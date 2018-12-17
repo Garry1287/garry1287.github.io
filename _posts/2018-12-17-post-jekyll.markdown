@@ -7,42 +7,47 @@ categories: jekyll posts
 
 
 # Установка jekyll на opensuse и github pages #
-zypper install ruby-devel
-zypper search gcc
-zypper install gcc-c++
+* `zypper install ruby-devel`
+* `zypper search gcc`
+* `zypper install gcc-c++`
 
 Gem - менеджер пакетов для ruby, как pip для python
 
-gem install bundle jekyll
+`gem install bundle jekyll`
 
 В suse надо добавлять версию через точку.
-jekyll.ruby2.5 -v
 
-cd /home/garry/MyBlog/
+`jekyll.ruby2.5 -v`
+
+`cd /home/garry/MyBlog/`
 
 Создание 
 
-jekyll.ruby2.5 new iptech-blog
+`jekyll.ruby2.5 new iptech-blog`
 
 Запуск сайта и встроенного веб-сервера
 
-bundle.ruby2.5 exec jekyll.ruby2.5 serve
+`bundle.ruby2.5 exec jekyll.ruby2.5 serve`
 
 ## Работа с git
 Создаем новый репозиторий на github, с названием, как username. Не забываем в setting поставить галочку для github-pages.
 
 Клонируем репозиторий к себе (один README файл), потом создаем там сайт, добавлем все файлы в него
-git init
-git add .
+
+`git init`
+
+`git add .`
 
 Добавляем удалённый репозиторий как источник
-git remote add origin https://github.com/Garry1287/iptech.github.io.git
+`git remote add origin https://github.com/Garry1287/iptech.github.io.git`
 
 Коммитим
- git commit -m "first blog commit"
+
+`git commit -m "first blog commit`
 
 Пушим файлы в удалённых репозиторий с компьютера
-garry-w:/home/garry/MyBlog/test-blog # git push origin master
+
+`garry-w:/home/garry/MyBlog/test-blog # git push origin master`
 
 
 
@@ -53,11 +58,11 @@ garry-w:/home/garry/MyBlog/test-blog # git push origin master
 По умолчанию стоит тема minima и файлы css и некоторые другие лежат не в осноной папке сайта, а в папке темы.
 Чтобы на github все заработало их надо тоже скопировать
 
-[http://www.unix-lab.org/posts/jekyll/](http://www.unix-lab.org/posts/jekyll/) 
-[https://guides.hexlet.io/jekyll/](https://guides.hexlet.io/jekyll/)
-[https://gosha20777.github.io/blog/github/jekyll/2017/01/28/blog-with-github/](https://gosha20777.github.io/blog/github/jekyll/2017/01/28/blog-with-github/)
-[https://frontender.info/build-blog-jekyll-github-pages](https://frontender.info/build-blog-jekyll-github-pages/)
-[https://annimon.com/article/2658](https://annimon.com/article/2658)
+1. [http://www.unix-lab.org/posts/jekyll/](http://www.unix-lab.org/posts/jekyll/) 
+2. [https://guides.hexlet.io/jekyll/](https://guides.hexlet.io/jekyll/)
+3. [https://gosha20777.github.io/blog/github/jekyll/2017/01/28/blog-with-github/](https://gosha20777.github.io/blog/github/jekyll/2017/01/28/blog-with-github/)
+4. [https://frontender.info/build-blog-jekyll-github-pages](https://frontender.info/build-blog-jekyll-github-pages/)
+5. [https://annimon.com/article/2658](https://annimon.com/article/2658)
 
-[Тема] (http://jekyllthemes.org/themes/Less-Or-More/)
+[Тема для оформления блога](http://jekyllthemes.org/themes/Less-Or-More/)
 
