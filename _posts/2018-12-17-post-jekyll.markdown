@@ -66,3 +66,4 @@ Gem - менеджер пакетов для ruby, как pip для python
 
 [Тема для оформления блога](http://jekyllthemes.org/themes/Less-Or-More/)
 
+[Markdown краткое описание](https://paulradzkov.com/2014/markdown_cheatsheet/)
