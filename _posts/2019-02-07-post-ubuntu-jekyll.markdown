@@ -25,7 +25,7 @@ Run 'bundle install' to install missing gems.`
 
 Запуск сайта и встроенного веб-сервера
 
-`bundle exec jekyll serve`
+`garry-w:/home/garry/MyBlog/iptech-blog$ bundle exec jekyll serve`
 
 ## Работа с git
 Создаем новый репозиторий на github, с названием, как username. Не забываем в setting поставить галочку для github-pages.
@@ -36,7 +36,7 @@ Run 'bundle install' to install missing gems.`
 
 `git add .`
 
-Добавляем удалённый репозиторий как источник
+Добавляем удалённый репозиторий как источник. Origin - это просто название, можно использовать другое, но используется это (origin - пер. источник)
 `git remote add origin https://github.com/Garry1287/iptech.github.io.git`
 
 Коммитим

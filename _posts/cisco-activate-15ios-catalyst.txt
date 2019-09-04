@@ -1,0 +1,18 @@
+https://wiki.merionet.ru/seti/15/obnovit-ios-cisco/
+cat4500e-UNIVERSAL-M), Version 03.05.00.E RELEASE SOFTWARE (fc3)
+
+
+license right-to-use activate entservices acceptEula
+
+https://community.cisco.com/t5/routing/license-activation-on-4500/td-p/3104521
+https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst3850/software/release/3se/system_management/configuration_guide/b_sm_3se_3850_cg/b_sm_3se_3850_cg_chapter_0100.html
+https://www.cisco.com/c/en/us/support/docs/switches/catalyst-4500-series-switches/200082-Getting-Started-with-SUP8E-4500-Wireless.html
+https://forum.nag.ru/index.php?/topic/132280-cisco-4500x-i-licenziya-right-to-use/
+http://www.anticisco.ru/forum/viewtopic.php?t=6733
+https://sprosi.pro/questions/12016/catalyst-4500r-e-sup7l-e-strannoe-upravlenie-litsenziyami
+https://community.cisco.com/t5/routing/license-activation-on-4500/td-p/3104521
+
+http://ciscotips.ru/cisco-ios-license-activation
+http://nike.bronk.ru/dokuwiki/doku.php?id=cisco_license
+https://learningnetwork.cisco.com/docs/DOC-20321
+

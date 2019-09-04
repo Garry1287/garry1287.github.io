@@ -6,7 +6,7 @@ categories: networking
 ---
 
 
-##Juniper EX4200 - восстановление после ошибки  error: could not copy to juniper.save+ 
+## Juniper EX4200 - восстановление после ошибки  error: could not copy to juniper.save+ 
 
 
 ```
@@ -31,8 +31,8 @@ total files: 8
 Попробую удалить juniper.data+ и по инструкции.
 Думаю делать ночью или когда кто-то будет на ЦТД
 
-*[http://juniper.ucoz.ru/index/file_from_server/0-43](http://juniper.ucoz.ru/index/file_from_server/0-43)
-*[http://prostoblog-unit.blogspot.com/2016/06/junos.html](http://prostoblog-unit.blogspot.com/2016/06/junos.html)
+* [http://juniper.ucoz.ru/index/file_from_server/0-43](http://juniper.ucoz.ru/index/file_from_server/0-43)
+* [http://prostoblog-unit.blogspot.com/2016/06/junos.html](http://prostoblog-unit.blogspot.com/2016/06/junos.html)
 
 
 ```

@@ -1,0 +1,484 @@
+script по созданию хостинга
+
+
+
+Создать пользователя
+Создать папку /srv/www/%user/public_html
+www - линк
+
+cgi-bin
+log
+tmp
+
+Права на них верные
+
+
+/etc/httpd/vhosts.d/sucden.conf
+
+И сгенерить
+<VirtualHost *:8080>
+    ServerName www.lombard-sapphire.ru
+    ServerAlias lombard-sapphire.ru *.lombard-sapphire.ru
+    DocumentRoot /srv/www/lombard/www/
+    ErrorLog /srv/www/lombard/log/apache_error.log
+    CustomLog /srv/www/lombard/log/apache_access.log combined
+    # Важный момент, указываем, что апач будет работать от пользователя www-data и нашей группы site1
+    AssignUserId lombard lombard
+
+
+    <Directory "/srv/www/lombard/www/cgi-bin/">
+        AllowOverride None
+        Options +ExecCGI -Includes -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+
+
+    <Directory "/srv/www/lombard/www">
+        Options All
+        AllowOverride All
+        Order Deny,Allow
+        Allow from all
+    </Directory>
+
+
+    # open_basedir для домашней директории пользователя, можно добавить несколько директорий при необходимости, директории разделяются двоеточием «:»
+#    php_admin_value open_basedir "/srv/www/lombard/:."
+        # Включаем сейф-мод, я сделал это в каждом конфиге сайта для удобства отключения при необходимости.
+    #php_admin_value safe_mode «on»
+    # Определяем нашу временную директорию как основную, вместо /tmp и устанавливаем её директорией для хранения сессий.
+    php_admin_value upload_tmp_dir "/srv/www/lombard/tmp"
+    php_admin_value session.save_path "/srv/www/lombard/tmp"
+</VirtualHost>
+
+
+
+/etc/nginx/vhosts.d/lombard.conf
+
+server {
+   listen *:80;
+        server_name lombard-sapphire.ru www.lombard-sapphire.ru;
+        error_log /srv/www/lombard/log/nginx_error.log;
+        access_log /srv/www/lombard/log/nginx_access.log;
+        location / {
+                proxy_pass http://127.0.0.1:8080/;
+        }
+        location ~* \.(jpg|jpeg|gif|png|ico|css|js|txt|doc|docx|xls|xlsx|ppt|pptx)$ {
+                expires max;
+                root /srv/www/lombard/www;
+        }
+        
+        location ~ /\.ht {
+                 deny  all;
+        }
+        
+}
+
+
+reload http
+reload nginx
+
+
+
+
+Создать БД
+
+
+
+
+
+#!/bin/bash
+# скрипт создаёт инфраструктуру сайта, требуется доменное имя c указанием зоны, зона будет заменена на локальную
+# Втр Июл 28 00:41:18 MSD 2009
+
+nd=$@
+if [ $nd ]
+then echo make new virtual domain $nd
+else echo use: $0 new-domain.ru; exit
+fi
+d=`echo $nd| sed -r 's/\.[a-z]+$//g'`
+z="a" # название зоны
+ip="192.168.0.78" # IP адрес сервера
+t="breys" # название эталонного виртуального хоста
+
+# если DNS имя не существует то создаём его либо пропускаем этот шаг
+if host $d > /dev/null ; 
+then  
+    echo skip make dns name
+else
+    echo "echo  \"\n;`date`\" >> /etc/bind/$z.host" | sudo sh
+    echo "echo $d        IN  A $ip >> /etc/bind/$z.host" | sudo sh
+    echo "echo www.$d        IN  CNAME $d >>  /etc/bind/$z.host" | sudo sh
+    sudo /etc/init.d/bind9 restart
+fi
+
+# создаём директорию для нового сайт, -p без проверок и вопросов
+mkdir -p /home/httpd/$nd/www /home/httpd/$nd/cgi-bin
+
+# создаём виртуальный хост apache на основе конфига рабочего сайта
+sudo cp /etc/apache2/sites-available/$t.ru.conf /etc/apache2/sites-available/$nd.conf
+sudo sed -i s/$t/$d/g /etc/apache2/sites-available/$nd.conf
+sudo ln -s /etc/apache2/sites-available/$nd.conf /etc/apache2/sites-enabled/
+
+sudo apache2ctl restart
+if wget -q  --spider $d.$z;
+then
+    echo Wellcom http://$d.$z
+else
+    # если новый виртуальный хост по какой либо причине не доступен, удалём его и перезапускаем индейца
+    sudo rm /etc/apache2/sites-available/$nd.conf /etc/apache2/sites-enabled/$nd.conf
+    rmdir  /home/httpd/$nd/www /home/httpd/$nd/cgi-bin  /home/httpd/$nd
+    sudo apache2ctl restart
+fi
+
+
+
+
+
+
+
+
+
+
+
+#!/bin/bash
+
+HOST="Unknown";
+
+if [ "$1" != "" ]; then
+    HOST="$1";
+else
+    echo "Enter hosthame: ";
+    read HOST;
+fi 
+
+echo "Creating virtual domain $HOST.ps with allias www.$HOST.ps";
+
+
+echo "#VirtualHost Config File for host $HOST
+<VirtualHost *:80>
+	ServerName $HOST.ps
+	ServerAdmin webmaster@localhost
+	ServerAlias www.$HOST.ps
+	DocumentRoot /home/prostosergik/WWW/$HOST/Www/
+</VirtualHost>" > "/etc/apache2/sites-available/$HOST"
+
+DIR="/home/prostosergik/WWW/$HOST/Www"
+
+mkdir -p $DIR > /dev/null
+echo "<?php phpinfo(); ?>" > "$DIR/index.php"
+chmod -R 777 "$DIR/../";
+
+echo "127.0.0.1	$HOST.ps www.$HOST.ps" >> /etc/hosts
+
+a2ensite $HOST > /dev/null
+apache2ctl restart > /dev/null
+
+
+
+
+
+
+
+
+cp skel.conf host.conf
+sed -i s/skel_site_name/new_site_name/g
+service apache2 restart
+
+/home/addsite user_name site.ru
+
+Генерация пароля 
+
+cat /dev/urandom | base64 | head -n1 -c10 && echo
+
+
+
+
+
+
+This is the exit status of the last executed command.
+
+For example the command true always returns a status of 0 and false always returns a status of 1:
+
+true
+echo $? # echoes 0
+false
+echo $? # echoes 1
+
+From the manual: (acessible by calling man bash in your shell)
+
+    $?       Expands to the exit status of the most recently executed foreground pipeline.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!/bin/bash
+
+
+function generate_pass(){
+	PASSWORD=`cat /dev/urandom | base64 | head -n1 -c10 && echo`
+    echo $PASSWORD
+}
+
+function create_user(){
+    local login="$1"
+    local password="$2"
+    `groupadd $login`
+    `useradd -g $login -s /bin/bash -d /srv/www/$login -m $login`
+    #set password
+    echo -e "$password\n$password\n" | passwd $login >> /dev/null
+ }
+
+USER_NAME=$1
+USER_PASSWORD="$(generate_pass)"
+
+create_user "$USER_NAME" "$USER_PASSWORD"
+
+
+www - линк
+
+cgi-bin
+log
+tmp
+
+
+
+if [ $# -eq 2 ]; then
+    if [ "$2" != "delete" ]; then
+        SITE_NAME=$2
+        
+        mkdir /home/$USER_NAME/$SITE_NAME
+        mkdir /home/$USER_NAME/$SITE_NAME/public_html
+        
+        mkdir /home/$USER_NAME/$SITE_NAME/log
+        mkdir /home/$USER_NAME/$SITE_NAME/tmp
+        mkdir /home/$USER_NAME/$SITE_NAME/cgi-bin
+
+  hostConf="
+<VirtualHost *:8080>
+    ServerName www.lombard-sapphire.ru
+    ServerAlias lombard-sapphire.ru *.lombard-sapphire.ru
+    DocumentRoot /srv/www/lombard/www/
+    ErrorLog /srv/www/lombard/log/apache_error.log
+    CustomLog /srv/www/lombard/log/apache_access.log combined
+    # Важный момент, указываем, что апач будет работать от пользователя www-data и нашей группы site1
+    AssignUserId lombard lombard
+
+
+    <Directory "/srv/www/lombard/www/cgi-bin/">
+        AllowOverride None
+        Options +ExecCGI -Includes -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+
+
+    <Directory "/srv/www/lombard/www">
+        Options All
+        AllowOverride All
+        Order Deny,Allow
+        Allow from all
+    </Directory>
+
+
+    # open_basedir для домашней директории пользователя, можно добавить несколько директорий при необходимости, директории разделяются двоеточием «:»
+#    php_admin_value open_basedir "/srv/www/lombard/:."
+        # Включаем сейф-мод, я сделал это в каждом конфиге сайта для удобства отключения при необходимости.
+    #php_admin_value safe_mode «on»
+    # Определяем нашу временную директорию как основную, вместо /tmp и устанавливаем её директорией для хранения сессий.
+    php_admin_value upload_tmp_dir "/srv/www/lombard/tmp"
+    php_admin_value session.save_path "/srv/www/lombard/tmp"
+</VirtualHost>
+
+
+<VirtualHost ${IP_ADDRESS}:80>
+        ServerName $SITE_NAME
+        ServerAlias www.$SITE_NAME
+        ServerAdmin webmaster@$SITE_NAME
+
+        AddDefaultCharset utf-8
+        AssignUserID ${USER_NAME} ${USER_NAME}
+
+        DocumentRoot /home/$USER_NAME/$SITE_NAME/www
+        CustomLog log combined
+        ErrorLog /home/$USER_NAME/$SITE_NAME/logs/error.log
+        DirectoryIndex index.php index.html
+
+        ScriptAlias /cgi-bin/ /home/$USER_NAME/$SITE_NAME/cgi-bin
+        <FilesMatch \"\\.ph(p[3-5]?|tml)$\">
+                SetHandler application/x-httpd-php
+        </FilesMatch>
+        <FilesMatch \"\\.phps$\">
+                SetHandler application/x-httpd-php-source
+        </FilesMatch>
+        php_admin_value upload_tmp_dir "/home/$USER_NAME/$SITE_NAME/tmp"
+        php_admin_value session.save_path "/home/$USER_NAME/$SITE_NAME/tmp"
+        php_admin_value open_basedir "/home/$USER_NAME/$SITE_NAME/www:."
+</VirtualHost>
+<Directory /home/$USER_NAME/$SITE_NAME/www>
+        Options +Includes +ExecCGI
+        php_admin_flag engine on
+</Directory>
+        "
+
+    nginxConf="
+server {
+   listen *:80;
+        server_name lombard-sapphire.ru www.lombard-sapphire.ru;
+        error_log /srv/www/lombard/log/nginx_error.log;
+        access_log /srv/www/lombard/log/nginx_access.log;
+        location / {
+                proxy_pass http://127.0.0.1:8080/;
+        }
+        location ~* \.(jpg|jpeg|gif|png|ico|css|js|txt|doc|docx|xls|xlsx|ppt|pptx)$ {
+                expires max;
+                root /srv/www/lombard/www;
+        }
+        
+        location ~ /\.ht {
+                 deny  all;
+        }
+        
+}
+    "
+        
+        mkdir
+        mkdir
+        mkdir
+        touch ${APACHE2_DIR}/vhosts/${SITE_NAME}.conf
+        echo "$hostConf" >> ${APACHE2_DIR}/vhosts/${SITE_NAME}.conf
+        touch //home/$USER_NAME/$SITE_NAME/www/index.php
+        echo "<?php phpinfo() ?>" >> /home/$USER_NAME/$SITE_NAME/www/index.php
+        
+        chown $USER_NAME:$USER_NAME /home/$USER_NAME/$SITE_NAME/*
+
+
+
+
+
+* Web Site: 
+* user: sucden
+* password: s8bSqBbCvs
+*
+* Server: 
+* sftp user: sucden
+* sftp password: s8bSqBbCvs
+*
+
+Match User sucden
+    ChrootDirectory /srv/www/sucden
+    AllowTCPForwarding no
+    X11Forwarding no
+    ForceCommand internal-sftp
+
+
+
+mkdir: невозможно создать каталог «/srv/www/sucden»: Файл существует
+./vhostadd.sh: line 104: http_conf: команда не найдена
+./vhostadd.sh: line 142: nginx_conf: команда не найдена
+
+/vhostadd.sh: line 88: =dobrinsky-sahzavod.ru: команда не найдена
+    
+
+* Web Site: dobrinsky-sahzavod.ru
+* user: sucden
+* password: 1cZtdFS+yJ
+*
+* Server: 
+* sftp user: sucden
+* sftp password: 1cZtdFS+yJ
+
+
+
+http://uvadzucumi.blogspot.com/2012/11/bash-useradduserdel-mysql-apache.html
+https://habr.com/ru/post/209962/
+
+
+
+    $0 - имя скрипта Bash.
+    $1-$9 - Первые 9 аргументов для скрипта Bash. (Как уже упоминалось выше.)
+    $# - Сколько аргументов было передано скрипту Bash.
+    $@ - Все аргументы, предоставленные сценарию Bash.
+    $?- Статус выхода последнего процесса.
+    $$ - Идентификатор процесса текущего скрипта.
+    $USER - имя пользователя, выполняющего скрипт.
+    $HOSTNAME - имя хоста, на котором запущен скрипт.
+    $SECONDS - количество секунд с момента запуска скрипта.
+    $RANDOM - Возвращает другое случайное число каждый раз, когда он упоминается.
+    $LINENO - возвращает текущий номер строки в сценарии Bash.
+
+
+
+Из приведенного скрипта видно, что:
+
+$0
+
+хранит имя команды, запустившей сценарий
+
+$1-$n
+
+переменные хранят 1, 2, 3,...n позицию аргументов команды
+
+$#
+
+хранит количество аргументов команды
+
+$*
+
+хранит значение всех аргументов командной строки через пробел
+
+$@
+
+хранит значение всех аргументов командной строки в виде списка
+
+$$
+
+хранит PID запущенного сценария (процесса)
+
+$!
+
+хранит значение PID последнего процесса, запущенного в фоне
+
+$?
+
+Статус выхода запущенной последней программы. Он так же называется кодом условия, кодом возврата. По соглашению, ненулевое значение статусы завершения соответствует значению false и обозначает неудачное завершение процесса. Код выхода равный 0 соответствует true и обозначает успешное завершение программы. (в нашем примере ls display_ завершилось с ошибкой и кодом выхода 2, т.к. файла или каталога display_ не существует)
+
+http://www.k-max.name/linux/peremennye-intepretatora-bash/
+
+
+Условие if-else BASH
+
+Условие if-else применяется в скриптах BASH очень часто. Само условие имеет несколько странный вид [[ условие ]]. Обратите внимание на отступы. Без них условие работать не будет. Привожу список логических операторов для условия [[ ? ]]:
+Список логических операторов, которые
+используются для конструкции if-then-else-fi
+оператор	описание
+-z	строка пуста
+-n	строка не пуста
+=, (==)	строки равны
+!=	строки неравны
+-eq	равно
+-ne	неравно
+-lt,(< )	меньше
+-le,(<=)	меньше или равно
+-gt,(>)	больше
+-ge,(>=)	больше или равно
+!	отрицание логического выражения
+-a,(&&)	логическое «И»
+-o,(||)	логическое «ИЛИ»
+
+
+http://trainingweb.ru/page/conditions-if-else-bash
+
+https://devhints.io/bash
