@@ -199,6 +199,12 @@ def GetfromRKN(node, tag, file2write):
 Например надо узнать есть ли запись про домен skoty.info. IP думаю также можно примерно найти
 
 ```
+from xml.dom.minidom import *
+import codecs, sys
+import os
+import tempfile
+xml = parse('dump.xml')
+
 In [132]: for node in content:
      ...:     if node.getElementsByTagName('domain'):
      ...:         if node.getElementsByTagName('domain')[0].childNodes[0].nodeValue == "skoty.info":

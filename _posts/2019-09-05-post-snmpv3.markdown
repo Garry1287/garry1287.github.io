@@ -1,0 +1,18 @@
+---
+layout: post
+title:  "SNMPv3"
+date:   2019-09-05 11:49:15 +0300
+categories: networking
+---
+
+## SNMP v3
+
+Добавьте в /var/net-snmp/snmptrapd.conf следующую строку:
+```
+  createUser myuser MD5 mypassword DES myotherpassword
+```
+[https://blog.ine.com/2008/07/19/snmpv3-tutorial](https://blog.ine.com/2008/07/19/snmpv3-tutorial)
+[http://vladimir-stupin.blogspot.com/2016/09/](http://vladimir-stupin.blogspot.com/2016/09/)
+[https://www.opsview.com/resources/how-to/blog/setting-snmpv3-traps](https://www.opsview.com/resources/how-to/blog/setting-snmpv3-traps)
+[http://www.net-snmp.org/wiki/index.php/TUT:Configuring_snmptrapd_to_receive_SNMPv3_notifications](http://www.net-snmp.org/wiki/index.php/TUT:Configuring_snmptrapd_to_receive_SNMPv3_notifications)
+[https://wiki.debian.org/SNMP][https://wiki.debian.org/SNMP](https://wiki.debian.org/SNMP][https://wiki.debian.org/SNMP)
