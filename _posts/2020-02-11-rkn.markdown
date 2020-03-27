@@ -1,0 +1,218 @@
+---
+layout: post
+title:  "Как работает блокировка RKN"
+date:   2020-02-21 15:02:11 +0300
+categories: jekyll posts
+---
+
+
+
+```
+0       2       *       *       *       /root/bin/dellogs.sh
+0     0,8,16     *       *       *       /root/bin/zapret-info/rkn.sh | tee -a /root/bin/zapret-info/rkn_dump.log 2>&1 | /usr/bin/mail -s "RKN script" iptech@sc.ru
+```
+
+```
+_DIR="/root/bin/zapret-info"
+
+rkn.sh
+dump.xml
+file_ip_subnet.txt
+file_ip_subnet_old.txt
+zapret-info.zones
+zapret-info.zones.old
+
+parse.py
+addIPSETrules2.py
+
+filedomain.txt
+ip_list_error.txt
+zones-fake.txt
+
+domain-isk.txt`
+
+
+ip_revisor.txt
+fileip.txt
+file_ip_resolv.txt
+ip_list_error.txt
+```
+```
+ip_revizor/ip_revisor.txt
+ip_revizor/out_ip.txt_/ip_revizor/out_ip_old.txt
+```
+
+#Блокируем на BGW fileip.txt ip_list_error.txt ip_Subnet.txt
+#Копируем старую версию
+mv $_DIR/ip_revizor/out_ip.txt $_DIR/ip_revizor/out_ip_old.txt
+
+#out_ip для блокировки по маршрутизации
+cat fileip.txt ip_list_error.txt | sort | uniq > $_DIR/ip_revizor/out_ip.txt
+
+# Не справляемся с нагрузкой
+#python3 $_DIR/blockIPzebra.py
+
+echo "[ OK ]"
+echo "Окончание выполнения скрипта в:" $(date +%F' '%H:%M:%S);
+
+
+
+1) По крону запускается rkn.sh
+2) Первая секция просто получает dump.xml и продолжает, если он новый.
+3) Делает бэкап file_ip_subnet.txt и zapret-info.zones
+        zapret-info.zones - файл для bind для блокировки запрещённых сайтов
+        состоящий из записей, где stub - файл заглушка
+        `zone "rostovdiplom.com" in {type master; file "fake/stub"; allow-transfer { 81.20.192.21; 81.20.192.19; 81.20.195.33; }; };`
+        
+        file_ip_subnet.tx
+4) Запускаем parse.py для парсинга dump.xml
+        parse.py формирует следущие файлы
+                filedomain.txt           # Список доменов
+                file_ip_resolv.txt      #Список ip адресов, которые даются с доменами и url, которые подставляются в url запросы вместо домена. Блокируем только для ревизора
+                file_ipv6_resolv.txt    #Список ipv6 подсетей, которые даются с доменами, url, которые надо проверять. На будующее
+                fileip.txt                      #Список ip для блокировки - blockType="ip",         сюда же включаются subnets
+                file_ip_subnet.txt      #Список ip для блокировки - blockType="ipSubnet"
+                fileipv6.txt                #Список ip для блокировки - blockType="ipv6"
+                file_ipv6_subnet.txt   #Список ip для блокировки - blockType="ipv6Subnet" 
+
+5) Создаем список DNS зон для блокировки
+        Сначала в файл ip_list_error.txt помещаем ошибочно внесённые в списки доменов ip        адреса, горе-специалисты вносят в РКН список вместо доменов ip-шники. 
+        Удаляем спец. символы на конце доменных зон, тоже боремся со специалстами. Получаем zones-fake.txt.
+         Затем с помощью файла domain-isk.txt (файла с доменами исключениями youtube например) формируем конечный zones-fake.txt
+6) Отправляем сформированный файл на DNS серверы
+7) Теперь задача заблокировать по ip. Делаем это через ipset
+        Формируем новый список из ip адресов 
+        `cat fileip.txt file_ip_resolv.txt ip_list_error.txt | sort | uniq > $_DIR/ip_revizor/ip_revisor.txt`
+        Запускаем скрипт addIPSETrules2.py, который формирует ipset
+                Скрипт работает следующим образом, формирует списки на основе
+                ip_revisor.txt и ip_revisor_old.txt (то есть нынешняя и предыдущая версия)
+                а также смотрим подсети в file_ip_subnet.txt и file_ip_subnet_old.txt
+                Делаем 2 списка add и del и соответственно удаляем и добавляем списки в ipset
+                В конце формируем в папке bipset целый файл для ipset
+    
+        Для блокировки через маршрутизацию формируем out_ip.txt
+`cat fileip.txt ip_list_error.txt | sort | uniq > $_DIR/ip_revizor/out_ip.txt`
+        Скрипт blockIPzebra.py не запускаем пока, так как cisco роутер охренел от количества маршрутов. Получается в реальности блокировка по dns только.
+
+
+-dump
+    -dump.xml
+    -dump.xml.md5
+
+
+-zones    
+    zapret-info.zones
+    zapret-info.zones.old
+    zones-fake.txt
+    domain-isk.txt
+    ip_list_error.txt
+    
+parsefiles
+    filedomain.txt           # Список доменов
+    file_ip_resolv.txt      #Список ip адресов, которые даются с доменами и url, которые подставляются в url запросы вместо домена. Блокируем только для ревизора
+    file_ipv6_resolv.txt    #Список ipv6 подсетей, которые даются с доменами, url, которые надо проверять. На будующее
+    fileip.txt                      #Список ip для блокировки - blockType="ip", сюда же включаются subnets
+    file_ip_subnet.txt      #Список ip для блокировки - blockType="ipSubnet"
+    fileipv6.txt                #Список ip для блокировки - blockType="ipv6"
+    file_ipv6_subnet.txt   #Список ip для блокировки - blockType="ipv6Subnet"
+    file_ip_subnet_old.txt #Предыдущий список ip для блокировки - blockType="ipSubnet
+    "
+    
+        
+    ip_revizor
+        ip_revisor.txt
+        ip_revisor_old.txt
+        out_ip.txt
+        out_ip_old.txt
+
+    python
+        addIPSETrules2.py
+        parse.py
+        blockIPzebra.py
+    logs
+        addrules2mikrot.log
+        rkn_dump.log
+    exception
+rkn.sh
+dellogs.sh
+    
+    
+    
+    cat fileip.txt file_ip_resolv.txt ip_list_error.txt | sort | uniq > $_DIR/ip_revizor/ip_revisor.txt
+
+#Блокируем на BGW fileip.txt ip_list_error.txt ip_Subnet.txt
+#out_ip для блокировки по маршрутизации
+
+
+# blocktype = ip - формируем список, ipSubnet - формируем список, объединяем их в один файл - дальше либо в rip, либо на Null0 (файл для ip)
+#		ip, ipv6, ipSubnet, ipv6Subnet  - получается надо 2 файла ip и ipv6
+# blokctype domain - собираем список доменов, в отдельный список собираем ip адреса и подсети, дальше их на Naebit или на Микрот (файл дл доменов и отдельный для ip_resolv)
+#		domain, ip, ipv6, ipSubnet, ipv6Subnet - получается надо 3 файла  domain, ip_resolv, ipv6_resolv
+# blocktype default - собираем список доменов, в отдельный список собираем ip адреса и подсети, дальше их на Naebit или на Микрот (файл дл доменов и отдельный для ip_resolv)
+#		domain, ip, ipv6, ipSubnet, ipv6Subnet - получается надо 3 файла  domain, ip_resolv, ipv6_resolv
+#Итого надо 5 файлов ip, ipv6, domain, ip_resolv, ipv6_resolv (ipv6 и ip_resolv можно объединить)
+
+# Файл для ipv6, пока в blocktype=ip не видел ipv6 адресов и подсетей.
+# filedomain.txt - домены, 
+
+
+1)
+
+
+
+echo -n "Adding ip to ipset"
+
+#Копируем старую версию
+if [ -f $_DIR/ip_revizor/ip_revisor.txt ];
+then
+	mv $_DIR/ip_revizor/ip_revisor.txt $_DIR/ip_revizor/ip_revisor_old.txt
+else
+	echo "No ip_revisor.txt file"
+fi
+echo "[ OK ]"
+
+#Создаём новую верисию
+if [[ -f fileip.txt && -f file_ip_resolv.txt && -f ip_list_error.txt ]];
+then
+	cat fileip.txt file_ip_resolv.txt ip_list_error.txt | sort | uniq > $_DIR/ip_revizor/ip_revisor.txt
+	python3 $_DIR/addIPSETrules2.py
+fi
+
+#Блокируем на BGW fileip.txt ip_list_error.txt ip_Subnet.txt
+#Копируем старую версию
+mv $_DIR/ip_revizor/out_ip.txt $_DIR/ip_revizor/out_ip_old.txt
+
+#out_ip для блокировки по маршрутизации
+cat fileip.txt ip_list_error.txt | sort | uniq > $_DIR/ip_revizor/out_ip.txt
+
+# Не справляемся с нагрузкой
+#python3 $_DIR/blockIPzebra.py
+
+echo "[ OK ]"
+
+
+
+
+
+
+
+
+
+
+
+
+   12  sudo apt install iptables-persistent
+   14  sudo apt install python3
+   15  sudo apt install python3-pip
+  299  sudo apt install ipset
+  341  sudo apt install ipython3
+  357  sudo apt install curl
+  366  sudo apt install unzip
+        apt install bsdtar
+        apt install libxml2-utils
+
+
+  389  sudo cp netfilter-persistent-plugin-ipset-master/10-ipset /usr/share/netfilter-persistent/plugins.d/
+  390  ls -al /usr/share/netfilter-persistent/plugins.d/
+  391  sudo chmod 755 /usr/share/netfilter-persistent/plugins.d/10-ipset 
+

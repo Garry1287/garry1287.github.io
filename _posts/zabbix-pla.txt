@@ -1,0 +1,264 @@
+1. Зависимости триггеров, сделать совместно с asterisk  (https://habr.com/ru/company/zabbix/blog/344492/)
+2. Grafana  (http://ithelp21.ru/ustanovka-grafana-podklyutchenie-k-zabbix-server/) (вывести загрузку каналов)
+3. Шаблон для роутеров, шаблон для ASA (правильный LLD)
+            - обнаружение портов
+            - статус порта
+            - ошибки на порту
+            - пакетный рейт
+            - трафик на порту
+            - cpu
+            - memory
+            - bgp статус
+            - попытки логирования
+            - вентиляторы
+            - icmp доступность
+            - перезагрузка девайсины
+       
+Template ICMP Ping + ZBX-CISCO-INTERFACES(Template Interfaces Discover) + CPU(Template SNMP Router Cisco, Template SNMP Processors) or Template Cisco generic + вентиляторы моделей+ BGP,OSPF + нужные traps(Template_Cisco_Traps)
+
+SNMP PHYS DES
+
+Template ICMP Ping
+MAT-CISCO-TEMPLATES
+        MAT-CISCO-INTERFACES
+        MAT-CISCO-INFO (Template SNMP Generic)
+        MAT-CISCO-CPU-MEM (Template SNMP Router Cisco)
+        MAT-CISCO-2901
+        MAT-CISCO-2911
+        MAT-CISCO-2801
+        MAT-CISCO-2811
+        MAT-CISCO-ROUTE (Template Cisco General)
+        MAT-CISCO-TRAP
+
+SNMP Trap failback ????????????? 
+
+
+
+
+Template Interfaces Discover: Чисто сетевых интерфейсов
+
+Template Cisco generic  - подходит
+Template2 SNMP Interfaces: (просто интерфейсы)
+	
+Template2 SNMP Interfaces: Admin status of interface {#SNMPVALUE}	ifAdminStatus[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Alias of interface {#SNMPVALUE}	ifAlias[{#SNMPVALUE}]	1h	1w		SNMPv2 агент	Interfaces	Да	
+Template2 SNMP Interfaces: Description of interface {#SNMPVALUE}	ifDescr[{#SNMPVALUE}]	1h	1w		SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Inbound errors on interface {#SNMPVALUE}	ifInErrors[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Incoming traffic 64 on interface {#SNMPVALUE}	ifHCInOctets[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Incoming traffic on interface {#SNMPVALUE}	ifInOctets[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Operational status of interface {#SNMPVALUE}	ifOperStatus[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Outbound errors on interface {#SNMPVALUE}	ifOutErrors[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Outgoing traffic 64 on interface {#SNMPVALUE}	ifHCOutOctets[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Template2 SNMP Interfaces: Outgoing traffic on interface {#SNMPVALUE}	ifOutOctets[{#SNMPVALUE}]	5m	1w	365d	SNMPv2 агент	Interfaces	Да
+Триггер из него
+
+
+ZBX-CISCO-INTERFACES (интерфейсы)
+Basic Cisco ASA device (memory)
+Device reboot trigger
+
+Template Cisco General: OSPF Interfaces	Элементы данных
+	Template Cisco General: OSPF Neighbor States
+Template Cisco General: BGP Peers
+            snmptrap (BGP Neighbor Up/Down)		snmptrap[1.3.6.1.2.1.15.3.1.2|1.3.6.1.4.1.9.9.187.1.2.5.1.3]		90d		SNMP trap		Активировано	
+	snmptrap (IF Down)		snmptrap[.1.3.6.1.6.3.1.1.5.3]		90d		SNMP trap		Активировано	
+	snmptrap (IF Up)		snmptrap[.1.3.6.1.6.3.1.1.5.4]		90d		SNMP trap		Активировано	
+	snmptrap (OSPF Neighbor Up/Down)		snmptrap[1.3.6.1.2.1.14.16.2.2]		90d		SNMP trap		Активировано	
+
+    Предупреждение	Template_Cisco_Traps: BGP Peer State is idle	{Template_Cisco_7200:snmptrap["bgpPeerState|cbgpPeer2State"].count(10m,"idle","like")}>0 and {Template_Cisco_7200:snmptrap["bgpPeerState|cbgpPeer2State"].nodata(10m)}=0	Активировано	
+	Предупреждение	Template_Cisco_Traps: Many OSPF TX Retransmits	{Template_Cisco_7200:snmptrap["ospfTxRetransmit"].count(1h,"ospfTxRetransmit","like")}>30 and {Template_Cisco_7200:snmptrap["ospfTxRetransmit"].nodata(1h)}=0	Активировано	
+	Средняя	Template_Cisco_Traps: MPLS L3 is down	{Template_Cisco_7200:snmptrap["mplsL3VpnVrf[Up|Down]"].str(Down)}=1	Активировано	
+	Предупреждение	Template_Cisco_Traps: OSPF Interface State is down	{Template_Cisco_7200:snmptrap["ospfIfState"].count(10m,"down","like")}>0 and {Template_Cisco_7200:snmptrap["ospfIfState"].nodata(10m)}=0	Активировано	
+	Предупреждение	Template_Cisco_Traps: OSPF Interface State is loopback	{Template_Cisco_7200:snmptrap["ospfIfState"].count(10m,"loopback","like")}>0 and {Template_Cisco_7200:snmptrap["ospfIfState"].nodata(10m)}=0	Активировано	
+	Предупреждение	Template_Cisco_Traps: OSPF Interface State is waiting	{Template_Cisco_7200:snmptrap["ospfIfState"].count(10m,"waiting","like")}>0 and {Template_Cisco_7200:snmptrap["ospfIfState"].nodata(10m)}=0
+    
+OSPF посмотреть в статье
+    
+    
+Попытки войти на роутер  (SNMP trap в принципе)
+
+Item
+1.Доступность
+2.CPU
+3.Memory
+4. in, out, bps, multicast, unicast, broadcast,errors
+5. Статус порта
+6. snmp location
+7. Вентиляторы
+8.  Количество маршрутизированных пакетовб Количество отброшенных пакетов без маршрута(Template Cisco 2911)
+9. Температура 
+
+Тригеры
+1.Не пингуется
+2.Cpu нагрузка
+3.Мемору нагрузка
+4. Падение порта
+5.Ошибки на порту
+6. Температура (со временем)
+
+Графики
+1.CPU
+2.Memory
+3.Интерфейс (In,Out, Bps,Error)
+
+
+Template Cisco generic - создаёт ненужные триггеры и для сабинтерфейсов
+Template ICMP Ping - ok
+Template SNMP Device  - не использовать (он на каждый влан создал item 4096)   Discovery не верный подход.
+
+
+ Template Cisco ASA Discovery - в нем нихрена не работает, удаляем           
+            
+4. Триггер на icmp (В принципе стандартный должен работать, просто период стоял 10секунд, увеличили max(#12))
+5. Повторять уведомления о падении канала (через 15 минут)  https://serveradmin.ru/povtoryayushhiesya-uvedomleniya-v-zabbix/ (подсмотреть в зелёном)
+6.  https://github.com/ableev/Zabbix-in-Telegram + postgres    https://www.zabbix.com/forum/in-russian/42618-telegram-%D0%BD%D0%B8%D0%BA%D1%82%D0%BE-%D0%B5%D1%89%D0%B5-%D0%BD%D0%B5-%D0%BF%D1%80%D0%B8%D0%BA%D1%80%D1%83%D1%87%D0%B8%D0%B2%D0%B0%D0%BB/page3
+7. zabbix агенты 
+8. Модификация бота для отправки писем.  
+9. Организация мониторинга - https://habr.com/ru/company/pixonic/blog/325040/
+10. Поработать с traps https://habr.com/ru/post/417813/
+11. Отрисовать карты
+
+About zabbix
+https://techexpert.tips/ru/category/zabbix-ru/
+https://techexpert.tips/ru/grafana-ru/%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-grafana-zabbix-%D1%81-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D0%BC-%D0%BF%D0%BB%D0%B0%D0%B3%D0%B8/
+https://techexpert.tips/ru/category/grafana-ru/
+https://adminnotes.info/zabbix/zabbix-%D0%BE%D0%B1%D0%BD%D0%B0%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D1%81%D0%B5%D1%82%D0%B5%D0%B2%D1%8B%D1%85-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%BE%D0%B2.html
+
+
+
+
+
+
+Пример настройки и установки zabbix
+http://blog.apikulin.ru/2016/04/ustanovka-sistemy-monitoringa-zabbix-v-centos-6.html
+
+
+
+
+
+[garry@zabbix1 ~]$ snmpget -v 2c -c Udgl48dS 10.98.99.9 ifOperStatus.8
+IF-MIB::ifOperStatus.8 = INTEGER: up(1)
+[garry@zabbix1 ~]$ snmpget -v 2c -c Udgl48dS 10.98.99.9 ifOperStatus.9
+IF-MIB::ifOperStatus.9 = INTEGER: down(2)
+
+
+
+{Maxi-ASA0:ifOperStatus[Adaptive Security Appliance 'Ethernet0/1' interface].diff(0)}=1
+
+count (сек|#кол-во,<шаблон>,<оператор>,<сдвиг_времени>) 
+
+
+
+count(#10,12,gt) → количество значений из последних 10 значений, которые больше '12'
+
+count(#1,2,eq)=1
+
+
+Если количество значений из последнего значения равно единицы
+count(#1,1,eq)=1
+
+
+- UP (1)
+- DOWN (2)
+- Administratively down
+
+
+{$IFCONTROL:"{#IFNAME}"}=1 and ({Dlink3028_Ximikov47:net.if.status[ifOperStatus.{#SNMPINDEX}].last()}=2 and {Dlink3028_Ximikov47:net.if.status[ifOperStatus.{#SNMPINDEX}].diff()}=1) 
+
+
+
+ 	
+ifOperStatus OBJECT-TYPE
+SYNTAX INTEGER {
+up(1), -- ready to pass packets
+down(2),
+testing(3), -- in some test mode
+unknown(4), -- status can not be determined
+-- for some reason.
+dormant(5),
+notPresent(6), -- some component is missing
+lowerLayerDown(7) -- down due to state of
+-- lower-layer interface(s)
+
+
+And the trigger from Template is controlling the change of state.
+Using your words "a trigger creates an alarm while the interface is down an clears while it goes up again
+
+
+
+
+
+
+If you go to "Configuration -> Templates -> Template SNMP Interfaces ->
+Discovery Rules -> Trigger Prototypes" you can create a trigger
+prototype that will be added to every discovered interface.
+
+When you create the Trigger prototype make sure you use the prototype
+item names and not the discovered items for the real interfaces. If you
+use the "Add" button next to the Trigger's Expression field then you'll
+have a "Select prototype" button to help you make the right choice.
+Something like:
+
+{Template SNMP Interfaces:ifAdminStatus[{#SNMPVALUE}].last()}=1 AND
+{Template SNMP Interfaces:ifOperStatus[{#SNMPVALUE}].last()}=2
+
+Have a look at the Low Level Discovery manual for more information.
+
+
+
+
+
+
+Originally posted by Mechanix View Post
+fire trigger only when the interface went from UP to DOWN and stays in DOWN state for at least 3 minutes.
+({Template Datacenter:ifOperStatus[{#SNMPVALUE}].last(#4)}=1 and {Template Datacenter:ifOperStatus[{#SNMPVALUE}].min(#3)}=2 and {TRIGGER.VALUE}=0) or ({Template Datacenter:ifOperStatus[{#SNMPVALUE}].min(#3)}=2 and {TRIGGER.VALUE}=1)
+
+
+
+The 1st part of the trigger counts how many times ( =3) ifOperStatus was in state 2(down) (2 eq) during 3m.
+The 2nd part counts the same with timeshift 3 min. "<>3" means ifOperStatus wasn't down during 3m 3m ago. 
+{Template Datacenter:ifOperStatus[{#SNMPVALUE}].count(3m,2,eq)}=3 and {Template Datacenter:ifOperStatus[{#SNMPVALUE}].count(3m,2,eq,3m)}<>3 and {Template Datacenter:ifAlias[{#SNMPVALUE}].str(this_does_not_exist)}=0 
+
+
+
+Если последнее значение равно 2, то значить интерфейс упал
+({TRIGGER.VALUE}=0 and {LLD template:ifOperStatus[{#IFNAME}].last(0)}=2) or
+({TRIGGER.VALUE}=1 and {LLD template:ifOperStatus[{#IFNAME}].last(0)}=2)
+
+
+({TRIGGER.VALUE}=0 and {Template SNMP Mikrotik:icmpping[,4].max(#3)}=0) or
+({TRIGGER.VALUE}=1 and {Template SNMP Mikrotik:icmpping[,4].min(#3)}=0)
+
+
+
+
+
+
+
+
+
+LLD - discovery rules
+https://adminnotes.info/zabbix/zabbix-%D0%BE%D0%B1%D0%BD%D0%B0%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D1%81%D0%B5%D1%82%D0%B5%D0%B2%D1%8B%D1%85-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%BE%D0%B2.html
+https://tech4u.pro/articles/80-nizkourovnevoe-obnaruzhenie-zabbix-low-level-discovery
+https://litl-admin.ru/monitoring-2/nizkourovnevoe-obnaruzhenie-v-zabbix.html
+https://habr.com/ru/company/zabbix/blog/203050/
+https://habr.com/ru/company/zabbix/blog/193460/
+
+
+
+Добавление MIB файлов
+https://mibs.cloudapps.cisco.com/ITDIT/MIBS/servlet/index
+https://mibs.cloudapps.cisco.com/ITDIT/MIBS/MainServlet?ReleaseSel=4741&PlatformSel=261&fsSel=302
+https://www.cisco.com/c/en/us/td/docs/routers/asr1000/mib/guide/asr1kmib/asr1mib2.html#43458
+http://admindoc.ru/986/mib-yi-dlya-cisco-ustroystv/
+asa mibs
+ftp://ftp.cisco.com/pub/mibs/supportlists/asa/asa-supportlist.html
+
+
+Добавление mib файлов
+http://va0816.blogspot.com/2013/07/snmp-mib-cent-os.html
+https://voipnotes.ru/install-snmp-mib-files-linux-ubuntu-14-10/
+http://net-snmp.sourceforge.net/tutorial/tutorial-5/commands/mib-options.html
+
+Хороший мануал
+https://www.ibm.com/developerworks/ru/library/snmp_essentials_02/

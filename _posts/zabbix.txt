@@ -1,0 +1,131 @@
+
+http://icingathis.blogspot.com/2014/09/snmptt.html
+https://www.zabbix.com/forum/in-russian/30663-zabbix-2-0-4-snmp-trap-snmptt-d-link-des-3200
+https://www.zabbix.com/forum/zabbix-troubleshooting-and-problems/25752-zabbix-snmp-trap-with-snmptt?postcount=6
+https://www.zabbix.com/forum/in-russian/32980-snmp-trap-%D0%BD%D1%83%D0%B6%D0%BD%D0%B0-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C
+http://va0816.blogspot.com/2013/06/zabbix-snmp-traps.html
+http://software-radar.com/article/zabbix-24-%D0%BF%D1%80%D0%B8%D0%B5%D0%BC-snmp-%D1%82%D1%80%D0%B0%D0%BF%D0%BE%D0%B2-%D0%BA%D0%B0%D0%BA-%D1%8D%D1%82%D0%BE-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82
+https://zabbix.org/wiki/Start_with_SNMP_traps_in_Zabbix
+http://snmptt.sourceforge.net/docs/snmptt.shtml#LoggingSyslog
+https://www.zabbix.com/forum/in-russian/12646-%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-snmp-%D1%82%D1%80%D0%B0%D0%BF%D0%BE%D0%B2
+https://www.zabbix.com/documentation/3.4/ru/manual/config/items/itemtypes/snmptrap
+https://www.zabbix.org/wiki/Start_with_SNMP_traps_in_Zabbix
+http://software-radar.com/article/zabbix-24-%D0%BF%D1%80%D0%B8%D0%B5%D0%BC-snmp-%D1%82%D1%80%D0%B0%D0%BF%D0%BE%D0%B2-%D0%BA%D0%B0%D0%BA-%D1%8D%D1%82%D0%BE-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%D0%B5%D1%82
+https://2keep.net/snmp_trap_email_zabbix/
+https://forum.nag.ru/index.php?/topic/118022-zabbix-traps-snmptt/
+https://www.kost.su/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-trap-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%BE%D0%B1%D1%80%D0%B0%D0%B1/
+https://internet-lab.ru/zabbix_snmp_traps
+https://forum.nag.ru/index.php?/topic/117298-zabbix-snmp-traps/
+https://www.linux.org.ru/forum/admin/9429608
+https://habr.com/ru/post/417813/
+https://habr.com/ru/company/X5RetailGroup/blog/438754/
+http://bloggik.net/index.php/articles/monitoring/17-zabbix/37-zabbix-snmp-traps
+http://icingathis.blogspot.com/2014/09/snmptt.html
+https://books.google.ru/books?id=eyyFDwAAQBAJ&pg=PA166&lpg=PA166&dq=SNMP+trap+fallback&source=bl&ots=XFvDRd03MI&sig=ACfU3U2zH7HkGKHnpbrYUe1NCFvHjsXZ4A&hl=ru&sa=X&ved=2ahUKEwjThKrpr8jkAhUy2aYKHZihACA4ChDoATAMegQICRAB#v=onepage&q=SNMP%20trap%20fallback&f=false
+https://www.youtube.com/watch?v=fVK2YWdTalQ
+https://blog.cadena-it.com/linux-tips-how-to/received-zabbix-monitoring-snmp-traps/
+https://www.zabbix.com/forum/in-russian/40948-snmp-trap-%D0%B8-zabbix_trap_receiver-pl
+https://support.usergate.com/ru/knowledge-base/docs/book/12816/nastroyka-snmp-traps-v-zabbix
+
+
+Мониторинг логов
+https://lykoz.livejournal.com/55260.html
+https://rtfm.co.ua/zabbix-sozdanie-elementa-dannyx-item-dlya-nablyudeniya-za-log-fajlom-i-dobavlenie-triggera/
+https://vot-tak-vot.tk/?p=201
+https://kamaok.org.ua/?p=2149
+
+
+https://habr.com/ru/post/206612/
+
+
+
+
+
+
+
+
+https://forum.lissyara.su/pro-sajt-f14/nastrojka-snmp-v2-trap-na-zabbix-server-na-primere-t41125.html
+https://www.zabbix.com/documentation/1.8/ru/manual/advanced_snmp
+
+
+
+
+
+Вот мой пример триггера для температурного гистерезиса:
+
+({TRIGGER.VALUE}=0 and {Template Sensor:temp.T1.last(5m)}>{$MAX_TEMP_T1}) or 
+        ({TRIGGER.VALUE}=1 and {Template Sensor:temp.T1.last(5m)}>{$MAX_TEMP_T1_HYST})
+
+С этими шаблонами макросов:
+
+{$MAX_TEMP_T1} = 28
+{$MAX_TEMP_T1_HYST} = 25
+
+Также из 3.2 вы можете использовать функцию «Выражение восстановления»:
+
+
+Порт упал
+({192.168.2.22:ifOperStatus.21.last(0)}<>1)
+
+
+
+
+
+Шаблоны
+https://github.com/rmavrichev/zabbix/tree/master/zbx-templates
+https://github.com/rmavrichev/zabbix/blob/master/zbx-scripts/zbxhostname.sh
+https://github.com/gcaracuel/Zabbix_Templates/tree/master/Cisco%20Routers
+https://www.zabbix.com/integrations/cisco
+https://github.com/jjmartres/Zabbix/tree/master/zbx-templates/zbx-cisco/zbx-cisco-interfaces
+
+
+LLD
+https://habr.com/ru/company/zabbix/blog/193460/
+https://habr.com/ru/company/zabbix/blog/203050/
+https://blog.bissquit.com/unix/debian/nizkourovnevoe-obnaruzhenie-v-zabbix-pravila-lld/
+https://adminnotes.info/zabbix/zabbix-%D0%BE%D0%B1%D0%BD%D0%B0%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D1%81%D0%B5%D1%82%D0%B5%D0%B2%D1%8B%D1%85-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%BE%D0%B2.html
+https://www.zabbix.com/documentation/3.0/manual/appendix/macros/supported_by_location
+https://forum.nag.ru/index.php?/topic/101157-zabbix-30-shablony-dlya-snmp-lld/
+
+
+
+
+
+
+telegram
+https://serveradmin.ru/nastroyka-opoveshheniy-zabbix-v-telegram/
+https://unixhelp.org/python-smtp-alert-script-for-zabbix/
+
+
+
+
+FORMAT ZBXTRAP $aA $1
+
+Формат формируется из предыдущих настроек
+09:50:22 2019/09/12  .1.3.6.1.6.3.1.1.5.5 Normal "General event" 192.168.121.63 - ZBXTRAP 192.168.121.63 91.196.222.194
+
+
+
+Нужен триггер, который на 
+
+
+
+
+
+
+
+
+
+-----------------------
+
+/etc/snmp/snmptt.ini
+
+net_snmp_perl_enable = 1
+mibs_environment = ALL
+date_time_format = %H:%M:%S %Y/%m/%d
+log_enable = 1
+log_file = /tmp/my_zabbix_traps.tmp
+
+
+
+log_file = /var/log/snmptt/snmptt.log

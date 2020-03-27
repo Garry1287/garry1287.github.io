@@ -11,8 +11,312 @@ categories: networking
 ```
   createUser myuser MD5 mypassword DES myotherpassword
 ```
+
+## Настройка cisco роутера
+
+
+
+Используйте команду терминала конфигурации, чтобы войти в режим конфигурации.
+
+Switch# configure terminal
+
+Используйте следующую команду для включения и настройки Cisco SNMP версии 3.
+
+Switch(config)# snmp-server group Universe7 v3 priv
+Switch(config)# snmp-server user goku Universe7 v3 auth sha 0123456789 priv aes 128 9876543210
+Switch(config)# snmp-server contact Zamasu <zamasu@dbsuper.com>
+Switch(config)# snmp-server location Universe10 - IT Room
+Switch(config)# exit
+
+Настройка сервера
+Чтобы проверить конфигурацию CiscoV3, используйте следующие команды на компьютере под управлением Ubuntu Linux.
+```
+# apt-get install snmp
+# snmpwalk -v 3 -u goku -l authPriv -a SHA -A 0123456789 -x AES -X 9876543210 192.168.0.1
+```
+
+
+ SNMP V3 на маршрутизаторе
+Сначала сделаем ACL с указанием с каких машин/сетей, разрешен доступ по SNMP
+например:
+access-list 3 permit 192.168.1.0 0.0.0.255
+
+Затем создаем view и можем указать какие MIB будут доступны
+snmp-server view READ iso included
+
+Создаем группу, в данном случае разрешается только чтение с сети 192.168.1.0/24
+snmp-server group SNMP_G v3 priv read READ access 3
+
+Создаем пользователя, который входит в выше описанную группу:
+snmp-server user SNMP_U SNMP_G v3 auth sha Cisco priv des Systems
+
+Красным отмечены пароли.
+
+Ну и укажем, кто будет получать SNMP traps:
+snmp-server host 192.168.1.3 version 3 auth SNMP_U 
+
+
+
+Часть 1
+
+Router(config)# snmp-server view SNMP-RO system included
+Router(config)# snmp-server view SNMP-RO mib-2 included
+Router(config)# snmp-server group TEST v3 priv read SNMP-RO access SNMP_ACL
+Router(config)# snmp-server user ADMIN TEST v3 auth sha cisco123 priv aes 128 snmp321
+Router(config)# snmp-server enable traps snmp
+
+Агент SNMPv3 настраивается по-другому нежели SNMPv1/SNMPv2:
+
+Вместо строки сообщества создаётся пользователь с паролем (cisco123) и шифрованием (aes 128, ключ шифрования snmp321)  - следует запомнить, что первым указывается пароль пользователя (auth sha cisco123) и вторым ключ шифрования (aes 128 snmp321). Это важно.
+
+Предварительно для пользователя создаётся группа, а ещё ранее вид. Вид определяет с какой частью дерева MIB предстоит работать.
+
+Ещё раз по командам:
+
+    Команда 1 - создание вида (SNMP-RO) для работы с веткой MIB (system).
+    Команда 2 - создание вида (SNMP-RO) для работы с веткой MIB (mib-2), mib-2 входит в system - эта команда только для примера, что можно добавлять несколько веток.
+    Команда 3 - создание группы (TEST) версии 3 (v3) с аутентификацией и шифрованием (priv) только для чтения (read) для вида (SNMP-RO) и списком доступа (SNMP_ACL).
+    Команда 4 - создание пользователя (ADMIN) в группе (TEST) версии 3 (v3) аутентификацией по алгоритму (sha), паролем (cisco123) и шифрованием (priv) по алгоритму (aes 128) и ключом шифрования (snmp321).
+    Команда 5 - включаем ловушки и определение типов ловушек (snmp).
+
+    
+    
+    
+    auth - group using the authNoPriv Security Level (MD5/SHA-1 аутентификация, без шифрования данных);
+    noauth - group using the noAuthNoPriv Security Level (без аутентификации и шифрования);
+    priv - group using SNMPv3 authPriv security level (MD5/SHA-1 аутентификация, шифрование данных DES/3DES/AES)
+
+    
+    Router(config)# snmp-server enable traps snmp
+Router(config)# snmp-server host 192.168.137.40 version 3 auth ADMIN
+
+
+EngineID - характерезует агента, сервер получает эти данные при опросе
+
+При snmp v3 trap надо указывать EngineID, при  не надо в настройках сервера
+
+In a /tmp/snmptrapd.conf file put:
+
+ createUser -e 0x8000000001020304 traptest SHA mypassword AES
+ authuser log traptest
+
+SNMPv3 INFORM
+
+In a /tmp/snmptrapd.conf file put:
+
+ createUser informtest SHA mypassword AES
+ authuser log informtest
+
+
 [https://blog.ine.com/2008/07/19/snmpv3-tutorial](https://blog.ine.com/2008/07/19/snmpv3-tutorial)
 [http://vladimir-stupin.blogspot.com/2016/09/](http://vladimir-stupin.blogspot.com/2016/09/)
 [https://www.opsview.com/resources/how-to/blog/setting-snmpv3-traps](https://www.opsview.com/resources/how-to/blog/setting-snmpv3-traps)
 [http://www.net-snmp.org/wiki/index.php/TUT:Configuring_snmptrapd_to_receive_SNMPv3_notifications](http://www.net-snmp.org/wiki/index.php/TUT:Configuring_snmptrapd_to_receive_SNMPv3_notifications)
-[https://wiki.debian.org/SNMP][https://wiki.debian.org/SNMP](https://wiki.debian.org/SNMP][https://wiki.debian.org/SNMP)
+[https://wiki.debian.org/SNMP][https://wiki.debian.org/SNMP][https://wiki.debian.org/SNMP](https://wiki.debian.org/SNMP)
+
+
+
+
+
+
+
+
+
+
+
+Log time format - hh:mm:ss yyyy/MM/dd
+
+
+snmptrap.fallback
+
+Создайте файл ( /usr/local/etc/snmp/cisco.conf ) с двумя строчками;
+
+Код: Выделить всё
+
+gns3#cat /usr/local/etc/snmp/cisco.conf
+EVENT general .* "General event" Normal
+FORMAT ZBXTRAP $aA $ar
+
+Демон SNMPTT имеет большой конфиг ( /usr/local/etc/snmp/snmptt.ini )
+разбит на блоки и имеет много комментариев , поэтому отищите и замените удобным вам редактором 7 строчек на следующие (последние три строчки в файле это блок в файле);
+
+Код: Выделить всё
+
+mode = daemon
+net_snmp_perl_enable = 1
+date_time_format = %H:%M:%S %Y/%m/%d
+log_file = /tmp/zabbix_traps.tmp
+snmptt_conf_files = <<END
+/usr/local/etc/snmp/cisco.conf
+END
+
+
+
+
+#mkdir -p /var/log/zabbix_traps_archive
+#nano /etc/logrotate.d/zabbix_traps
+/tmp/zabbix_traps.tmp {
+   weekly
+   size 10M
+   compress
+   compresscmd /bin/bzip2
+   compressoptions -9
+   notifempty
+   dateext
+   dateformat -%Y%m%d
+   missingok
+   olddir /var/log/zabbix_traps_archive
+   maxage 365
+   rotate 10
+}
+
+mkdir -p /var/log/zabbix_traps_archive
+
+/etc/logrotate.d/zabbix_traps contents :
+
+/tmp/zabbix_traps.tmp {
+    weekly
+    size 10M
+    compress
+    compresscmd /usr/bin/bzip2
+    compressoptions -9
+    notifempty
+    dateext
+    dateformat -%Y%m%d
+    missingok
+    maxage 365
+    rotate 10
+}
+
+
+
+
+
+Все пользовательские получатели трапов perl и конфигурация SNMPTT трапов должны быть отформатированы следующим образом: 
+ [штамп времени] [трап, часть 1] ZBXTRAP [адрес] [трап, часть 2]
+
+где
+
+    [штамп времени] - штамп времени используемый для элементов данных типа 'Журнал (лог)'
+    ZBXTRAP - заголовок, который указывает, что с этой строки начался новый трап
+    [адрес] - IP адрес используемый для поиска узла сети из этого трапа
+
+
+
+
+
+
+
+
+
+
+
+
+
+схема такая
+
+прилетает трап демону snmptrapd (из пакета snmp)
+
+в конфиге у него указан обработчик трапов snmptt (/usr/sbin/snmptthandler)
+
+(эта дикая штука на перле - чтобы разгребать/фильтровать/форматировать трапы - чтобы не засирать системы мониторинга)
+
+Результат складывается в лог /var/log/snmptt/*
+
+его же нужно указать в конфиге забикс сервера и включить траппер и перезабустить демон забикс сервера
+
+zabbix_server.conf - настройте Zabbix для запуска SNMP траппера и задайте файл с трапами:
+
+StartSNMPTrapper=1
+
+SNMPTrapperFile=/tmp/my_zabbix_traps.tmp
+
+меняем
+
+SNMPTrapperFile=/var/log/snmptt/snmptt.log (ибо он указан а конфиге snmptt и в Logrotate прописан инсталятором snmptt)
+
+ 
+
+ 
+
+
+
+
+Нюансы
+
+ 
+
+/etc/snmp/snmptrapd.conf - добавьте SNMPTT как обработчик трапов:
+
+traphandle default snmptt #это для standalone
+
+рекомендуется daemon
+
+traphandle default snmptthandler
+
+ 
+
+snmptrapd надо запускать с параметром
+
+snmptrapd -On
+
+(это рулит преобр oid число-текст)
+
+ 
+
+ 
+
+ 
+
+Еще в /etc/snmp/snmptt.ini
+
+меняем mode standalone на daemon
+
+date_time_format = %H:%M:%S %Y/%m/%d
+
+ 
+
+Далее в забиксе уже создаем элемент данных тип SNMP trap
+
+Трап по IP узла + регулярка навешивается на этот элемент
+
+ключ с регуляркой snmptrap["бла-бла-бла"]
+
+тип данных Log (для корректной обработки штампов времени)
+
+далее будет сохраняться вся строка
+
+Далее тригер тоже с регуляркой.....
+
+ 
+
+ 
+
+snmptrap.fallback
+
+важно для узла создать элемент snmptrap.fallback
+
+для трапов - которые не попадут ни под одно правило
+
+ 
+
+ 
+
+Если совпадений не было найдено ни с одним из соответствующих SNMP интерфейсов, Zabbix по умолчанию журналирует несовпавшие трапы. (Это поведение настраивается в “Журналировать несовпавшие SNMP трапы” в Администрирование → Общие → Другое).
+
+
+
+
+
+
+
+
+Установи
+
+sudo apt-get install snmp-mibs-downloader
+
+
+
+
+
+%H:%M:%S %Y/%m/%d 
