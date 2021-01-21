@@ -15,4 +15,4 @@ categories: Git and docs
 
 Предварительно выделяем ссылку. После этого, используя комбинацию `Ctr+Shift+P` находим в списке UrlConverter, нажимаем и получаем результат
 
-![](https://garry1287.github.io//assets/2021-01-20-Urlconvertor/2021-01-20 15-56-01.png)
+![](//garry1287.github.io/assets/2021-01-20-Urlconvertor/2021-01-20 15-56-01.png)
