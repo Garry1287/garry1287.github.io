@@ -1,0 +1,98 @@
+---
+layout: post
+title:  "VPLS L2VP на juniper и huawei"
+date:   2021-01-25 11:18:10 +0300
+categories: isp
+---
+
+
+
+Схема вланов
+
+
+
+```
+apply-groups-except arp-police;
+disable;
+description "## VPLS: vpls7119-lightwifi-lptz_opt82 ##";
+encapsulation vlan-vpls;
+vlan-tags outer 4050 inner 100;
+input-vlan-map pop-pop;
+output-vlan-map push-push;
+family vpls {
+    filter {
+        input mrfc-lwifi-in;
+    }
+    policer {
+        input lim500m;
+        output lim500m;
+    }
+}
+
+
+
+> show configuration interfaces xe-1/0/0.5026
+
+apply-groups-except arp-police;
+description "## VPLS: vpls1236-MRSK-Lipetsk, g.Lipetsk, ul. 50 let NLMK, 33, SURMS-356882 [1433.668]##";
+encapsulation vlan-vpls;
+bandwidth 4m;
+vlan-tags outer 1433 inner 668;
+input-vlan-map pop-pop;
+output-vlan-map push-push;
+family vpls {
+    policer {
+        input lim4m;
+        output lim4m;
+    }
+}
+
+требуется переделать вот в это:
+
+apply-groups-except arp-police;
+description "## VPLS: vpls1236-MRSK-Lipetsk, g.Lipetsk, ul. 50 let NLMK, 33, SURMS-356882 [1442.595]##";
+encapsulation vlan-vpls;
+bandwidth 4m;
+vlan-tags outer 1442 inner 595;
+input-vlan-map pop-pop;
+output-vlan-map push-push;
+family vpls {
+    policer {
+        input lim4m;
+        output lim4m;
+    }
+}
+
+
+
+
+interface GigabitEthernet0/3.30000800
+ description *** Remote branch 1 ***
+ encapsulation dot1Q 300 second-dot1q 800
+ ip address 10.0.30.1 255.255.255.252
+ ip mtu 1500
+!
+```
+300 - внешний
+800 - внутренний
+
+
+### Ссылки
+
++ [VPLS — Juniper Exam Wiki](https://juniper-exam.ru/wiki/VPLS)
++ [Lab and fun!: Лаба MPLS VPN. ALU/Junos/XR Interoperability](http://www.labnfun.ru/2016/08/mpls-vpn-alujunosxr-interoperability.html)
++ [RFC 4026 - Provider Provisioned Virtual Private Network (VPN) Terminology](https://tools.ietf.org/html/rfc4026)
++ [l2 vfi на juniper - Активное оборудование Ethernet, IP, MPLS, SDN/NFV... - Форумы NAG.RU](https://forum.nag.ru/index.php?/topic/74829-l2-vfi-na-juniper/)
++ [Построение l2 vpn на основе MX juniper и 7606 cisco - Добро пожаловать в журнал Ростовского Орла — LiveJournal](https://eagle-rost.livejournal.com/54219.html)
++ [Сети для самых матёрых. Часть двенадцатая. MPLS L2VPN / linkmeup](https://linkmeup.ru/blog/261.html)
++ [Настройка VPLS Multihoming на маршрутизаторах Juniper / Хабр](https://habr.com/ru/post/259645/)
++ [Проброс вланов на Джуниперах серии MX | Netwild.ru](http://netwild.ru/juniper_mx_vlan/)
++ [ИТ, сети, безопасность.: Juniper EX Q-in-Q](https://show-route.blogspot.com/2017/02/juniper-ex-q-in-q.html)
++ [ИТ, сети, безопасность.: Настройка интерфейсов на Juniper (copy-paste)](https://show-route.blogspot.com/2015/07/juniper-copy-paste.html)
++ [Настройка QinQ и Selective QinQ на коммутаторах SNR - НАГ](https://shop.nag.ru/article/snr_switch_qinq_selective_qinq)
++ [Основы компьютерных сетей. Тема №6. Понятие VLAN, Trunk и протоколы VTP и DTP / Хабр](https://habr.com/ru/post/319080/)
++ [QinQ between MX and EX | Switching](https://community.juniper.net/communities/community-home/digestviewer/viewthread?MID=66045)
++ [VLANs and VPLS Routing Instances - TechLibrary - Juniper Networks](https://www.juniper.net/documentation/en_US/junos/topics/topic-map/vlans-and-vpls.html)
++ [404 : Page not found](https://www.juniper.net/documentation/en_US/junos/topics/topic-map/tagged-vlans).html#id-configuring-double-tagged-vlans-on-layer-3-logical-interfaces
++ [Разбор QinQ на Juniper MX и изящный бриджинг 🖧 | Amin 's Blog](https://aminux.wordpress.com/2017/10/11/juniper-mx80-mx960-mx-qinq-non-loop/)
++ [QinQ на Juniper EX и Cisco 4900M « Golas](http://www.golas.ru/blog/qinq-na-juniper-ex/)
