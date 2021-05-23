@@ -7,7 +7,7 @@ categories: jekyll posts
 
 # Proxy arp и local-proxy-arp #
 
-###proxy arp
+### proxy arp
 
 Например, скажем, хост A (192.168.1.5) напрямую подключен к маршрутизатору 192.168.1.1. Если узел A запрашивает узел C (10.10.10.10), маршрутизатор отвечает своим MAC-адресом (при условии, что маршрутизатор может достичь 10.10.10.10) proxy-arp.
 [http://xgu.ru/wiki/Proxy_ARP](http://xgu.ru/wiki/Proxy_ARP)
