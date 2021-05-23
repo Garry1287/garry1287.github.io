@@ -96,3 +96,4 @@ interface GigabitEthernet0/3.30000800
 + [404 : Page not found](https://www.juniper.net/documentation/en_US/junos/topics/topic-map/tagged-vlans).html#id-configuring-double-tagged-vlans-on-layer-3-logical-interfaces
 + [Разбор QinQ на Juniper MX и изящный бриджинг 🖧 | Amin 's Blog](https://aminux.wordpress.com/2017/10/11/juniper-mx80-mx960-mx-qinq-non-loop/)
 + [QinQ на Juniper EX и Cisco 4900M « Golas](http://www.golas.ru/blog/qinq-na-juniper-ex/)
++ [Example: Configuring Extended VLAN VPLS Encapsulation - TechLibrary - Juniper Networks](https://www.juniper.net/documentation/en_US/junos/topics/example/vpls-security-extended-vlan-encapsulation-configuring-cli.html)
