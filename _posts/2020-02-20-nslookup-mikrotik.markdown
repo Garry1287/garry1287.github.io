@@ -5,9 +5,7 @@ date:   2020-02-20 09:49:10 +0300
 categories: jekyll posts
 ---
 
-
-
-#Nslookup в mikrotik
+# Nslookup в mikrotik #
 
 ```
 [admin@RKN] > put [resolve ya.ru server 217.107.196.11] 

@@ -1,4 +1,9 @@
-
+---
+layout: post
+title:  "DNS"
+date:   2019-02-21 15:02:11 +0300
+categories: networking dns
+---
 
 NOTIFY в pdns только AXFR, IXFR пока есть только на слейвах
 

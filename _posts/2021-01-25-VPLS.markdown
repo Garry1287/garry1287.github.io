@@ -2,14 +2,10 @@
 layout: post
 title:  "VPLS L2VP на juniper и huawei"
 date:   2021-01-25 11:18:10 +0300
-categories: isp
+categories: isp networking ros
 ---
 
-
-
-Схема вланов
-
-
+# Схема вланов #
 
 ```
 apply-groups-except arp-police;
@@ -34,7 +30,7 @@ family vpls {
 > show configuration interfaces xe-1/0/0.5026
 
 apply-groups-except arp-police;
-description "## VPLS: vpls1236-MRSK-Lipetsk, g.Lipetsk, ul. 50 let NLMK, 33, SURMS-356882 [1433.668]##";
+description "## VPLS: vpls1236-MRSK-Lipetsk,";
 encapsulation vlan-vpls;
 bandwidth 4m;
 vlan-tags outer 1433 inner 668;
@@ -50,7 +46,7 @@ family vpls {
 требуется переделать вот в это:
 
 apply-groups-except arp-police;
-description "## VPLS: vpls1236-MRSK-Lipetsk, g.Lipetsk, ul. 50 let NLMK, 33, SURMS-356882 [1442.595]##";
+description "## VPLS: vpls1236-MRSK-Lipetsk";
 encapsulation vlan-vpls;
 bandwidth 4m;
 vlan-tags outer 1442 inner 595;

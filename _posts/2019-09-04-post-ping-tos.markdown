@@ -5,7 +5,7 @@ date:   2019-09-04 15:49:15 +0300
 categories: networking
 ---
 
-## Отправка маркированного ping
+# Отправка маркированного ping #
 
 ```
 router#ping       

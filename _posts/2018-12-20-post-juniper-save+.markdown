@@ -6,7 +6,7 @@ categories: networking
 ---
 
 
-## Juniper EX4200 - восстановление после ошибки  error: could not copy to juniper.save+ 
+# Juniper EX4200 - восстановление после ошибки  error: could not copy to juniper.save+ # 
 
 
 ```

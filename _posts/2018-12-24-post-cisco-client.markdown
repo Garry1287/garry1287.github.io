@@ -2,11 +2,11 @@
 layout: post
 title:  "Получить адрес по dhcp на cisco роутер"
 date:   2018-12-24 10:10:15 +0300
-categories: networking
+categories: networking cisco
 ---
 
 
-## Получить адрес по dhcp на cisco роутер
+# Получить адрес по dhcp на cisco роутер #
 
 Ни разу до сегодняшнего дня не стояло задачи получить адрес по dhcp на cisco роутер.
 

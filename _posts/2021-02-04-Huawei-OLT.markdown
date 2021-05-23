@@ -5,7 +5,7 @@ date:   2021-02-04 12:31:10 +0300
 categories: Netorking
 ---
 
-# Huawei OLT
+# Huawei OLT #
 
 - [Первичная настройка коммутатора Huawei](https://huaweigid.ru/blog/nastrojka/pervichnaya-nastrojka-kommutatora-huawei.html)
 - [Помощь в настройке OLT от Huawei - Активное оборудование Ethernet, IP, MPLS, SDN/NFV... - Форумы NAG.RU](https://forum.nag.ru/index.php?/topic/121748-pomosch-v-nastroyke-olt-ot-huawei/)

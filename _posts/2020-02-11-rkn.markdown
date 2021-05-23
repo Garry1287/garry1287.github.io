@@ -2,10 +2,8 @@
 layout: post
 title:  "Как работает блокировка RKN"
 date:   2020-02-21 15:02:11 +0300
-categories: jekyll posts
+categories: networking psi
 ---
-
-
 
 ```
 0       2       *       *       *       /root/bin/dellogs.sh
