@@ -3,6 +3,8 @@ layout: post
 title:  "Пинг TOS"
 date:   2019-09-04 15:49:15 +0300
 categories: networking
+tags: nettools networking
+comments: 1
 ---
 
 # Отправка маркированного ping #

@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Setting default value for a BASH variable
-date:   2020-02-25 10:24:11 +0300
-categories: jekyll posts
+date: 2020-02-25 10:24:11 +0300
+categories: bash
 ---
 
 # Setting default value for a BASH variable #
