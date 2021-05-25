@@ -1,0 +1,32 @@
+---
+layout: post
+title:  "oauth2.0"
+date:   2018-05-15 00:39:21 +0300
+categories: programming
+tags: programming
+---
+
+# oauth2.0
+Адрес, на который пользователь возвращается после того, как он разрешил или отказал приложению в доступе (соответствует redirect_uri протокола OAuth)
+
+
+PizzaShopsApp
+
+https://localhost:8000/
+
+тестовое приложения для изучения Django oauth2.0
+Права:
+
+Получение информации о внешних ссылках на сайт
+
+ID: 8d27ca00004c4b8d984052db18bfa1af
+Пароль: a9ed1109ab4742ea85102c29cea45fdd
+Callback URL: [https://oauth.yandex.ru/verification_code](https://oauth.yandex.ru/verification_code)
+
+
+
+Autorazation Grand
+
+
+
+[https://www.youtube.com/watch?v=Go--9f9_gG8](https://www.youtube.com/watch?v=Go--9f9_gG8)

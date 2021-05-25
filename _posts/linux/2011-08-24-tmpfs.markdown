@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "tmpfs"
+date:   2011-08-24 01:43:52 +0400
+categories: linux
+tags: linux
+---
+
+# tmpfs
+Filesystem                      1K-blocks    Used Available Use% Mounted on
+devtmpfs                          4059852      76   4059776   1% /dev
+tmpfs                             4064408       0   4064408   0% /dev/shm
+tmpfs                             4064408     376   4064032   1% /run
+/dev/md0                         10316984  592228   9200680   7% /
+/dev/mapper/vg_kvmhost1-lv_usr   20642428 1019024  18574828   6% /usr
+tmpfs                             4064408       0   4064408   0% /sys/fs/cgroup
+/dev/mapper/vg_kvmhost1-lv_home  51606140  184252  48800448   1% /home
+/dev/mapper/vg_kvmhost1-lv_var   30963708  384532  29006312   2% /var
+tmpfs                             4064408     376   4064032   1% /var/run
+tmpfs                             4064408     376   4064032   1% /var/lock
+
+
+Tmpfs — временное файловое хранилище во многих Unix-like ОС. 
+Предназначена для монтирования файловой системы, но размещается в ОЗУ вместо физического диска. 
+Подобная конструкция является RAM диском.
+
+
+tmpfs - это файловая система, размещающая все файлы и каталоги в оперативной памяти. Обычно, данную файловую систему используют для работы со временными файлами (например для хранения информации о PHP-сессиях и т.п.), так как после перезагрузки компьютера вся размещённая в таком разделе информация по понятным причинам будет удалена.
+
+devtmpfs = tmpfs + kernel puts standard dev files in it 
+
+Before devtmpfs, udev creates all the dev files in /dev which is a pure tmpfs.
+But it's slow, because udev must iterate /sys to do it.
+
+ devtmpfs doesn't need udev, it's standalone
+
+This is great for rescue scenarios (when you need init=/bin/sh), or embedded systems. There's also a speed consideration, you know, the eternal quest for faster boot times. Having the kernel create device nodes is faster than creating them with udev.
+
+devtmpfs creates device nodes, then udev works on top of that, changing permissions and creating symlinks.
+
+devtmpfs не нуждается в udev, что увеличивает скорость в отличии от tmpfs, создаёт device nodes, но udev работает сверху этого, изменяя права
+и создавая симлинки
+
+create a tmpfs very early at kernel
+initialization, before any driver core device is registered.
+
+[http://lwn.net/Articles/330985/](http://lwn.net/Articles/330985/) 
+ 
+192.168.121.34

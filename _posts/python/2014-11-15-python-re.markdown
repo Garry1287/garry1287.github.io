@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "python-re"
+date:   2014-11-15 11:00:09 +0300
+categories: python
+tags: python
+---
+
+# python-re
+[http://litovchenko.com/blog/2009/04/regexp-python/](http://litovchenko.com/blog/2009/04/regexp-python/)
+[http://kobru.ru/view_post4.php?id=35](http://kobru.ru/view_post4.php?id=35)
+[https://tproger.ru/translations/regular-expression-python/](https://tproger.ru/translations/regular-expression-python/)
+[http://qualcode.ru/article/python_regex/](http://qualcode.ru/article/python_regex/)
+[http://snakeproject.ru/rubric/article.php?art=python_reg_exp](http://snakeproject.ru/rubric/article.php?art=python_reg_exp)
+[https://tproger.ru/translations/regular-expression-python/](https://tproger.ru/translations/regular-expression-python/)

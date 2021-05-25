@@ -1,0 +1,28 @@
+---
+layout: post
+title:  "suricata"
+date:   2012-08-29 05:46:06 +0400
+categories: PSI
+tags: PSI
+---
+
+# suricata
+30/5/2019 -- 16:08:39 - <Info> - Parsed disabled for ftp protocol. Protocol detectionstill on.
+30/5/2019 -- 16:08:39 - <Info> - Protocol detection and parser disabled for smtp protocol.
+30/5/2019 -- 16:08:39 - <Info> - Protocol detection and parser disabled for dns protocol.
+30/5/2019 -- 16:08:39 - <Info> - Protocol detection and parser disabled for imap protocol.
+30/5/2019 -- 16:08:39 - <Info> - Protocol detection and parser disabled for msn protocol.
+30/5/2019 -- 16:08:39 - <Warning> - [ERRCODE: SC_WARN_DEFAULT_WILL_CHANGE(317)] - in 5.0 the default for decoder event stats will go from 'decoder.<proto>.<event>' to 'decoder.event.<proto>.<event>'. See ticket #2225. To suppress this message, set stats.decoder-events-prefix in the yaml.
+30/5/2019 -- 16:08:39 - <Info> - fast output device (regular) initialized: fast.log
+30/5/2019 -- 16:08:39 - <Info> - stats output device (regular) initialized: stats.log
+30/5/2019 -- 16:08:39 - <Info> - file-log output device (regular) initialized: files-json.log
+30/5/2019 -- 16:08:39 - <Info> - md5 calculation requires linking against libnss
+
+
+
+30/5/2019 -- 16:10:18 - <Info> - 2 rule files processed. 907915 rules successfully loaded, 0 rules failed
+30/5/2019 -- 16:10:21 - <Info> - Threshold config parsed: 0 rule(s) found
+30/5/2019 -- 16:15:33 - <Info> - 907915 signatures processed. 315882 are IP-only rules, 592033 are inspecting packet payload, 0 inspect application layer, 0 are decoder event only
+30/5/2019 -- 16:19:19 - <Info> - Found 4 RX RSS queues for 'eth5'
+30/5/2019 -- 16:19:19 - <Info> - Going to use 4 thread(s)
+30/5/2019 -- 16:19:20 - <Notice> - all 4 packet processing threads, 4 management threads initialized, engine started.

@@ -1,0 +1,273 @@
+---
+layout: post
+title:  "hosting"
+date:   2018-02-04 18:59:32 +0300
+categories: linux
+tags: linux
+---
+
+# hosting
+Plugins
+
+    PHP Network Weathermap (weathermap - v0.97a)
+    SuperLinks (superlinks - v0.8)
+    Real-time statistics (zond - v0.34c)
+    Host Info (hostinfo - v0.2)
+    Report Creator (reports - v0.3)
+    Global Plugin Settings (settings - v0.5)
+    Network Discovery (discovery - v0.9)
+    System Title Changer (titlechanger - v0.1)
+
+
+[http://mmonit.com/monit/](http://mmonit.com/monit/)
+Monit - для мониторинга падения процессов
+
+[http://serverfault.com/questions/45005/how-to-monitor-single-process](http://serverfault.com/questions/45005/how-to-monitor-single-process)
+[http://linuxpoison.blogspot.com/2010/03/how-to-monitor-process-on-linux-using.html](http://linuxpoison.blogspot.com/2010/03/how-to-monitor-process-on-linux-using.html)
+[http://www.cyberciti.biz/tips/top-linux-monitoring-tools.html](http://www.cyberciti.biz/tips/top-linux-monitoring-tools.html)
+[http://www.manageengine.com/products/applications_manager/linux-monitoring.html](http://www.manageengine.com/products/applications_manager/linux-monitoring.html)
+
+
+
+
+
+
+[http://alexandr.sysoev.ru/node/164](http://alexandr.sysoev.ru/node/164)
+[http://www.xela.ru/2009/12/nastrojka-servera-apache-na-vps/](http://www.xela.ru/2009/12/nastrojka-servera-apache-na-vps/)
+
+[https://onyx.net.ua/s_loadbalance.php](https://onyx.net.ua/s_loadbalance.php)
+[http://www.telemultimedia.ru/art.php?id=339](http://www.telemultimedia.ru/art.php?id=339)
+[http://nag.ru/articles/article/22380/cdn.html](http://nag.ru/articles/article/22380/cdn.html)
+[http://ru.wikipedia.org/wiki/Content_Delivery_Network](http://ru.wikipedia.org/wiki/Content_Delivery_Network)
+[http://habrahabr.ru/post/46239/](http://habrahabr.ru/post/46239/)
+
+
+
+
+
+Включать wwwrun - пользователя то которого запускается apache - в группу пользователя, например в группу lipbalkon
+
+
+
+
+
+Использую на своем дедике CentOS, суммарный трафик - 30-40к уников/сутки, нареканий нету. Главное настроить правильно: nginx, php-fpm, eaccelerator, memcache, использовать встроенный в CMS модуль кеширования (modx, drupal имеют "из коробки", WP как дополнительный плагин), тогда Load Average будет низкий.
+
+
+
+
+
+
+
+В статье забыли упомянуть что в секции http необходимо задать параметры кеша staticfilecache через fastcgi_cache_path + советую если сайт не сильно тяжеловесный размещать кеш на tmpfs что бы не перегружать дисковую систему если большая посещаемость...
+
+
+
+
+
+
+[http://www.pro100hosting.ru/%D0%B2%D1%8B%D0%B6%D0%B8%D0%BC%D0%B0%D0%B5%D0%BC-%D0%B8%D0%B7-wordpress-%D0%BC%D0%B0%D0%BA%D1%81%D0%B8%D0%BC%D1%83%D0%BC-nginx-php-fpm-w3c-%D0%B8-cdn](http://www.pro100hosting.ru/%D0%B2%D1%8B%D0%B6%D0%B8%D0%BC%D0%B0%D0%B5%D0%BC-%D0%B8%D0%B7-wordpress-%D0%BC%D0%B0%D0%BA%D1%81%D0%B8%D0%BC%D1%83%D0%BC-nginx-php-fpm-w3c-%D0%B8-cdn)
+
+
+Не забыть на корень верные права drwxr-xr-x   6 sucden     sucden         4096 Фев 18 11:45 sucden
+
+
+
+
+Выжимаем из WordPress максимум: nginx, php-fpm, w3c и cdn 
+
+
+Сегодня мы попробуем выжать из популярного движка WordPress все соки. А для этого нам потребуются:
+
+    Быстрый вебсервер nginx
+    php в режиме fastcgi (fpm)
+    Плагин кеширования w3c
+    Какой-то CDN-сервис (опционально)
+
+Кеширование выйдет трехуровневое: cdn, кеш w3, кеш nginx. Таким образом, фактически мы сохраняем только новые данные в базу через HTTP POST-запросы, а отдаем максимально кешированные страницы. Это особо полезно в тех случаях, когда на движке WordPress у вас популярный новостной сайт, куда переодически приходит масса посетителей. Главное - дать им возможность читать сайт, пускай ценой временного перевода авторизованных пользователей в анонимные. Последнее реализуется отдачей сохраненной страницы из кеша залогиненному пользователю, если его динамическая страница не была сгенерирована сервером из-за высокой нагрузки. Приступим:
+ 
+Настройка php-fpm заключается в прописывании пути к unix-сокету и выставлению разумного числа дочерних процессов, кратное потока mysql. Например если вы указали для mysql 4 потока на процессор, то и число дочерних процессов надо выставить из расчета CPU * 4.
+ 
+Плагин w3c помимо кеширования предоставляет еще возможность сохранять медиа-библиотеку на CDN-сервисе. Это очень полезно, напормер, если у вас множество фотографий. В таком случае все картинки загружаются на удаленный сервер, а их адреса заменяются на URL вида img.mydomain.com, где img указывает на CDN, который и отдае файлы вместо нас.
+ 
+Ну а теперь самое главное, конфигурация nginx:
+
+
+
+
+    server {
+
+    listen 78.47.123.214;
+
+    index index.php;
+
+    #set $do_not_cache 1; #Если раскомментировать эту строку, nginx перестанет кешировать все страницы для анонимных пользователей
+
+    server_name mydomain.com www.mydomain.com;
+
+    root /var/www/html;
+
+    gzip                on;
+
+    gzip_disable        "msie6";
+
+    gzip_vary           on;
+
+    gzip_proxied        any;
+
+    gzip_comp_level     5;
+
+    gzip_buffers        16 8k;
+
+    gzip_http_version   1.0;
+
+    gzip_types          text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript image/png image/gif image/jpeg;
+
+    # Обработка CSS и JS
+
+    location ~* \.(css|js) {
+
+        if (!-f $request_filename) {
+
+            rewrite ^/wp-content/w3tc/min/(.+\.(css|js))$ /wp-content/w3tc/min/index.php?file=$1 last;
+
+        }
+
+    }
+
+    # Сохраним url запрошенной страницы
+
+    set $cache_uri $request_uri;
+
+    # POST запросы не кешируются
+
+    if ($request_method = POST) {
+
+        set $cache_uri 'no cache';
+
+        set $do_not_cache 1;
+
+    }
+
+    # Динамические страницы не кешируются
+
+    if ($query_string != "") {
+
+        set $cache_uri 'no cache';
+
+        set $do_not_cache 1;
+
+    }
+
+    # Не кешируем админку, rpc, коментарии и тд.
+
+    if ($request_uri ~* "(\/wp-admin\/|\/xmlrpc.php|\/wp-(app|cron|login|register|mail)\.php|wp-.*\.php|index\.php|wp\-comments\-popup\.php|wp\-links\-opml\.php|wp\-locations\.php)") {
+
+        set $cache_uri "no cache";
+
+        set $do_not_cache 1;
+
+    }
+
+    # Не кешируем зарегистрированных пользователей
+
+    if ($http_cookie ~* "comment_author|wordpress_[a-f0-9]+|wp\-postpass|wordpress_logged_in") {
+
+        set $cache_uri 'no cache';
+
+        set $do_not_cache 1;
+
+    }
+
+    # Если страница не закеширована w3c, то отдаемся на милость WordPress
+
+    location / {
+
+        try_files /wp-content/w3tc/pgcache/$cache_uri/_index.html $uri $uri/ /index.php?q=$uri&$args;
+
+    }
+
+    # Статичный контент отдаем напрямую с диска
+
+    location ~* \.(xml|ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|css|rss|atom|js|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$ {
+
+        try_files       $uri =404;
+
+        access_log      off;
+
+        expires         7d;
+
+    }
+
+    # Запрещаем доступы к .ht - файлам
+
+    location ~* /\.ht {
+
+        deny            all;
+
+        access_log      off;
+
+        log_not_found   off;
+
+    }
+
+#И наконец самое главное - обработка PHP
+
+location ~ \.php$ {
+
+            fastcgi_buffers 8 256k;
+
+            fastcgi_buffer_size 128k;
+
+            fastcgi_intercept_errors on;
+
+            include fastcgi.conf;
+
+            fastcgi_pass unix:/dev/shm/php-fpm-www.sock;
+
+            fastcgi_ignore_headers Set-Cookie Cache-Control Expires;
+
+            fastcgi_no_cache $do_not_cache;
+
+            fastcgi_cache_bypass $do_not_cache;
+
+            fastcgi_cache staticfilecache;
+
+            fastcgi_cache_valid 200 20m;
+
+            fastcgi_cache_key "$server_addr:$server_port$request_uri";
+
+            fastcgi_cache_use_stale updating error timeout invalid_header http_500;
+
+        }
+
+}
+
+[http://linuxcenter.kz/node/687/user/register](http://linuxcenter.kz/node/687/user/register)
+[http://ru.opensuse.org/Apache_Quickstart_HOWTO](http://ru.opensuse.org/Apache_Quickstart_HOWTO)
+[http://ru.opensuse.org/SDB:%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_HTTP_%D0%A1%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0_%28Apache%29](http://ru.opensuse.org/SDB:%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_HTTP_%D0%A1%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0_%28Apache%29)
+[http://www.swerdna.net.au/suseapache.html](http://www.swerdna.net.au/suseapache.html)
+[http://korzh.net/2012-01-ya-medlenno-udalyayu-apache-s-servera.html](http://korzh.net/2012-01-ya-medlenno-udalyayu-apache-s-servera.html)
+
+
+
+
+
+
+
+
+[http://hostobzor.ru/main/](http://hostobzor.ru/main/)
+[http://habrahabr.ru/post/91921/](http://habrahabr.ru/post/91921/)
+[http://dalance.ru/projects/tag/hosting/](http://dalance.ru/projects/tag/hosting/)
+[http://hosting101.ru/node/37027](http://hosting101.ru/node/37027)
+
+
+
+
+[http://www.msav.ru/blog/206-configuring-nginx-as-a-frontend-for-the-apache-web-server](http://www.msav.ru/blog/206-configuring-nginx-as-a-frontend-for-the-apache-web-server)
+
+Сравнение
+[http://habrahabr.ru/post/264775/](http://habrahabr.ru/post/264775/)
+
+
+[http://habrahabr.ru/sandbox/21382/](http://habrahabr.ru/sandbox/21382/)

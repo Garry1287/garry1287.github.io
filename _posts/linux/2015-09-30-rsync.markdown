@@ -1,0 +1,239 @@
+---
+layout: post
+title:  "rsync"
+date:   2015-09-30 17:08:16 +0300
+categories: linux
+tags: linux
+---
+
+# rsync
+Мы хотим иметь копию каталога /home/user/foto, а дубликат папки будем хранить в /mnt/backup Выполним (не забывая проверить права папки куда копируем, или выполняем от root-sudo)
+
+
+rsync -av  /home/user/foto /mnt/backup
+
+ключи
+
+    -a архивный перенос (вместе с папками, вложенными папками, файлами, скрытыми файлами и т.д)
+    -v вывод на экран данных о выполнении команды
+
+
+
+
+
+В вышеприведенной команде есть небольшой подвох. К примеру вы переименовали или отсортировали в другие папки фотографии, 
+а старые каталоги изменили название или вообще удалили. Что же получится? Скрипт честно перенесет новые появившиеся файлы и каталоги,
+ а старые которые вы удалили в папке /home/user/foto так и останутся лежать в папке бэкапа.
+ Фактически в часто изменяемых директориях выполнение такого скрипта будет приводить к помойке в папке бэкапа. Чтобы этого избежать команду надо выполнять с ключем --delete
+
+
+rsync -av  --delete /home/user/foto /mnt/backup
+
+И обе папки всегда будут идентичными
+Теперь надо выбрать ваши самые важные директории и написать в файл простенький перечень команд для бэкапа. У меня он когда-то выглядел примерно так.
+
+
+1 пример.
+
+
+rsync -av --delete --exclude="*.avi" --exclude="*.mpg" /home/user /mnt/backup
+
+Команда синхронизирует весь ваш домашний каталог, но не копирует файлы с расширениями avi и mpg. Если вам не надо еще что-то, то просто дописываете подряд --exclude="_что_исключаем_"
+
+2 пример.
+
+
+rsync -avz -e "ssh -l ssh_user -p5623" --delete /home/user/foto 192.168.0.1:"./temp"
+
+А вот это уже команда синхронизации между вашим и удаленным компьютером через ssh соединение.
+
+    -z дополнительно сжимаем данные
+    -e используем удаленный shell
+    ssh -l ssh_user -p5623 - команда на соединение с удаленным компьютером. ssh_user пользователь, а -p5623 это если порт ssh нестандартный, в примере 5623
+    192.168.0.1:"./temp" - ip адрес компьютера, (можно и по имени). Также указываем директорию куда будем переносить данные. Обратите внимание, что директория задана через ./, мы уже отталкиваемся от пути домашней директории ssh_user куда мы попадаем при соединении через ssh
+
+После ввода этой команды мы должны авторизоваться по паролю ssh_user и только тогда начнется синхронизация каталогов. Аналогичным образом можно синхронизировать удаленный каталог и локальный. Достаточно просто поменять местами папки, откуда и куда синхронизируем.
+Если вы хотите автоматизировать процесс и не вводить каждый раз 
+
+
+
+
+
+/usr/bin/rsync -avz -e ssh --delete-after /home/backup/  backup@crystal.sc.int:/home/backup/sapphire
+
+
+
+
+
+
+Последние 2 параметра в команде обозначают директорию источник и назначение.
+
+В примере ниже мы использует следующие опции:
+
+-avz - a для режима архивации (сохраняет все атрибуты файлов и директорий - владельца , права и прочее), v для отображения списка файлов обработанных rsync и  z для компрессии данных для увеличения скорость.
+
+–stats - данная опция после завершения синхронизации выводит суммарную статистику.
+
+ubuntu$ <strong>rsync -avz --stats  /tmp/dir1/ /tmp/dir2</strong>
+building file list ... done
+file2
+file3
+Number of files: 4
+Number of files transferred: 2
+Total file size: 48 bytes
+Total transferred file size: 32 bytes
+Literal data: 32 bytes
+Matched data: 0 bytes
+File list size: 87
+File list generation time: 0.001 seconds
+File list transfer time: 0.000 seconds
+Total bytes sent: 221
+Total bytes received: 64
+sent 221 bytes  received 64 bytes  570.00 bytes/sec
+total size is 48  speedup is 0.17
+
+
+
+Ребят, а можно с помощю rsync удалять файлы, которые уже удалены из источника?
+А то он новые добавляет, существующие изменяет, но не удаляет. 
+
+rsync --delete -av --rsh=ssh root@I.P.A.DRESS:/SOURCE_DIR /DESTINATION_DIR
+Такая команда скопирует рекурсивно все файлы из директории сервера "SOURCE_DIR" в локальную директорию машины с которой была выполнена команда и удалит из "DESTINATION_DIR" все несуществующие в "SOURCE_DIR" файлы. 
+
+ --del                   an alias for --delete-during
+            --delete                delete extraneous files from dest dirs
+            --delete-before         receiver deletes before xfer, not during
+            --delete-during         receiver deletes during the transfer
+            --delete-delay          find deletions during, delete after
+            --delete-after          receiver deletes after transfer, not during
+            --delete-excluded       also delete excluded files from dest dirs
+
+
+
+[https://www.digitalocean.com/community/tutorials/how-to-copy-files-with-rsync-over-ssh](https://www.digitalocean.com/community/tutorials/how-to-copy-files-with-rsync-over-ssh)
+[http://nix-sa.blogspot.ru/2011/11/rsync-ssh.html](http://nix-sa.blogspot.ru/2011/11/rsync-ssh.html)
+[http://greendail.ru/Node/487](http://greendail.ru/Node/487)
+[http://vds-admin.ru/unix-toolbox/rsync](http://vds-admin.ru/unix-toolbox/rsync)
+
+
+
+rsync -zvh --progress file /tmp/backups/
+rsync -azvh /home/user/documents /tmp/backups/
+
+
+SSH
+ rsync -avzhe ssh --progress /home/user/documents root@192.168.56.102:/root/documents
+ 
+ 7. Удаление при синхронизации
+
+Во время синхронизации можно удалять файлы, которых нет на машине откуда идет rsync синхронизация, для этого используется опция --delete.
+
+Например:
+
+rsync -avz --delete root@192.168.56.102:/documents/ /tmp/documents/
+
+
+
+--bwlimit=100
+
+
+
+rsync -avnWr --progress --bwlimit=1000 --ignore-errors diskC /mnt/yandex.disk/Docs/
+
+
+rsync -avWr --progress --bwlimit=1000 --ignore-errors diskC /mnt/yandex.disk/Docs/diskC
+
+
+
+
+
+
+
+[https://greendail.ru/Node/487](https://greendail.ru/Node/487)
+[https://toster.ru/q/288444](https://toster.ru/q/288444)
+[https://www.alexeykopytko.com/2017/rsync-howto/](https://www.alexeykopytko.com/2017/rsync-howto/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Те пользователи macOS и OS X, что делают бэкап, наверняка оценили работу Time Machine. Эта программа позволяет буквально в два клика вернуться к прошлой версии любого файла. Не смотря на все красивости, Time Machine не делает ничего такого чего мы не можем сделать с помощью rsync.
+
+#!/bin/bash
+set -o nounset -o errexit
+cd $(dirname "$0")
+date=$(date --iso-8601=seconds)
+test -L latest || ln -s "$date" latest
+rsync --delete-excluded --prune-empty-dirs --archive -F --link-dest=../latest "$@" "./$date"
+rm latest
+ln -s "$date" latest
+
+Скрипт следует положить в корень того диска или каталога, куда следует делать бэкапы.
+
+Запускать с указанием единственного аргумента: каталога с исходными файлами. Например, так.
+
+/mnt/backups/backup /home
+
+После нескольких запусков получается такая структура каталога:
+
+2017-02-08T22:05:04+09:00
+2017-02-08T22:10:05+09:00
+2017-02-08T22:15:05+09:00
+2017-02-08T22:20:06+09:00
+2017-02-08T22:25:05+09:00
+2017-02-08T22:30:04+09:00
+latest -> 2017-02-08T22:30:04+09:00
+
+При этом latest указывает на самый последний бэкап.
+
+В каждом из каталогов содержится слепок того, что было в исходном каталоге в момент копирования. Можно подумать что и место на диске занято пропорционально количеству копий, однако это не так.
+
+$ du -sh /mnt/backups
+4,5M    /mnt/backups
+
+$ du -sh /home
+3,8M    /home
+
+Всё множество копий занимает лишь немного больше места чем исходный каталог. Место уходит на изменившиеся файлы.
+
+Если ничего не менялось, то место всё равно расходуется на создание каталогов, которые нельзя хранить как жесткие ссылки.
+
+$ du -hs 2017-02-08T22:20:06+09:00 2017-02-08T22:25:05+09:00 2017-02-08T22:30:04+09:00
+3,8M    2017-02-08T22:20:06+09:00
+136K    2017-02-08T22:25:05+09:00
+136K    2017-02-08T22:30:04+09:00
+
+Такая существенная экономия возможна благодаря упомянутым жестким ссылкам, которые rsync делает для файлов, не изменившихся с последнего копирования.
+
+$ stat -c '%i' 2017-02-08*/example.txt | uniq
+31819810
+
+У одинаковых, не менявшихся, файлов будет один и тот же inode.
+
+Конечно, по возможной экономии места на диске такому способу резервного копирования далеко до специальных программам, таких как Borg или Restic.
+
+
+
+
+
+
+
+
+
+
+
+ sudo rsync -avWr --bwlimit=1000 --include=/diskD/Docs --ignore-errors diskD /mnt/yandex.disk/Docs/
+
+ 
+ rsync -avWr --delete --progress --exclude=/home/garry/cinema --bwlimit=1000 --ignore-errors /home /mnt/vg_dz

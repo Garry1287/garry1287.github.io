@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "муфта"
+date:   2016-07-02 15:20:48 +0300
+categories: optica
+tags: optica
+---
+
+# муфта
+[http://ooosd.ru/documents/MTOK%2096-48B.pdf](http://ooosd.ru/documents/MTOK%2096-48B.pdf)
+[http://nag.ru/goodies/instruction/Instr_mtok48.pdf](http://nag.ru/goodies/instruction/Instr_mtok48.pdf)

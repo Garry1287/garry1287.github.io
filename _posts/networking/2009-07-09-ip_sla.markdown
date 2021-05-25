@@ -1,0 +1,81 @@
+---
+layout: post
+title:  "ip_sla"
+date:   2009-07-09 10:35:23 +0400
+categories: Networking
+tags: Networking
+---
+
+# ip_sla
+ip sla 1
+ icmp-echo 8.8.8.8 source-interface FastEthernet0/0
+ threshold 1000
+ timeout 1500
+ frequency 3
+
+ip sla schedule 1 life forever start-time now
+
+
+Рекомендации Cisco по настройке параметров (frequency, timeout, threshold) для других тестов IP SLA:
+
+    (frequency seconds) > (timeout milliseconds) > (threshold milliseconds) 
+
+
+!* Периодичность запуска теста (в секундах)
+frequency 5
+ !* Время ожидания ответа до признания его утерянным (в миллисекундах)
+ timeout 5000
+
+threshold
+
+Значение параметра threshold для операции:
+
+    IP SLA UDP jitter:
+        устанавливает верхнее пороговое значение для среднего значения jitter 
+    для других операций:
+        устанавливает верхнее пороговое значение для измерения RTT (round-trip time) 
+
+
+
+ip sla 1
+ icmp-echo 8.8.8.8 source-interface FastEthernet0/0
+ threshold 1000
+ timeout 1500
+ frequency 3
+
+ip sla schedule 1 life forever start-time now
+
+
+
+
+--создаем функцию отслеживания и--
+track 1 ip sla 1 reachability 
+ delay down 5 up 5
+--прикрепляем эту функцию к маршруту--
+ip route 8.8.8.8 255.255.255.255 169.254.54.2 track 1
+ip route 8.8.8.8 255.255.255.255 169.254.54.130 200
+
+
+!* Определяем параметры "планировщика" "монитора" на непрерывную работу с немедленным запуском задачи
+sla monitor schedule 1 life forever start-time now
+!* Привязываем результат отработки теста "монитора" в некому "трекеру", состояние которого напрямую влияет на выбор статического маршрута в дальнейшем (здесь "101" - идентификатор "трека", а "1" - идентификатор "монитора" для исходных данных)
+track 101 rtr 1 reachability
+
+!* Описываем маршрут по умолчанию, через "медленный" надёжный канал (метрика "253" - экстремальна, можно обойтись и существенно меньшими значениями)
+route outside0 0.0.0.0 0.0.0.0 10.10.1.2 253
+
+!* Описываем маршрут через "быстрый" ненадёжный канал, буде тот в рабочем состоянии
+route outside1 0.0.0.0 0.0.0.0 10.10.2.2 track 101
+
+
+
+
+
+
+Test-VPN(config)#track 101 ?
+  interface    Select an interface to track
+  ip           IP protocol
+  list         Group objects in a list
+  rtr          Response Time Reporter (RTR) entry
+  stub-object  Stub tracking object
+

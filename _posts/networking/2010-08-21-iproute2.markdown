@@ -1,0 +1,172 @@
+---
+layout: post
+title:  "iproute2"
+date:   2010-08-21 07:20:47 +0400
+categories: Networking
+tags: Networking
+---
+
+# iproute2
+
+  ###[http://www.opennet.ru/tips/1417_tcp_linux_kernel_tune_optimization_speed.shtml](http://www.opennet.ru/tips/1417_tcp_linux_kernel_tune_optimization_speed.shtml)
+    ###[http://www.opennet.ru/tips/273_tcp_win_proc_subnet_tune_linux_sysctl_forward_port_ip_time_x_udp_config_window_buffer_file_coredump_timeout_fault_sync_select.shtml](http://www.opennet.ru/tips/273_tcp_win_proc_subnet_tune_linux_sysctl_forward_port_ip_time_x_udp_config_window_buffer_file_coredump_timeout_fault_sync_select.shtml)
+
+
+
+
+
+    ## General parameters
+    sysctl -w net.core.rmem_max=16777216
+    sysctl -w net.core.wmem_max=16777216
+    sysctl -w net.ipv4.tcp_rmem="4096 87380 16777216"
+    sysctl -w net.ipv4.tcp_wmem="4096 65536 16777216"
+
+    ## Max packets in kernel queue for network interface
+    sysctl -w net.core.netdev_max_backlog=2500
+
+    ## Important: tuning for conntrack!!!
+    sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=7200
+    sysctl -w net.nf_conntrack_max=1548576
+
+    ## Use only in case of very high IRQ rate
+    ifconfig eth0 txqueuelen 10000
+    ifconfig eth1 txqueuelen 10000
+
+
+
+Увеличиваем очередь передачи данных на linux
+/sbin/ifconfig eth0 txqueuelen 10000
+
+
+ip link list - просмотр интерфейсов
+
+
+Vlan    Mac Address       Type        Ports
+----    -----------       --------    -----
+  10    0015.176a.0e64    DYNAMIC     Gi0/6
+Total Mac Addresses for this criterion: 1
+
+
+CTD-S1#sh int Gi0/6        
+GigabitEthernet0/6 is up, line protocol is up (connected) 
+  Hardware is Gigabit Ethernet, address is 001c.b14e.3c86 (bia 001c.b14e.3c86)
+  Description: # Emerald, port1
+  MTU 1712 bytes, BW 1000000 Kbit, DLY 10 usec, 
+     reliability 255/255, txload 82/255, rxload 55/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Full-duplex, 1000Mb/s, media type is 10/100/1000BaseTX
+  input flow-control is off, output flow-control is unsupported 
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input never, output 00:00:08, output hang never
+  Last clearing of "show interface" counters 4w3d
+  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 31491411
+  Queueing strategy: fifo
+  Output queue: 0/40 (size/max)
+  30 second input rate 218899000 bits/sec, 28690 packets/sec
+  30 second output rate 325204000 bits/sec, 43763 packets/sec
+     70586430606 packets input, 63565116846428 bytes, 0 no buffer
+     Received 973808 broadcasts (973808 multicasts)
+     0 runts, 0 giants, 0 throttles
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 watchdog, 973808 multicast, 0 pause input
+     0 input packets with dribble condition detected
+     114221468413 packets output, 110291836356455 bytes, 0 underruns
+     0 output errors, 0 collisions, 0 interface resets
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier, 0 PAUSE output
+     0 output buffer failures, 0 output buffers swapped out
+
+
+
+CTD-S1#sh mac address-table int gi0/20
+          Mac Address Table
+-------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       --------    -----
+1021    0015.176a.0e65    DYNAMIC     Gi0/20
+  27    0015.176a.0e65    DYNAMIC     Gi0/20
+
+
+sh int Gi0/20
+GigabitEthernet0/20 is up, line protocol is up (connected) 
+  Hardware is Gigabit Ethernet, address is 001c.b14e.3c94 (bia 001c.b14e.3c94)
+  Description: # Emerald, port2
+  MTU 1712 bytes, BW 1000000 Kbit, DLY 10 usec, 
+     reliability 255/255, txload 57/255, rxload 84/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Full-duplex, 1000Mb/s, media type is 10/100/1000BaseTX
+  input flow-control is off, output flow-control is unsupported 
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input never, output 00:00:07, output hang never
+  Last clearing of "show interface" counters 4w3d
+  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 20824
+  Queueing strategy: fifo
+  Output queue: 0/40 (size/max)
+  30 second input rate 332518000 bits/sec, 37653 packets/sec
+  30 second output rate 225659000 bits/sec, 42386 packets/sec
+     95190974332 packets input, 108543141423464 bytes, 0 no buffer
+     Received 1038503 broadcasts (1038503 multicasts)
+     0 runts, 0 giants, 0 throttles
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 watchdog, 1038503 multicast, 0 pause input
+     0 input packets with dribble condition detected
+     103120418159 packets output, 65202428188804 bytes, 0 underruns
+     0 output errors, 0 collisions, 0 interface resets
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier, 0 PAUSE output
+     0 output buffer failures, 0 output buffers swapped out
+
+
+
+
+
+
+Irqbalance
+
+В Linux стандартный irqbalance лучше не использовать. Руками развести прерывания по процессорам можно так:
+
+echo "N" /proc/irq/номер_прерывания/smp_affinity
+N - битмаска
+01 - первый процессор
+02 - второй
+04 - третий
+08 - четвертый
+
+01+04 =
+03 - первый и третий
+
+Список в /proc/interrupts
+
+Взято отсюда: Форум НАГа
+
+
+
+
+/sbin/ifconfig eth0 txqueuelen 2000
+/sbin/ifconfig eth1 txqueuelen 2000
+ethtool -s eth0 autoneg off speed 1000 duplex full
+ethtool -A eth0 autoneg off rx on tx on
+ethtool -C eth0 adaptive-rx off adaptive-tx off rx-
+usecs 20 rx-frames 5 tx-usecs 60 tx-frames 11
+ethtool -G eth0 rx 511 rx-jumbo 255 tx 511
+
+
+
+echo 1048576 > /proc/sys/net/core/rmem_max
+echo 1048576 > /proc/sys/net/core/rmem_default
+echo 1048576 > /proc/sys/net/core/wmem_max
+echo 1048576 > /proc/sys/net/core/wmem_default
+echo 10000000 > /proc/sys/net/core/optmem_max
+echo 262143 262143 262143 > /proc/sys/net/ipv4/tcp_rmem
+echo 262143 262143 262143 > /proc/sys/net/ipv4/tcp_wmem
+echo 8388608 8388608 8388608 > /proc/sys/net/ipv4/tcp_mem
+echo 400 > /proc/sys/net/unix/max_dgram_qlen
+echo 400 > /proc/sys/net/core/message_burst
+echo 2800 > /proc/sys/net/core/mod_cong
+echo 1000 > /proc/sys/net/core/lo_cong
+echo 200 > /proc/sys/net/core/no_cong
+echo 2900 > /proc/sys/net/core/no_cong_thresh
+echo 3000 > /proc/sys/net/core/netdev_max_backlog

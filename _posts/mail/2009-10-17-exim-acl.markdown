@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "exim-acl"
+date:   2009-10-17 15:39:54 +0400
+categories: mail
+tags: mail
+---
+
+# exim-acl
+[http://bsdadmin.ru/index.php/mail-server/202-tool-exim](http://bsdadmin.ru/index.php/mail-server/202-tool-exim)
+[http://odminblog.ru/cheets-and-tips-exim/](http://odminblog.ru/cheets-and-tips-exim/)
+[http://lehan604.blogspot.ru/2008/10/exim-469.html](http://lehan604.blogspot.ru/2008/10/exim-469.html)
+[http://vds-admin.ru/mail/poleznye-komandy-pochtovogo-servera-exim-shpargalka](http://vds-admin.ru/mail/poleznye-komandy-pochtovogo-servera-exim-shpargalka)
+[http://forum.ru-board.com/topic.cgi?forum=8&topic=41168&start=60](http://forum.ru-board.com/topic.cgi?forum=8&topic=41168&start=60)
+[http://404.hizel.ru/exim/ch40.html](http://404.hizel.ru/exim/ch40.html)
+[http://www.bog.pp.ru/work/exim.html](http://www.bog.pp.ru/work/exim.html)

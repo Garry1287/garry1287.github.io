@@ -1,0 +1,19 @@
+---
+layout: post
+title:  "AWS.amazon"
+date:   2009-04-24 22:15:57 +0400
+categories: AWS.amazon
+tags: devops
+---
+
+# AWS.amazon
+xgu.ru/wiki/Amazon_EC2
+[https://habrahabr.ru/post/62362/](https://habrahabr.ru/post/62362/)
+[https://aws.amazon.com/ru/ec2/getting-started/#tutorials](https://aws.amazon.com/ru/ec2/getting-started/#tutorials)
+[https://aws.amazon.com/ru/free/](https://aws.amazon.com/ru/free/)
+[https://aws.amazon.com/ru/ec2/instance-types/](https://aws.amazon.com/ru/ec2/instance-types/)
+www.ubuntomania.ru/servery/amazon.html
+[https://habrahabr.ru/hub/aws/](https://habrahabr.ru/hub/aws/)
+[https://habrahabr.ru/post/136829/](https://habrahabr.ru/post/136829/)
+[https://habrahabr.ru/post/138695/](https://habrahabr.ru/post/138695/)
+[https://aws.amazon.com/blogs/architecture/](https://aws.amazon.com/blogs/architecture/)

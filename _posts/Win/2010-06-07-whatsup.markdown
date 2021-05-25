@@ -1,0 +1,64 @@
+---
+layout: post
+title:  "whatsup"
+date:   2010-06-07 21:03:35 +0400
+categories: Win
+tags: Win
+---
+
+# whatsup
+[http://docs.ipswitch.com/NM/82_WhatsUp%20Gold%20v14.4/02_Guides/WhatsUp%20Gold%20v14.4%20User%20Guide.pdf](http://docs.ipswitch.com/NM/82_WhatsUp%20Gold%20v14.4/02_Guides/WhatsUp%20Gold%20v14.4%20User%20Guide.pdf)
+[http://docs.ipswitch.com/NM/82_WhatsUp%20Gold%20v14.4/05_Additional%20Resources/Distributed/WhatsUp%20Gold%2014.4%20Distributed%20Deployment%20Guide.pdf](http://docs.ipswitch.com/NM/82_WhatsUp%20Gold%20v14.4/05_Additional%20Resources/Distributed/WhatsUp%20Gold%2014.4%20Distributed%20Deployment%20Guide.pdf)
+
+[https://community.whatsupgold.com/forums/whatsup-databases/dbtoobigstatisticalinterface](https://community.whatsupgold.com/forums/whatsup-databases/dbtoobigstatisticalinterface)
+[https://community.whatsupgold.com/forums/whatsupgoldeditionsstandardandpremiumeditions/purge-syslog-entries-compact-database](https://community.whatsupgold.com/forums/whatsupgoldeditionsstandardandpremiumeditions/purge-syslog-entries-compact-database)
+[https://community.whatsupgold.com/forums/whatsupgoldeditionsstandardandpremiumeditions/error-validating-and-compacting-database](https://community.whatsupgold.com/forums/whatsupgoldeditionsstandardandpremiumeditions/error-validating-and-compacting-database)
+[http://docs.ipswitch.com/NM/82_WhatsUp%20Gold%20v14.4/03_Help/index.htm?database_performance_tool.htm?toc.htm](http://docs.ipswitch.com/NM/82_WhatsUp%20Gold%20v14.4/03_Help/index.htm?database_performance_tool.htm?toc.htm)
+[https://community.whatsupgold.com/forums/whatsup-databases/database-connection-error](https://community.whatsupgold.com/forums/whatsup-databases/database-connection-error)
+[http://docs.ipswitch.com/WhatsUp_Gold_v11/UserGuide/WhatsUp_UserGuide.pdf](http://docs.ipswitch.com/WhatsUp_Gold_v11/UserGuide/WhatsUp_UserGuide.pdf)
+
+[http://sqlblogcasts.com/blogs/ssqanet/archive/2008/02/19/sql-server-2005-index-optimization-best-practices.aspx](http://sqlblogcasts.com/blogs/ssqanet/archive/2008/02/19/sql-server-2005-index-optimization-best-practices.aspx)
+
+
+
+
+
+
+
+
+
+
+
+
+Адалось наконецто:
+1. Поставил WhatsUp на тестовую машину
+2. Бэкапнул его базу(просто пустая база, может быть он смог бы сам структуру базы создать на MS SQL 2000, но я не проверял.).
+3. Ресторнул базу на локальный MS SQL 2000 сервер.
+4. Создал ODBC алиас(спасибо за совет ILSOFT) - и указал на локальную базу.
+5. Начал утсановку WhatsUp - он предложил использовать базу по находящуюся по этому алиасу
+6. Изменил порт встроенного Web сервера.
+7. Пренастоил на работу с IIS.
+ 
+ILSOFT спасибо большое.
+Может наш опыт комуто да сгодиться. 
+
+
+
+iptables -t nat -A PREROUTING -d 192.168.253.49/32 -p tcp -m tcp --dport 8888  -j DNAT --to-destination 192.168.1.136:8080
+
+
+[http://192.168.253.49:8880/NmConsole/CoreNm/User/DlgUserLogin/DlgUserLogin.asp](http://192.168.253.49:8880/NmConsole/CoreNm/User/DlgUserLogin/DlgUserLogin.asp)
+
+
+
+    Database name is WhatsUp.
+    Default collation is SQL_Latin1_General_CP1_CI_AS.
+
+sqlcmd -E -S "UNISPRINT" -Q "RESTORE DATABASE [WhatsUp] FROM DISK='C:\Documents and Settings\garry\My Documents\database18.05.15.dat' WITH REPLACE, MOVE 'WhatsUp_dat' TO 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.mdf', MOVE 'WhatsUp_log' To 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.ldf'"
+
+sqlcmd -E -S "UNISPRINT" -Q "restore filelistonly from disk = 'C:\Documents and Settings\garry\My Documents\database18.05.15.dat'"
+sqlcmd -E -S "UNISPRINT" -Q "ALTER DATABASE WhatsUp SET SINGLE_USER WITH ROLLBACK IMMEDIATE"
+sqlcmd -E -S "UNISPRINT" -Q "RESTORE DATABASE [WhatsUp] FROM DISK='C:\Documents and Settings\garry\My Documents\database18.05.15.dat' WITH REPLACE, MOVE 'WhatsUp_dat' TO 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.mdf', MOVE 'WhatsUp_log' To 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.ldf'"
+
+
+sqlcmd -E -S "UNISPRINT" -Q "CREATE DATABASE WhatsUp ON PRIMARY (NAME = WhatsUp_dat, FILENAME='C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.mdf'), LOG ON (NAME=WhatsUp_log, FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.ldf') COLLATE Latin1_General_CI_AS;"

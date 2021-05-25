@@ -1,0 +1,66 @@
+---
+layout: post
+title:  "кодировки в python2"
+date:   2010-04-09 06:46:54 +0400
+categories: python
+tags: python
+---
+
+# кодировки в python2
+
+ 
+ Загрузка и сохранение файла
+
+# coding: utf8
+
+# Загружаем файл с кодировкай utf8
+text = open('file.txt','r').read()
+
+# Декодируем из utf8 в unicode - из внешней в рабочую
+text = text.decode('utf8')
+
+# Работаем с текстом
+text += text
+
+# Кодируем тест из unicode в utf8 - из рабочей во внешнюю
+text = text.encode('utf8')
+
+# Сохраняем в файл с кодировкий utf8
+open('file.txt','w').write(text)
+
+
+
+encode('utf8') преобразует внутренний тип unicode в набор байтов в кодировке utf8, аргумент в скобках показывает в какую кодировку преобразовывать
+decode('utf8') преобразует файл, строку в кодировке utf8 (если он в ней) во внутренний тип unicode python 2  - в скобках, как аргумент используем ту кодировку, в которой исходная строка или файл должны быть
+            если строка или файл будет в другой кодировке, то получим ошибку
+            
+            Пример
+
+            print('гбо.kz'.decode('idna'))
+---------------------------------------------------------------------------
+UnicodeDecodeError                        Traceback (most recent call last)
+<ipython-input-47-d488bd516784> in <module>()
+----> 1 print('гбо.kz'.decode('idna'))
+
+/usr/lib64/python2.7/encodings/idna.pyc in decode(self, input, errors)
+    180             # Must be ASCII string
+    181             input = str(input)
+--> 182             unicode(input, "ascii")
+    183             labels = input.split(".")
+    184 
+
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 0: ordinal not in range(128)
+
+«UnicodeDecodeError» обычно есть свидетельством того, что нужно декодировать строку в юникод, используя правильную кодировку.
+                                           
+                                           encode
+Тип данных unicode кодируется в байты(строку)
+
+                                        decode
+Строка(байты)            декодируется в тип данных unicode
+
+Внутренний тип unicode - это нечитабельные юникод-поинты (то есть «u'\u1234'»)
+
+
+[https://habrahabr.ru/post/135913/](https://habrahabr.ru/post/135913/)
+[http://www.py-my.ru/post/4bfb3c6a1d41c846bc00009b#](http://www.py-my.ru/post/4bfb3c6a1d41c846bc00009b#)!

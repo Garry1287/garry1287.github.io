@@ -1,0 +1,100 @@
+---
+layout: post
+title:  "sfid"
+date:   2014-05-06 02:39:02 +0400
+categories: juniper
+tags: juniper
+---
+
+# sfid
+ show chassis routing-engine no-forwarding 
+
+show system processes extensive no-forwarding
+
+On EX4500 or EX4550 switches, the software forwarding infrastructure daemon (sfid) might continuously create core files, causing interruptions in traffic, because packets are erroneously freed twice. A possible trigger is the handling of Layer 2 protocol tunneling packets. [PR/941482: This issue has been resolved.]
+
+
+
+
+
+Hello,
+
+SFID is Software Forwarding Daemon. It is responsible control protocol packets processing & punting to RE including STP/ARP/IGMP/LACP/LLDP/VRRP/BFD/you name it.
+
+Please check:
+
+1/ if Your switch is operating close to or at the scale limits, i.e. for EX4200:
+
+- 16K ARP entries
+
+- 300 ARP/sec learn rate per PFE
+
+- 32K learned MAC addresses
+
+etc
+
+2/ whether You are using aggressive protocol timers:
+
+- if You are using BFD, timers less than 500msec are not recommended for EX4200
+
+- if You are using Ethernet OAM, timers less than 100ms are not recommended for EX4200
+
+
+
+
+
+Have you find RCA for your problem yet ?
+
+I have similar problem when running EX4500+EX4200 VC (12.3R3).
+
+ CPU varied high/low rapidly because of sfid.
+
+I have checked spanning-tree but but it's seem normally.
+
+ 
+
+I've captured and saw some strange packet:
+
+- There are many packet with TTL = 1 and ip destination which doesn't exist. Because TTL = 1 so Switch have to reply with TTL exceed (may cause CPU high). I've tried to discard these packet but not success because switch doesn't support filter packet with ttl=1 yet Smiley Sad
+
+- There are some broadcast ARP message from switch to find MAC address of IP destination which doesn't exist. I have tried to discard these IP destination by configure static route discard.
+
+ Have anyone know shell command to check detail sfid process ?
+
+
+
+
+
+Not that I can offer any help on the issue, but why are you not able to create the filter with that match condition? 
+
+ 
+
+ 
+
+
+
+set firewall family inet filter BLOCKTTL1 term TTL from ttl 1
+set firewall family inet filter BLOCKTTL1 term TTL then accept
+set firewall family inet filter BLOCKTTL1 term ACeetALTTL then accept
+
+commit check
+configuration check succeeds
+
+
+Model: ex4200-24t
+JUNOS Base OS boot [12.2R1.8]
+
+I found this on wiki but you are on your own as to its usage and Juniper support.
+
+?
+Semi-hidden debug interfaces
+lcdd: Line Card Daemon
+
+"lcdd" from a shell (not the cli) connects you to various other parts of the switch,
+including the software forwarding infrastructure (sfid), chassis manager (chassism),
+and the virtual chassis system (vccpd). You don't need to be root to get into these."
+[KUDOS PLEASE! If you think I earned it!
+If this solution worked for you please flag my post as an "Accepted Solution" so others can benefit..]
+
+
+

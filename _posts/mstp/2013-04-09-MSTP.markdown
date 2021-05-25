@@ -1,0 +1,356 @@
+---
+layout: post
+title:  "MSTP"
+date:   2013-04-09 21:38:11 +0400
+categories: mstp
+tags: mstp
+---
+
+# MSTP
+cde-s0:
+
+spanning-tree vlan 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+
+
+spanning-tree mode mst
+!
+spanning-tree mst configuration
+ name PSI
+ instance 1 vlan 9, 10, 110, 202, 205, 260, 272, 276, 281, 303, 628, 629, 648, 651, 684, 691, 693, 694, 700, 816, 822, 833, 837, 855, 895, 1014, 4007
+ instance 2 vlan 54, 55, 57, 58, 68, 172, 294, 577, 671, 773, 787, 846, 894, 1011, 1012, 4001
+ instance 3 vlan 2, 11, 16, 21, 22, 23, 24, 25, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 113, 120, 151, 152, 153, 156, 165, 284, 899, 953, 954
+!
+! Root for MSTI1
+!
+spanning-tree mst 0 priority 8192
+spanning-tree mst 1 priority 8192
+!
+interface Gi0/50
+ description #ATS45-S0
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan
+ switchport mode trunk
+ load-interval 30
+!
+interface Gi0/49
+ description #CTD-S1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan
+ switchport mode trunk
+ load-interval 30
+
+
+
+ switchport trunk allowed vlan add 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+
+60,67
+ 
+149
+
+Отсортировать эти виланы
+interface GigabitEthernet0/49
+ description # CTD-S1 # Cat 2950 via FO mediaconvertor
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 2,9-11,16,21-25,60,67,100,101,103-109,113,115
+ switchport trunk allowed vlan add 120,121,149-154,156,163,165,168,171,174-180
+ switchport trunk allowed vlan add 182,185-187,190,191,198,199,202,205,215,260
+ switchport trunk allowed vlan add 276,278-281,284,298,301-303,353,400,420,425
+ switchport trunk allowed vlan add 427,435,450,452,520,577,603,608,609,612,616
+ switchport trunk allowed vlan add 617,621,628,629,648,651,660,661,684,691,693
+ switchport trunk allowed vlan add 694,700,773,801-803,806,816,817,821,824,825
+ switchport trunk allowed vlan add 847,855,895,899,901,902,930,953,954,999,1014
+ switchport trunk allowed vlan add 2000,2500,2999,4007
+ switchport mode trunk
+ load-interval 30
+end
+
+
+
+59
+121
+149
+150
+162
+171
+174
+267
+316
+354
+600
+603
+609
+612-617
+619
+621
+623
+626
+630
+776
+782
+870
+875
+876
+878
+901
+902
+999
+
+interface GigabitEthernet0/50
+ description # Link to ATS-45
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 10,11,21,22,24,54,55,57-59,68,100-110,120,121
+ switchport trunk allowed vlan add 149-153,162,171,172,174,202,260,267,272,276
+ switchport trunk allowed vlan add 281,294,316,354,577,600,603,608,609,612-617
+ switchport trunk allowed vlan add 619,621,623,626,630,671,773,776,782,787,822
+ switchport trunk allowed vlan add 833,837,846,870,875,876,878,894,901,902,999
+ switchport trunk allowed vlan add 1011,1012,4001
+ switchport mode trunk
+ load-interval 30
+end
+
+
+
+
+
+
+
+
+60
+67
+115
+121
+149
+150
+154
+163
+168
+171
+174-180
+182
+185-187
+190
+191
+198
+199
+215
+278-280
+301
+302
+353,400,420,425,427
+435,450,452,520
+603,608,609,612,616,617
+621
+660,661
+691,693
+801-803,806
+817,821,824,825,847
+901,902,930
+999
+2000,2500,2999
+
+
+
+CDE-S0#sh run int Gi0/49
+Building configuration...
+
+Current configuration : 853 bytes
+!
+interface GigabitEthernet0/49
+ description # CTD-S1 # Cat 2950 via FO mediaconvertor
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 2,9-11,16,21-25,60,67,100,101,103-109,113,115
+ switchport trunk allowed vlan add 120,121,149-154,156,163,165,168,171,174-180
+ switchport trunk allowed vlan add 182,185-187,190,191,198,199,202,205,215,260
+ switchport trunk allowed vlan add 276,278-281,284,301-303,353,400,420,425,427
+ switchport trunk allowed vlan add 435,450,452,520,577,603,608,609,612,616,617
+ switchport trunk allowed vlan add 621,628,629,648,651,660,661,684,691,693,694
+ switchport trunk allowed vlan add 700,773,801-803,806,816,817,821,824,825,847
+ switchport trunk allowed vlan add 855,895,899,901,902,930,953,954,999,1014
+ switchport trunk allowed vlan add 2000,2500,2999,4007
+ switchport mode trunk
+ load-interval 30
+end
+
+ switchport trunk allowed vlan add 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+
+
+
+
+
+
+
+
+
+switchport trunk allowed vlan add 2
+
+
+
+
+
+
+ctd-s1:
+
+spanning-tree vlan 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+
+spanning-tree mode mst
+!
+spanning-tree mst configuration
+ name PSI
+ instance 1 vlan 9, 10, 110, 202, 205, 260, 272, 276, 281, 303, 628, 629, 648, 651, 684, 691, 693, 694, 700, 816, 822, 833, 837, 855, 895, 1014, 4007
+ instance 2 vlan 54, 55, 57, 58, 68, 172, 294, 577, 671, 773, 787, 846, 894, 1011, 1012, 4001
+ instance 3 vlan 2, 11, 16, 21, 22, 23, 24, 25, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 113, 120, 151, 152, 153, 156, 165, 284, 899, 953, 954
+!
+! Root for MSTI 2
+!
+spanning-tree mst 2 priority 8192
+!
+interface Gi0/25
+ description #CDE-S0
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan
+ switchport mode trunk
+ load-interval 30
+!
+interface Gi0/27
+ description #ATS45-S0
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan
+ switchport mode trunk
+ load-interval 30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ats45-s0:
+
+spanning-tree vlan 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+
+
+spanning-tree mode mst
+!
+spanning-tree mst configuration
+ name PSI
+ instance 1 vlan 9, 10, 110, 202, 205, 260, 272, 276, 281, 303, 628, 629, 648, 651, 684, 691, 693, 694, 700, 816, 822, 833, 837, 855, 895, 1014, 4007
+ instance 2 vlan 54, 55, 57, 58, 68, 172, 294, 577, 671, 773, 787, 846, 894, 1011, 1012, 4001
+ instance 3 vlan 2, 11, 16, 21, 22, 23, 24, 25, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 113, 120, 151, 152, 153, 156, 165, 284, 899, 953, 954
+!
+! Root for the IST
+!
+spanning-tree mst 3 priority 8192
+!
+interface Gi0/52
+ description #CDE-S0
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan add 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+ switchport mode trunk
+ load-interval 30
+!
+interface Gi0/51
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan add 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 200, 201, 202, 203, 204, 205, 206, 207, 208, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+ switchport mode trunk
+ load-interval 30
+
+
+
+
+switchport trunk allowed vlan 22
+switchport trunk allowed vlan add 9
+switchport trunk allowed vlan add 10
+switchport trunk allowed vlan add 11
+switchport trunk allowed vlan add 16
+switchport trunk allowed vlan add 21
+switchport trunk allowed vlan add 2
+switchport trunk allowed vlan add 23
+switchport trunk allowed vlan add 24
+switchport trunk allowed vlan add 25
+switchport trunk allowed vlan add 54
+switchport trunk allowed vlan add 55
+switchport trunk allowed vlan add 57
+switchport trunk allowed vlan add 58
+switchport trunk allowed vlan add 68
+switchport trunk allowed vlan add 100
+switchport trunk allowed vlan add 101
+switchport trunk allowed vlan add 102
+switchport trunk allowed vlan add 103
+switchport trunk allowed vlan add 104
+switchport trunk allowed vlan add 105
+switchport trunk allowed vlan add 106
+switchport trunk allowed vlan add 107
+switchport trunk allowed vlan add 108
+switchport trunk allowed vlan add 109
+switchport trunk allowed vlan add 110
+switchport trunk allowed vlan add 113
+switchport trunk allowed vlan add 120
+switchport trunk allowed vlan add 151
+switchport trunk allowed vlan add 152
+switchport trunk allowed vlan add 153
+switchport trunk allowed vlan add 156
+switchport trunk allowed vlan add 165
+switchport trunk allowed vlan add 172
+switchport trunk allowed vlan add 200
+switchport trunk allowed vlan add 201
+switchport trunk allowed vlan add 202
+switchport trunk allowed vlan add 203
+switchport trunk allowed vlan add 204
+switchport trunk allowed vlan add 205
+switchport trunk allowed vlan add 206
+switchport trunk allowed vlan add 207
+switchport trunk allowed vlan add 208
+switchport trunk allowed vlan add 260
+switchport trunk allowed vlan add 272
+switchport trunk allowed vlan add 276
+switchport trunk allowed vlan add 281
+switchport trunk allowed vlan add 284
+switchport trunk allowed vlan add 294
+switchport trunk allowed vlan add 298
+switchport trunk allowed vlan add 303
+switchport trunk allowed vlan add 520
+switchport trunk allowed vlan add 577
+switchport trunk allowed vlan add 628
+switchport trunk allowed vlan add 629
+switchport trunk allowed vlan add 648
+switchport trunk allowed vlan add 651
+switchport trunk allowed vlan add 671
+switchport trunk allowed vlan add 684
+switchport trunk allowed vlan add 691
+switchport trunk allowed vlan add 693
+switchport trunk allowed vlan add 694
+switchport trunk allowed vlan add 700
+switchport trunk allowed vlan add 773
+switchport trunk allowed vlan add 787
+switchport trunk allowed vlan add 816
+switchport trunk allowed vlan add 817
+switchport trunk allowed vlan add 822
+switchport trunk allowed vlan add 833
+switchport trunk allowed vlan add 837
+switchport trunk allowed vlan add 846
+switchport trunk allowed vlan add 855
+switchport trunk allowed vlan add 894
+switchport trunk allowed vlan add 895
+switchport trunk allowed vlan add 899
+switchport trunk allowed vlan add 953
+switchport trunk allowed vlan add 954
+switchport trunk allowed vlan add 1011
+switchport trunk allowed vlan add 1012
+switchport trunk allowed vlan add 1014
+switchport trunk allowed vlan add 4001
+switchport trunk allowed vlan add 4007
+
+
+
+
+
+
+10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007

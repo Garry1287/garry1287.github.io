@@ -1,0 +1,128 @@
+---
+layout: post
+title:  "gryazi"
+date:   2010-07-05 20:34:08 +0400
+categories: dlink
+tags: dlink
+---
+
+# gryazi
+#Сайф гард
+create account admin admin
+
+config safeguard_engine state enable
+config safeguard_engine state enable utilization rising 80 falling 20 trap_log enable mode fuzzy
+
+#dhcp_snooping
+
+config address_binding ip_mac ports 1-24 state enable
+config address_binding ip_mac ports 1-24 allow_zeroip enable 
+config address_binding ip_mac ports 1-24 state enable strict 
+
+enable address_binding dhcp_snoop
+config address_binding dhcp_snoop max_entry ports 1-24 limit 6
+config address_binding ip_mac ports 1-24 state enable loose allow_zeroip enable
+
+#passwd
+enable password encryption
+
+
+
+# SNTP
+
+enable sntp
+config time_zone operator + hour 3 min 0
+config sntp primary 172.28.0.4 secondary 81.20.192.19 poll-interval 720
+config dst repeating s_week last s_day sun s_mth 3 s_time 2:0 e_week last e_day sun e_mth 10 e_time 3:0 offset 60
+
+
+
+
+#
+enable syslog
+create syslog host 1 ipaddress 172.28.0.4 severity all facility local7 udp_port 514  state enable
+config log_save_timing log_trigger
+
+
+enable loopdetect
+config loopdetect ports 1-24 state enabled
+config loopdetect recover_timer 60 interval 10 mode port-based
+
+
+
+
+
+
+# MANAGEMENT
+
+enable snmp traps
+enable snmp authenticate_traps
+enable snmp linkchange_traps
+config snmp linkchange_traps ports all enable
+disable rmon
+
+# SNMPv3
+
+delete snmp community public
+delete snmp community private
+delete snmp user initial
+delete snmp group initial
+delete snmp view restricted all
+delete snmp view CommunityView all
+delete snmp group public
+delete snmp group private
+delete snmp group ReadGroup
+delete snmp group WriteGroup
+config snmp engineID 800000ab031cbdb95a8e60
+create snmp view restricted 1.3.6.1.2.1.1 view_type included
+create snmp view restricted 1.3.6.1.2.1.11 view_type included
+create snmp view restricted 1.3.6.1.6.3.10.2.1 view_type included
+create snmp view restricted 1.3.6.1.6.3.11.2.1 view_type included
+create snmp view restricted 1.3.6.1.6.3.15.1.1 view_type included
+create snmp view CommunityView 1 view_type included
+create snmp view CommunityView 1.3.6.1.6.3 view_type excluded
+create snmp view CommunityView 1.3.6.1.6.3.1 view_type included
+create snmp group public v1 read_view CommunityView notify_view CommunityView
+create snmp group public v2c read_view CommunityView notify_view CommunityView
+create snmp group initial v3  noauth_nopriv read_view restricted notify_view restricted
+create snmp group private v1 read_view CommunityView write_view CommunityView notify_view CommunityView
+create snmp group private v2c read_view CommunityView write_view CommunityView notify_view CommunityView
+create snmp group ReadGroup v1 read_view CommunityView notify_view CommunityView
+create snmp group ReadGroup v2c read_view CommunityView notify_view CommunityView
+create snmp group WriteGroup v1 read_view CommunityView write_view CommunityView notify_view CommunityView
+create snmp group WriteGroup v2c read_view CommunityView write_view CommunityView notify_view CommunityView
+create snmp community private view CommunityView read_write
+create snmp community public view CommunityView read_only
+create snmp user initial initial
+
+
+
+
+config address_binding ip_mac ports 1-24 state enable
+config address_binding ip_mac ports 1-24 allow_zeroip enable 
+config address_binding ip_mac ports 1-24 state enable strict 
+
+enable address_binding dhcp_snoop
+config address_binding dhcp_snoop max_entry ports 1-24 limit 6
+config address_binding ip_mac ports 1-24 state enable loose allow_zeroip enable
+
+# ERPS
+
+config erps log disable
+config erps trap disable
+disable erps
+
+
+
+
+
+
+
+
+#dhcp_snooping
+
+
+
+
+config vlan mngt delete 20
+config ports 20 state disable

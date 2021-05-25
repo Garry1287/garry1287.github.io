@@ -1,0 +1,1550 @@
+---
+layout: post
+title:  "dlink_qnq"
+date:   2012-03-29 12:05:08 +0400
+categories: dlink
+tags: dlink
+---
+
+# dlink_qnq
+Double VLAN(Port-based Q-in-Q) - это банальное вставка ешё одного заголовка vlan, только у них отличается tpid
+по умолчанию tpid 0x8100 - это inner_tpid для c-vlan, а здесь он добавить ещё один влан - s-vlan с tpid 0x88A8 или любой другой - можно выбирать
+Всё пакуется в один SVLAN
+
+
+Selective Q-in-Q - отличается тем, что есть возможность добавлять в определённые  s-vlan определённые c-vlan. Либо заменять с-vlan - s-vlanом
+Поэтому и называется "Selective"
+
+DES-3200
+
+create vlan v23 tag 23
+config vlan v23 add untagged 25-26   #для управления нужны untagged порты
+enable qinq
+create vlan_translation add cvid 23 svid 23 #так же должнны совпадать для управления
+config gvrp 25-26 pvid 1
+config qinq ports 25-26 role uni outer_tpid 0x8100 trust_cvid enable vlan_translation enable #соответственно uni
+config ipif System vlan v23 ipaddress 192.168.1.2/24 state enable
+
+
+Настройка VLAN Translation нужна для работы Q-in-Q Selective, чтобы можно было указать что делать с тем или иным тегом, попадающим на UNI порт (заменить или добавить второй тег).
+Trust CVID должен быть включен на соответствующем UNI порту, это позволяет коммутатору "доверять" пришедшему тегу, чтобы его можно было заменить или добавить на него второй сверху.
+
+Получается есть два варианта:
+
+1) #config qinq ports <№> role uni trust_cvid disable vlan_translation disable
+это port based q-n-q, все теги, которые прилетают на UNI заворачиваются в svid.
+
+2) #config qinq ports <№> role uni trust_cvid enable vlan_translation enable
+это selective q-n-q, теги наворачиваются на основе списка - show vlan_translation.
+
+Другие варианты: "trust_cvid disable vlan_translation enable" или "trust_cvid enable vlan_translation disable" не применяются?
+
+Так и есть, два варианта: Port-Based и Selective Q-in-Q.
+
+
+
+Если Вы не включили поддержку VLAN Translation на портах и не создали правила VLAN Translation,
+ то коммутатор будет отрабатывать в режиме Port-Based Q-in-Q и все пакетики упаковывать только в один SPVID
+
+На nni портах включать VLAN Translation не нужно.
+
+Нужно отключить trust_cvid и пакетики будут оборачиваться вторым тегом согласно PVID UNI порта
+
+missdrop enable означает, что добавление внешнего vlan только по правилам vlan_translation ( не работает на 3200)
+enable - означает, что пакет будет отброшен, если translation отсутствует
+disable - пакет не будте отброшен, если трансляция не отсутствует
+
+If the VLAN translation table lookup misses, the packet can be either dropped or added to an outer VLAN tag based on MAC-based VLAN/Subnet VLAN/Protocol VLAN/Port VID based VLAN configuration. This will make the packet a double tagged packet. NOTE: The result will be a Transparent Mode behavior. TPID – Specifies the tpid of the QinQ. The default setting is 0x88a8.
+Если таблица vlan трансляции отсутствует, пакет может быть либо отброшен или добавлен к внешнему тэгу Влана на основе mac-основанные vlan / subnet vlan / Протокол vlan / port vid интерфейс управления vlan. Это позволит сделать пакет с двойной меткой пакета. ПРИМЕЧАНИЕ: Результат будет - поведение в Прозрачном режиме. TPID - определяет tpid из qinq. По умолчанию 0x88a8.
+
+То есть банально становиться port based
+
+
+
+
+2 ADv > Можно решить вашу задачу через Port-Based режим, только для этого нужно на клиентском порту отключить trust_cvid, 
+добавить порт как untag в нужный spvlan и pvid порта изменить на vid spvlan-а, 
+тогда для Вас будет прозрачно какие VLAN-ы клиент пробрасывает через spvlan.
+
+
+Первым делом обновить прошивку, потом настроить по-моему описанию, т.е. настроить порт как uni, 
+создать VLAN, добавить uni порт как untag в этот VLAN, убедиться, 
+что pvid этого порта равен vid-у этого VLAN-а, можно включить vlan_translation на этом порту,
+ но не включать trust_cvid, тогда на клиентские пакетики, 
+приходящие на этот порт, будет навешиваться второй tag = pvid-у этого порта, т.е. будет работать режим Port-Based Q-in-Q.
+
+
+
+
+
+trust cvid - функция, если включена, то CVID из пакета, пришедшего от пользователя используется как SVLAN 
+(vlan id не меняется, tpid может поменяться)
+Enable or disable the Trust Customer VLAN ID (CVID). If the state is Enabled, use the CVID
+from the customer’s packet as the VLAN ID of the SPVLAN tag. The default is Disabled.
+
+
+На одном коммутаторе серии DGS-36xx всего можно создать 768 правил vlan_translation.
+
+Обходится это ограничение с помощью настройки PVID и отключением функции “missdrop disable” на UNI порту. 
+При данных настройках все входящие фреймы с тегом 802.1Q будут метиться SPVID = PVID. (port based?)
+
+
+
+
+vlan translation работает только при включенном trust cvid
+
+
+
+
+config qinq ports 1-24,26-28 role uni missdrop enable outer_tpid 0x8100 
+create vlan_translation ports 2,27-28 cvid 1202 replace svid 1202
+create vlan_translation ports 28 cvid 756 add svid 1247
+create vlan_translation ports 28 cvid 1247 add svid 1247
+
+
+На 28-ом порту либо missdrop disable, либо создавать правило vlan_translation для управляющего VLAN-а.
+create vlan_translation ports 28 cvid 10 replace svid 10
+create vlan_translation ports 28 cvid 10 add svid 10
+
+config ipif System ipaddress 192.168.110.57/24 vlan Managemant (10)
+
+Для управления есть ipif System, при включении Double VLAN он будет привязан к какому-то SPVLAN-у(зависит от настроек),
+ доступ к интерфейсу можно будет получить когда CVID и SPVID равны.
+
+Особенности 3200
+Надо S-Vlan заводить untagged на uni порту
+config vlan double add untagged 1
+Для uni порта надо делать trust_cvid
+config qinq ports 1 trust_cvid enable 
+
+
+Для управления порты нужны untagged (тут наверно missdrop enable)
+config vlan v23 add untagged 25-26 
+
+
+
+
+Если Вы не включили поддержку VLAN Translation на портах и не создали правила VLAN Translation,
+ то коммутатор будет отрабатывать в режиме Port-Based Q-in-Q и все пакетики упаковывать только в один SPVID.
+
+config vlan double1000 add untagged 25
+config qinq ports 25 trust_cvid enable - на порту который смотрит в сторону клиента, чтобы не переписывал влан
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Вот такой пример еще можно рассмотреть:
+Client1 -(25 port)DES-3200-28F(26 port) - (11 port)DGS-3612G(10 port) - Client2
+
+Client1 IP 192.168.1.220 tag 400
+Client2 IP 192.168.1.221 tag 400
+
+# DGS-3612G
+Код:
+config vlan default delete 1-12
+config vlan default add untagged 1-12
+config vlan default advertisement enable
+
+create vlan test1 tag 400
+config vlan test1 add tagged 10 advertisement disable
+
+create vlan double1000 tag 1000
+config vlan double1000 add tagged 10-11 advertisement disable
+
+enable qinq
+
+config gvrp 1-12 state disable ingress_checking enable acceptable_frame admit_all pvid 1
+config qinq ports 10 role uni missdrop enable outer_tpid 0x8100
+config qinq ports 11 role nni missdrop enable outer_tpid 0x8100
+create vlan_translation ports 10 cvid 400 add svid 1000
+
+# DES-3200
+Код:
+config vlan default delete 1-28
+config vlan default add untagged 1-28
+config vlan default advertisement enable
+
+create vlan test1 tag 400
+config vlan test1 add tagged 25 advertisement disable
+
+create vlan double1000 tag 1000
+config vlan double1000 add tagged 26 advertisement disable
+config vlan double1000 add untagged 25
+
+enable qinq
+config gvrp 1-28 state disable ingress_checking enable acceptable_frame admit_all pvid 1
+config qinq ports 25 role uni outer_tpid 0x8100 vlan_translation enable
+config qinq ports 26 role nni outer_tpid 0x8100 vlan_translation enable
+create vlan_translation add cvid 400 svid 1000
+config qinq ports 25 trust_cvid enable
+
+
+
+
+
+
+
+
+
+ address-family ipv4 vrf alpha-zegelya
+ redistribute connected
+ redistribute static
+ neighbor 172.26.24.141 remote-as 64543
+ neighbor 172.26.24.141 activate
+ neighbor 172.26.24.145 remote-as 65007
+ neighbor 172.26.24.145 activate
+ no auto-summary
+ no synchronization
+ exit-address-family
+
+
+
+enable syslog
+create syslog host 1 ipaddress 192.168.113.1 severity all facility local7 udp_port 514  state enable 
+config log_save_timing log_trigger
+
+
+
+
+
+
+
+
+
+
+#/bin/sh
+#change tarif
+export PATH=$PATH:/bin:/usr/bin
+
+#echo "Пример ./test.sh <Port> <IP_HOST>"
+
+
+
+pswd=Nexponka
+USR=admin
+port=$1
+IP_HOST=$2
+
+sshpass -p ${pswd} ssh -o StrictHostKeyChecking=no -l ${USR} ${IP_HOST} << EOF
+config bandwidth_control ${port} rx_rate ${rate} tx_rate ${rate}
+save
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+logout
+
+EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Хочу получить: Порт2 (клиент с неизвестными VLAN) - Порт28 - Порт28 - Порт2 (клиент с теми же неизвестными VLAN).
+
+Конфигурация на обоих DES-3200-28 FW 1.21.B006
+
+Код:
+disable asymmetric_vlan
+enable pvid auto_assign
+config vlan default delete 1-28
+config vlan default advertisement enable
+config vlan default add untagged 1,4-28
+create vlan SP-100 tag 100
+config vlan SP-100 add tagged 28
+config vlan SP-100 add untagged 2
+enable qinq
+disable gvrp
+
+config qinq ports 1,3-27 role uni outer_tpid 0x88A8 trust_cvid disable vlan_tran slation disable
+config qinq ports 2 role uni outer_tpid 0x88A8 trust_cvid disable vlan_translation enable
+config qinq ports 28 role nni outer_tpid 0x88A8 trust_cvid disable vlan_translation enable
+
+
+
+
+
+
+
+На одном:
+Код:
+DES-3200-28:4#sh gvrp 2
+Command: show gvrp 2
+
+Global GVRP  : Disabled
+
+Port  PVID  Reassigned  GVRP      Ingress   Acceptable Frame Type
+            PVID        State     Checking
+----  ----  ----------  --------  --------  -----------------------
+2     100   -           Disabled    Enabled     All Frames
+
+Total Entries  : 1
+
+
+На другом:
+Код:
+DES-3200-28:4#sh gvrp 2
+Command: show gvrp 2
+
+Global GVRP  : Disabled
+
+Port  PVID  Reassigned  GVRP      Ingress   Acceptable Frame Type
+            PVID        State     Checking
+----  ----  ----------  --------  --------  -----------------------
+2     1     -           Disabled    Enabled     All Frames
+
+Total Entries  : 1
+
+
+Странно, настройки совершенно одинаковые. Сейчас специально "сличал" - не напутал ли я чего.
+
+
+
+На втором DES-3200-28 pvid также должен быть равен 100.
+
+
+
+
+
+
+
+
+
+
+Руслан, а если поверх этого еще надо пробросить и обычные VLAN-ы?
+
+То есть
+
+1. Порт2 (клиент с неизвестными VLAN) - Порт28 - Порт28 - Порт2 (клиент с теми же неизвестными VLAN).
+2. Порт3, Порт4 (VLAN99 tagged) - Порт28 - Порт28 - Порт3, Порт4 (VLAN99 tagged).
+
+С первым пунктом все работает, а вот как через тот же проброс отправить обычные тегированные VLAN с нескольких портов?
+
+
+tpid = 8100 и использовать vlan_translation replace, 
+только нужно помнить, что можно создать только 16 правил replace, а вместе с add всего 4к правил.
+
+2 ADv > Можно решить вашу задачу через Port-Based режим, только для этого нужно на клиентском порту отключить trust_cvid, 
+добавить порт как untag в нужный spvlan и pvid порта изменить на vid spvlan-а, 
+тогда для Вас будет прозрачно какие VLAN-ы клиент пробрасывает через spvlan.
+
+
+Первым делом обновить прошивку, потом настроить по-моему описанию, т.е. настроить порт как uni, 
+создать VLAN, добавить uni порт как untag в этот VLAN, убедиться, 
+что pvid этого порта равен vid-у этого VLAN-а, можно включить vlan_translation на этом порту,
+ но не включать trust_cvid, тогда на клиентские пакетики, 
+приходящие на этот порт, будет навешиваться второй tag = pvid-у этого порта, т.е. будет работать режим Port-Based Q-in-Q.
+
+
+
+
+
+Если вкратце то это выглядит так:
+
+1) Включаете Q-in-Q на устройстве командой enable qinq.
+2) Создаёте SP-VLAN-ы как обычные 802.1q VLAN-ы.
+3) Командами config qinq ports ... назначаете порты как UNI (access) или NNI (uplink). Здесь же выставляете нужный TPID.
+4) Порты UNI и NNI добавляете как tagged в SP-VLAN-ы. Естественно C-VLAN-ы не нужно создавать.
+5) Создаёте таблицу VLAN Translation командами create vlan_translation. В них указываете какие C-VLAN-ы запихивать в какие SP-VLAN-ы. 
+В этих же командах можно менять тег C-VLAN и не добавлять второй тег.
+
+Это реализовано в аппаратной части. Но есть ограничение, размер VLAN Translation Table 768 записей. 
+Но можно и обойти это ограничение запихнув все непоместившиеся в таблицу VLAN-ы по PVID access порта в соответствующий SP-VLAN.
+ Чтобы это сделать нужно на UNI порту отключить missdrop и назначить PVID на порту.
+
+
+
+
+
+
+
+
+
+
+
+
+Вопросы
+1. Планируется исполльзовть схему vlan-per-user для ISG. Задача протянуть кучу вланов от коммутатора на районе (Dlink DGS3627G) запакованную в dot1q tunnel (qinq) через сеть - коммутаторы Catalyst 36xx, 35xx до Catalyst4900
+Как распаковывать на конечном коммутаторе Catalyst4900? Использовать QinQ Loop ([http://www.hilik.org.ua/%D1%8D%D0%BA%D0%BE%D0%BD%D0%BE%D0%BC%D0%BD%D0%B0%D1%8F-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%BF%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B5%D0%BD%D0%B8%D1%8F-qinq/)?](http://www.hilik.org.ua/%D1%8D%D0%BA%D0%BE%D0%BD%D0%BE%D0%BC%D0%BD%D0%B0%D1%8F-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%BF%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B5%D0%BD%D0%B8%D1%8F-qinq/)?)
+Не подскажите ли другое возможное решение? Требуется ли какая-то специфическая настройка промежуточных коммутаторов, кроме увеличенного MTU?
+
+2.ISG планируется делать на основе опции 82. Документации для 4900 не нашел. Работает на основе документации для 36xx и 35xx.
+Встретил 2 вида настройки. При обеих настройках функция отрабатывает правильно (почти :), есть проблема с unicast dhcp-request на Dlink 3200)
+
+Вот первый вид
+ip dhcp snooping vlan 50-51                                                                                                                                  
+ip dhcp snooping information option allow-untrusted                                                                                                          
+ip dhcp snooping  
+
+interface Loopback1                                                                                                                                          
+ ip address 192.168.7.1 255.255.255.0 secondary                                                                                                              
+ ip address 10.90.0.1 255.255.255.0
+
+interface Vlan50                                                                                                                                             
+ description #Test user                                                                                                                                      
+ ip unnumbered Loopback1                                                                                                                                     
+ ip helper-address 192.168.120.254   
+
+
+Вот второй вид
+ip dhcp relay
+
+interface Loopback1                                                                                                                                          
+ ip address 192.168.7.1 255.255.255.0 secondary                                                                                                              
+ ip address 10.90.0.1 255.255.255.0
+
+interface Vlan50                                                                                                                                             
+ description #Test user                                                                                                                                      
+ ip unnumbered Loopback1                                                                                                                                     
+ ip helper-address 192.168.120.254   
+
+Не могу понять в чём отличия? Работают вроде одинаково?
+
+
+
+
+
+DGS3627G
+
+
+config vlan default delete 1-28
+config vlan default advertisement enable
+config vlan default add untagged 1,4-28
+create vlan SP-100 tag 100
+config vlan SP-100 add tagged 15
+config vlan SP-100 add untagged 21
+create vlan test tag 50
+
+enable qinq
+disable gvrp
+
+config qinq ports 21 role uni missdrop enable outer_tpid 0x88A8
+config qinq ports 15 role nni missdrop enable outer_tpid 0x88A8
+create vlan_translation ports 21 cvid 50 add svid 100
+create vlan_translation add cvid 26 svid 26
+
+
+
+
+config qinq ports 1-14,16-20,22-27 role nni missdrop disable tpid 0x88A8 
+config qinq ports 15 role nni missdrop enable tpid 0x88A8 
+config qinq ports 21 role uni missdrop enable tpid 0x88A8 
+create vlan_translation ports 21 cvid 26 add svid 26
+create vlan_translation ports 21 cvid 50 add svid 100
+
+
+
+
+
+
+
+
+
+# VLAN                                                                                                                                                       
+                                                                                                                                                             
+enable pvid auto_assign                                                                                                                                      
+config vlan default delete 1-27                                                                                                                              
+config vlan default advertisement enable                                                                                                                     
+create vlan mngt tag 26                                                                                                                                      
+config vlan mngt add tagged 15,21-24                                                                                                                                                                                                                               
+create vlan test tag 50                                                                                                                                      
+config vlan test add tagged 15,21-24                                                                                                                                                                                                                              
+create vlan test2 tag 51                                                                                                                                     
+config vlan test2 add tagged 15,21-24                                                                                          
+create vlan SP-100 tag 100                                                                                                                                   
+config vlan SP-100 add tagged 15, 21                                                                                                   
+enable qinq                                                                                                                                                  
+disable gvrp                                                                                                                                                 
+config gvrp 1-14,16-20,25-27 state disable ingress_checking enable acceptable_frame admit_all pvid 1                                                         
+config gvrp 15,21-24 state disable ingress_checking enable acceptable_frame admit_all pvid 51                                                                
+config gvrp 21 state disable ingress_checking enable acceptable_frame admit_all pvid 50                                                                      
+                                                                                                                                                             
+# PROTOCOL_VLAN                                                                                                                                              
+                                                                                                                                                             
+                                                                                                                                                             
+# QINQ                                                                                                                                                       
+                                                                                                                                                             
+config qinq ports 1-14,16-20,22-27 role nni missdrop disable tpid 0x88A8                                                                                     
+config qinq ports 15 role nni missdrop enable tpid 0x8100                                                                                                    
+config qinq ports 21 role uni missdrop enable tpid 0x8100                                                                                                    
+create vlan_translation ports 21 cvid 26 add svid 26                                                                                                         
+create vlan_translation ports 21 cvid 50 add svid 100   
+
+create vlan_translation ports 21 cvid 26 replace svid 26 
+
+
+
+
+
+
+interface GigabitEthernet2/9                                                                                                                                 
+ description #Loop Trunk                                                                                                                                     
+ switchport trunk allowed vlan 26,50,51                                                                                                                      
+ switchport mode trunk                                                                                                                                       
+ load-interval 30    
+
+interface GigabitEthernet2/10                                                                                                                                
+ description #Loop qinq tunnel                                                                                                                               
+ switchport access vlan 100                                                                                                                                  
+ switchport mode dot1q-tunnel                                                                                                                                
+ load-interval 30                                                                                                                                            
+ no cdp enable                                                                                                                                               
+end   
+
+
+interface GigabitEthernet2/10 
+ description #Loop selective tunnel
+ switchport vlan mapping 50 dot1q-tunnel 100
+ switchport vlan mapping 26 dot1q-tunnel 26
+ switchport mode trunk
+ dot1q tunneling ethertyp
+ load-interval 30                                                                                                                                            
+ no cdp enable                                                                                                                                               
+end   
+
+
+
+interface GigabitEthernet2/12                                                                                                                                
+ description #TO DLINK 3627G                                                                                                                                 
+ switchport trunk allowed vlan 100, 26                                                                                                                           
+ switchport mode trunk                                                                                                                                       
+ load-interval 30   
+
+
+
+
+
+
+
+
+c7200(config)#int gi0/1
+c7200(config-if)#dot1q tunneling ethertype ?
+  0x88A8  dot1q tunneling etype 0x88A8
+  0x9100  dot1q tunneling etype 0x9100
+
+
+
+
+
+
+
+
+
+New config 
+
+
+
+# DES-3200
+Код:
+config vlan default delete 1-28
+config vlan default add untagged 1-28
+config vlan default advertisement enable
+
+create vlan test1 tag 400
+config vlan test1 add tagged 25 advertisement disable
+
+create vlan double1000 tag 1000
+config vlan double1000 add tagged 26 advertisement disable
+config vlan double1000 add untagged 25
+
+enable qinq
+config gvrp 1-28 state disable ingress_checking enable acceptable_frame admit_all pvid 1
+config qinq ports 26 role uni outer_tpid 0x8100 vlan_translation enable
+config qinq ports 25 role nni outer_tpid 0x8100 vlan_translation enable
+create vlan_translation add cvid 50 svid 100
+create vlan_translation replace cvid 26 svid 26
+config qinq ports 26 trust_cvid enable
+
+
+
+
+
+
+
+
+
+
+
+
+# VLAN                                                                                                                                                       
+                                                                                                                                                             
+enable pvid auto_assign                                                                                                                                      
+config vlan default delete 1-27                                                                                                                              
+config vlan default advertisement enable                                                                                                                     
+create vlan mngt tag 26                                                                                                                                      
+config vlan mngt add tagged 15,21-24                                                                                                                                                                                                                               
+create vlan test tag 50                                                                                                                                      
+config vlan test add tagged 15,21-24                                                                                                                                                                                                                              
+create vlan test2 tag 51                                                                                                                                     
+config vlan test2 add tagged 15,21-24                                                                                          
+create vlan SP-100 tag 100                                                                                                                                   
+config vlan SP-100 add tagged 15, 21                                                                                                   
+enable qinq                                                                                                                                                  
+disable gvrp                                                                                                                                                 
+config gvrp 1-14,16-20,25-27 state disable ingress_checking enable acceptable_frame admit_all pvid 1                                                         
+config gvrp 15,21-24 state disable ingress_checking enable acceptable_frame admit_all pvid 51                                                                
+config gvrp 21 state disable ingress_checking enable acceptable_frame admit_all pvid 50                                                                      
+                                                                                                                                                             
+# PROTOCOL_VLAN                                                                                                                                              
+                                                                                                                                                             
+                                                                                                                                                             
+# QINQ                                                                                                                                                       
+                                                                                                                                                             
+config qinq ports 1-14,16-20,22-27 role nni missdrop disable tpid 0x88A8                                                                                     
+config qinq ports 15 role uni missdrop enable tpid 0x8100                                                                                                    
+config qinq ports 21 role nni missdrop enable tpid 0x8100                                                                                                    
+create vlan_translation ports 21 cvid 26 add svid 26                                                                                                         
+create vlan_translation ports 21 cvid 50 add svid 100   
+
+create vlan_translation ports 15 cvid 26 replace svid 26 
+
+
+
+
+
+
+download firmware_fromTFTP 10.90.90.1 DES-3200R_1.33.B003.had image_id 1
+download cfg_fromTFTP 10.90.90.1 /s-ring11/ushinskogo18-s1.sc.int
+
+
+
+snmp-server community public RO 57
+snmp-server location Aronso
+
+
+access-list 57 permit 81.20 192.0 0.0.0.127
+access-list 57 deny   any
+
+
+VID             : 490         VLAN Name       : borodinskaya45
+VLAN Type       : Static      Advertisement   : Disabled
+Member Ports    : 1-28                
+Static Ports    : 1-28                
+Current Tagged Ports   : 25-28               
+Current Untagged Ports : 1-24                
+Static Tagged Ports    : 25-28               
+Static Untagged Ports  : 1-24                
+Forbidden Ports        :       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tagged (cуммируются с untagged)
+
+garry@garry:/var/home/garry> snmpwalk -v 2c -c public 192.168.118.71 1.3.6.1.2.1.17.7.1.4.3.1.2
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.1 = Hex-STRING: 00 00 00 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.25 = Hex-STRING: 00 00 00 F0 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.490 = Hex-STRING: FF FF FF F0 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.491 = Hex-STRING: 00 00 00 C0 00 00 00 00 
+
+
+
+untagged
+garry@garry:/var/home/garry> snmpwalk -v 2c -c public 192.168.118.71 1.3.6.1.2.1.17.7.1.4.3.1.4
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.1 = Hex-STRING: 00 00 00 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.25 = Hex-STRING: 00 00 00 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.490 = Hex-STRING: FF FF FF 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.491 = Hex-STRING: 00 00 00 00 00 00 00 00 
+
+
+
+8 портов	8 портов	8 портов	4 порта
+FF 		FF		FF		 F0	 		00 00 00 00
+11111111	11111111	11111111	11110000
+
+VID             : 1           VLAN Name       : default
+VLAN Type       : Static      Advertisement   : Enabled
+Member Ports    :                     
+Static Ports    :                     
+Current Tagged Ports   :                     
+Current Untagged Ports :                     
+Static Tagged Ports    :                     
+Static Untagged Ports  :                     
+Forbidden Ports        :                     
+
+VID             : 25          VLAN Name       : mngt
+VLAN Type       : Static      Advertisement   : Disabled
+Member Ports    : 25-28               
+Static Ports    : 25-28               
+Current Tagged Ports   : 25-28               
+Current Untagged Ports :                     
+Static Tagged Ports    : 25-28               
+Static Untagged Ports  :                     
+Forbidden Ports        :                     
+                                                                               
+VID             : 490         VLAN Name       : borodinskaya45
+VLAN Type       : Static      Advertisement   : Disabled
+Member Ports    : 1-28                
+Static Ports    : 1-28                
+Current Tagged Ports   : 25-28               
+Current Untagged Ports : 1-24                
+Static Tagged Ports    : 25-28               
+Static Untagged Ports  : 1-24                
+Forbidden Ports        :                     
+                                                                               
+VID             : 491         VLAN Name       : borodinskaya49
+VLAN Type       : Static      Advertisement   : Disabled
+Member Ports    : 25-26               
+Static Ports    : 25-26               
+Current Tagged Ports   : 25-26               
+Current Untagged Ports :                     
+Static Tagged Ports    : 25-26               
+Static Untagged Ports  :   
+
+          
+
+Сохранить конфиг
+snmpset -v2c -c private 192.168.118.71 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+Прописать описание на порт
+snmpset -v2c -c private 192.168.118.71 IF-MIB::ifAlias.28 s "28port"
+
+
+
+[http://mail.yandex.ru/for/umit-agro.ru](http://mail.yandex.ru/for/umit-agro.ru)
+info@umit-agro.ru
+D37HdsWp4B
+
+podhaluzin@umit-agro.ru
+Opv3Tfs3DA
+
+jatkin@umit-agro.ru
+Mn39Uhds7t
+
+
+
+
+3200(25)---(21)3627(22)--(25)3200(26)--(22)3627(21)--(25)3200
+50,51,52 в 100 --- 100 в 50,51,52
+
+ 
+
+DGS3627G
+
+
+config vlan default delete 1-28
+config vlan default advertisement enable
+config vlan default add untagged 1,4-28
+create vlan SP-100 tag 100
+config vlan SP-100 add tagged 22
+config vlan SP-100 add untagged 21
+create vlan test tag 50
+config vlan test add tagged 21
+create vlan test2 tag 51
+config vlan test2 add tagged 21
+create vlan test3 tag 52
+config vlan test3 add tagged 21
+
+enable qinq
+disable gvrp
+
+config qinq ports 21 role uni missdrop enable outer_tpid 0x8100
+config qinq ports 22 role nni missdrop enable outer_tpid 0x8100
+create vlan_translation ports 21 cvid 50 add svid 100
+create vlan_translation ports 21 cvid 51 add svid 100
+create vlan_translation ports 21 cvid 52 add svid 100
+create vlan_translation ports 21 cvid 27 replace svid 27
+create vlan_translation ports 22 cvid 27 replace svid 27
+
+
+config ipif System ipaddress 192.168.121.8/24 vlan mngt 
+
++ spanning tree     
+
+
+Что делают vlan_translation add и vlan_translation_replace описано в manual-ах доступных здесь: ftp://ftp.dlink.ru/pub/Switch/DGS-3600% ... scription/
+
+Но если кратко, то правило add добавляет в пакет spvid и tpid q-in-q, настроенный в коммутаторе. А replace заменяет cvid на spvid и также выставляет tpid q-in-q, т.е. в пакетеке остаётся один tag, а не два, как при использовании add.
+
+Если включать missdrop, то на порту будут работать только правила vlan_translation, если отключить, то ещё будет работать режим Port-Based Q-in-Q, т.е. spvid будет равен pvid-у, выставленному на порту.
+
+Роль uni нужно задавать на портах, к которым подключены стандартные коммутаторы, которые поддерживают IEEE 802.1q, nni - это магистральные порты.
+
+Q-in-Q -это L2 функция, поэтому и не работает маршрутизация, но можно использовать обходной вариант, т.е. настраивать tpid равный 8100.         
+
+
+
+
+Для Management VLAN можно использовать vlan_translation replace.
+
+
+[http://forum.dlink.ru/viewtopic.php?f=2&t=127699&hilit=DGS3627+qinq](http://forum.dlink.ru/viewtopic.php?f=2&t=127699&hilit=DGS3627+qinq)  
+
+May 11 11:04:33 garry dhcpd:  Lease for 10.90.0.40 Switch port: 12 Switch vlan: 0.52 Switch MAC: e0.5f.b9.52.4b.40
+
+
+
+
+
+192.168.117.12	00-90-E8-1A-4A-95
+192.168.117.16	00-90-E8-1A-4B-0E
+
+
+
+download firmware_fromTFTP 10.90.90.1 DES-3200R_1.50.B010.had image_id 1
+download cfg_fromTFTP 10.90.90.1 /manej2/50let15-s2.sc.int
+
+
+Эмуляция звонка с voip-cisco
+Опубликовано 18.06.2010 автором skeletor
+
+Иногда бывает нужно протестировать канал с cisco которая имеет порты T1\E1. Для этого инициируют звонок с cisco и смотрят.
+
+Есть недокументированная команда для этого:
+
+#csim start №ТЕЛЕФОНА
+
+
+
+
+garry@garry:/etc> snmpwalk -v 2c -c public 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.2
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.1 = Hex-STRING: 00 00 00 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.26 = Hex-STRING: FF FF FF E0 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.3061 = Hex-STRING: 20 00 08 00 00 00 00 00 
+
+garry@garry:/etc> snmpwalk -v 2c -c public 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.4
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.1 = Hex-STRING: 00 00 00 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.26 = Hex-STRING: 00 00 00 00 00 00 00 00 
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.3061 = Hex-STRING: 00 00 00 00 00 00 00 00 
+
+
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.5 vlan100
+					1.3.6.1.2.1.17.7.1.4.3.1.1.5
+
+
+
+SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.3061 = Hex-STRING: 00 00 00 00 00 00 00 00
+
+
+
+
+
+
+DGS3627G
+
+
+config vlan default delete 1-28
+config vlan default advertisement enable
+config vlan default add untagged 1,4-28
+create vlan SP-100 tag 100
+config vlan SP-100 add tagged 22
+config vlan SP-100 add untagged 21
+create vlan test tag 50
+config vlan test add tagged 21
+create vlan test2 tag 51
+config vlan test2 add tagged 21
+create vlan test3 tag 52
+config vlan test3 add tagged 21
+
+enable qinq
+disable gvrp
+
+config qinq ports 21 role uni missdrop enable outer_tpid 0x8100
+config qinq ports 22 role nni missdrop enable outer_tpid 0x8100
+create vlan_translation ports 21 cvid 50 add svid 100
+create vlan_translation ports 21 cvid 51 add svid 100
+create vlan_translation ports 21 cvid 52 add svid 100
+create vlan_translation ports 21 cvid 27 replace svid 27
+create vlan_translation ports 22 cvid 27 replace svid 27
+
+
+00040034020c:0006e05fb9524b40
+
+00040034020c:0006e05fb9524b40
+
+Для 2000 Влана и 11 порта
+00040033020b:0006e05fb9524b40
+
+
+
+
+
+
+
+
+120.32
+DGS3627G
+
+
+
+create vlan TRSokol tag 1950
+config vlan TRSokol add tagged 21
+config vlan TRSokol add untagged 9
+create vlan TestUser tag 2000
+config vlan TestUser add tagged 9
+
+
+enable qinq
+
+config qinq ports 9 role uni missdrop enable outer_tpid 0x8100
+config qinq ports 21 role nni missdrop enable outer_tpid 0x8100
+create vlan_translation ports 9 cvid 2000 add svid 1950
+create vlan_translation ports 9 cvid 26 replace svid 26
+
+
+
+
+
+
+
+
+
+
+
+121.7
+
+create vlan TRSokol tag 1950
+config vlan TRSokol add tagged 22
+config vlan TRSokol add untagged 21
+create vlan TestUser tag 2000
+config vlan TestUser add tagged 21
+
+
+
+config qinq ports 1-20,23-27 role nni missdrop disable tpid 0x88A8              
+config qinq ports 21 role uni missdrop enable tpid 0x8100                       
+config qinq ports 22 role nni missdrop enable tpid 0x8100                       
+create vlan_translation ports 21 cvid 27 replace svid 27
+create vlan_translation ports 21 cvid 2000 add svid 1950      
+
+
+create vlan TestUser tag 2000
+config vlan TestUser add tagged 25-28
+
+
+
+
+
+
+^M# VLAN
+
+^Menable pvid auto_assign
+^Mconfig vlan default delete 1-27
+^Mconfig vlan default add untagged 25-27
+^Mconfig vlan default advertisement enable
+^Mcreate vlan mngt tag 27
+^Mconfig vlan mngt add tagged 21-24 advertisement disable
+^Mcreate vlan test tag 50
+^Mconfig vlan test add tagged 21 advertisement disable
+^Mcreate vlan test2 tag 51
+^Mconfig vlan test2 add tagged 21 advertisement disable
+^Mcreate vlan test3 tag 52
+^Mconfig vlan test3 add tagged 21 advertisement disable
+^Mcreate vlan SP-100 tag 100
+^Mconfig vlan SP-100 add tagged 22
+^Mconfig vlan SP-100 add untagged 21 advertisement disable
+^Mcreate vlan QNQ-Tunnel tag 1950
+^Mconfig vlan QNQ-Tunnel add tagged 21 advertisement disable
+^Mcreate vlan 2000-USER tag 2000
+^Mconfig vlan 2000-USER add tagged 1,21-22 advertisement disable
+
+
+
+
+
+
+
+
+
+# VLAN
+
+enable pvid auto_assign
+config vlan default delete 1-27
+config vlan default advertisement enable
+create vlan mngt tag 26
+config vlan mngt add tagged 1-27 advertisement disable
+create vlan TRSokol tag 1950
+config vlan TRSokol add tagged 21
+config vlan TRSokol add untagged 9 advertisement disable
+create vlan TestUser tag 2000
+config vlan TestUser add tagged 9 advertisement disable
+create vlan GZK-Sokol-Voip tag 3061
+config vlan GZK-Sokol-Voip add tagged 3,21 advertisement disable
+enable qinq
+disable gvrp
+config gvrp 1-8,10-27 state disable ingress_checking enable acceptable_frame admit_all pvid 1
+config gvrp 9 state disable ingress_checking enable acceptable_frame admit_all pvid 1950
+
+
+# PROTOCOL_VLAN
+
+
+# QINQ
+
+Mconfig qinq ports 1-20,23-27 role nni missdrop disable tpid 0x88A8
+config qinq ports 9 role uni missdrop enable outer_tpid 0x8100
+config qinq ports 21 role nni missdrop enable outer_tpid 0x8100
+create vlan_translation ports 9 cvid 2000 add svid 1950
+create vlan_translation ports 9 cvid 26 replace svid 26
+
+
+
+
+create vlan_translation ports 9 cvid 26 replace svid 26
+
+
+
+config ipif System ip_mtu 1712
+
+
+                                                                                
+# VLAN                                                                          
+                                                                                
+enable pvid auto_assign                                                         
+config vlan default delete 1-27                                                 
+config vlan default advertisement enable                                        
+create vlan mngt tag 26                                                         
+config vlan mngt add tagged 1-27 advertisement disable                          
+create vlan TRSokol tag 1950                                                    
+config vlan TRSokol add tagged 21                                               
+config vlan TRSokol add untagged 9 advertisement disable                        
+create vlan TestUser tag 2000                                                   
+config vlan TestUser add tagged 9 advertisement disable                         
+create vlan TestUserPrivate tag 2001                                            
+config vlan TestUserPrivate add tagged 9 advertisement disable                  
+create vlan GZK-Sokol-Voip tag 3061                                             
+config vlan GZK-Sokol-Voip add tagged 3,21 advertisement disable                
+enable qinq                                                                     
+disable gvrp                                                                    
+config gvrp 1-8,10-27 state disable ingress_checking enable acceptable_frame admit_all pvid 1
+config gvrp 9 state disable ingress_checking enable acceptable_frame admit_all pvid 1950
+                                                                                
+# PROTOCOL_VLAN                                                                 
+                                                                                
+                                                                                
+# QINQ                                                                          
+                                                                                
+config qinq ports 1-2,4-8,10-20,22-27 role nni missdrop disable tpid 0x88A8     
+config qinq ports 3,9 role uni missdrop enable tpid 0x8100                      
+config qinq ports 21 role nni missdrop enable tpid 0x8100                       
+create vlan_translation ports 3 cvid 3061 replace svid 3061                     
+create vlan_translation ports 9 cvid 26 replace svid 26                         
+create vlan_translation ports 9 cvid 2000 add svid 1950 
+
+                                                                                
+# VLAN                                                                          
+                                                                                
+enable pvid auto_assign                                                         
+config vlan default delete 1-27                                                 
+config vlan default advertisement enable                                        
+create vlan mngt tag 26                                                         
+config vlan mngt add tagged 1-27 advertisement disable                          
+create vlan TRSokol tag 1950                                                    
+config vlan TRSokol add tagged 21                                               
+config vlan TRSokol add untagged 9 advertisement disable                        
+create vlan TestUser tag 2000                                                   
+config vlan TestUser add tagged 9 advertisement disable                         
+create vlan TestUserPrivate tag 2001                                            
+config vlan TestUserPrivate add tagged 9 advertisement disable                  
+create vlan GZK-Sokol-Voip tag 3061                                             
+config vlan GZK-Sokol-Voip add tagged 3,21 advertisement disable                
+enable qinq                                                                     
+disable gvrp                                                                    
+config gvrp 1-8,10-27 state disable ingress_checking enable acceptable_frame admit_all pvid 1
+config gvrp 9 state disable ingress_checking enable acceptable_frame admit_all pvid 1950
+                                                                                
+# PROTOCOL_VLAN                                                                 
+                                                                                
+                                                                                
+# QINQ                                                                          
+                                                                                
+ 
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26
+config qinq ports 1 role uni missdrop disable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26  
+config qinq ports 1 role uni missdrop enable tpid 0x8100                      
+create vlan_translation ports 1 cvid 26 replace svid 26
+
+
+
+
+
+config qinq ports 1 role uni missdrop disable tpid 0x8100  
+
+
+
+{vlan} - номер vlan
+${desc} - описание и название vlan
+${if} - название интерфейса, заданное нашим отделом, зависит от района
+
+
+sshpass -p ${pswd} ssh -o StrictHostKeyChecking=no -l ${USR} ${IP_HOST} << EOF
+conf t
+interface Vlan${vlan}
+ description ${desc}
+ ip unnumbered Loopback{number loopback}
+ ip helper-address 192.168.121.31
+ exit
+vlan ${vlan}
+name ${desc}
+exit	
+int ${if}
+  switchport trunk allowed vlan add ${vlan}
+exit
+exit
+write memory
+logout
+EOF
+
+
+
+create vlan TestUserPrivate tag 2001                                            
+config vlan TestUserPrivate add tagged 25-28      
+
+
+ip policy route-map pptp-nat
+
+route-map pptp-nat permit 10
+ match ip address 131
+ set ip next-hop 192.168.200.1
+
+
+access-list 131 deny   udp 172.28.16.0 0.0.3.255 any eq bootps
+access-list 131 deny   udp 10.0.16.0 0.0.3.255 any eq bootps
+
+
+access-list 131 permit ip 10.90.0.0 0.0.0.255 any
+access-list 131 permit ip 10.100.0.0 0.0.0.255 any
+access-list 131 deny   ip any any
+
+
+
+
+
+-A POSTROUTING -s 172.28.16.0/22 -o vlan500 -j MASQUERADE
+
+
+iptables -t nat -A POSTROUTING -s 10.100.0.0/24 -o vlan10 -j SNAT --to-source 81.20.198.190
+iptables -t nat -A POSTROUTING -s 10.90.0.0/24 -o vlan10 -j SNAT --to-source 81.20.198.190
+
+
+
+
+route-map pptp-nat permit 10
+ description #PPTP NAT redirection
+ match ip address 31
+ set ip next-hop 172.10.0.1 192.168.200.1
+
+
+
+
+
+
+interface GigabitEthernet0/0.1021
+ description PPTP-NAT-Server
+ encapsulation dot1Q 1021
+ ip address 172.10.0.2 255.255.255.252
+ ip flow ingress
+ shutdown 
+ no cdp enable
+
+
+$telnet route-views.oregon-ix.net
+route-server.ip.att.net
+
+
+ip dhcp pool local-pool
+ network 81.20.199.240 255.255.255.248
+ default-router 81.20.199.241 
+ dns-server 81.20.192.16 
+ lease 0 2
+!         
+ip dhcp pool blocked-users
+ network 10.90.0.0 255.255.224.0
+ dns-server 81.20.192.16 
+ default-router 10.90.0.1 
+ lease 0 2
+!         
+ip dhcp pool private
+ network 172.20.96.0 255.255.224.0
+ dns-server 81.20.192.16 
+ default-router 172.20.96.1 
+ lease 0 2
+!         
+
+
+
+
+
+
+
+interface GigabitEthernet0/0/2.52
+ encapsulation dot1Q 52
+ ip unnumbered Loopback2
+ ip helper-address 172.31.3.2
+ service-policy type control ISG-CUSTOMERS-POLICY
+ ip subscriber l2-connected
+  initiator dhcp class-aware
+
+  
+
+
+
+
+
+
+
+
+trust_cvid включаем для пользователей
+
+
+
+
+# QINQ
+
+config qinq ports 1-8,20,22 role uni missdrop disable tpid 0x8100               
+config qinq ports 9-17,25-27 role nni missdrop disable tpid 0x88A8 
+config qinq ports 18-19,21,23 role uni missdrop enable tpid 0x8100 
+config qinq ports 24 role nni missdrop enable tpid 0x8100 
+create vlan_translation ports 1-8,21-23 cvid 26 replace svid 26
+create vlan_translation ports 3-4 cvid 221 add svid 1951
+create vlan_translation ports 18,21,23 cvid 11 replace svid 11
+create vlan_translation ports 18,21 cvid 22 replace svid 22
+create vlan_translation ports 18,21 cvid 24 replace svid 24
+create vlan_translation ports 18,21 cvid 30 replace svid 30
+create vlan_translation ports 18 cvid 444 replace svid 444
+create vlan_translation ports 18 cvid 671 replace svid 671
+create vlan_translation ports 18,21 cvid 1018 replace svid 1018
+create vlan_translation ports 18 cvid 1956 replace svid 1956
+create vlan_translation ports 18,21 cvid 2007 replace svid 2007
+create vlan_translation ports 18 cvid 3088 replace svid 3088
+create vlan_translation ports 18 cvid 3089 replace svid 3089
+create vlan_translation ports 18 cvid 3090 replace svid 3090
+create vlan_translation ports 18 cvid 3091 replace svid 3091
+create vlan_translation ports 18 cvid 3093 replace svid 3093
+create vlan_translation ports 18 cvid 3111 replace svid 3111
+create vlan_translation ports 18-24 cvid 3116 replace svid 3116
+create vlan_translation ports 18-24 cvid 3120 replace svid 3120                 
+create vlan_translation ports 18-24 cvid 3121 replace svid 3121
+create vlan_translation ports 18-24 cvid 3122 replace svid 3122
+create vlan_translation ports 18-24 cvid 3123 replace svid 3123
+create vlan_translation ports 18-24 cvid 3124 replace svid 3124
+create vlan_translation ports 18,24 cvid 3129 replace svid 3129
+create vlan_translation ports 18,24 cvid 3151 replace svid 3151
+create vlan_translation ports 19 cvid 6 replace svid 6
+create vlan_translation ports 20-21 cvid 25 replace svid 25
+create vlan_translation ports 20 cvid 222 add svid 1951
+create vlan_translation ports 20 cvid 223 add svid 1951
+create vlan_translation ports 20 cvid 224 add svid 1951
+create vlan_translation ports 20 cvid 225 add svid 1951
+create vlan_translation ports 20-21 cvid 3029 replace svid 3029
+create vlan_translation ports 20 cvid 3070 replace svid 3070
+create vlan_translation ports 21 cvid 5 replace svid 5
+create vlan_translation ports 21 cvid 10 replace svid 10
+create vlan_translation ports 21 cvid 12 replace svid 12
+create vlan_translation ports 21-22 cvid 13 replace svid 13
+create vlan_translation ports 21 cvid 15 replace svid 15
+create vlan_translation ports 21 cvid 16 replace svid 16
+create vlan_translation ports 21 cvid 21 replace svid 21
+create vlan_translation ports 21 cvid 23 replace svid 23                        
+create vlan_translation ports 21 cvid 27 replace svid 27
+create vlan_translation ports 21,23 cvid 28 replace svid 28
+create vlan_translation ports 21 cvid 29 replace svid 29
+create vlan_translation ports 21 cvid 418 replace svid 418
+create vlan_translation ports 21 cvid 684 replace svid 684
+create vlan_translation ports 21 cvid 773 replace svid 773
+create vlan_translation ports 21 cvid 872 replace svid 872
+create vlan_translation ports 21 cvid 1024 replace svid 1024
+create vlan_translation ports 21 cvid 1025 replace svid 1025
+create vlan_translation ports 21 cvid 1027 replace svid 1027
+create vlan_translation ports 21 cvid 2002 replace svid 2002
+create vlan_translation ports 21 cvid 2019 replace svid 2019
+create vlan_translation ports 21 cvid 2021 replace svid 2021
+create vlan_translation ports 21-22 cvid 2029 replace svid 2029
+create vlan_translation ports 21 cvid 2502 replace svid 2502
+create vlan_translation ports 21-24 cvid 3013 replace svid 3013
+create vlan_translation ports 21 cvid 3075 replace svid 3075
+create vlan_translation ports 21 cvid 3078 replace svid 3078
+create vlan_translation ports 21 cvid 3087 replace svid 3087
+create vlan_translation ports 21 cvid 3098 replace svid 3098
+create vlan_translation ports 21 cvid 3100 replace svid 3100
+create vlan_translation ports 21 cvid 3110 replace svid 3110                    
+create vlan_translation ports 21 cvid 3117 replace svid 3117
+create vlan_translation ports 21 cvid 3118 replace svid 3118
+create vlan_translation ports 21-24 cvid 3125 replace svid 3125
+create vlan_translation ports 21-24 cvid 3127 replace svid 3127
+create vlan_translation ports 21 cvid 3130 replace svid 3130
+create vlan_translation ports 21-24 cvid 3131 replace svid 3131
+create vlan_translation ports 21-24 cvid 3134 replace svid 3134
+create vlan_translation ports 21,24 cvid 3135 replace svid 3135
+create vlan_translation ports 21,23-24 cvid 3144 replace svid 3144
+create vlan_translation ports 21-24 cvid 3149 replace svid 3149
+create vlan_translation ports 21 cvid 3997 replace svid 3997
+create vlan_translation ports 21 cvid 4001 replace svid 4001
+create vlan_translation ports 22 cvid 875 replace svid 875
+create vlan_translation ports 22 cvid 1021 replace svid 1021
+create vlan_translation ports 22 cvid 2222 replace svid 2222
+create vlan_translation ports 22 cvid 3104 replace svid 3104
+create vlan_translation ports 23 cvid 1955 replace svid 1955
+
+
+
+
+
+
+Работал
+1:24   UNI     Disabled    0x8100       Disabled
+1:24    34         34         Replace   -
+ 
+1:24 untagged для 34 влана
+
+34           X        -           -           -         
+
+DGS-3627G:admin#sh gvrp
+Command: show gvrp
+
+
+ 1:24    34    Disabled  Enabled           All Frames   
+
+
+create vlan user-qiqn tag 1300                                                                                                                                      
+config vlan user-qiqn tagged 25-28 
+
+
+config qinq ports 1 role uni outer_tpid 0x8100 trust_cvid enable vlan_translation enable 
+config gvrp 1 state disable ingress_checking disable acceptable_frame admit_all pvid 1300
+
+
+
+config qinq ports 1 role uni outer_tpid 0x8100 trust_cvid disable vlan_translation disable
+config gvrp 1 state disable ingress_checking disable acceptable_frame admit_all pvid 1300
+
+
+config gvrp 25-28 state disable ingress_checking disable acceptable_frame admit_all pvid 1 
+config qinq ports 25-28 role nni outer_tpid 0x8100 trust_cvid disable vlan_translation disable   
+
+На конкретном порту не делается в 3200
+create vlan_translation add cvid 1300 svid 1957
+
+
+Надо сделать 2 vlan_translation, на клиентском и пользовательском порту
+чтобы работало на клиентском делаем 
+config qinq ports 1 role uni outer_tpid 0x8100 trust_cvid enable vlan_translation enable 
+config gvrp 1 state disable ingress_checking disable acceptable_frame admit_all pvid 1300
+create vlan_translation add cvid 1300 svid 1300
+
+config qinq ports 25-28 role nni outer_tpid 0x8100 trust_cvid disable vlan_translation enable 
+create vlan_translation add cvid 1300 svid 1957
+
+
+Все вланы в qinq коммутаторе - spvlan. Поэтому даже не теггированый фрейм, попадая в коммутатор считается spvlan, хотя
+у тебя всего одно поле.
+
+Если Вы не включили поддержку VLAN Translation на портах и не создали правила VLAN Translation,
+ то коммутатор будет отрабатывать в режиме Port-Based Q-in-Q и все пакетики упаковывать только в один SPVID
+
+На nni портах включать VLAN Translation не нужно.
+
+Нужно отключить trust_cvid и пакетики будут оборачиваться вторым тегом согласно PVID UNI порта
+
+
+
+create vlan_translation add cvid 1301 svid 1500
+delete vlan_translation cvid 1301
+Первые три работают без правил vlan_translation
+
+Работает с правилом влан транслейшен, а без правила нет
+config qinq ports 1 role uni vlan_translation enable trust_cvid enable
+config qinq ports 2 role uni vlan_translation enable trust_cvid enable
+config qinq ports 24 role uni vlan_translation enable trust_cvid enable
+
+И с правилом влан транслейшен и без правила влан транслейн не работает
+config qinq ports 1 role uni vlan_translation disable trust_cvid enable
+config qinq ports 2 role uni vlan_translation disable trust_cvid enable
+config qinq ports 24 role uni vlan_translation disable trust_cvid enable
+
+Работает с правилом влан транслейшен и без него тоже
+config qinq ports 1 role uni vlan_translation enable trust_cvid disable
+config qinq ports 2 role uni vlan_translation enable trust_cvid disable
+config qinq ports 24 role uni vlan_translation enable trust_cvid disable
+
+Работает в режиме порт базет
+config qinq ports 1 role uni vlan_translation disable trust_cvid disable
+config qinq ports 2 role uni vlan_translation disable trust_cvid disable
+config qinq ports 24 role uni vlan_translation disable trust_cvid disable
+
+
+
+
+
+
+
+
+
+ip vrf euroset-pl.mira4
+ description #Euroset-PL.Mira4
+ rd 20866:416
+ route-target export 20866:4160
+ route-target import 20866:4160
+ maximum routes 500 100
+
+
+interface GigabitEthernet0/0.813
+ description #IPVPN Euroset-PL.Mira4  #garry 5.04.2012
+ encapsulation dot1Q 813
+ ip vrf forwarding euroset-pl.mira4
+ ip address 172.16.15.221 255.255.255.252
+ no cdp enable
+
+ address-family ipv4 vrf euroset-pl.mira4
+ redistribute connected
+ redistribute static
+ no synchronization
+ exit-address-family
+
+
+ip route vrf euroset-pl.mira4 0.0.0.0 0.0.0.0 172.16.15.222
+
+
+
+Euroset-pl.mira4-client
+
+
+ip vrf euroset-pl.mira4
+ description #Euroset-PL.Mira4
+ rd 20866:416
+ route-target export 20866:4160
+ route-target import 20866:4160
+ maximum routes 500 100
+
+
+interface Fa0/0.2005
+ description #IPVPN Client-side Euroset-PL.Mira4  #garry 5.04.2012
+ encapsulation dot1Q 2005
+ ip vrf forwarding euroset-pl.mira4
+ ip address 172.16.15.225 255.255.255.252
+ no cdp enable
+
+ip route vrf euroset-pl.mira4 10.168.94.80 255.255.255.240 172.16.15.226
+ip route vrf euroset-pl.mira4 10.77.55.16 255.255.255.240 172.16.15.226
+ip route vrf euroset-pl.mira4 10.0.98.136 255.255.255.252 172.16.15.226
+ip route vrf euroset-pl.mira4 172.23.48.21 255.255.255.255 172.16.15.226
+
+
+
+
+
+ address-family ipv4 vrf euroset-pl.mira4
+ redistribute connected
+ redistribute static
+ default-information originate
+
+
+
+
+
+iptables -I forward_int 1 -s 192.168.66.2/32 -i vlan1021 -o vlan10 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
+
+iptables -I FORWARD 2 -s 192.168.66.2/32 -i vlan1021 -o vlan10 -j ACCEPT
+
+ip policy route-map test-nat
+
+
+access-list 37 permit 192.168.66.2 0.0.0.1
+access-list 37 deny any
+
+route-map test-nat permit 10
+ description #Test NAT redirection
+ match ip address 37
+ set ip next-hop 192.168.200.1
+
+
+
+
+
+
+
+
+CDE-C2#ping vrf euroset-pl.mira4 172.16.15.226
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.15.226, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 44/46/48 ms
+CDE-C2#ping vrf euroset-pl.mira4 172.16.15.226 repeat 100 
+
+Type escape sequence to abort.
+Sending 100, 100-byte ICMP Echos to 172.16.15.226, timeout is 2 seconds:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+

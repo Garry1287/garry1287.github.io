@@ -1,0 +1,87 @@
+---
+layout: post
+title:  "django-нужное"
+date:   2016-04-07 03:44:16 +0300
+categories: python
+tags: python
+---
+
+# django-нужное
+Полезные Django apps
+[https://toster.ru/q/33081](https://toster.ru/q/33081)
+[https://djangopackages.org/search/?q=news](https://djangopackages.org/search/?q=news)
+[https://pypi.python.org/pypi?%3Aaction=search&term=django-%D1%81%D1%84%D0%B5%D1%84%D0%B4%D1%89%D0%BF&submit=search](https://pypi.python.org/pypi?%3Aaction=search&term=django-%D1%81%D1%84%D0%B5%D1%84%D0%B4%D1%89%D0%BF&submit=search)
+
+[https://github.com/ggcarrots/django-carrots/tree/master/source](https://github.com/ggcarrots/django-carrots/tree/master/source)
+
+DjangoCMS2.0
+[https://habrahabr.ru/post/78362/](https://habrahabr.ru/post/78362/)
+
+
+[http://feincms-django-cms.readthedocs.io/en/latest/](http://feincms-django-cms.readthedocs.io/en/latest/)
+
+Примеры
+[http://elweb.co/33-projects-that-make-developing-django-apps-awesome/](http://elweb.co/33-projects-that-make-developing-django-apps-awesome/)
+[https://github.com/learnpython/learnpython.in.ua](https://github.com/learnpython/learnpython.in.ua)
+
+Разворачиваем проект на сервере с нуля по шагам python + django + uwsgi + nginx + supervisor. Предисловие
+[http://vivazzi.ru/blog/8/](http://vivazzi.ru/blog/8/)
+
+Уроки django
+[https://www.youtube.com/playlist?list=PLk3dllNv0g252fFKpiYeJaSRwEpBzhUcu](https://www.youtube.com/playlist?list=PLk3dllNv0g252fFKpiYeJaSRwEpBzhUcu)
+
+
+
+git
+[https://habrahabr.ru/post/174467/](https://habrahabr.ru/post/174467/)
+[http://maxsite.org/page/how-to-put-your-project-on-github-com](http://maxsite.org/page/how-to-put-your-project-on-github-com)
+[https://habrahabr.ru/post/125799/](https://habrahabr.ru/post/125799/)
+
+[http://m05quit0.ru/dev/e-ffektivnoe-ispol-zovanie-django-queryset/](http://m05quit0.ru/dev/e-ffektivnoe-ispol-zovanie-django-queryset/)
+
+[http://gettingstartedwithdjango.com/introduction-and-launch.html](http://gettingstartedwithdjango.com/introduction-and-launch.html)
+
+
+
+Техническая сторона Supl.biz
+[https://habrahabr.ru/company/suplbiz/blog/249873/](https://habrahabr.ru/company/suplbiz/blog/249873/)
+
+
+Дорабатываем HTTP-кеширование в Django
+[https://habrahabr.ru/company/redmadrobot/blog/305774/](https://habrahabr.ru/company/redmadrobot/blog/305774/)
+
+
+[http://madewithwagtail.org/?tag=forms](http://madewithwagtail.org/?tag=forms)
+[http://docs.wagtail.io/en/v1.5.3/topics/index.html](http://docs.wagtail.io/en/v1.5.3/topics/index.html)
+[https://github.com/torchbox/wagtaildemo](https://github.com/torchbox/wagtaildemo)
+[http://materializecss.com/about.html](http://materializecss.com/about.html)
+[https://habrahabr.ru/post/303900/](https://habrahabr.ru/post/303900/)
+
+
+
+
+[https://www.youtube.com/watch?v=txWYQhUac_Y](https://www.youtube.com/watch?v=txWYQhUac_Y)
+[https://www.youtube.com/watch?v=qgGIqRFvFFk&list=PL6gx4Cwl9DGBlmzzFcLgDhKTTfNLfX1IK](https://www.youtube.com/watch?v=qgGIqRFvFFk&list=PL6gx4Cwl9DGBlmzzFcLgDhKTTfNLfX1IK)
+[https://www.youtube.com/watch?v=V7IwdSJRe9I&list=PLpTASIMYgCp8supkEmnnrYa5xi9g91ZPI&index=8](https://www.youtube.com/watch?v=V7IwdSJRe9I&list=PLpTASIMYgCp8supkEmnnrYa5xi9g91ZPI&index=8)
+
+Книги
+[https://rtfm.co.ua/books-translations/django-book/](https://rtfm.co.ua/books-translations/django-book/)
+[https://github.com/vhf/free-programming-books/blob/master/free-programming-books.md#django](https://github.com/vhf/free-programming-books/blob/master/free-programming-books.md#django)
+[http://agiliq.com/books/djenofdjango/](http://agiliq.com/books/djenofdjango/)
+
+
+
+
+Сайт закупок
+[https://habrahabr.ru/company/suplbiz/blog/249873/](https://habrahabr.ru/company/suplbiz/blog/249873/)
+
+
+
+
+
+    Простой блог с комментариями на Django: разработка и развертывание для самых маленьких
+    [https://habrahabr.ru/post/181556/](https://habrahabr.ru/post/181556/)
+
+
+10 ошибок новичков
+[https://habrahabr.ru/company/mailru/blog/328352/](https://habrahabr.ru/company/mailru/blog/328352/)

@@ -1,0 +1,244 @@
+---
+layout: post
+title:  "mtu-mss"
+date:   2013-02-16 00:36:44 +0400
+categories: Networking
+tags: Networking
+---
+
+# mtu-mss
+[http://matt.dinham.net/mtu-settings-on-junos-ios-part-1/](http://matt.dinham.net/mtu-settings-on-junos-ios-part-1/)
+[http://matt.dinham.net/mtu-junos-vs-ios-part2-with-ospf/](http://matt.dinham.net/mtu-junos-vs-ios-part2-with-ospf/)
+
+
+Cisco IOS hw mtu = ip mtu и не включает l2 заголовок
+Junos hw mtu включает l2 заголовок = ip mtu + l2 заголовок
+
+
+ПРОБЛЕМА OSPF
+С точки зрения OSPF ip mtu - это размер ip пакета включая заголовки
+В cisco - это будет прописанный на интерфейсе  ip mtu XXXX ( разницы при настройке ip mtu и mtu - нет)? на L2 заголовок 24-36 в зависимости от систем резервируется
+NXOS также как в cisco
+IOS XE (asr 1004 нарпимер) всё также задаётся. Здесь есть разница в настройке между mtu и ip mtu
+mtu больше на 22  
+    – Layer 2 header—14 bytes
+    – Dot1q header—4 bytes
+    – CRC—4 bytes
+  Но для ospf  это не имеет значения
+  IOS-XR задаётся hardware MTU на интерфейсе и от него пляшешь, чтобы высчитать ip mtu, считается что разница в 14 на этом ПО
+    Ethernet overhead is seen as 14 bytes.
+    XR does not count the CRC trailer when calculating IP mtu.  E.g. a 1514 interface mtu provides a 1500 byte IP MTU.
+
+                RP/0/RP0/CPU0:ios#sh ipv4 int gi0/0/0/2 | i MTU
+                        MTU is 1514 (1500 is available to IP)
+ 
+ Junos - можно отдельно настраивать hardware mtu и ip mtu, разница между ними также 14
+ E.g. If the interface mtu is 1514 bytes, junos will not allow you to configure an IP  mtu greater than 1500 bytes
+ lab@junos-r1> show interfaces xe-0/0/5 detail | match MTU 
+ Link-level type: Ethernet, MTU: 1514, Speed: 10Gbps,  <--snip-->
+ Protocol inet, MTU: 1500, Generation: 161, Route table: 0
+ 
+ 
+ Вот наш пример 
+ garry@ctd-s2# run show interfaces ge-0/0/0   
+Physical interface: ge-0/0/0, Enabled, Physical link is Up
+  Interface index: 135, SNMP ifIndex: 502
+  Link-level type: Ethernet, MTU: 1514, Speed: Auto, Duplex: Auto, BPDU Error: None, MAC-REWRITE Error: None, Loopback: Disabled, Source filtering: Disabled, Flow control: Enabled,
+  Auto-negotiation: Enabled, Remote fault: Online
+  Device flags   : Present Running
+  Interface flags: SNMP-Traps Internal: 0x0
+  Link flags     : None
+  CoS queues     : 8 supported, 8 maximum usable queues
+  Current address: 3c:8a:b0:1f:1a:83, Hardware address: 3c:8a:b0:1f:1a:83
+  Last flapped   : 2016-12-08 10:36:36 GMT-3 (5d 06:55 ago)
+  Input rate     : 10056 bps (11 pps)
+  Output rate    : 0 bps (0 pps)
+  Active alarms  : None
+  Active defects : None
+  Interface transmit statistics: Disabled
+
+  Logical interface ge-0/0/0.0 (Index 71) (SNMP ifIndex 503) 
+    Flags: SNMP-Traps 0x0 Encapsulation: ENET2
+    Input packets : 2659290
+    Output packets: 111270
+    Protocol eth-switch
+      Flags: Trunk-Mode                                                                                                                                                                 
+                                                                                                                                                                                        
+{master:0}[edit]                                                                                                                                                                        
+garry@ctd-s2# run show interfaces vlan.10                                                                                                                                               
+  Logical interface vlan.10 (Index 69) (SNMP ifIndex 507)                                                                                                                               
+    Flags: SNMP-Traps 0x0 Encapsulation: ENET2                                                                                                                                          
+    Input packets : 273974                                                                                                                                                              
+    Output packets: 5463                                                                                                                                                                
+    Protocol inet, MTU: 1500                                                                                                                                                            
+      Flags: None                                                                                                                                                                       
+      Addresses, Flags: Is-Preferred Is-Primary                                                                                                                                         
+        Destination: 81.20.192.0/27, Local: 81.20.192.8, Broadcast: 81.20.192.31      
+        
+        
+Проблемы с mtu у нас не возникло
+
+ CDE-C3(config-if)#mtu ?
+  <1500-9216>  MTU size in bytes
+
+ 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+IOS XR и JunOS   hw mtu, которое показывается на интерфейсе включает L2 заголовок
+IOS и IOS XE  не включет L2 заголовок
+
+ Поэтому, при конфигурации MTU для Ethernet интерфейсов, на стороне IOS XR MTU должно быть на 14 байт больше (12 байт src mac+dst mac и 2 байт EtherType). К примеру, MTU в 1500 в Cisco IOS эквивалентно MTU в 1514 для IOS XR.
+
+ 
+ ------------------------------------------------------------------------------------------------------------------
+ Оборудование Cisco рассматривает mtu в соответствии c классическим определением от IEEE — по умолчанию на интерфейсах установлено 1500 байт, заголовок L2 фрейма при этом не учитывается.
+Оборудование от Juniper Networks считает mtu вместе с L2 заголовком (как media mtu) — по умолчанию задано 1518 байт, где 18 байт — размер L2 заголовка с 802.1q тегом.
+ (Разница MTU Cisco vs Juniper.html)
+---------------------------------------------------------------------------------------------------------------------
+ 
+ [http://thenetworksherpa.com/ospf-master-the-mtu-madness/](http://thenetworksherpa.com/ospf-master-the-mtu-madness/)
+ 
+ 
+ 
+ 
+
+: Protocol Data Unit — обобщённое название фрагмента данных на разных уровнях модели OSI:
+
+L3 PDU = пакет = payload(TCP MSS)   + TCP header + IP header
+L2 PDU = фрейм = L3 PDU + L2 header
+
+------Заголовки IP уровня -------------
+20 байт
+
+
+-------Заголовки TCP уровня------------
+udp header = 8 байт
+icmp header = 8 байт
+tcp header = 20 байт
+
+L3 header = 20 байт
+L2 header = 18 байт = SA(6)+DA(6)+EType(2)+FCS(4)  - здесь fcs внесён в header,  хотя он идёт в конце    L2 заголовок(header+trailer) 
+
+
+Frame = L2 Header (14) + IP packet + FCS(4)
+IP packet =  ip header (20)+ tcp header (20) + Payload
+Payload - это TCP MSS
+
+HW MTU не включает L2 header(14)   - характерно для IOS и IOS XE и совпадает с IP MTU 
+для IOS XR и JunOS  HW MTU включате L2 header, поэтому у них HW mtu  больше IP MTU на 14
+IP MTU ≤ HW MTU
+
+Ethernet MTU является частным случаем Hardware MTU
+
+mpls mtu больше ip mtu на 8, так как используется максимум 2 метки
+
+
+[https://habrahabr.ru/post/226807/](https://habrahabr.ru/post/226807/)
+[http://www.cisco.com/c/en/us/td/docs/ios/12_2sb/feature/guide/newmtu.html](http://www.cisco.com/c/en/us/td/docs/ios/12_2sb/feature/guide/newmtu.html)
+[http://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-xr-software/116350-trouble-ios-xr-mtu-00.html](http://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-xr-software/116350-trouble-ios-xr-mtu-00.html)
+[http://www.cisco.com/c/en/us/td/docs/ios/12_2sb/feature/guide/newmtu.html](http://www.cisco.com/c/en/us/td/docs/ios/12_2sb/feature/guide/newmtu.html)
+
+--------------------------------------- ПРИ ПИНГЕ --------------------------------------------------------------------------------------
+Как выяснилось, в cisco IOS, когда мы указываем утилите ping размер отправляемых в эхозапросе данных (опция size), подразумевается payload + 8 byte ICMP header + 20 byte IP header.
+
+В линукс же при указании size  сверху добавляется (+ 28 – заголовки IP и ICMP -   IP=20, ICMP=8)
+ping ya.ru -s 1500
+PING ya.ru (213.180.193.3) 1500(1528) bytes of data.
+1508 bytes from www.yandex.ru (213.180.193.3): icmp_seq=1 ttl=56 time=13.7 ms
+
+
+ping -s 1472 -M do 81.20.192.22 (с df битом), чтобы добиться как в cisco
+Получатется, что -s указывает нагрузку без IP загловков
+
+ ping ya.ru -s 0
+PING ya.ru (213.180.193.3) 0(28) bytes of data.
+8 bytes from www.yandex.ru (213.180.193.3): icmp_seq=1 ttl=56
+Нулевой пакет - общий размер 28 = 8 icmp + 20 ip   "ВООБЩЕМ К НИМ ДОБАВЛЯЕТСЯ ЕЩЁ 18 БАЙТ L2"
+
+wireshark ловит фрейм размером 42 байте (28 + 14) без учёта trailer
+
+При указании же размера ICMP пакета на сетевом оборудовании Cisco указываемый вами размер включает уже оба заголовка
+Иногда требуется 4 заложить ещё на влан - получатея 1468
+
+
+ping -s 1500  81.20.192.22
+PING 81.20.192.22 (81.20.192.22) 1500(1528) bytes of data
+Видим, что по факту размер 1528
+
+
+
+MSS = MTU — 40 байт(ip+tcp заголовки, оба по 20)
+TCM MSS = (IP MTU – [IPHDR + TCPHDR]) 
+
+Если вы увидите размер пакета 1472, это тот же 1550, так как недостающие байты это заголовок. Вас ждет удивительное открытие - 
+оказывается, большинство сайтов прекрасно воспринимают MTU=1500 и все пакеты до них доходят нефрагментированными.
+
+ Конечно, существуют некоторые более или менее общепринятые стандарты для данного параметра: 
+например, для Ethernet MTU равен 1500 байт, для PPPoE -1492, для PPP (то есть модемной связи с инт ернетом) - 576. 
+На деле каждый провайдер может выбрать какое то свое число, исходя из своих сооброжений.
+
+
++ 28 – заголовки IP и ICMP 
+
+Стандартный размер IP заголовка составляет 20 байт
+8 байт ICMP заголовок команды ping
+
+
+???размер фрейма Ethernet составляет 46 байт
+
+
+
+Размер по умолчанию
+ping  81.20.192.22
+PING 81.20.192.22 (81.20.192.22) 56(84) bytes of data
+
+Получается по умолчанию минимальный размер 56
+
+
+
+
+
+UDP заголовок 8 байт, а TCP 20 байт
+
+
+
+
+Подстройка под размер окна
+$IPT -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+
+
+
+[http://www.net-gyver.com/?p=1086](http://www.net-gyver.com/?p=1086)
+[http://prosto-seti.blogspot.ru/2010/09/qinq.html](http://prosto-seti.blogspot.ru/2010/09/qinq.html)
+[http://betep.wpl.ru/2009/10/mtu-mss-tcpip-vpn.html](http://betep.wpl.ru/2009/10/mtu-mss-tcpip-vpn.html)
+[http://ru.wikipedia.org/wiki/Maximum_transmission_unit](http://ru.wikipedia.org/wiki/Maximum_transmission_unit)
+www.networkers-online.com/blog/2010/02/mtu-and-ping-size-confusion/
+[http://ciscomaster.ru/content/ip-mtu-i-tunneli-ipsec-i-gre](http://ciscomaster.ru/content/ip-mtu-i-tunneli-ipsec-i-gre)
+[http://ipnet4you.ru/articles/47-raznitsa-mtu-cisco-vs-juniper](http://ipnet4you.ru/articles/47-raznitsa-mtu-cisco-vs-juniper)
+[http://docstore.mik.ua/manuals/ru/LARTC/x1727.html](http://docstore.mik.ua/manuals/ru/LARTC/x1727.html)
+
+System MTU size is 1712 bytes
+System Jumbo MTU size is 1712 bytes
+Routing MTU size is 1500 bytes
+
+
+
+
+Фрагментация
+[http://kickself.com/fragmentatsiya-v-ip-setyah-i-takie-veshhi-kak-tcp-adjust-mss-i-ip-mtu/](http://kickself.com/fragmentatsiya-v-ip-setyah-i-takie-veshhi-kak-tcp-adjust-mss-i-ip-mtu/)
+[http://www.opennet.ru/base/cisco/df_packet_fragment.txt.html](http://www.opennet.ru/base/cisco/df_packet_fragment.txt.html)
+[http://ciscomaster.ru/content/ip-mtu-i-tunneli-ipsec-i-gre](http://ciscomaster.ru/content/ip-mtu-i-tunneli-ipsec-i-gre)
+
+
+
+[http://www.cisco.com/cisco/web/support/RU/9/92/92028_pmtud_ipfrag.html](http://www.cisco.com/cisco/web/support/RU/9/92/92028_pmtud_ipfrag.html)
+
+
+
+
+mtu 1500
+
+14
+max_mtu = 1536

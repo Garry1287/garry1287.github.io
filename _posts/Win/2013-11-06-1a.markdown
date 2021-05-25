@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "1a"
+date:   2013-11-06 04:55:58 +0400
+categories: Win
+tags: Win
+---
+
+# 1a
+sqlcmd -E -S "UNISPRINT" -Q "restore filelistonly from disk = 'C:\Documents and Settings\garry\My Documents\database29.09.2015.dat'"
+sqlcmd -E -S "UNISPRINT" -Q "ALTER DATABASE WhatsUp SET SINGLE_USER WITH ROLLBACK IMMEDIATE"
+sqlcmd -E -S "UNISPRINT" -Q "RESTORE DATABASE [WhatsUp] FROM DISK='C:\Documents and Settings\garry\My Documents\database29.09.2015.dat' WITH REPLACE, MOVE 'WhatsUp_dat' TO 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.mdf', MOVE 'WhatsUp_log' To 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.ldf'"

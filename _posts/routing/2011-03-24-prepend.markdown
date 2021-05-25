@@ -1,0 +1,57 @@
+---
+layout: post
+title:  "prepend"
+date:   2011-03-24 04:20:52 +0300
+categories: routing
+tags: routing
+---
+
+# prepend
+
+route-map rm-adv-to-stk deny 10
+ description # Do not advertise LES prefix to STK
+ match ip address prefix-list allow-les-only
+!
+route-map rm-adv-to-stk permit 60
+ description # Advertise PSI networks to STK
+ match ip address prefix-list ournets
+!
+route-map rm-adv-to-stk permit 70
+ description # Advertise INDESIT prefixes to STK
+ match as-path 6
+!
+route-map rm-adv-to-stk permit 80
+ description # Advertise TELEMIR prefixes to STK
+ match ip address prefix-list permit_telemir
+ match as-path 1
+!
+route-map rm-adv-to-stk permit 90
+ description #Advetise MediaSeti prefix to STK
+ match as-path 3
+ set local-preference 50
+!
+route-map rm-adv-to-stk permit 100
+ match as-path 4
+ set local-preference 50
+!
+
+
+
+
+
+
+
+Было с дополнительным препендом
+route-map rm-adv-to-retn permit 60
+ match ip address prefix-list adv-to-retn
+ set as-path prepend 20866
+
+
+Как сейчас
+!
+route-map rm-adv-to-retn deny 10
+ description # Do not advertise LES prefix to Retn
+ match ip address prefix-list allow-les-only
+!
+route-map rm-adv-to-retn permit 60
+ match ip address prefix-list adv-to-retn

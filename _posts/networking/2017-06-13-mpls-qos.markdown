@@ -1,0 +1,58 @@
+---
+layout: post
+title:  "mpls-qos"
+date:   2017-06-13 11:40:16 +0300
+categories: Networking
+tags: Networking
+---
+
+# mpls-qos
+[http://flylib.com/books/en/2.286.1/qos_over_mpls.html](http://flylib.com/books/en/2.286.1/qos_over_mpls.html)
+[https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/ios/12-2SX/configuration/guide/book/mplsqos.pdf](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/ios/12-2SX/configuration/guide/book/mplsqos.pdf)
+[http://linkmeup.ru/blog/155.html](http://linkmeup.ru/blog/155.html)
+[https://www.cisco.com/c/ru_ru/support/docs/multiprotocol-label-switching-mpls/mpls/47815-diffserv-tunnel.html](https://www.cisco.com/c/ru_ru/support/docs/multiprotocol-label-switching-mpls/mpls/47815-diffserv-tunnel.html)
+
+Настраивать P роутер на обработку  ipp или exp?
+
+Прочитать
+[https://www.networkworld.com/article/2298533/lan-wan/mpls-and-quality-of-service.html](https://www.networkworld.com/article/2298533/lan-wan/mpls-and-quality-of-service.html)
+
+MPLS TE
+[http://flylib.com/books/en/2.286.1/mpls_traffic_engineering_with_autoroute.html](http://flylib.com/books/en/2.286.1/mpls_traffic_engineering_with_autoroute.html)
+[https://nag.ru/articles/reviews/15448/bazovyie-servisyi-tehnologii-mpls.html](https://nag.ru/articles/reviews/15448/bazovyie-servisyi-tehnologii-mpls.html)
+[https://habrahabr.ru/post/338578/](https://habrahabr.ru/post/338578/)
+[https://www.cisco.com/c/ru_ru/support/docs/multiprotocol-label-switching-mpls/mpls/47815-diffserv-tunnel.html](https://www.cisco.com/c/ru_ru/support/docs/multiprotocol-label-switching-mpls/mpls/47815-diffserv-tunnel.html)
+
+
+    
+class-map match-any MPLS-PREMIUM
+    match mpls experimental topmost 3
+    
+
+class-map match-any MPLS-REALTIME
+    match mpls experimental topmost 5
+
+policy-map MPLS-PLATINUM
+  class MPLS-REALTIME
+    priority percent 30
+  class MPLS-PREMIUM
+    bandwidth percent 60
+     random-detect
+   class class-default
+
+   
+   policy-map MPLS-LINK-50MB
+ class class-default
+  shape average 51200000
+   service-policy MPLS-PLATINUM
+   
+   policy-map MPLS-LINK
+ class REAL-TIME
+  priority percent 25
+ class PREMIUM
+  bandwidth percent 30 
+  random-detect
+ class MNGT
+  bandwidth percent 5 
+  random-detect
+ class class-default

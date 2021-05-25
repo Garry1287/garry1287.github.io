@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "block_rkn"
+date:   2016-03-01 12:23:25 +0300
+categories: PSI
+tags: PSI
+---
+
+# block_rkn
+Сначала обычный парсинг
+
+
+Делаем уникальным
+sort -u ip_revisor.txt  > rev.txt
+
+
+cat rev.txt | awk -F. '{print $1"."$2"."$3".0/24"}' | sort | uniq
+
+Посчитал количество
+cat rev.txt | awk -F. '{print $1"."$2"."$3".0/24"}' | sort | uniq | wc -l
+
+
+
+
+1) Парсим python ом, переносим на emerald - а там  запускаем скрипт обратотки
+2) sort -u ip_revisor.txt | awk -F. '{print $1"."$2"."$3".0/24"}' | sort -u > revnet.txt
+3) Формируем файл с маршрутами
+cat revnet.txt | while read line; do                    
+    echo "$firstword <a href=\"${url}\" title=\"$line\">$line</a>"
+        echo ""ip route $line Null0" >>  /home/garry/seo/potolok/genlink/${file}
+done
+4) Формируем файл для zebra или по telnet фигачим в него маршруты
+
+
+
+
+
+
+sort -u ip_revisor.txt | awk -F. '{print $1"."$2"."$3".0/24"}' | sort -u |  while read line; do  
+echo "ip route $line Null0"
+        echo ""ip route $line Null0" >  routes.txt
+done
+
+
+Получаем нужный список, теперь его надо фигануть в zebra и сделать wr
+sort -u ip_revisor.txt | awk -F. '{print $1"."$2"."$3".0/24"}' | sort -u |  while read line; do echo "ip route $line Null0"; done 
+
+
+[http://www.tech-notes.net/use-expect-in-bash/](http://www.tech-notes.net/use-expect-in-bash/)

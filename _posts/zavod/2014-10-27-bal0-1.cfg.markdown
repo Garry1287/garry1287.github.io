@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "bal0-1.cfg"
+date:   2014-10-27 21:42:51 +0300
+categories: zavod
+tags: zavod
+---
+
+# bal0-1.cfg
+!
+class-map match-all EXTERNAL-INTERACTIVE-VIDEO
+ match ip dscp cs5 
+class-map match-all INTERNAL-INTERACTIVE-VIDEO
+ match ip dscp af41 
+!
+!
+policy-map INGRESS-FROM-OUTSIDE
+ class EXTERNAL-INTERACTIVE-VIDEO
+  set ip dscp af41
+policy-map INGRESS-FROM-INSIDE
+ class INTERNAL-INTERACTIVE-VIDEO
+  set ip dscp cs5
+!
+!
+!
+!
+!
+interface GigabitEthernet0/1
+ description Link to ASA
+ ip address 10.186.254.4 255.255.255.248
+ no ip proxy-arp
+ ip flow ingress
+ duplex auto
+ speed auto
+ media-type rj45
+ negotiation auto
+ service-policy input INGRESS-FROM-INSIDE
+ hold-queue 150 in
+!

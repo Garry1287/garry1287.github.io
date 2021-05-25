@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "raid"
+date:   2009-05-29 07:49:13 +0400
+categories: raid
+tags: disk
+---
+
+# raid
+Доброго времени суток!
+
+1. Собрать RAID в INTEL-Utility
+2. Переключиться в LSI-Utility, тогда SUSE "видит" собраный RAID.                  
+                                                          

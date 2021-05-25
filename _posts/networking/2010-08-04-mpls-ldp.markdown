@@ -1,0 +1,111 @@
+---
+layout: post
+title:  "mpls-ldp"
+date:   2010-08-04 07:35:50 +0400
+categories: Networking
+tags: Networking
+---
+
+# mpls-ldp
+[https://www.cisco.com/c/en/us/td/docs/ios/mpls/configuration/guide/convert/mp_ldp_book/mp_ldp_lossless_md5.pdf](https://www.cisco.com/c/en/us/td/docs/ios/mpls/configuration/guide/convert/mp_ldp_book/mp_ldp_lossless_md5.pdf)
+[https://www.cisco.com/c/en/us/td/docs/ios/mpls/configuration/guide/convert/mp_ldp_book/mp_ldp_overview.html](https://www.cisco.com/c/en/us/td/docs/ios/mpls/configuration/guide/convert/mp_ldp_book/mp_ldp_overview.html)
+[https://sasipra.wordpress.com/2018/05/08/mpls-ldp-igp-sync-site-isolation/](https://sasipra.wordpress.com/2018/05/08/mpls-ldp-igp-sync-site-isolation/)
+[http://www.opennet.ru/docs/RUS/mpls/ldpdescription.html](http://www.opennet.ru/docs/RUS/mpls/ldpdescription.html)
+[http://www.opennet.ru/docs/RUS/mpls/testbed1.html#mozTocId612825](http://www.opennet.ru/docs/RUS/mpls/testbed1.html#mozTocId612825)
+
+ are u sumarizing the routes in between?
+
+are there any ACL's in between?
+
+is the mpls ip configured on all relevant interfaces?
+
+are you using the "mpls ldp router-id loopback0 force" command  on both sides.
+
+check all of above and maybe it should help you find some direction
+
+
+mpls ldp discovery targeted-hello accept
+
+
+
+debug mpls ldp bindings
+
+R3#show mpls ldp parameters | in time
+Session hold time: 180 sec; keep alive interval: 60 sec
+Discovery hello: holdtime: 15 sec; interval: 5 sec
+Discovery targeted hello: holdtime: 90 sec; interval: 10 sec
+
+Let's modify that to another value.
+mpls ldp discovery targeted-hello interval 5
+mpls ldp discovery targeted-hello holdtime 40
+
+Хорошая
+[https://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/12492-mpls-tsh.html](https://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/12492-mpls-tsh.html)
+[https://docplayer.ru/41823994-Tipovye-problemy-l3vpn-mpls-setey.html](https://docplayer.ru/41823994-Tipovye-problemy-l3vpn-mpls-setey.html)
+[https://cdn.ttgtmedia.com/searchNetworking/downloads/CH06excerpt.pdf](https://cdn.ttgtmedia.com/searchNetworking/downloads/CH06excerpt.pdf)
+
+
+
+
+
+
+
+Поэтому для ускорения попробовали инструменты elastic search и Grafana. Для этого самостоятельно разработали коллекторы, которые из стандартных инструментов мониторинга в Oracle/SAP/AIX/Linux передавали метрики в elastic search и позволяли в режиме реального времени отслеживать здоровье системы.
+
+
+
+debug mpls ldp transport events interface Gi0/0.824
+
+
+
+
+Jan 18 13:22:19 lip-ats45-c0-ge0-0-10.net.promsvyaz.ru 1841622: ATS45-C0: 1998699: Jan 18 13:22:18.390: ldp: Discovery hold timer expired for adj 0xB394F00, 81.20.192.76:0, will close conn
+Jan 18 13:22:19 lip-ats45-c0-ge0-0-10.net.promsvyaz.ru 1841623: ATS45-C0: 1998700: Jan 18 13:22:18.390: ldp: Unregistered from LDP TCB database tcb 0x96D65F0 [key 59440944], total 6
+Jan 18 13:22:19 lip-ats45-c0-ge0-0-10.net.promsvyaz.ru 1841624: ATS45-C0: 1998701: Jan 18 13:22:18.390: ldp: Closing ldp conn 81.20.192.77:26885 <-> 81.20.192.76:646, adj 0xB394F00
+Jan 18 13:22:19 lip-ats45-c0-ge0-0-10.net.promsvyaz.ru 1841625: ATS45-C0: 1998702: Jan 18 13:22:18.390: ldp: Discovery hold timer expired for adj 0xB394F00; 81.20.192.76:0
+Jan 18 13:22:19 lip-ats45-c0-ge0-0-10.net.promsvyaz.ru 1841626: ATS45-C0: 1998703: Jan 18 13:22:18.390: ldp: #011adj_addr/adj_xport_addr: 81.20.196.170/81.20.192.76; deleted
+Jan 18 13:22:19 lip-ats45-c0-ge0-0-10.net.promsvyaz.ru 1841627: ATS45-C0: 1998704: Jan 18 13:22:18.390: ldp: Adj 0xB394F00; state set to closed
+
+
+
+Protocol version: 1
+Session hold time: 180 sec; keep alive interval: 60 sec
+Discovery hello: holdtime: 15 sec; interval: 5 sec
+Discovery targeted hello: holdtime: 90 sec; interval: 10 sec
+Downstream on Demand max hop count: 255
+Downstream on Demand Path Vector Limit: 255
+LDP for targeted sessions
+LDP initial/maximum backoff: 15/120 sec
+LDP loop detection: off
+
+
+Protocol version: 1
+Session hold time: 180 sec; keep alive interval: 60 sec
+Discovery hello: holdtime: 15 sec; interval: 5 sec
+Discovery targeted hello: holdtime: 90 sec; interval: 10 sec
+Downstream on Demand max hop count: 255
+Downstream on Demand Path Vector Limit: 255
+LDP for targeted sessions
+LDP initial/maximum backoff: 15/120 sec
+LDP loop detection: off
+
+
+
+Protocol version: 1
+Downstream label generic region: min label: 16; max label: 100000
+
+Session hold time: 180 sec; keep alive interval: 60 sec
+Discovery hello: holdtime: 15 sec; interval: 5 sec
+Discovery targeted hello: holdtime: 90 sec; interval: 10 sec
+Downstream on Demand max hop count: 255
+Downstream on Demand Path Vector Limit: 255
+LDP for targeted sessions
+LDP initial/maximum backoff: 15/120 sec
+LDP loop detection: on
+
+
+
+
+
+    85 Jan 08 09:52:17 IN system: Port 26 has recovered to normal state(Broadcast Storm Control, type: Broadcast).
+    86 Jan 08 09:52:16 IN system: Port 26 is out of its packet limit(Broadcast Storm Control, type: Broadcast).

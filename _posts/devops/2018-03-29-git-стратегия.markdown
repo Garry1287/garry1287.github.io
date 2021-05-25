@@ -1,0 +1,469 @@
+---
+layout: post
+title:  "git-стратегия"
+date:   2018-03-29 07:43:19 +0300
+categories: git-стратегия
+tags: devops
+---
+
+# git-стратегия
+[http://www.zlatov.net/publication/git-publikaciya-v-prime-cherez-bare-repozitoriy.html](http://www.zlatov.net/publication/git-publikaciya-v-prime-cherez-bare-repozitoriy.html)
+[http://mbaev.com/content/sozdanie-git-repozitoria](http://mbaev.com/content/sozdanie-git-repozitoria)
+
+git и ssh
+[http://apricode.blogspot.ru/2013/04/git.html](http://apricode.blogspot.ru/2013/04/git.html)
+
+
+[garry@centos7py conf]$ sudo git config --global user.name "Garry V.Z"
+[garry@centos7py conf]$ sudo git config --global user.email "ibd@sc.ru"
+
+
+Использую git по принципу master/devel. В master идут только крупные изменения вроде новых версий, которые помечаются тегами. В devel идут только принимаемые изменения (никаких ошибок). Для каждого нового процесса создаётся ветвь, которая вливается в devel, когда полностью завершена. А вот ветвь процесса может быть одна или ветвиться дальше.
+
+Зачем это нужно? Проектов много, каждому по несколько лет уже. Когда через год открываешь что-то, то не очень помнишь, какие там были нюансы, задумки. У меня бывало уже такое, что я открывал собственный код и никак не мог даже вспомнить, когда это я его писал. 
+
+
+
+
+
+
+ Так, ребята юзающие git! Мы тоже уязвимы в случае, если корень репозитория доступен из веба.
+
+Причем исходники сливаются очень красиво, не надо писать никаких парсеров:
+git clone example.com/.git/
+
+К счастью, в большинстве случаев корень репа, а значит и папка .git закрыты извне.
+
+ПС: Кто-нибудь, переведите эту статью на английский!
+
+    EXSlim 23 сентября 2009 в 17:16
+    +1
+
+Для git предлагаю вот такие сниппеты экспорта:
+1. Если репозитарий на продакшн сервере. Из корня репозитария:
+git checkout-index -a -f --prefix=<destination e.g. /var/www>
+
+2. Если репозитарий на удаленном сервере. Из корня вебсервера:
+git-archive --format=tar --remote=ssh://:/<repo_path> master | tar -xf - 
+
+
+
+
+
+
+    master
+    develop
+
+    
+    Мы считаем ветку origin/master главной. То есть, исходный код в ней должен находиться в состоянии production-ready в любой произвольный момент времени.
+    
+    Ветвь origin/develop мы считаем главной ветвью для разработки. Хранящийся в ней код в любой момент времени должен содержать самые последние изданные изменения, необходимые для следующего релиза. Эту ветку также можно назвать «интеграционной». Она служит источником для сборки автоматических ночных билдов.
+    
+    Когда исходный код в ветви разработки (develop) достигает стабильного состояния и готов к релизу, все изменения должны быть определённым способом влиты в главную ветвь (master) и помечены тегом с номером релиза. 
+    
+    Следовательно, каждый раз, когда изменения вливаются в главную ветвь (master), мы по определению получаем новый релиз. Мы стараемся относиться к этому правилу очень строго, так что, в принципе, мы могли бы использовать хуки Git, чтобы автоматически собирать наши продукты и выкладывать их на рабочие сервера при каждом коммите в главную ветвь (master).
+    
+    
+    
+    
+    
+    1. Мастер - рабочая ветвь
+    2. Develop - ветвь для разроботки,     Когда исходный код в ветви разработки (develop) достигает стабильного состояния и готов к релизу, все изменения должны быть определённым способом влиты в главную ветвь (master) и           ш               помечены тегом с номером релиза. 
+    3. Для каждой фичи отдельную ветв, которую будем вливать в develop
+    
+    
+
+
+    
+    
+    
+    
+    
+
+    
+    		
+bare репозиторий - такой же репозиторий как обычный, с ветвлением, но хранит только данные, без рабочего каталога. Рабочий каталог - это те файлы которые мы правим
+    
+    bare -- "чистый" репозиторий без рабочий копии. Хранит массив последовательных снимков (снапшотов) (link is external) файловой иерархии, но без рабочей копии, которую непосредственно правит программист, когда работает с системой контроля версий. 
+    
+    
+
+Голый репозиторий - это не что иное, как сама папка .git, то есть содержимое открытого репозитория такое же, как содержимое папки .git внутри локального рабочего репозитория.
+
+    Используйте голый репозиторий на удаленном сервере, чтобы позволить нескольким вкладчикам продвигать свою работу.
+    Non-bare - тот, который имеет рабочее дерево, имеет смысл на локальной машине каждого участника вашего проекта.
+
+
+    
+    
+    
+    [http://ixrevo.me/wordpress-deployment-git/](http://ixrevo.me/wordpress-deployment-git/)
+    [https://toster.ru/q/56292](https://toster.ru/q/56292)
+    
+    
+    
+    
+    
+    - как только код подготовлен в release ветке, то продеплоить его на тестовый инстанс при помощи Capistrano/Fabric и т.п. утилит предназначенных для деплоймента
+    
+    Для этого мы будем использовать так называемый Git хук (hook англ. крючок, рычаг, комп. специальная процедура, отслеживающая появление некоторого события) — это небольшой скрипт, который вы можете разместить в специальной папке вашего Git репозитория $GIT_DIR/hooks, который будет вызывать определённые действия в ответ на какие-либо события.
+    
+    
+    
+    
+    сделать так (в идеале):
+1. создать bare-репозиторий где-то на сервере, или, например, разместиться на гитхабе\битбакете
+2. влить туда код, создать необходимые изначально ветки (master/develop)
+3. как только пришел коммит в девелоп-ветку, то обновляется dev-сайт
+4. как только решили сделать релиз - деплоите на test-сайт
+5. как только все изменения проверены - деплоите на live-сайт 
+    
+    
+
+    я в отличие от автора с двумя репами, сделал один реп с бранчами мастер (в который пушу) и продакшн (который чекаутнут на сервере). далее deploy.sh:
+git checkout master
+git merge newfeature
+git merge bugfix
+git push server master
+ssh xxx@librapost.ru "cd /xxx/xxx/librapost && git merge master"
+
+а сколько строк в вашем капистрано-конфиге? 
+    
+    
+    Откатите продакшен на 1 версию назад находясь на рабочей машине. Через git деплоить хорошо, да, но не так как это сделал автор, зачем второй репозиторий? Делать экспорт прямо из bare в нужный каталог.
+    
+    git-archive --format=tar --remote=ssh://remote_server/remote_repository master | tar -xf — в пост-апдейт хук и все.
+
+> deploy.sh:
+git checkout master
+git merge newfeature
+git merge bugfix
+git push server master
+
+git алисы вы не осилили, ога. 
+
+
+
+
+
+
+
+
+
+
+
+#!/bin/bash
+
+txtrst='\e[0m' # Text Reset
+txtred='\e[0;31m' # Red
+txtgrn='\e[0;32m' # Green
+WORK_TREE='/some/path/on/dev/server/'
+
+while read oldrev newrev ref
+do
+case $ref in
+refs/heads/dev )
+echo "========================================"
+git --work-tree=$WORK_TREE checkout -f dev
+if [ $? -eq 0 ]; then
+echo -e "${txtgrn}DEVELOPER SERVER successfully updated${txtrst}"
+else
+echo -e "${txtred}Failed to checkout DEVELOPER SERVER!${txtrst}"
+fi
+;;
+refs/heads/master )
+echo "========================================"
+git push gsl master:master
+if [ $? -eq 0 ]; then
+echo -e "${txtgrn}PRODUCTION SERVER successfully updated${txtrst}"
+else
+echo -e "${txtred}Failed to push to PRODUCTION SERVER!${txtrst}"
+fi
+;;
+* )
+echo "NO UPDATES FOR $1"
+;;
+esac
+done
+echo "========================================"
+
+вот мой post-receive hook на девелоперском сервере.
+принцип работы: есть две ветки — master и dev. изменения в ветке dev checkout'ятся в DOCUMENT_ROOT девелопеского сервера. А изменения в ветке master push'атся в bare-репозиторий на продакшн-сервере, а оттуда уже аналогичным образом chekout'ятся в его DOCUMENT_ROOT 
+
+
+
+
+Деплоить должен человек. Руками. Если оставить это на хук то в один прекрасный момент вы получите неработающий продакшн. А делать исправления на работающем сервере и заливать их в репозиторий — это вообще за гранью добра и зла! Вы там что, на Друпале пишете?? 
+
+
+
+
+Наша deploy-система блокирует проект, обновляет файлы, структуру базы, настройки cron, перезапускает отдельные сервисы, etc. а потом снимает блокировку. Это гарантирует, что в процессе обновления не получится так, что часть файлов/базы уже обновилась, часть ещё нет, и тут приходит запрос пользователя и он обрабатывается смесью старого и нового кода с в принципе непредсказуемыми последствиями. Кроме того, это гарантирует, что если обновление затянется или сломается в процессе, то пользователь получит статическую страничку «server maintenance, please try again later».
+
+Системы контроля версий всё это делать не умеют и они вообще не предназначены для реализации deploy. Можно, конечно, навесить на них сложные системы хуков и получить почти то, что требуется, но это сложно и не правильно. Для deploy нужно использовать предназначенные для этого системы. И выкатывать новую версию на production сервер нужно ручками, а не автоматически (не в том смысле, что файлы/базу ручками обновлять, а в том смысле, что во-первых желательно перед обновлением глазками просмотреть все изменения — т.е. patch/sql/etc.-файлы — и во-вторых присутствовать при установке этих изменений на сервере на случай если что-то пойдёт не так).
+
+Единственная сложность такого надёжного подхода в том, что все приложения проекта (cgi-шки, fastcgi-сервер, сервисы, cron-скрипты, qmail-скрипты, консольные утилиты) должны поддерживать единую систему блокировок, чтобы было возможно их всех одним махом заблокировать на время обновления системы (все приложения ставят shared-lock в процессе работы, а при обновлении ставится exclusive-lock). Но при наличии таких блокировок решается не только проблема атомарного обновления проекта, но и консистентного бэкапа. 
+
+
+
+ Прошу при первом упоминании слова bare, упомянуть в скобочках, что это «репозиторий без собственной рабочей копии»
+
+    Nashev 29 августа 2011 в 15:21
+    0
+
+и фразу «Одно из основных правил при работе с Git — никогда не делайте push в репозтирий, у которого есть рабочая копия.» куда-нибудь во вступление бы поместить, ибо она — ключевая.  
+
+
+
+Короче - это означает, что нельзя делать push в non-bare репозитории
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+я в отличие от автора с двумя репами, сделал один реп с бранчами мастер (в который пушу) и продакшн (который чекаутнут на сервере). далее deploy.sh:
+git checkout master
+git merge newfeature
+git merge bugfix
+git push server master
+ssh xxx@librapost.ru "cd /xxx/xxx/librapost && git merge master"
+
+
+
+
+на мой вкус я бы при ините добавил shared,
+если предполагается, что пушить в bare будут несколько человек:
+git --bare init --shared
+
+или даже сделать так после init:
+cd ..
+sudo chown -R www-data:www-data site_hub.git
+sudo chmod -R g+wX,o= site_hub.git
+sudo find site_hub.git -type d -exec chmod g+s '{}' ';'
+
+еще обновить server-info лучше сразу после первого пуша руками так:
+git update-server-info
+а в post-receive делать так:
+cd /home/okertanov/public_html/html-templates.espectrale.com/public || exit
+#unset GIT_DIR
+#unset GIT_WORK_TREE
+env -i git pull origin #or whatever
+env -i git update-server-info
+env -i git submodule init
+env -i git submodule update
+
+
+
+
+
+
+1
+	
+Репозиторий Git и тестовый сайт находится на одном хосте. Хочется сделать так: чтобы при пуше в репозиторий, автоматически пулился тестовый сайт. Репозиторий Gitа на gitosis
+
+Использую post-update hook:
+Все из-за переменной окружения GIT_DIR
+#!/bin/sh
+
+PATH=/bin:/usr/bin:/usr/lib:/usr/local/bin
+
+PROJECT_NAME='myproj'
+PROJECT_DIR=/var/www-myproj/
+PROJECT_ENV='testing'
+
+echo "start $PROJECT_NAME $PROJECT_ENV pulling:$GIT_WORK_TREE"
+cd $PROJECT_DIR
+unset GIT_DIR
+git pull origin $PROJECT_ENV
+
+
+
+Добавляем хук, реализующий авто-pull, при коммите разработчика, в тестовый сайт. Предположим, что наш тестовый сайт располагается по адресу: ~/domains/dev.my-site.ru, тогда
+Bash
+
+    cd ~/git/my-site.ru.git/hooks
+    nano post-update
+    #!/bin/sh
+    cd ~/domains/dev.my-site.ru || exit
+    unset GIT_DIR
+    git pull origin master
+    exec git update-server-info
+
+[http://mbaev.com/content/sozdanie-git-repozitoria](http://mbaev.com/content/sozdanie-git-repozitoria)
+
+
+
+
+
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\ Моя стратегия \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\[https://habrahabr.ru/post/127213/](https://habrahabr.ru/post/127213/)
+
+Есть рабочая папка и .git папка, рабочая содержит файлы, .git служебный
+
+
+med-hub - это bare репозиторий, в который делаем push из домашнего. Med-hub просто хранить всю историю изменений. Из него можно скопировать всё.
+Кроме самого репозитория есть ещё и workspace, где хранятся файлы с которыми вы работаете. Именно в этой папке лежит сам репозиторий (папка .git ). На серверах рабочие файлы не нужны, поэтому там хранятся только голые репозитории (bare-repo).
+post-update hook отправляет данные в prime репозиторий проекта (med-prime) автоматически
+
+
+1. Создаем bare репозиторий на сервере в хомяке например.(Он отличается тем, что в папке с этим репозиторием нет рабочих файлов и подпапки .git — все ее привычное содержимое как раз и находится в этом репозитории)
+
+(envmed) [root@centos7py med]# cd med-hub.git/
+(envmed) [root@centos7py med-hub.git]# ls
+(envmed) [root@centos7py med-hub.git]# git --bare init
+Initialized empty Git repository in /srv/med/med-hub.git/
+
+
+
+
+2. Создаем non-bare репозиторий в папке проекта с work-tree типом, получается .git папка в одном месте, а рабочая в /srv/med/www, настраиваем gitignore
+git init --separate-git-dir=/home/med-user/med-prime.git
+
+Создаём gitignore
+
+(envmed) [root@centos7py www]# ls -al
+итого 8
+drwxr-xr-x 6 med  med  82 окт 21 13:36 .
+drwxr-xr-x 5 med  med  65 окт 21 13:16 ..
+drwxr-xr-x 2 med  med  47 окт  7 10:16 conf
+drwxr-xr-x 5 med  med  77 окт  7 14:16 envmed
+-rw-r--r-- 1 root root 37 окт 21 13:15 .git
+-rw-r--r-- 1 root root 22 окт 21 13:36 .gitignore
+drwxr-xr-x 2 med  med  71 сен 27 15:45 log
+drwxr-xr-x 4 med  med  64 окт  7 16:09 project
+
+(envmed) [root@centos7py www]# cat .gitignore 
+conf/*
+envmed/*
+log/*
+(envmed) [root@centos7py www]# cat .git
+gitdir: /home/med-user/med-prime.git
+
+Подключаем med-hub как удалённый к med-prime
+(envmed) [root@centos7py www]# git remote remove med-hub       
+(envmed) [root@centos7py www]# git remote add med-hub /srv/med/med-hub.git
+(envmed) [root@centos7py www]# git remote show         
+med-hub
+(envmed) [root@centos7py www]# git push med-hub master 
+
+3. local репозиторий у себя на сайта
+ git clone ssh://med@192.168.1.128:2222/srv/med/med-hub.git /home/garry/med-project
+origin - теперь у нас это med-hub
+
+
+4. Работу организовываем следующим образом
+push делаем в bare (med-hub).  Работаем с 2-мя ветками master и dev). В dev вливаем feature_name ветви
+
+master--- master
+    \
+     dev---dev
+                \
+                feature
+
+
+
+5. post-update hook, который из делает pull в prime репозиторий проекта
+
+cat /srv/med/med-hub.git/hooks/post-update
+#!/bin/sh
+#
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-update".
+
+echo
+echo "**** Вытягиваем изменения в Prime
+echo
+
+cd /srv/med/www || exit
+unset GIT_DIR
+git pull med-hub master
+
+
+exec git update-server-info
+
+
+
+
+
+
+
+
+На локальной делаем вот так
+
+
+(env3)garry@garry:~/med-project> cat "README NOW 8.08.2017" > project/README 
+(env3)garry@garry:~/med-project> git add project/README 
+(env3)garry@garry:~/med-project> git commit -m "Commit README"
+[master 49086e5] 6 Commit README
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+(env3)garry@garry:~/med-project> git push origin master
+Подсчет объектов: 4, готово.
+Delta compression using up to 2 threads.
+Сжатие объектов: 100% (3/3), готово.
+Запись объектов: 100% (4/4), 435 bytes | 0 bytes/s, готово.
+Total 4 (delta 0), reused 0 (delta 0)
+remote: 
+remote: **** Вытягиваем изменения в Prime
+remote: 
+remote: From /srv/med/med-hub
+remote:  * branch            master     -> FETCH_HEAD
+remote: Updating de9a915..49086e5
+remote: Fast-forward
+remote:  project/README | 2 +-
+remote:  1 file changed, 1 insertion(+), 1 deletion(-)
+To ssh://med@192.168.1.128:2222/srv/med/med-hub.git
+   08b2397..49086e5  master -> master
+(env3)garry@garry:~/med-project> 
+
+На удалённой видим следующее
+[garry@centos7py project]$ cat README 
+README NOW 8.08.2017
+
+
+
+Красота схемы в том, что мы может внести измение на сайте, сделать push в med-hub, а оттуда подтянуть к себе в локальный.
+Просто не надо делать напрямую всё. Тажке post-hook не обязателен, можно руками делать pull в med-prime (возможно так даже лучше)
+
+
+
+Workflow
+
+Now that your app is set up, follow either of these simple workflows every time you want to make changes to your app:
+
+Basic:
+
+    Navigate to your project
+    Activate virtualenv
+    Develop
+    Commit changes
+    Deploy
+    Deactivate virtualenv
+
+Advanced:
+
+    Navigate to your project
+    Activate virtualenv
+    Create and checkout a new git branch
+    Develop
+    Commit changes
+    Merge the new branch with your master branch
+    PULL the changes into the production folder
+    Deploy
+    Deactivate virtualenv
+
+    
+    
+merge, fast-forward
+[https://habrahabr.ru/post/174467/](https://habrahabr.ru/post/174467/)

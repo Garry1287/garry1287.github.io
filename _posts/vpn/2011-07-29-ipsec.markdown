@@ -1,0 +1,1653 @@
+---
+layout: post
+title:  "ipsec"
+date:   2011-07-29 18:00:21 +0400
+categories: vpn
+tags: vpn
+---
+
+# ipsec
+Сначала идёт IKE согласование SA
+Потом IPsec согласование SA
+
+SAD - база данный SA. SA - одноноправленная связь (ассоциация, связанная либо с AH или ESP) (Что делать)
+SPD - базза данных политик, которые определяют как поступать с траффиком (Как делать)
+
+0. Определить наш серый адрес. Белый повесить на лупбэк
+1. Отключить crypto isakmp, то есть IKE надо отключить либо стандартные настройки. Параметры Ipsec вроде совпадает как для mtt.
+
+access-list IPSEC_NLMK.KVK extended permit ip host 10.0.145.14 host 81.20.192.59
+access-list IPSEC_NLMK.KVK extended permit gre host 10.0.145.14 host 81.20.192.59
+
+!
+pre-shared-key ykvrljcnrg
+ 
+! Трафик определенный нашим ACL который будет шифроватся через туннель
+crypto map VPNTunnels 142 match address IPSEC_NLMK.KVK
+! кто будет принимать наше VPN соединение и терминировать его
+crypto map VPNTunnels 142 set peer 81.20.192.59
+! устанавливаем нашу схему шифрования трафика
+crypto map VPNTunnels 142 set transform-set 3des-sha
+! время жизни соединения
+crypto map VPNTunnels 142 set security-association lifetime seconds 3600
+
+
+
+Правило для прохождения трафика
+-A INPUT -s 83.149.24.25/32 -p esp -j ACCEPT
+-A INPUT -s 83.149.24.25/32 -p ah -j ACCEPT
+-A allow_ports -p udp -m udp --dport 500 -j ACCEPT
+
+
+Loopback на rock
+
+Для любого ipsec
+
+1.В psk.txt надо записать ключ
+
+83.149.24.25    ykvrljcnrg
+
+
+
+2. В файле setkey.conf определяем SA и SD
+
+        flush;
+        spdflush;
+
+        # важно! 
+        # не перепутайте направление трафика (IP адреса сетей и маршрутизаторов)
+        # для исходящего трафика
+        spdadd 192.168.0.0/24 10.0.0.0/24 any -P out ipsec esp/tunnel/172.16.2.1-172.16.1.1/require;
+        # для входящего трафика
+        spdadd 10.0.0.0/24 192.168.0.0/24 any -P in  ipsec esp/tunnel/172.16.1.1-172.16.2.1/require;
+
+
+#mail1.unisprint.ru
+spdadd 192.168.1.0/24 192.168.2.0/24 any -P out ipsec esp/tunnel/81.20.192.19-195.151.76.173/require;
+spdadd 192.168.2.0/24 192.168.1.0/24 any -P in ipsec esp/tunnel/195.151.76.173-81.20.192.19/require;
+add 81.20.192.19 195.151.76.173 esp 2155 -m tunnel -E des-cbc 0x030a050a0f0a0f0a;
+add 195.151.76.173 81.20.192.19 esp 2155 -m tunnel -E des-cbc 0x030a050a0f0a0f0a;
+
+
+
+#megafon
+spdadd 0.0.0.0/0 10.10.0.0/24 any -P out ipsec esp/tunnel/81.20.192.58-83.149.24.25/require;
+spdadd 0.0.0.0/0 10.10.0.0/24 any -P fwd ipsec esp/tunnel/81.20.192.58-83.149.24.25/require; #Надо для доступов в сеть vpn
+
+spdadd 10.10.0.0/24 0.0.0.0/0 any -P in ipsec esp/tunnel/83.149.24.25-81.20.192.58/require;
+spdadd 10.10.0.0/24 0.0.0.0/0 any -P fwd ipsec esp/tunnel/83.149.24.25-81.20.192.58/require;
+
+
+
+
+3. racoon.conf (думаю аналогично mtt)
+В примере используется pre_shared_key чтобы провести первую фазу согласования, а потом ключи  будут создаваться сами, согласно ISAKMP
+
+
+path pre_shared_key "/etc/racoon/psk.txt";
+#Чтобы понять что происходит
+log debug;
+
+# "padding" defines some parameter of padding.  You should not touch these.
+
+padding
+{
+    maximum_length 20;# maximum padding length.
+    randomize off;# enable randomize length.
+    strict_check off;# enable strict check.
+    exclusive_tail off;# extract last one octet.
+
+# Вроде этого нахер не надо 
+#if no listen directive is specified, racoon will listen to all available interface addresses.
+listen
+{
+    #isakmp ::1 [7000];
+    isakmp 81.20.192.59 [500];
+    #admin [7002];        # administrative's port by kmpstat.
+    #strict_address;                         # required all addresses must be bound.
+
+# Specification of default various timer.
+# Specification of default various timer.
+timer
+{
+    # These value can be changed per remote node.
+    counter 5;# maximum trying count to send.
+    interval 20 sec;# maximum interval to resend.
+    persend 1;# the number of packets per a send.
+
+    # timer for waiting to complete each phase.
+    phase1 30 sec;
+    phase2 15 sec;
+}
+# IKE phase 1
+§    Фаза 1 (Main Mode) – Используется метод шифрования открытым ключом для создания двустороннего соглашения безопасности ISAKMP (Internet Security Association and Key Management Protocol). Далее этот безопасный канал будет использоваться для согласования новых ключей. Можно использовать множество методов аутентификации, но мы остановимся на основных, совместно используемых ключах.
+remote 194.168.23.12
+{
+  exchange_mode main,aggressive;
+  doi ipsec_doi;
+  lifetime time 24 hour;                                  # sec,min,hour
+# nat_traversal on;                                         # отключаем т.к. используем статические IP адреса
+
+  proposal {
+  encryption_algorithm 3des;
+  hash_algorithm sha1;
+  authentication_method pre_shared_key;
+  dh_group 2;
+           }
+}
+
+# IKE phase 2
+§    Фаза 2 (Quick Mode) – Используется ISAKMP первой фазы для обмена ключами безопасности при одновременном обновлении SADB. Согласованные ключи можно запросить через дамп SADB командой setkey -D на Linux.
+sainfo address 192.168.2.0/24 any address 10.0.0.0/8 any
+{
+        pfs_group 2;
+        lifetime time 3600 sec;
+        encryption_algorithm 3des;
+        authentication_algorithm hmac_sha1;
+        compression_algorithm deflate;
+}
+
+
+
+
+
+dh_group 2 (1024 битовый ключ диффи хелмана)
+dh_group 1 (768 битовый ключ диффи хелмана)
+
+lifetime секунды
+Предел времени существования ассоциации защиты, установленной с помощью IKE. Обычно можно оставить значение, используемое по умолчанию 
+
+
+pre-shared Метод аутентификации сторон
+
+
+Troubleshooting
+1.setkey -PD
+
+
+[!] Для информации:
+
+man setkey
+
+-f filename – загрузка конфигурационного файла KAME.
+-DP и -FP – отобразить и очистить текущие правила.
+-D и -F – отобразить и очистить текущие ключи
+
+2. Настроит лог
+
+
+
+
+Доброго времени суток!
+
+ 
+
+IP адрес нашего GW 83.149.24.25
+
+ 
+
+С нашей стороны прописаны настройки IPSEC
+
+Предложений и возражений нет?
+
+Предлагаю прописать и завтра начать тестирование
+
+ 
+
+access-list IPSEC_NLMK.KVK extended permit ip host 10.0.145.14 host 81.20.192.59
+
+access-list IPSEC_NLMK.KVK extended permit gre host 10.0.145.14 host 81.20.192.59
+
+ 
+!
+pre-shared-key ykvrljcnrg
+
+ 
+! Трафик определенный нашим ACL который будет шифроватся через туннель
+crypto map VPNTunnels 142 match address IPSEC_NLMK.KVK
+
+! кто будет принимать наше VPN соединение и терминировать его
+crypto map VPNTunnels 142 set peer 81.20.192.59
+
+! устанавливаем нашу схему шифрования трафика
+crypto map VPNTunnels 142 set transform-set 3des-sha
+! время жизни соединения
+crypto map VPNTunnels 142 set security-association lifetime seconds 3600
+
+
+(10.0.145.14)83.149.24.25----------81.20.192.59(10.192.10.42 или 10.192.10.254)
+
+SA (Security Association), что можно приближённо перевести как "связь или ассоциация безопасности"
+одноноправленная связь ( нужно две там, две у нас)
+
+Т.к. каждый узел способен устанавливать несколько туннелей с другими узлами, каждый SA имеет уникальный номер, позволяющий определить к какому узлу он относится.
+Это номер называется SPI (Security Parameter Index) или индекс параметра безопасности
+
+SA храняться в базе данных c названием, кто бы подумал - SAD (Security Association Database) или БД ассоциаций безопасности
+
+
+Каждый узел IPSec также имеет вторую БД - SPD или Security Policy Database (БД политики безопасности).
+Она содержит настроенную вами политику узла.
+Большинство VPN решений разрешают создание нескольких политик с комбинациями подходящих алгоритмов для каждого узла, 
+с которым нужно установить соединение.
+
+Какие настройки включает в себя политика?
+
+    Симметричные алгоритмы для шифрования/расшифровки данных
+    Криптографические контрольные суммы для проверки целостности данных
+    Способ идентификации узла. Самые распространнённые способы - это предустановленные ключи (pre-shared secrets) или RSA сертификаты.
+    Использовать ли режим туннеля или режим транспорта
+    Какую использовать группу Diffie Hellman
+    Как часто проводить переидентификацию узла
+    Как часто менять ключ для шифрования данных
+    Использовать ли PFS
+    Использовать ли AH, ESP, или оба вместе
+
+При создании политики, как правило, возможно создание упорядоченного списка алгоритмов и Diffie Hellman групп. 
+В таком случае будет использована первая совпавшая на обоих узлах позиция. 
+Запомните, очень важно, чтобы всё в политике безопасности позволяло добиться этого совпадения. 
+Если за исключением одной части политики всё остальное совпадает, узлы всё равно не смогут установить VPN соединение.
+ При настройе VPN между различными системами уделите время изучению того, какие алгоритмы поддерживаются каждой стороной, чтобы иметь выбор наиболее безопасной политики из возможных.
+
+На первом этапе (фазе) два узла договариваются о методе идентификации, алгоритме шифрования, хэш алгоритме и группе Diffie Hellman. 
+Они также идентифицируют друг друга. Всё это может пройти в результате обмена тремя нешифрованными пакетами (т.н. агрессивный режим) или через обмен шестью нешифрованными пакетами (стандартный режим - main mode). 
+Предполагая, что операция завершилась успешно, создаётся SA первой Фазы - Phase 1 SA (также называемый IKE SA) и процесс переходит к Фазе Два.
+
+
+
+
+
+
+remote 83.149.24.25
+{
+       exchange_mode main,aggressive;
+       doi ipsec_doi;
+       situation identity_only;
+         my_identifier 81.20.192.59;
+
+        #nonce_size 16;
+       lifetime time 86400 sec;
+#       initial_contact on;
+       proposal_check obey;    # obey, strict, or claim
+
+       proposal {
+               encryption_algorithm 3des;
+               hash_algorithm sha1;
+               authentication_method pre_shared_key;
+               dh_group 2;
+       }
+}
+
+
+#phase megafon
+sainfo address 81.20.192.59 any address 83.149.24.25 any
+{
+        #pfs_group 2;
+        lifetime time 3600 sec;
+        encryption_algorithm 3des;
+        authentication_algorithm hmac_sha1;
+        compression_algorithm deflate;
+}
+
+
+
+Настройка cisco
+
+ISAKMP Policy
+
+(config)#crypto isakmp enable
+(config)#crypto isakmp policy 110 
+(config-isakmp)#authentication pre-share
+(config-isakmp)#encryption 3des
+(config-isakmp)#group 2
+(config-isakmp)#hash md5
+(config-isakmp)#lifetime 36000
+
+Pre-shared key
+
+(config)#crypto isakmp key 0 password address 192.168.6.6
+
+Это для первой фазы
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+neighbor 10.192.10.42 remote-as 65066
+
+
+
+
+
+
+1.BGP
+81.20.192.58
+
+Узнать AS у Паши
+
+
+!
+! Zebra configuration saved from vty
+!   2010/08/27 16:43:21
+!
+hostname sapphire-bgpd
+password 8 ZsqLdJguAJqz.
+enable password 8 vwLiBBxJopD4w
+log file /var/log/quagga/bgpd.log
+service password-encryption
+!
+router bgp 65066
+ bgp router-id 10.192.10.42
+ bgp log-neighbor-changes
+ network 10.192.10.40/30
+ neighbor 10.192.10.41 remote-as 20866
+!
+line vty
+!
+
+-A allowed_ports -s 81.20.192.19/32 -p tcp -m tcp --dport 123 -j ACCEPT
+
+ip route add 10.10.0.0/24 via 81.20.192.58 src 81.20.192.58 
+
+
+
+2.Узнать их сетку
+10.192.12.1 - вроде их адрес. Для чего
+10.0.145.14 и этот вроде их
+10.10.0.0/24 - это вроде их сеть
+
+
+
+
+
+
+
+3.И тест
+
+При установке увидим следующее
+
+        Sep 21 22:07:16 sles9 racoon: INFO: respond new phase 1 negotiation: 172.16.2.1[500]<=>172.16.1.1[500]
+        Sep 21 22:07:16 sles9 racoon: INFO: begin Identity Protection mode.
+        Sep 21 22:07:16 sles9 racoon: INFO: ISAKMP-SA established 172.16.2.1[500]-172.16.1.1[500] spi:93b2202c65692650:247ac3da3bb61f85
+        Sep 21 22:07:16 sles9 racoon: INFO: respond new phase 2 negotiation: 172.16.2.1[0]<=>172.16.1.1[0]
+        Sep 21 22:07:16 sles9 racoon: INFO: IPsec-SA established: ESP/Tunnel 172.16.1.1->172.16.2.1 spi=182739187(0xae460f3)
+        Sep 21 22:07:16 sles9 racoon: INFO: IPsec-SA established: ESP/Tunnel 172.16.2.1->172.16.1.1 spi=14128346(0xd794da)
+
+или
+Feb  8 15:37:31 beta racoon: INFO: IPsec-SA established: ESP/Transport 82.140.78.114[500]->82.140.78.116[500] spi=40483762(0x269bbb2)
+
+для проверки, на linux сервере можете подать команду :
+
+        $ ping -I {ip адрес интерфейса линух из нлмк} {адрес из их локалки} 
+
+Запускаем в одном терминале
+tcpdump -i eth1 -p esp
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth1, link-type EN10MB (Ethernet), capture size 65535 bytes
+
+11:23:30.533083 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x29), length 116
+11:23:30.533825 IP 81.20.192.10 > 81.20.192.58: ESP(spi=0x0cae2831,seq=0x10), length 116
+
+11:23:31.532084 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x2a), length 116
+11:23:31.532952 IP 81.20.192.10 > 81.20.192.58: ESP(spi=0x0cae2831,seq=0x11), length 116
+11:23:32.532107 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x2b), length 116
+11:23:32.532851 IP 81.20.192.10 > 81.20.192.58: ESP(spi=0x0cae2831,seq=0x12), length 116
+11:23:33.532044 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x2c), length 116
+11:23:33.532803 IP 81.20.192.10 > 81.20.192.58: ESP(spi=0x0cae2831,seq=0x13), length 116
+11:23:34.532032 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x2d), length 116
+11:23:34.532802 IP 81.20.192.10 > 81.20.192.58: ESP(spi=0x0cae2831,seq=0x14), length 116
+11:23:35.532016 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x2e), length 116
+11:23:35.532750 IP 81.20.192.10 > 81.20.192.58: ESP(spi=0x0cae2831,seq=0x15), length 116
+11:23:36.692045 IP 81.20.192.58 > 81.20.192.10: ESP(spi=0xc0637c6a,seq=0x2f), length 92
+
+А в другом проверяем
+ ping -I 10.192.10.42 81.20.192.10
+PING 81.20.192.10 (81.20.192.10) from 10.192.10.42 : 56(84) bytes of data.
+64 bytes from 81.20.192.10: icmp_seq=1 ttl=255 time=0.862 ms
+64 bytes from 81.20.192.10: icmp_seq=2 ttl=255 time=0.855 ms
+64 bytes from 81.20.192.10: icmp_seq=3 ttl=255 time=0.776 ms
+64 bytes from 81.20.192.10: icmp_seq=4 ttl=255 time=0.791 ms
+64 bytes from 81.20.192.10: icmp_seq=5 ttl=255 time=0.821 ms
+64 bytes from 81.20.192.10: icmp_seq=6 ttl=255 time=0.796 ms
+64 bytes from 81.20.192.10: icmp_seq=7 ttl=255 time=0.923 ms
+64 bytes from 81.20.192.10: icmp_seq=8 ttl=255 time=0.799 ms
+64 bytes from 81.20.192.10: icmp_seq=9 ttl=255 time=0.815 ms
+64 bytes from 81.20.192.10: icmp_seq=10 ttl=255 time=0.834 ms
+64 bytes from 81.20.192.10: icmp_seq=11 ttl=255 time=0.788 ms
+^C
+--- 81.20.192.10 ping statistics ---
+11 packets transmitted, 11 received, 0% packet loss, time 10000ms
+rtt min/avg/max/mdev = 0.776/0.823/0.923/0.052 ms
+
+
+
+
+
+Sa на ASA
+K9-ASA# sh ipsec sa 
+interface: PSI-White
+    Crypto map tag: PSI-White_map, seq num: 3, local addr: 81.20.192.10
+
+      access-list CRYPTO-TEST permit ip any 10.192.10.40 255.255.255.252 
+      local ident (addr/mask/prot/port): (0.0.0.0/0.0.0.0/0/0)
+      remote ident (addr/mask/prot/port): (10.192.10.40/255.255.255.252/0/0)
+      current_peer: 81.20.192.58
+
+      #pkts encaps: 21, #pkts encrypt: 21, #pkts digest: 21
+      #pkts decaps: 69, #pkts decrypt: 69, #pkts verify: 69
+      #pkts compressed: 0, #pkts decompressed: 0
+      #pkts not compressed: 21, #pkts comp failed: 0, #pkts decomp failed: 0
+      #post-frag successes: 0, #post-frag failures: 0, #fragments created: 0
+      #PMTUs sent: 0, #PMTUs rcvd: 0, #decapsulated frgs needing reassembly: 0
+      #send errors: 0, #recv errors: 0
+
+      local crypto endpt.: 81.20.192.10, remote crypto endpt.: 81.20.192.58
+
+      path mtu 1500, ipsec overhead 58, media mtu 1500
+      current outbound spi: 0CAE2831
+
+    inbound esp sas:
+      spi: 0xC0637C6A (3227745386)
+         transform: esp-des esp-sha-hmac no compression 
+         in use settings ={L2L, Tunnel, PFS Group 1, }
+         slot: 0, conn_id: 868352, crypto-map: PSI-White_map
+         sa timing: remaining key lifetime (sec): 2731
+         IV size: 8 bytes
+         replay detection support: Y
+         Anti replay bitmap: 
+          0xFFFFFFFF 0xFFFFFFFF
+    outbound esp sas:
+      spi: 0x0CAE2831 (212740145)
+         transform: esp-des esp-sha-hmac no compression 
+         in use settings ={L2L, Tunnel, PFS Group 1, }
+         slot: 0, conn_id: 868352, crypto-map: PSI-White_map
+         sa timing: remaining key lifetime (sec): 2731
+         IV size: 8 bytes
+         replay detection support: Y
+         Anti replay bitmap: 
+          0x00000000 0x00000001
+
+
+
+
+Sa на linux
+setkey -D
+81.20.192.58 81.20.192.10 
+        esp mode=tunnel spi=3227745386(0xc0637c6a) reqid=0(0x00000000)
+        E: des-cbc  7005af74 8ff5ce1a
+        A: hmac-sha1  646fc23b e092d879 ee684f60 4e7655a9 9578e28f
+        seq=0x00000000 replay=4 flags=0x00000000 state=mature 
+        created: May 25 11:12:24 2012   current: May 25 11:27:37 2012
+        diff: 913(s)    hard: 3600(s)   soft: 2880(s)
+        last: May 25 11:12:49 2012      hard: 0(s)      soft: 0(s)
+        current: 5285(bytes)    hard: 0(bytes)  soft: 0(bytes)
+        allocated: 70   hard: 0 soft: 0
+        sadb_seq=1 pid=20287 refcnt=0
+81.20.192.10 81.20.192.58 
+        esp mode=tunnel spi=212740145(0x0cae2831) reqid=0(0x00000000)
+        E: des-cbc  5002f3a0 de10652b
+        A: hmac-sha1  b00738ea 958cef48 0a443569 1563d44e 0b994652
+        seq=0x00000000 replay=4 flags=0x00000000 state=mature 
+        created: May 25 11:12:24 2012   current: May 25 11:27:37 2012
+        diff: 913(s)    hard: 3600(s)   soft: 2880(s)
+        last: May 25 11:19:45 2012      hard: 0(s)      soft: 0(s)
+        current: 1924(bytes)    hard: 0(bytes)  soft: 0(bytes)
+        allocated: 21   hard: 0 soft: 0
+        sadb_seq=0 pid=20287 refcnt=0
+
+
+
+
+
+
+
+
+
+
+
+
+
+запуск демона Ракун
+
+arhontus racoon # racoon -f /etc/racoon/racoon.conf -F -v
+
+Проверка tcpdump
+
+tcpdump -i eth0 -p esp
+
+Просмотр политик и SA
+setkey -D
+setkey -DP
+
+Отладка
+racoon -F -v -d -l /var/log/racoon.log
+
+
+Всё нормально (первый пакет всегда теряется - т.к. на установление соединения нужно время). Если не заработало, то пробуем запустить racoon с отладкой
+racoon -F -f /etc/racoon/racoon.conf
+Также смотрим роутинг:
+netstat -rn
+и чё там у нас шифруется
+setkey -D
+Для просмотра того, что гуляет по интерфейсам юзаем:
+tcpdump -i gif0 (можно и другой интерфейс подставить)
+По поводу setkey -D - она выводит данные только в случае установленного соединения (канал уже существует) - если не было ни одного пакеты в нужном направлении, то она ничего не выведет.
+   Учтите, в данном случае всё упирется в пароль, конечно, лучше бы сделать на сертификатах, но это уже повод для другой статьи :)
+
+
+
+
+
+
+
+
+Иногда (но редко), соединение по VPN IPSEC установлено, но пакеты, почему то не заворачиваются в туннель. Для этого я создал небольшой скрипт для автоматической перезагрузки racoon сервиса:
+
+файл: vpn_restore
+
+ping -c 3 10.9.0.1
+    if [ $? != 0 ]
+then
+    echo "not ping"
+    /etc/init.d/racoon restart
+    ping -c 5 -i 3 10.9.0.1
+else
+    echo "ping ok"
+fi
+
+и поместил его в /etc/crontab (каждые 10 минут скрипт проверяет состояние туннеля)
+
+*/10   9-21 * * *  root /usr/sbin/vpn_restore > /var/log/vpn_restore.log
+
+
+
+
+
+
+
+
+Наш ipsec mtt
+
+
+			    (это название)
+crypto ipsec transform-set ESP-DES-SHA esp-des esp-sha-hmac 
+Наверно умолчательные настройки
+crypto ipsec security-association lifetime seconds 3600   (может это относится тоже к первой фазе)
+crypto ipsec security-association lifetime kilobytes 4608000
+crypto ipsec fragmentation after-encryption PSI-White
+crypto ipsec fragmentation after-encryption PSI-LAN
+crypto ipsec fragmentation after-encryption PSI-DMZ
+
+(Вторая фаза)
+crypto map PSI-White_map 1 match address PSI-White_1_cryptomap
+crypto map PSI-White_map 1 set pfs group1
+crypto map PSI-White_map 1 set peer 80.75.128.2 
+crypto map PSI-White_map 1 set transform-set ESP-DES-SHA
+crypto map PSI-White_map 1 set security-association lifetime seconds 3600
+
+
+crypto map PSI-White_map 2 match address PSI-White_2_cryptomap
+crypto map PSI-White_map 2 set pfs group1
+crypto map PSI-White_map 2 set peer Start-IP-SEC 
+crypto map PSI-White_map 2 set transform-set ESP-DES-SHA
+crypto map PSI-White_map interface PSI-White
+
+(Первая фаза)
+crypto isakmp enable PSI-White
+crypto isakmp enable PSI-LAN
+crypto isakmp enable PSI-DMZ
+crypto isakmp policy 10
+ authentication pre-share
+ encryption des
+ hash sha
+ group 1
+ lifetime 1440
+
+
+tunnel-group 80.75.128.2 type ipsec-l2l
+tunnel-group 80.75.128.2 ipsec-attributes
+ pre-shared-key *
+
+
+
+
+
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.78 
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.5 
+
+
+access-list PSI-White_2_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host Start-IP-SEC 
+
+
+
+
+1. Тест для IPSEC Мегафон
+
+access-list CRYPTO-TEST extended permit ip 81.20.192.0 255.255.255.224 ip 10.192.10.40 255.255.255.252 
+
+crypto isakmp policy 10
+ authentication pre-share
+ encryption des
+ hash sha
+ group 1
+ lifetime 1440
+
+
+crypto ipsec transform-set TEST-IPSEC esp-des esp-sha-hmac
+
+
+crypto map PSI-White_map 3 match address CRYPTO-TEST
+crypto map PSI-White_map 3 set pfs group1
+crypto map PSI-White_map 3 set peer 81.20.192.58
+crypto map PSI-White_map 3 set transform-set ESP-DES-SHA
+crypto map PSI-White_map 3 set security-association lifetime seconds 3600
+
+crypto map CRYPTO interface PSI-White
+
+
+tunnel-group 81.20.192.58 type ipsec-l2l
+tunnel-group 81.20.192.58 ipsec-attributes
+ pre-shared-key Testcrypto12
+
+
+no tunnel-group 81.20.192.10 type ipsec-l2l
+no tunnel-group 81.20.192.10 ipsec-attributes
+ pre-shared-key *
+
+
+2.
+
+81.20.192.10
+
+81.20.192.10 Testcrypto12
+
+remote 81.20.192.10
+{
+       exchange_mode main,aggressive;
+       doi ipsec_doi;
+       situation identity_only;
+       my_identifier address 81.20.192.58;
+
+        #nonce_size 16;
+       lifetime time 86400 sec;
+#       initial_contact on;
+       proposal_check obey;    # obey, strict, or claim
+
+       proposal {
+               encryption_algorithm des;
+               hash_algorithm sha1;
+               authentication_method pre_shared_key;
+               dh_group 1;
+       }
+}
+
+
+#phase 2 test
+sainfo address 81.20.192.58 any address 81.20.192.10 any
+{
+        pfs_group 1;
+        lifetime time 3600 sec;
+        encryption_algorithm des;
+        authentication_algorithm hmac_sha1;
+        compression_algorithm deflate;
+}
+
+
+
+#test
+spdadd 10.192.10.40/30 0.0.0.0/0 any -P out ipsec esp/tunnel/81.20.192.58-81.20.192.10/require;
+spdadd 10.192.10.40/30 0.0.0.0/0 any -P fwd ipsec esp/tunnel/81.20.192.58-81.20.192.10/require;
+
+spdadd 0.0.0.0/0 10.192.10.40/30 any -P in ipsec esp/tunnel/81.20.192.10-81.20.192.58/require;
+spdadd 0.0.0.0/0 10.192.10.40/30 any -P fwd ipsec esp/tunnel/81.20.192.10-81.20.192.58/require;
+
+
+
+<!-- Этот блок кода нужно вставить в ту часть страницы, где вы хотите разместить карту (начало) -->
+<div id="ymaps-map-id_133759858421621964949" style="width: 512px; height: 450px;"></div>
+<div style="width: 512px; text-align: right;"><a href="[http://api.yandex.ru/maps/tools/constructor/?lang=ru-RU](http://api.yandex.ru/maps/tools/constructor/?lang=ru-RU)" target="_blank" style="color: #1A3DC1; font: 13px Arial,Helvetica,sans-serif;">Создано с помощью инструментов Яндекс.Карт</a></div>
+<script type="text/javascript" src="[http://api-maps.yandex.ru/2.0/?coordorder=longlat&load=package.full&wizard=constructor&lang=ru-RU&onload=fid_133759858421621964949](http://api-maps.yandex.ru/2.0/?coordorder=longlat&load=package.full&wizard=constructor&lang=ru-RU&onload=fid_133759858421621964949)"></script>
+<script type="text/javascript">function fid_133759858421621964949(ymaps) {var map = new ymaps.Map("ymaps-map-id_133759858421621964949", {center: [39.59026771691892, 52.600355541580264], zoom: 16, type: "yandex#map"});map.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));map.geoObjects.add(new ymaps.Placemark([39.591899, 52.600436], {balloonContent: "Винград - пластиковые окна и балконы"}, {preset: "twirl#lightblueDotIcon"}));};</script>
+<!-- Этот блок кода нужно вставить в ту часть страницы, где вы хотите разместить карту (конец) -->
+
+
+<!-- Этот блок кода нужно вставить в ту часть страницы, где вы хотите разместить карту (начало) -->
+<div id="ymaps-map-id_133759858421621964949" style="width: 512px; height: 450px;"></div>
+<div style="width: 512px; text-align: right;"><a href="[http://api.yandex.ru/maps/tools/constructor/?lang=ru-RU](http://api.yandex.ru/maps/tools/constructor/?lang=ru-RU)" target="_blank" style="color: #1A3DC1; font: 13px Arial,Helvetica,sans-serif;">Создано с помощью инструментов Яндекс.Карт</a></div>
+<script type="text/javascript" src="[http://api-maps.yandex.ru/2.0/?coordorder=longlat&load=package.full&wizard=constructor&lang=ru-RU&onload=fid_133759858421621964949](http://api-maps.yandex.ru/2.0/?coordorder=longlat&load=package.full&wizard=constructor&lang=ru-RU&onload=fid_133759858421621964949)"></script>
+<script type="text/javascript">
+function fid_133759858421621964949(ymaps) {
+    var map = new ymaps.Map("ymaps-map-id_133759858421621964949", {
+        center: [39.59026771691892, 52.600355541580264],
+        zoom: 16,
+        type: "yandex#map"
+    });
+    map.controls
+        .add("zoomControl")
+        .add("mapTools")
+        .add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));
+    map.geoObjects
+        .add(new ymaps.Placemark([39.591899, 52.600436], {
+            balloonContent: "Винград - пластиковые окна и балконы"
+        }, {
+            preset: "twirl#lightblueDotIcon"
+        }));
+};
+</script>
+<!-- Этот блок кода нужно вставить в ту часть страницы, где вы хотите разместить карту (конец) -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+padlock_sha: VIA PadLock Hash Engine not detected.
+
+
+
+
+
+
+
+
+May 23 16:54:50 rock racoon[5625]: Setting up IPsec policies..done
+May 23 16:54:50 rock racoon: ERROR: racoon: MLS support is not enabled.
+May 23 16:54:50 rock racoon: INFO: @(#)ipsec-tools 0.7.3 ([http://ipsec-tools.sourceforge.net)](http://ipsec-tools.sourceforge.net))
+May 23 16:54:50 rock racoon: INFO: @(#)This product linked OpenSSL 1.0.0e 6 Sep 2011 ([http://www.openssl.org/)](http://www.openssl.org/))
+May 23 16:54:50 rock racoon: INFO: Reading configuration from "/etc/racoon/racoon.conf"
+May 23 16:54:50 rock racoon: DEBUG: hmac(modp1024)
+May 23 16:54:50 rock racoon: DEBUG: hmac(modp1024)
+May 23 16:54:50 rock racoon: DEBUG: compression algorithm can not be checked because sadb message doesn't support it.
+May 23 16:54:50 rock racoon: DEBUG: getsainfo params: loc='ANONYMOUS', rmt='ANONYMOUS', peer='NULL', id=0
+May 23 16:54:50 rock racoon: DEBUG: getsainfo pass #2
+May 23 16:54:50 rock racoon: DEBUG: hmac(modp768)
+May 23 16:54:50 rock racoon: DEBUG: compression algorithm can not be checked because sadb message doesn't support it.
+May 23 16:54:50 rock racoon: DEBUG: getsainfo params: loc='81.20.192.58', rmt='81.20.192.10', peer='NULL', id=0
+May 23 16:54:50 rock racoon: DEBUG: getsainfo pass #2
+May 23 16:54:50 rock racoon: DEBUG: evaluating sainfo: loc='ANONYMOUS', rmt='ANONYMOUS', peer='ANY', id=0
+May 23 16:54:50 rock racoon: DEBUG: open /var/run/racoon/racoon.sock as racoon management.
+May 23 16:54:50 rock racoon: INFO: 81.20.192.58[500] used as isakmp port (fd=7)
+May 23 16:54:50 rock racoon: INFO: 81.20.192.58[500] used for NAT-T
+May 23 16:54:50 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:54:50 rock racoon: DEBUG: get pfkey X_SPDDUMP message
+May 23 16:54:50 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:54:50 rock racoon: DEBUG: get pfkey X_SPDDUMP message
+May 23 16:54:50 rock racoon: DEBUG: sub:0x7fffcb4bbfd0: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:54:50 rock racoon: DEBUG: db :0x6ada10: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=fwd
+May 23 16:54:50 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:54:50 rock racoon: DEBUG: get pfkey X_SPDDUMP message
+May 23 16:54:50 rock racoon: DEBUG: sub:0x7fffcb4bbfd0: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=fwd
+May 23 16:54:50 rock racoon: DEBUG: db :0x6ada10: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=fwd
+May 23 16:54:50 rock racoon: DEBUG: sub:0x7fffcb4bbfd0: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=fwd
+May 23 16:54:50 rock racoon: DEBUG: db :0x6ae320: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:54:50 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:54:50 rock racoon: DEBUG: get pfkey X_SPDDUMP message
+May 23 16:54:50 rock racoon: DEBUG: sub:0x7fffcb4bbfd0: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out
+May 23 16:54:50 rock racoon: DEBUG: db :0x6ada10: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=fwd
+May 23 16:54:50 rock racoon: DEBUG: sub:0x7fffcb4bbfd0: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out
+May 23 16:54:50 rock racoon: DEBUG: db :0x6ae320: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:54:50 rock racoon: DEBUG: sub:0x7fffcb4bbfd0: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out
+May 23 16:54:50 rock racoon: DEBUG: db :0x6ae720: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=fwd
+
+May 23 16:54:50 rock racoon[5625]: Starting IPsec IKE daemon (racoon) ..done
+May 23 16:54:53 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:54:53 rock racoon: DEBUG: get pfkey ACQUIRE message
+May 23 16:54:53 rock racoon: DEBUG: suitable outbound SP found: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out.
+May 23 16:54:53 rock racoon: DEBUG: sub:0x7fffcb4bbfc0: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:54:53 rock racoon: DEBUG: db :0x6ada10: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=fwd
+May 23 16:54:53 rock racoon: DEBUG: sub:0x7fffcb4bbfc0: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:54:53 rock racoon: DEBUG: db :0x6ae320: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:54:53 rock racoon: DEBUG: suitable inbound SP found: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in.
+May 23 16:54:53 rock racoon: DEBUG: new acquire 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out
+May 23 16:54:53 rock racoon: DEBUG: configuration found for 81.20.192.10.
+May 23 16:54:53 rock racoon: DEBUG: getsainfo params: loc='10.192.10.40/30', rmt='0.0.0.0/0', peer='NULL', id=0
+May 23 16:54:53 rock racoon: DEBUG: getsainfo pass #2
+May 23 16:54:53 rock racoon: DEBUG: evaluating sainfo: loc='81.20.192.58', rmt='81.20.192.10', peer='ANY', id=0
+May 23 16:54:53 rock racoon: DEBUG: check and compare ids : value mismatch (IPv4_address)
+May 23 16:54:53 rock racoon: DEBUG: cmpid target: '10.192.10.40/30'
+May 23 16:54:53 rock racoon: DEBUG: cmpid source: '81.20.192.58'
+May 23 16:54:53 rock racoon: DEBUG: evaluating sainfo: loc='ANONYMOUS', rmt='ANONYMOUS', peer='ANY', id=0
+May 23 16:54:53 rock racoon: DEBUG: selected sainfo: loc='ANONYMOUS', rmt='ANONYMOUS', peer='ANY', id=0
+May 23 16:54:53 rock racoon: DEBUG:  (proto_id=ESP spisize=4 spi=00000000 spi_p=00000000 encmode=Tunnel reqid=0:0)
+May 23 16:54:53 rock racoon: DEBUG:   (trns_id=3DES encklen=0 authtype=hmac-sha)
+May 23 16:54:53 rock racoon: DEBUG: in post_acquire
+May 23 16:54:53 rock racoon: DEBUG: configuration found for 81.20.192.10.
+May 23 16:54:53 rock racoon: INFO: IPsec-SA request for 81.20.192.10 queued due to no phase1 found.
+May 23 16:54:53 rock racoon: DEBUG: ===
+May 23 16:54:53 rock racoon: INFO: initiate new phase 1 negotiation: 81.20.192.58[500]<=>81.20.192.10[500]
+May 23 16:54:53 rock racoon: INFO: begin Identity Protection mode.
+May 23 16:54:53 rock racoon: DEBUG: new cookie:#0120e7b53fe6162362f 
+May 23 16:54:53 rock racoon: DEBUG: add payload of len 52, next type 13
+May 23 16:54:53 rock racoon: DEBUG: add payload of len 16, next type 0
+May 23 16:54:53 rock racoon: DEBUG: 104 bytes from 81.20.192.58[500] to 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: sockname 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: send packet from 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: send packet to 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: src4 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: dst4 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: 1 times of 104 bytes message will be sent to 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: #0120e7b53fe 6162362f 00000000 00000000 01100200 00000000 00000068 0d000038#01200000001 00000001 0000002c 01010001 00000024 01010000 800b0001 000c0004#01200015180 80010001 80030001 80020002 80040001 00000014 afcad713 68a1f1c9#0126b8696fc 77570100
+May 23 16:54:53 rock racoon: DEBUG: resend phase1 packet 0e7b53fe6162362f:0000000000000000
+May 23 16:54:53 rock racoon: phase1(ident I msg1): 0.001230
+May 23 16:54:53 rock racoon: DEBUG: ===
+May 23 16:54:53 rock racoon: DEBUG: 108 bytes message received from 81.20.192.10[500] to 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: #0120e7b53fe 6162362f b5c4ecac 8239cfde 01100200 00000000 0000006c 0d000038#01200000001 00000001 0000002c 01010001 00000024 01010000 80010001 80020002#01280040001 80030001 800b0001 000c0004 00015180 00000018 4048b7d5 6ebce885#01225e7de7f 00d6c2d3 c0000000
+May 23 16:54:53 rock racoon: DEBUG: begin.
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=1(sa)
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=13(vid)
+May 23 16:54:53 rock racoon: DEBUG: succeed.
+May 23 16:54:53 rock racoon: INFO: received broken Microsoft ID: FRAGMENTATION
+May 23 16:54:53 rock racoon: DEBUG: total SA len=52
+May 23 16:54:53 rock racoon: DEBUG: #01200000001 00000001 0000002c 01010001 00000024 01010000 80010001 80020002#01280040001 80030001 800b0001 000c0004 00015180
+May 23 16:54:53 rock racoon: DEBUG: begin.
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=2(prop)
+May 23 16:54:53 rock racoon: DEBUG: succeed.
+May 23 16:54:53 rock racoon: DEBUG: proposal #1 len=44
+May 23 16:54:53 rock racoon: DEBUG: begin.
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=3(trns)
+May 23 16:54:53 rock racoon: DEBUG: succeed.
+May 23 16:54:53 rock racoon: DEBUG: transform #1 len=36
+May 23 16:54:53 rock racoon: DEBUG: type=Encryption Algorithm, flag=0x8000, lorv=DES-CBC
+May 23 16:54:53 rock racoon: DEBUG: encryption(des)
+May 23 16:54:53 rock racoon: DEBUG: type=Hash Algorithm, flag=0x8000, lorv=SHA
+May 23 16:54:53 rock racoon: DEBUG: hash(sha1)
+May 23 16:54:53 rock racoon: DEBUG: type=Group Description, flag=0x8000, lorv=768-bit MODP group
+May 23 16:54:53 rock racoon: DEBUG: hmac(modp768)
+May 23 16:54:53 rock racoon: DEBUG: type=Authentication Method, flag=0x8000, lorv=pre-shared key
+May 23 16:54:53 rock racoon: DEBUG: type=Life Type, flag=0x8000, lorv=seconds
+May 23 16:54:53 rock racoon: DEBUG: type=Life Duration, flag=0x0000, lorv=4
+May 23 16:54:53 rock racoon: DEBUG: pair 1:
+May 23 16:54:53 rock racoon: DEBUG:  0x6b0b50: next=(nil) tnext=(nil)
+May 23 16:54:53 rock racoon: DEBUG: proposal #1: 1 transform
+May 23 16:54:53 rock racoon: DEBUG: prop#=1, prot-id=ISAKMP, spi-size=0, #trns=1
+May 23 16:54:53 rock racoon: DEBUG: trns#=1, trns-id=IKE
+May 23 16:54:53 rock racoon: DEBUG: type=Encryption Algorithm, flag=0x8000, lorv=DES-CBC
+May 23 16:54:53 rock racoon: DEBUG: type=Hash Algorithm, flag=0x8000, lorv=SHA
+May 23 16:54:53 rock racoon: DEBUG: type=Group Description, flag=0x8000, lorv=768-bit MODP group
+May 23 16:54:53 rock racoon: DEBUG: type=Authentication Method, flag=0x8000, lorv=pre-shared key
+May 23 16:54:53 rock racoon: DEBUG: type=Life Type, flag=0x8000, lorv=seconds
+May 23 16:54:53 rock racoon: DEBUG: type=Life Duration, flag=0x0000, lorv=4
+May 23 16:54:53 rock racoon: DEBUG: Compared: DB:Peer
+May 23 16:54:53 rock racoon: DEBUG: (lifetime = 86400:86400)
+May 23 16:54:53 rock racoon: DEBUG: (lifebyte = 0:0)
+May 23 16:54:53 rock racoon: DEBUG: enctype = DES-CBC:DES-CBC
+May 23 16:54:53 rock racoon: DEBUG: (encklen = 0:0)
+May 23 16:54:53 rock racoon: DEBUG: hashtype = SHA:SHA
+May 23 16:54:53 rock racoon: DEBUG: authmethod = pre-shared key:pre-shared key
+May 23 16:54:53 rock racoon: DEBUG: dh_group = 768-bit MODP group:768-bit MODP group
+May 23 16:54:53 rock racoon: DEBUG: an acceptable proposal found.
+May 23 16:54:53 rock racoon: DEBUG: hmac(modp768)
+May 23 16:54:53 rock racoon: DEBUG: agreed on pre-shared key auth.
+May 23 16:54:53 rock racoon: DEBUG: ===
+May 23 16:54:53 rock racoon: oakley_dh_generate(MODP768): 0.000889
+May 23 16:54:53 rock racoon: DEBUG: compute DH's private.
+May 23 16:54:53 rock racoon: DEBUG: #0124fe2657c a5f228eb ce4c3513 09c0135b aff7e00c e09a658c 4573c4dd 52edbad1#01226cf977a 0e799138 086b0833 28df0b71 56968d35 5b155d1a e35b8911 6e2674cb#0127af66eb6 39274824 de34980b 6a955181 d77561ec 91ed34ee fcf66f55 c6a15030
+May 23 16:54:53 rock racoon: DEBUG: compute DH's public.
+May 23 16:54:53 rock racoon: DEBUG: #0123eeaf99f 6c21002c 6b5cf64a 31fe9c4d 35e20cd1 934c57e7 9c3cf501 4396eeef#012ca29daff bb7a536f 2e55f03f d0311be2 1ffe330e d1a9dcf8 156a6917 9a320819#0129c32daa5 d43c2c55 7dccd2e6 6091d005 b3afa9b3 9492b672 1348c42c bd658ef4
+May 23 16:54:53 rock racoon: DEBUG: add payload of len 96, next type 10
+May 23 16:54:53 rock racoon: DEBUG: add payload of len 16, next type 0
+May 23 16:54:53 rock racoon: DEBUG: 148 bytes from 81.20.192.58[500] to 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: sockname 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: send packet from 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: send packet to 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: src4 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: dst4 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: 1 times of 148 bytes message will be sent to 81.20.192.10[500]
+May 23 16:54:53 rock racoon: DEBUG: #0120e7b53fe 6162362f b5c4ecac 8239cfde 04100200 00000000 00000094 0a000064#0123eeaf99f 6c21002c 6b5cf64a 31fe9c4d 35e20cd1 934c57e7 9c3cf501 4396eeef#012ca29daff bb7a536f 2e55f03f d0311be2 1ffe330e d1a9dcf8 156a6917 9a320819#0129c32daa5 d43c2c55 7dccd2e6 6091d005 b3afa9b3 9492b672 1348c42c bd658ef4#01200000014 c6adf967 5a8dbbad e9239cb4 77bc761d
+May 23 16:54:53 rock racoon: DEBUG: resend phase1 packet 0e7b53fe6162362f:b5c4ecac8239cfde
+May 23 16:54:53 rock racoon: phase1(ident I msg2): 0.004328
+May 23 16:54:53 rock racoon: DEBUG: ===
+May 23 16:54:53 rock racoon: DEBUG: 224 bytes message received from 81.20.192.10[500] to 81.20.192.58[500]
+May 23 16:54:53 rock racoon: DEBUG: #0120e7b53fe 6162362f b5c4ecac 8239cfde 04100200 00000000 000000e0 0a000064#012099278b6 78dd238c dfc3dac6 64ab8f28 6ae52b3d 2ee66295 55488578 8349a03e#012050aadb4 d5225c9b 523fba35 a20f85d5 21f152b5 e2d02d74 3457f62a 8ac6d182#012b628f641 deed0db5 625ca70b eb9b4739 03513d9c eff762ae f246c078 e6e92060#0120d000018 609f3661 7686d518 a678fa83 5f8de132 a3fcaa80 0d000014 12f5f28c#012457168a9 702d9fe2 74cc0100 0d00000c 09002689 dfd6b712 0d000014 40034bb1#0128238cfde 4cd3f0e5 d8c49df8 00000014 1f07f70e aa6514d3 b0fa9654 2a500100
+May 23 16:54:53 rock racoon: DEBUG: begin.
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=4(ke)
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=10(nonce)
+May 23 16:54:53 rock racoon: DEBUG: seen nptype=13(vid)
+May 23 16:54:53  racoon: last message repeated 3 times
+May 23 16:54:53 rock racoon: DEBUG: succeed.
+May 23 16:54:53 rock racoon: INFO: received Vendor ID: CISCO-UNITY
+May 23 16:54:53 rock racoon: INFO: received Vendor ID: draft-ietf-ipsra-isakmp-xauth-06.txt
+May 23 16:54:53 rock racoon: DEBUG: received unknown Vendor ID
+May 23 16:54:53 rock racoon: DEBUG: #01240034bb1 8238cfde 4cd3f0e5 d8c49df8
+May 23 16:54:53 rock racoon: DEBUG: received unknown Vendor ID
+May 23 16:54:53 rock racoon: DEBUG: #0121f07f70e aa6514d3 b0fa9654 2a500100
+May 23 16:54:53 rock racoon: DEBUG: ===
+May 23 16:54:53 rock racoon: oakley_dh_compute(MODP768): 0.000837
+May 23 16:54:53 rock racoon: DEBUG: compute DH's shared.
+May 23 16:54:53 rock racoon: DEBUG: #0123f2aa362 4048784e 0473c2c4 4a01d0b0 8c6ab602 4c9fc5aa ef154aeb 531bf118#012ff80e9fd f2d349ea 15103480 c0a55ec9 6a179ba7 d1239004 99304708 13195451#0122dda396b 11b04c10 823ac498 00823d06 12f47547 d3a8c7bf 1ca0f599 c267f377
+May 23 16:54:53 rock racoon: DEBUG: the psk found.
+May 23 16:54:53 rock racoon: DEBUG: nonce 1: 
+May 23 16:54:53 rock racoon: DEBUG: #012c6adf967 5a8dbbad e9239cb4 77bc761d
+May 23 16:54:53 rock racoon: DEBUG: nonce 2: 
+May 23 16:54:53 rock racoon: DEBUG: #012609f3661 7686d518 a678fa83 5f8de132 a3fcaa80
+May 23 16:54:53 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:54:53 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=36): 0.000018
+May 23 16:54:53 rock racoon: DEBUG: SKEYID computed:
+May 23 16:54:53 rock racoon: DEBUG: #01256aa86f7 8fcf4f7d c7571205 5bfac612 5975cb1d
+May 23 16:54:53 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:54:53 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=113): 0.000006
+May 23 16:54:53 rock racoon: DEBUG: SKEYID_d computed:
+May 23 16:54:53 rock racoon: DEBUG: #012a9f22408 a1edcd3a 57891529 3b88c97a 804063dc
+May 23 16:54:53 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:54:53 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=133): 0.000009
+May 23 16:54:53 rock racoon: DEBUG: SKEYID_a computed:
+May 23 16:54:53 rock racoon: DEBUG: #0127e61b388 a85fe5e4 9f0fb70c 08d5b845 60b25b0a
+May 23 16:54:53 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:54:53 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=133): 0.000006
+May 23 16:54:53 rock racoon: DEBUG: SKEYID_e computed:
+May 23 16:54:53 rock racoon: DEBUG: #0127f8b80d9 9d40d43e 2a7adf4d 7c4449f3 dc943fd9
+May 23 16:54:53 rock racoon: DEBUG: encryption(des)
+May 23 16:54:53 rock racoon: DEBUG: hash(sha1)
+May 23 16:54:53 rock racoon: DEBUG: final encryption key computed:
+May 23 16:54:53 rock racoon: DEBUG: #0127f8b80d9 9d40d43e
+May 23 16:54:53 rock racoon: DEBUG: hash(sha1)
+May 23 16:54:53 rock racoon: DEBUG: encryption(des)
+May 23 16:54:53 rock racoon: DEBUG: IV computed:
+May 23 16:54:53 rock racoon: DEBUG: #012f6c27689 19c79748
+May 23 16:54:53 rock racoon: DEBUG: use ID type of IPv4_address
+May 23 16:54:53 rock racoon: DEBUG: HASH with:
+May 23 16:54:53 rock racoon: DEBUG: #0123eeaf99f 6c21002c 6b5cf64a 31fe9c4d 35e20cd1 934c57e7 9c3cf501 4396eeef#012ca29daff bb7a536f 2e55f03f d0311be2 1ffe330e d1a9dcf8 156a6917 9a320819#0129c32daa5 d43c2c55 7dccd2e6 6091d005 b3afa9b3 9492b672 1348c42c bd658ef4#012099278b6 78dd238c dfc3dac6 64ab8f28 6ae52b3d 2ee66295 55488578 8349a03e#012050aadb4 d5225c9b 523fba35 a20f85d5 21f152b5 e2d02d74 3457f62a 8ac6d182#012b628f641 deed0db5 625ca70b eb9b4739 03513d9c eff762ae f246c078 e6e92060#0120e7b53fe 6162362f b5c4ecac 8239cfde 00000001 00000001 0000002c 01010001#01200000024 01010000 800b0001 000c0004 00015180 80010001 80030001 80020002#01280040001 011101f4 5114c03a
+May 23 16:54:53 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:54:53 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=268): 0.000006
+May 23 16:54:53 rock racoon: DEBUG: HASH (init) computed:
+May 23 16:54:53 rock racoon: DEBUG: #01283852074 1b61a9e0 ed9518eb 68358780 ad59fc26
+May 23 16:54:53 rock racoon: DEBUG: add payload of len 8, next type 8
+May 23 16:54:53 rock racoon: DEBUG: add payload of len 20, next type 0
+May 23 16:54:53 rock racoon: DEBUG: begin encryption.
+May 23 16:54:53 rock racoon: DEBUG: encryption(des)
+May 23 16:54:53 rock racoon: DEBUG: pad length = 4
+May 23 16:54:53 rock racoon: DEBUG: #0120800000c 011101f4 5114c03a 00000018 83852074 1b61a9e0 ed9518eb 68358780#012ad59fc26 00000004
+May 23 16:54:53 rock racoon: DEBUG: encryption(des)
+May 23 16:54:53 rock racoon: alg_oakley_encdef_encrypt(des klen=64 size=40): 0.000036
+May 23 16:54:53 rock racoon: DEBUG: with key:
+May 23 16:54:53 rock racoon: DEBUG: #0127f8b80d9 9d40d43e
+May 23 16:54:53 rock racoon: DEBUG: encrypted payload by IV:
+May 23 16:54:53 rock racoon: DEBUG: #012f6c27689 19c79748
+May 23 16:54:53 rock racoon: DEBUG: save IV for next:
+May 23 16:54:53 rock racoon: DEBUG: #01268de38b0 f42aafd4
+May 23 16:54:53 rock rsyslogd-2177: imuxsock begins to drop messages from pid 5668 due to rate-limiting
+
+
+
+
+May 23 16:55:09 rock rsyslogd-2177: imuxsock lost 278 messages from pid 5668 due to rate-limiting
+May 23 16:55:09 rock racoon: ERROR: 81.20.192.10 give up to get IPsec-SA due to time up to wait.
+May 23 16:55:09 rock racoon: DEBUG: an undead schedule has been deleted.
+May 23 16:55:09 rock racoon: DEBUG: IV freed
+May 23 16:55:10 rock racoon: INFO: ISAKMP-SA deleted 81.20.192.58[500]-81.20.192.10[500] spi:0e7b53fe6162362f:b5c4ecac8239cfde
+May 23 16:55:10 rock racoon: DEBUG: IV freed
+May 23 16:55:24 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:55:24 rock racoon: DEBUG: get pfkey EXPIRE message
+May 23 16:55:24 rock racoon: INFO: IPsec-SA expired: ESP/Tunnel 81.20.192.10[0]->81.20.192.58[0] spi=236331363(0xe162163)
+May 23 16:55:24 rock racoon: DEBUG: no such a SA found: ESP/Tunnel 81.20.192.10[0]->81.20.192.58[0] spi=236331363(0xe162163)
+May 23 16:55:24 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:55:24 rock racoon: DEBUG: get pfkey ACQUIRE message
+May 23 16:55:24 rock racoon: DEBUG: suitable outbound SP found: 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out.
+May 23 16:55:24 rock racoon: DEBUG: sub:0x7fffcb4bbfc0: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:55:24 rock racoon: DEBUG: db :0x6ada10: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=fwd
+May 23 16:55:24 rock racoon: DEBUG: sub:0x7fffcb4bbfc0: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:55:24 rock racoon: DEBUG: db :0x6ae320: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in
+May 23 16:55:24 rock racoon: DEBUG: suitable inbound SP found: 0.0.0.0/0[0] 10.192.10.40/30[0] proto=any dir=in.
+May 23 16:55:24 rock racoon: DEBUG: new acquire 10.192.10.40/30[0] 0.0.0.0/0[0] proto=any dir=out
+May 23 16:55:24 rock racoon: DEBUG: configuration found for 81.20.192.10.
+May 23 16:55:24 rock racoon: DEBUG: getsainfo params: loc='10.192.10.40/30', rmt='0.0.0.0/0', peer='NULL', id=0
+May 23 16:55:24 rock racoon: DEBUG: getsainfo pass #2
+May 23 16:55:24 rock racoon: DEBUG: evaluating sainfo: loc='81.20.192.58', rmt='81.20.192.10', peer='ANY', id=0
+May 23 16:55:24 rock racoon: DEBUG: check and compare ids : value mismatch (IPv4_address)
+May 23 16:55:24 rock racoon: DEBUG: cmpid target: '10.192.10.40/30'
+May 23 16:55:24 rock racoon: DEBUG: cmpid source: '81.20.192.58'
+May 23 16:55:24 rock racoon: DEBUG: evaluating sainfo: loc='ANONYMOUS', rmt='ANONYMOUS', peer='ANY', id=0
+May 23 16:55:24 rock racoon: DEBUG: selected sainfo: loc='ANONYMOUS', rmt='ANONYMOUS', peer='ANY', id=0
+May 23 16:55:24 rock racoon: DEBUG:  (proto_id=ESP spisize=4 spi=00000000 spi_p=00000000 encmode=Tunnel reqid=0:0)
+May 23 16:55:24 rock racoon: DEBUG:   (trns_id=3DES encklen=0 authtype=hmac-sha)
+May 23 16:55:24 rock racoon: DEBUG: in post_acquire
+May 23 16:55:24 rock racoon: DEBUG: configuration found for 81.20.192.10.
+May 23 16:55:24 rock racoon: INFO: IPsec-SA request for 81.20.192.10 queued due to no phase1 found.
+May 23 16:55:24 rock racoon: DEBUG: ===
+May 23 16:55:24 rock racoon: INFO: initiate new phase 1 negotiation: 81.20.192.58[500]<=>81.20.192.10[500]
+May 23 16:55:24 rock racoon: INFO: begin Identity Protection mode.
+May 23 16:55:24 rock racoon: DEBUG: new cookie:#012ec15d5b600809bab 
+May 23 16:55:24 rock racoon: DEBUG: add payload of len 52, next type 13
+May 23 16:55:24 rock racoon: DEBUG: add payload of len 16, next type 0
+May 23 16:55:24 rock racoon: DEBUG: 104 bytes from 81.20.192.58[500] to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: sockname 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: send packet from 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: send packet to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: src4 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: dst4 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: 1 times of 104 bytes message will be sent to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: #012ec15d5b6 00809bab 00000000 00000000 01100200 00000000 00000068 0d000038#01200000001 00000001 0000002c 01010001 00000024 01010000 800b0001 000c0004#01200015180 80010001 80030001 80020002 80040001 00000014 afcad713 68a1f1c9#0126b8696fc 77570100
+May 23 16:55:24 rock racoon: DEBUG: resend phase1 packet ec15d5b600809bab:0000000000000000
+May 23 16:55:24 rock racoon: phase1(ident I msg1): 0.000450
+May 23 16:55:24 rock racoon: DEBUG: ===
+May 23 16:55:24 rock racoon: DEBUG: 108 bytes message received from 81.20.192.10[500] to 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: #012ec15d5b6 00809bab 4c87a4e0 2a132278 01100200 00000000 0000006c 0d000038#01200000001 00000001 0000002c 01010001 00000024 01010000 80010001 80020002#01280040001 80030001 800b0001 000c0004 00015180 00000018 4048b7d5 6ebce885#01225e7de7f 00d6c2d3 c0000000
+May 23 16:55:24 rock racoon: DEBUG: begin.
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=1(sa)
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=13(vid)
+May 23 16:55:24 rock racoon: DEBUG: succeed.
+May 23 16:55:24 rock racoon: INFO: received broken Microsoft ID: FRAGMENTATION
+May 23 16:55:24 rock racoon: DEBUG: total SA len=52
+May 23 16:55:24 rock racoon: DEBUG: #01200000001 00000001 0000002c 01010001 00000024 01010000 80010001 80020002#01280040001 80030001 800b0001 000c0004 00015180
+May 23 16:55:24 rock racoon: DEBUG: begin.
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=2(prop)
+May 23 16:55:24 rock racoon: DEBUG: succeed.
+May 23 16:55:24 rock racoon: DEBUG: proposal #1 len=44
+May 23 16:55:24 rock racoon: DEBUG: begin.
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=3(trns)
+May 23 16:55:24 rock racoon: DEBUG: succeed.
+May 23 16:55:24 rock racoon: DEBUG: transform #1 len=36
+May 23 16:55:24 rock racoon: DEBUG: type=Encryption Algorithm, flag=0x8000, lorv=DES-CBC
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock racoon: DEBUG: type=Hash Algorithm, flag=0x8000, lorv=SHA
+May 23 16:55:24 rock racoon: DEBUG: hash(sha1)
+May 23 16:55:24 rock racoon: DEBUG: type=Group Description, flag=0x8000, lorv=768-bit MODP group
+May 23 16:55:24 rock racoon: DEBUG: hmac(modp768)
+May 23 16:55:24 rock racoon: DEBUG: type=Authentication Method, flag=0x8000, lorv=pre-shared key
+May 23 16:55:24 rock racoon: DEBUG: type=Life Type, flag=0x8000, lorv=seconds
+May 23 16:55:24 rock racoon: DEBUG: type=Life Duration, flag=0x0000, lorv=4
+May 23 16:55:24 rock racoon: DEBUG: pair 1:
+May 23 16:55:24 rock racoon: DEBUG:  0x6b0820: next=(nil) tnext=(nil)
+May 23 16:55:24 rock racoon: DEBUG: proposal #1: 1 transform
+May 23 16:55:24 rock racoon: DEBUG: prop#=1, prot-id=ISAKMP, spi-size=0, #trns=1
+May 23 16:55:24 rock racoon: DEBUG: trns#=1, trns-id=IKE
+May 23 16:55:24 rock racoon: DEBUG: type=Encryption Algorithm, flag=0x8000, lorv=DES-CBC
+May 23 16:55:24 rock racoon: DEBUG: type=Hash Algorithm, flag=0x8000, lorv=SHA
+May 23 16:55:24 rock racoon: DEBUG: type=Group Description, flag=0x8000, lorv=768-bit MODP group
+May 23 16:55:24 rock racoon: DEBUG: type=Authentication Method, flag=0x8000, lorv=pre-shared key
+May 23 16:55:24 rock racoon: DEBUG: type=Life Type, flag=0x8000, lorv=seconds
+May 23 16:55:24 rock racoon: DEBUG: type=Life Duration, flag=0x0000, lorv=4
+May 23 16:55:24 rock racoon: DEBUG: Compared: DB:Peer
+May 23 16:55:24 rock racoon: DEBUG: (lifetime = 86400:86400)
+May 23 16:55:24 rock racoon: DEBUG: (lifebyte = 0:0)
+May 23 16:55:24 rock racoon: DEBUG: enctype = DES-CBC:DES-CBC
+May 23 16:55:24 rock racoon: DEBUG: (encklen = 0:0)
+May 23 16:55:24 rock racoon: DEBUG: hashtype = SHA:SHA
+May 23 16:55:24 rock racoon: DEBUG: authmethod = pre-shared key:pre-shared key
+May 23 16:55:24 rock racoon: DEBUG: dh_group = 768-bit MODP group:768-bit MODP group
+May 23 16:55:24 rock racoon: DEBUG: an acceptable proposal found.
+May 23 16:55:24 rock racoon: DEBUG: hmac(modp768)
+May 23 16:55:24 rock racoon: DEBUG: agreed on pre-shared key auth.
+May 23 16:55:24 rock racoon: DEBUG: ===
+May 23 16:55:24 rock racoon: oakley_dh_generate(MODP768): 0.000844
+May 23 16:55:24 rock racoon: DEBUG: compute DH's private.
+May 23 16:55:24 rock racoon: DEBUG: #012542a1633 43eb3ceb ec9b06d1 c236b885 5294c4bc d7a45572 c9314c63 89f2c28c#01283b55c20 e5d2625d 8dcd6d20 22e65a54 a8be4639 6fcca49e 57d63dc4 acf671b2#012c75a3efe e016df54 3bc006e7 a6e9e71b 524613dd 23550853 1d1c8bfc ef963879
+May 23 16:55:24 rock racoon: DEBUG: compute DH's public.
+May 23 16:55:24 rock racoon: DEBUG: #012b0bb9287 96c94bb6 d4b573b1 1436a093 960d02ce d12da950 b8286045 6ede8b18#0128bd59edb 4e47846a 1446f0fb d62ea5cc c66d3887 25b8c003 f43e0814 940b9a04#012c46b86f6 cce7bad7 c0cca63e dd0ed7a7 94db7c36 de7823a3 3f9b5a2f 7934bad2
+May 23 16:55:24 rock racoon: DEBUG: add payload of len 96, next type 10
+May 23 16:55:24 rock racoon: DEBUG: add payload of len 16, next type 0
+May 23 16:55:24 rock racoon: DEBUG: 148 bytes from 81.20.192.58[500] to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: sockname 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: send packet from 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: send packet to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: src4 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: dst4 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: 1 times of 148 bytes message will be sent to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: #012ec15d5b6 00809bab 4c87a4e0 2a132278 04100200 00000000 00000094 0a000064#012b0bb9287 96c94bb6 d4b573b1 1436a093 960d02ce d12da950 b8286045 6ede8b18#0128bd59edb 4e47846a 1446f0fb d62ea5cc c66d3887 25b8c003 f43e0814 940b9a04#012c46b86f6 cce7bad7 c0cca63e dd0ed7a7 94db7c36 de7823a3 3f9b5a2f 7934bad2#01200000014 fa51e420 bc946402 f61efa43 e9b405b8
+May 23 16:55:24 rock racoon: DEBUG: resend phase1 packet ec15d5b600809bab:4c87a4e02a132278
+May 23 16:55:24 rock racoon: phase1(ident I msg2): 0.002774
+May 23 16:55:24 rock racoon: DEBUG: ===
+May 23 16:55:24 rock racoon: DEBUG: 224 bytes message received from 81.20.192.10[500] to 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: #012ec15d5b6 00809bab 4c87a4e0 2a132278 04100200 00000000 000000e0 0a000064#01277a09650 357a1b3b 34accd76 8344332d 41381d97 2df93304 1e26e2ce 837eb072#012987f53e9 b66ed946 70d5c15a 3af59b8b 1627bd1a c0ae6025 6147457d c53b31aa#012e9836653 02e96d63 e0a21580 3ac6f5a8 7a91a416 a88680e3 fccea8cd 14d525fa#0120d000018 26994bd5 2a1c280a b1ebfdec 58114052 e3aaefa0 0d000014 12f5f28c#012457168a9 702d9fe2 74cc0100 0d00000c 09002689 dfd6b712 0d000014 b94003fd#0122a122278 21d3075d 5659aff6 00000014 1f07f70e aa6514d3 b0fa9654 2a500100
+May 23 16:55:24 rock racoon: DEBUG: begin.
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=4(ke)
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=10(nonce)
+May 23 16:55:24 rock racoon: DEBUG: seen nptype=13(vid)
+May 23 16:55:24  racoon: last message repeated 3 times
+May 23 16:55:24 rock racoon: DEBUG: succeed.
+May 23 16:55:24 rock racoon: INFO: received Vendor ID: CISCO-UNITY
+May 23 16:55:24 rock racoon: INFO: received Vendor ID: draft-ietf-ipsra-isakmp-xauth-06.txt
+May 23 16:55:24 rock racoon: DEBUG: received unknown Vendor ID
+May 23 16:55:24 rock racoon: DEBUG: #012b94003fd 2a122278 21d3075d 5659aff6
+May 23 16:55:24 rock racoon: DEBUG: received unknown Vendor ID
+May 23 16:55:24 rock racoon: DEBUG: #0121f07f70e aa6514d3 b0fa9654 2a500100
+May 23 16:55:24 rock racoon: DEBUG: ===
+May 23 16:55:24 rock racoon: oakley_dh_compute(MODP768): 0.000820
+May 23 16:55:24 rock racoon: DEBUG: compute DH's shared.
+May 23 16:55:24 rock racoon: DEBUG: #012d1c3bab0 555f210c 45ce4847 a656c24d 37dc3ede 5259e856 293fabb0 8cfe4148#012fefeac92 b359841a 98ac0ab5 828b72d7 4e69234b 84a5f669 096e5484 0d3b25e5#0121900a864 91703c86 f6e242d8 153df896 6fd83461 672dff5a ac9d5025 6fa00bf3
+May 23 16:55:24 rock racoon: DEBUG: the psk found.
+May 23 16:55:24 rock racoon: DEBUG: nonce 1: 
+May 23 16:55:24 rock racoon: DEBUG: #012fa51e420 bc946402 f61efa43 e9b405b8
+May 23 16:55:24 rock racoon: DEBUG: nonce 2: 
+May 23 16:55:24 rock racoon: DEBUG: #01226994bd5 2a1c280a b1ebfdec 58114052 e3aaefa0
+May 23 16:55:24 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:55:24 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=36): 0.000006
+May 23 16:55:24 rock racoon: DEBUG: SKEYID computed:
+May 23 16:55:24 rock racoon: DEBUG: #012e14c7eca bae5bc64 40b36e4c 9045b1f9 e835a905
+May 23 16:55:24 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:55:24 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=113): 0.000004
+May 23 16:55:24 rock racoon: DEBUG: SKEYID_d computed:
+May 23 16:55:24 rock racoon: DEBUG: #01230331ab2 eaf4e75e 04736ce5 b24e76ab 1039e5dc
+May 23 16:55:24 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:55:24 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=133): 0.000005
+May 23 16:55:24 rock racoon: DEBUG: SKEYID_a computed:
+May 23 16:55:24 rock racoon: DEBUG: #012a8665103 fb5573c1 977b6b3e c4bd4e40 400b0766
+May 23 16:55:24 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:55:24 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=133): 0.000003
+May 23 16:55:24 rock racoon: DEBUG: SKEYID_e computed:
+May 23 16:55:24 rock racoon: DEBUG: #0124ea210a5 ece794c0 9a1b48c8 0b8c03b9 de690d3a
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock racoon: DEBUG: hash(sha1)
+May 23 16:55:24 rock racoon: DEBUG: final encryption key computed:
+May 23 16:55:24 rock racoon: DEBUG: #0124ea210a5 ece794c0
+May 23 16:55:24 rock racoon: DEBUG: hash(sha1)
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock racoon: DEBUG: IV computed:
+May 23 16:55:24 rock racoon: DEBUG: #0129894a246 ecba0461
+May 23 16:55:24 rock racoon: DEBUG: use ID type of IPv4_address
+May 23 16:55:24 rock racoon: DEBUG: HASH with:
+May 23 16:55:24 rock racoon: DEBUG: #012b0bb9287 96c94bb6 d4b573b1 1436a093 960d02ce d12da950 b8286045 6ede8b18#0128bd59edb 4e47846a 1446f0fb d62ea5cc c66d3887 25b8c003 f43e0814 940b9a04#012c46b86f6 cce7bad7 c0cca63e dd0ed7a7 94db7c36 de7823a3 3f9b5a2f 7934bad2#01277a09650 357a1b3b 34accd76 8344332d 41381d97 2df93304 1e26e2ce 837eb072#012987f53e9 b66ed946 70d5c15a 3af59b8b 1627bd1a c0ae6025 6147457d c53b31aa#012e9836653 02e96d63 e0a21580 3ac6f5a8 7a91a416 a88680e3 fccea8cd 14d525fa#012ec15d5b6 00809bab 4c87a4e0 2a132278 00000001 00000001 0000002c 01010001#01200000024 01010000 800b0001 000c0004 00015180 80010001 80030001 80020002#01280040001 011101f4 5114c03a
+May 23 16:55:24 rock racoon: DEBUG: hmac(hmac_sha1)
+May 23 16:55:24 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=268): 0.000005
+May 23 16:55:24 rock racoon: DEBUG: HASH (init) computed:
+May 23 16:55:24 rock racoon: DEBUG: #0128c408c45 10b366fd 08bda20c eef18566 046c457e
+May 23 16:55:24 rock racoon: DEBUG: add payload of len 8, next type 8
+May 23 16:55:24 rock racoon: DEBUG: add payload of len 20, next type 0
+May 23 16:55:24 rock racoon: DEBUG: begin encryption.
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock racoon: DEBUG: pad length = 4
+May 23 16:55:24 rock racoon: DEBUG: #0120800000c 011101f4 5114c03a 00000018 8c408c45 10b366fd 08bda20c eef18566#012046c457e 00000004
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock racoon: alg_oakley_encdef_encrypt(des klen=64 size=40): 0.000008
+May 23 16:55:24 rock racoon: DEBUG: with key:
+May 23 16:55:24 rock racoon: DEBUG: #0124ea210a5 ece794c0
+May 23 16:55:24 rock racoon: DEBUG: encrypted payload by IV:
+May 23 16:55:24 rock racoon: DEBUG: #0129894a246 ecba0461
+May 23 16:55:24 rock racoon: DEBUG: save IV for next:
+May 23 16:55:24 rock racoon: DEBUG: #0129aadbba0 4f15d6c5
+May 23 16:55:24 rock racoon: DEBUG: encrypted.
+May 23 16:55:24 rock racoon: DEBUG: 68 bytes from 81.20.192.58[500] to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: sockname 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: send packet from 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: send packet to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: src4 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: dst4 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: 1 times of 68 bytes message will be sent to 81.20.192.10[500]
+May 23 16:55:24 rock racoon: DEBUG: #012ec15d5b6 00809bab 4c87a4e0 2a132278 05100201 00000000 00000044 c1d867ac#012c69d9384 1e41d674 f328ab73 323a9021 197cf62a d2292a3e b6ab5ddb 9aadbba0#0124f15d6c5
+May 23 16:55:24 rock racoon: DEBUG: resend phase1 packet ec15d5b600809bab:4c87a4e02a132278
+May 23 16:55:24 rock racoon: phase1(ident I msg3): 0.003301
+May 23 16:55:24 rock racoon: DEBUG: ===
+May 23 16:55:24 rock racoon: DEBUG: 84 bytes message received from 81.20.192.10[500] to 81.20.192.58[500]
+May 23 16:55:24 rock racoon: DEBUG: #012ec15d5b6 00809bab 4c87a4e0 2a132278 05100201 00000000 00000054 dd594679#012ff8cc683 81c9a779 9f595031 2109635a c4e3ff8e c92244c4 4ff23ea6 14623cc1#0125ed800ff acf5d730 084a85d3 9c6120c5 4972caf0
+May 23 16:55:24 rock racoon: DEBUG: begin decryption.
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock racoon: DEBUG: IV was saved for next processing:
+May 23 16:55:24 rock racoon: DEBUG: #0129c6120c5 4972caf0
+May 23 16:55:24 rock racoon: DEBUG: encryption(des)
+May 23 16:55:24 rock rsyslogd-2177: imuxsock begins to drop messages from pid 5668 due to rate-limiting
+May 23 16:55:40 rock rsyslogd-2177: imuxsock lost 223 messages from pid 5668 due to rate-limiting
+May 23 16:55:40 rock racoon: ERROR: 81.20.192.10 give up to get IPsec-SA due to time up to wait.
+May 23 16:55:40 rock racoon: DEBUG: an undead schedule has been deleted.
+May 23 16:55:40 rock racoon: DEBUG: IV freed
+May 23 16:55:41 rock racoon: INFO: ISAKMP-SA deleted 81.20.192.58[500]-81.20.192.10[500] spi:ec15d5b600809bab:4c87a4e02a132278
+May 23 16:55:41 rock racoon: DEBUG: IV freed
+May 23 16:55:55 rock racoon: DEBUG: pk_recv: retry[0] recv() 
+May 23 16:55:55 rock racoon: DEBUG: get pfkey EXPIRE message
+May 23 16:55:55 rock racoon: INFO: IPsec-SA expired: ESP/Tunnel 81.20.192.10[0]->81.20.192.58[0] spi=11411718(0xae2106)
+May 23 16:55:55 rock racoon: DEBUG: no such a SA found: ESP/Tunnel 81.20.192.10[0]->81.20.192.58[0] spi=11411718(0xae2106)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+May 24 09:29:56 rock racoon[8205]: Setting up IPsec policies..done
+May 24 09:29:56 rock racoon: ERROR: racoon: MLS support is not enabled.
+May 24 09:29:56 rock racoon: INFO: @(#)ipsec-tools 0.7.3 ([http://ipsec-tools.sourceforge.net)](http://ipsec-tools.sourceforge.net))
+May 24 09:29:56 rock racoon: INFO: @(#)This product linked OpenSSL 1.0.0e 6 Sep 2011 ([http://www.openssl.org/)](http://www.openssl.org/))
+May 24 09:29:56 rock racoon: INFO: Reading configuration from "/etc/racoon/racoon.conf"
+May 24 09:29:56 rock racoon: INFO: 81.20.192.58[500] used as isakmp port (fd=7)
+May 24 09:29:56 rock racoon: INFO: 81.20.192.58[500] used for NAT-T
+May 24 09:29:56 rock racoon[8205]: Starting IPsec IKE daemon (racoon) ..done
+May 24 09:30:05 rock racoon: INFO: IPsec-SA request for 81.20.192.10 queued due to no phase1 found.
+May 24 09:30:05 rock racoon: INFO: initiate new phase 1 negotiation: 81.20.192.58[500]<=>81.20.192.10[500]
+May 24 09:30:05 rock racoon: INFO: begin Identity Protection mode.
+May 24 09:30:05 rock racoon: phase1(ident I msg1): 0.000200
+May 24 09:30:05 rock racoon: INFO: received broken Microsoft ID: FRAGMENTATION
+May 24 09:30:05 rock racoon: oakley_dh_generate(MODP768): 0.000975
+May 24 09:30:05 rock racoon: phase1(ident I msg2): 0.001137
+May 24 09:30:05 rock racoon: INFO: received Vendor ID: CISCO-UNITY
+May 24 09:30:05 rock racoon: INFO: received Vendor ID: draft-ietf-ipsra-isakmp-xauth-06.txt
+May 24 09:30:05 rock racoon: oakley_dh_compute(MODP768): 0.000834
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=36): 0.000016
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=113): 0.000005
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=133): 0.000005
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=133): 0.000005
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=268): 0.000004
+May 24 09:30:05 rock racoon: alg_oakley_encdef_encrypt(des klen=64 size=40): 0.000026
+May 24 09:30:05 rock racoon: phase1(ident I msg3): 0.001740
+May 24 09:30:05 rock racoon: alg_oakley_encdef_decrypt(des klen=64 size=56): 0.000005
+May 24 09:30:05 rock racoon: INFO: received Vendor ID: DPD
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=268): 0.000006
+May 24 09:30:05 rock racoon: oakley_validate_auth(pre-shared key): 0.000097
+May 24 09:30:05 rock racoon: phase1(ident R msg3): 0.000346
+May 24 09:30:05 rock racoon: phase1(Identity Protection): 0.007483
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=32): 0.000003
+May 24 09:30:05 rock racoon: alg_oakley_encdef_encrypt(des klen=64 size=56): 0.000005
+May 24 09:30:05 rock racoon: INFO: ISAKMP-SA established 81.20.192.58[500]-81.20.192.10[500] spi:9e6787fe80d05b77:07d04e4218c7152e
+May 24 09:30:05 rock racoon: alg_oakley_encdef_decrypt(des klen=64 size=64): 0.000004
+May 24 09:30:05 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=40): 0.000006
+May 24 09:30:06 rock racoon: INFO: initiate new phase 2 negotiation: 81.20.192.58[500]<=>81.20.192.10[500]
+May 24 09:30:06 rock racoon: oakley_dh_generate(MODP1024): 0.001875
+May 24 09:30:06 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=240): 0.000006
+May 24 09:30:06 rock racoon: alg_oakley_encdef_encrypt(des klen=64 size=264): 0.000013
+May 24 09:30:06 rock racoon: phase2(quick I msg1): 0.002181
+May 24 09:30:06 rock racoon: alg_oakley_encdef_decrypt(des klen=64 size=320): 0.000010
+May 24 09:30:06 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=296): 0.000007
+May 24 09:30:06 rock racoon: ERROR: fatal INVALID-ID-INFORMATION notify messsage, phase1 should be deleted.
+May 24 09:30:06 rock racoon: ERROR: Message: '1 Y `+ sH Y 4 ( u p p2 a ; " h/ =`{j o Q R ^6W ^D V } ; [ < , z3 = *Uo = z { a ,m1J~ [ p Z)F @M e q XI_ & ( '.
+May 24 09:30:06 rock racoon: alg_oakley_encdef_decrypt(des klen=64 size=56): 0.000004
+May 24 09:30:06 rock racoon: alg_oakley_hmacdef_one(hmac_sha1 size=32): 0.000005
+May 24 09:30:06 rock racoon: INFO: ISAKMP-SA expired 81.20.192.58[500]-81.20.192.10[500] spi:9e6787fe80d05b77:07d04e4218c7152e
+
+
+
+
+
+
+
+May 24 11:08:03 [IKEv1]: Group = 81.20.192.58, IP = 81.20.192.58, QM FSM error (P2 struct &0xac57b4d0, mess id 0x8cdd40b8)!
+May 24 11:08:03 [IKEv1]: Group = 81.20.192.58, IP = 81.20.192.58, Removing peer from correlator table failed, no match!
+
+
+ZFound and fixed a mismatch between the IP address ranges associated with
+the crypto maps on both ends. It looks like the messages have stopped since.
+NAT-T
+
+QM FSM Error
+
+The IPsec L2L VPN tunnel does not come up on the PIX firewall or ASA, and the QM FSM error message appears.
+
+One possible reason is the proxy identities, such as interesting traffic, access control list (ACL) or crypto ACL, do not match on both the ends. Check the configuration on both the devices, and make sure that the crypto ACLs match.
+
+Another possible reason is mismatching of the transform set parameters. Make sure that at both ends, VPN gateways use the same transform set with the exact same parameters.
+
+
+
+
+
+
+May 24 12:25:57 rock kernel: [   87.342695] NET: Registered protocol family 15
+May 24 12:26:07 rock racoon: ERROR: racoon: MLS support is not enabled.
+May 24 12:26:07 rock racoon: 2012-05-24 12:26:07: INFO: @(#)ipsec-tools 0.7.3 ([http://ipsec-tools.sourceforge.net)](http://ipsec-tools.sourceforge.net))
+May 24 12:26:07 rock racoon: 2012-05-24 12:26:07: INFO: @(#)This product linked OpenSSL 1.0.0e 6 Sep 2011 ([http://www.openssl.org/)](http://www.openssl.org/))
+May 24 12:26:07 rock racoon: 2012-05-24 12:26:07: INFO: Reading configuration from "/etc/racoon/racoon.conf"
+May 24 12:26:07 rock modprobe: FATAL: Error inserting padlock_sha (/lib/modules/3.1.10-1.9-desktop/kernel/drivers/crypto/padlock-sha.ko): No such device
+May 24 12:26:07 rock kernel: [   96.866193] padlock_sha: VIA PadLock Hash Engine not detected.
+May 24 12:26:07 rock kernel: [   96.873681] padlock_sha: VIA PadLock Hash Engine not detected.
+May 24 12:26:07 rock modprobe: FATAL: Error inserting padlock_sha (/lib/modules/3.1.10-1.9-desktop/kernel/drivers/crypto/padlock-sha.ko): No such device
+May 24 12:26:07 rock racoon: 2012-05-24 12:26:07: ERROR: bind(sockname:/var/run/racoon/racoon.sock): No such file or directory
+May 24 12:26:38 rock racoon: ERROR: racoon: MLS support is not enabled.
+
+
+
+
+[   59.249268] padlock_sha: VIA PadLock Hash Engine not detected.
+[   59.254985] padlock_sha: VIA PadLock Hash Engine not detected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Успешный запуск
+rock:~ # racoon -F -f /etc/racoon/racoon.conf
+Foreground mode.
+2012-05-24 12:08:39: INFO: @(#)ipsec-tools 0.7.3 ([http://ipsec-tools.sourceforge.net)](http://ipsec-tools.sourceforge.net))
+2012-05-24 12:08:39: INFO: @(#)This product linked OpenSSL 1.0.0e 6 Sep 2011 ([http://www.openssl.org/)](http://www.openssl.org/))
+2012-05-24 12:08:39: INFO: Reading configuration from "/etc/racoon/racoon.conf"
+2012-05-24 12:08:39: INFO: 81.20.192.58[500] used as isakmp port (fd=6)
+2012-05-24 12:08:39: INFO: 81.20.192.58[500] used for NAT-T
+
+
+
+
+
+
+
+2012-05-24 12:08:50: INFO: IPsec-SA request for 81.20.192.10 queued due to no phase1 found.
+2012-05-24 12:08:50: INFO: initiate new phase 1 negotiation: 81.20.192.58[500]<=>81.20.192.10[500]
+2012-05-24 12:08:50: INFO: begin Identity Protection mode.
+2012-05-24 12:08:50: INFO: received broken Microsoft ID: FRAGMENTATION
+2012-05-24 12:08:50: INFO: received Vendor ID: CISCO-UNITY
+2012-05-24 12:08:50: INFO: received Vendor ID: draft-ietf-ipsra-isakmp-xauth-06.txt
+2012-05-24 12:08:50: INFO: received Vendor ID: DPD
+2012-05-24 12:08:50: INFO: ISAKMP-SA established 81.20.192.58[500]-81.20.192.10[500] spi:dc4dbb17b8f27a0a:f433fcbf5a99bf37
+2012-05-24 12:08:51: INFO: initiate new phase 2 negotiation: 81.20.192.58[500]<=>81.20.192.10[500]
+2012-05-24 12:08:51: INFO: IPsec-SA established: ESP/Tunnel 81.20.192.10[0]->81.20.192.58[0] spi=66807384(0x3fb6658)
+2012-05-24 12:08:51: INFO: IPsec-SA established: ESP/Tunnel 81.20.192.58[500]->81.20.192.10[500] spi=1552115434(0x5c8366ea)
+^C2012-05-24 12:09:18: INFO: caught signal 2
+
+
+
+
+
+
+
+
+
+
+ip route add 192.168.113.0/24 via 81.20.192.58 src 81.20.192.58 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Доброго времени суток!
+
+ 
+
+IP адрес нашего GW 83.149.24.25
+
+ 
+
+С нашей стороны прописаны настройки IPSEC
+
+Предложений и возражений нет?
+
+Предлагаю прописать и завтра начать тестирование
+
+
+
+
+
+У нас пробовал на сети настоить на ASA. Удалось. Возмоно на PIX настройки должны быть похожие. 
+Ниже идут настройки на нашей ASA, но ip поменял на ваши. Может где сетки не совпадают или ещё какие расхождения, думаю для примера не важно
+
+
+interface Ethernet0/0.10
+ vlan 10
+ nameif WAN
+ security-level 0
+ ip address 83.149.24.25 255.255.255.224 
+ ospf mtu-ignore
+!
+
+
+# crypto ACL. Этот лист определяет политику, как SPD в setkey.conf.Возможно нужно 2 правила - туда и обратно
+access-list IPSEC_NLMK.KVK extended permit ip 10.10.0.0 255.255.255.0 any
+
+#Настройка transform set. Создали под названием ESP-DES-SHA и указали, что используем для 2-ой фазы. В мануалах можно посмотреть соответствие linux
+crypto ipsec transform-set ESP-DES-SHA esp-3des esp-sha-hmac 
+# Это наверно глобально для всех SA. Точно не знаю не читал
+crypto ipsec security-association lifetime seconds 3600
+crypto ipsec security-association lifetime kilobytes 4608000
+#Не знаю точно зачем
+crypto ipsec fragmentation after-encryption WAN
+crypto ipsec fragmentation after-encryption LAN
+crypto ipsec fragmentation after-encryption DMZ
+
+
+#Применяем crypto ACL
+crypto map VPNTunnels 142 match address IPSEC_NLMK.KVK
+#Выставляем pfs для 2-ой фазы
+crypto map VPNTunnels 142 set pfs group1
+#Указываем peer
+crypto map VPNTunnels 142 set peer 81.20.192.58 
+#Применяем transform set
+crypto map VPNTunnels 142 set transform-set ESP-DES-SHA
+#Указывает lifetime для конкретных SA наверно
+crypto map VPNTunnels 142 set security-association lifetime seconds 3600
+#Применяем к интерфейсу
+crypto map VPNTunnels interface WAN
+
+#Наверно применяем на интерфейсах isakmp
+crypto isakmp enable WAN
+crypto isakmp enable LAN
+crypto isakmp enable DMZ
+#Это настройки для 1 фазы (1440 минут - это 86400 в сек)
+crypto isakmp policy 10
+ authentication pre-share
+ encryption 3des
+ hash sha     
+ group 1      
+ lifetime 1440
+
+#Указываем, что использует туннель и вводит pre-share-key
+tunnel-group 81.20.192.58 type ipsec-l2l
+tunnel-group 81.20.192.58 ipsec-attributes
+ pre-shared-key ykvrljcnrg
+
+
+
+У Вас наверно должно быть примерно так. У нас нет PIX в сети, поэтому не уверен
+
+
+access-list IPSEC_NLMK.KVK extended permit ip 10.10.0.0 255.255.255.0 any
+
+ 
+!
+pre-shared-key ykvrljcnrg
+
+ 
+! Трафик определенный нашим ACL который будет шифроватся через туннель
+crypto map VPNTunnels 142 match address IPSEC_NLMK.KVK
+
+! кто будет принимать наше VPN соединение и терминировать его
+crypto map VPNTunnels 142 set peer 81.20.192.59
+
+! устанавливаем нашу схему шифрования трафика
+crypto map VPNTunnels 142 set transform-set 3des-sha
+! время жизни соединения
+crypto map VPNTunnels 142 set security-association lifetime seconds 3600
+
+
+
+
+
+
+Mode: Tunnel
+Encryption Protocol: esp-3des
+MAC-Algorithm for Authentication: esp-sha-hmac
+Perfect Forward Secrecy (PFS) : yes, 1 group
+SA Lifetype: 3600 sec
+
+[http://www.amazon.com/Linux-Programming-Interface-System-Handbook/dp/1593272200/ref=sr_1_1?ie=UTF8&qid=1303161332&sr=8-1](http://www.amazon.com/Linux-Programming-Interface-System-Handbook/dp/1593272200/ref=sr_1_1?ie=UTF8&qid=1303161332&sr=8-1)
+[http://www.amazon.com/Linux-Kernel-Development-Robert-Love/dp/0672329468/ref=sr_1_1?ie=UTF8&qid=1303161338&sr=8-1](http://www.amazon.com/Linux-Kernel-Development-Robert-Love/dp/0672329468/ref=sr_1_1?ie=UTF8&qid=1303161338&sr=8-1)
+[http://www.amazon.com/Understanding-Linux-Kernel-Third-Daniel/dp/0596005652/ref=sr_1_1?ie=UTF8&qid=1303163313&sr=8-1](http://www.amazon.com/Understanding-Linux-Kernel-Third-Daniel/dp/0596005652/ref=sr_1_1?ie=UTF8&qid=1303163313&sr=8-1)	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+crypto ipsec transform-set ESP-DES-SHA esp-des esp-sha-hmac 
+crypto ipsec security-association lifetime seconds 3600
+crypto ipsec security-association lifetime kilobytes 4608000
+crypto ipsec fragmentation after-encryption PSI-White
+crypto ipsec fragmentation after-encryption PSI-DMZ
+
+
+
+
+crypto map PSI-White_map 1 match address PSI-White_1_cryptomap
+crypto map PSI-White_map 1 set pfs group1
+crypto map PSI-White_map 1 set peer 80.75.128.2 
+crypto map PSI-White_map 1 set transform-set ESP-DES-SHA
+crypto map PSI-White_map 1 set security-association lifetime seconds 3600
+
+
+
+crypto isakmp policy 10
+ authentication pre-share
+ encryption des
+ hash sha
+ group 1
+ lifetime 3600
+
+
+
+tunnel-group 80.75.128.2 type ipsec-l2l
+tunnel-group 80.75.128.2 ipsec-attributes
+ pre-shared-key *
+
+
+
+
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.78 
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.5 
+
+
+static (PSI-DMZ,PSI-White) tcp interface 3389 192.168.253.2 3389 netmask 255.255.255.255 
+
+
+
+
+
+
+
+crypto ipsec transform-set ESP-DES-SHA esp-des esp-sha-hmac 
+crypto ipsec security-association lifetime seconds 3600
+crypto ipsec security-association lifetime kilobytes 4608000
+
+
+
+crypto isakmp keepalive 3600
+
+
+no access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.128.250 
+no access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.128.78 
+no access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.128.5 
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.250 
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.78 
+access-list PSI-White_1_cryptomap extended permit ip 81.20.192.0 255.255.255.224 host 80.75.131.5 
+
+
+
+Aug 19 18:06:56 [IKEv1]: Group = 80.75.128.2, IP = 80.75.128.2, Removing peer from correlator table failed, no match!
+Aug 19 18:06:59 [IKEv1]: Group = 80.75.128.2, IP = 80.75.128.2, QM FSM error (P2 struct &0xac55ef88, mess id 0xa7af8db2)!
+Aug 19 18:06:59 [IKEv1]: Group = 80.75.128.2, IP = 80.75.128.2, Removing peer from correlator table failed, no match!
+Aug 19 18:07:05 [IKEv1]: Group = 80.75.128.2, IP = 80.75.128.2, QM FSM error (P2 struct &0xac505460, mess id 0x7b58261)!
+Aug 19 18:07:05 [IKEv1]: Group = 80.75.128.2, IP = 80.75.128.2, Removing peer from correlator table failed, no match!
+
+
+Tunnel -  внутренние сети, инкапсулируются в туннель
+transport - просто траффик

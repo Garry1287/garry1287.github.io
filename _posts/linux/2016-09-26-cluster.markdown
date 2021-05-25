@@ -1,0 +1,82 @@
+---
+layout: post
+title:  "cluster"
+date:   2016-09-26 13:49:42 +0300
+categories: linux
+tags: linux
+---
+
+# cluster
+Heartbeat - продукт проекта Linux-HA, позволяющий реализовать механизм безотказной работы отдельных частей кластера.
+
+[http://habrahabr.ru/post/104621/](http://habrahabr.ru/post/104621/)
+
+[http://www.ibm.com/developerworks/ru/linux/library/l-halinux/](http://www.ibm.com/developerworks/ru/linux/library/l-halinux/)
+[http://www.ibm.com/developerworks/ru/library/l-linux-ha/](http://www.ibm.com/developerworks/ru/library/l-linux-ha/)
+
+
+[http://metalcandy.ru/how-to-forge-centos/465-efficient-high-available-loadbalanced-cluster-on-centos](http://metalcandy.ru/how-to-forge-centos/465-efficient-high-available-loadbalanced-cluster-on-centos)
+[https://access.redhat.com/knowledge/docs/ru-RU/Red_Hat_Enterprise_Linux/5/html/Cluster_Suite_Overview/s1-lvs-overview-CSO.html](https://access.redhat.com/knowledge/docs/ru-RU/Red_Hat_Enterprise_Linux/5/html/Cluster_Suite_Overview/s1-lvs-overview-CSO.html)
+[http://docs.pcn.com.ua/PDF/root.ua/rootua16/00000000/5-1.html](http://docs.pcn.com.ua/PDF/root.ua/rootua16/00000000/5-1.html)
+[http://www.linuxvirtualserver.org/whatis.html](http://www.linuxvirtualserver.org/whatis.html)
+[http://docstore.mik.ua/manuals/ru/ha_cluster/index.html](http://docstore.mik.ua/manuals/ru/ha_cluster/index.html)
+[http://vilgelm.me/otkazoustojchivyj-klaster-na-ubuntu/](http://vilgelm.me/otkazoustojchivyj-klaster-na-ubuntu/)
+[http://www.redhat.com/support/resources/howto/piranha/](http://www.redhat.com/support/resources/howto/piranha/)
+[http://stopxaker.ru/showthread.php?t=1554](http://stopxaker.ru/showthread.php?t=1554)
+[http://www.rhd.ru/docs/manuals/enterprise/RHEL-AS-2.1-Manual/install-guide/s1-lvs-block-diagram.html](http://www.rhd.ru/docs/manuals/enterprise/RHEL-AS-2.1-Manual/install-guide/s1-lvs-block-diagram.html)
+[http://www.rhd.ru/docs/manuals/enterprise/RHEL-3-Manual/rh-cs-ru-3/ch-lvs-overview.html](http://www.rhd.ru/docs/manuals/enterprise/RHEL-3-Manual/rh-cs-ru-3/ch-lvs-overview.html)
+[http://www.ultramonkey.org/3/linux-ha.html](http://www.ultramonkey.org/3/linux-ha.html)
+[http://www.fwbuilder.org/4.0/docs/users_guide/heartbeat_cluster.html](http://www.fwbuilder.org/4.0/docs/users_guide/heartbeat_cluster.html)
+
+[http://www.ntua.gr/lvsp/Joseph.Mack/HOWTO/](http://www.ntua.gr/lvsp/Joseph.Mack/HOWTO/)
+
+[http://habrahabr.ru/post/111056/](http://habrahabr.ru/post/111056/)
+[http://serverfault.com/questions/101513/heartbeat-vs-ucarp](http://serverfault.com/questions/101513/heartbeat-vs-ucarp)
+[http://habrahabr.ru/post/137476/](http://habrahabr.ru/post/137476/)
+[http://habrahabr.ru/post/104621/](http://habrahabr.ru/post/104621/)
+
+
+Suse
+[http://www.novell.com/communities/node/4846/load-balancing-howto-lvs-ldirectord-heartbeat-2](http://www.novell.com/communities/node/4846/load-balancing-howto-lvs-ldirectord-heartbeat-2)
+
+
+
+[http://www.keepalived.org/LVS-NAT-Keepalived-HOWTO.html](http://www.keepalived.org/LVS-NAT-Keepalived-HOWTO.html)
+
+[http://www.ucexpert.ru/archives/3501](http://www.ucexpert.ru/archives/3501)
+
+
+
+LVS работает на 4 уровне Ip+port
+Позволяет балансировать нагрузку на серверы через балансер (директор). Механизм ipvsadm
+Heartbeat, keepalived, ucarp используются для отказоустойчивости, то есть один общий ip на всю конструкцию на 2 или более директоров
+
+The Distributed Replicated Block Device (DRBD) is a software-based, shared-nothing,
+ replicated storage solution mirroring the content of block devices 
+(hard disks, partitions, logical volumes etc.) between hosts.
+
+
+
+
+
+
+[http://www.opennet.ru/base/sys/drbd_gentoo.txt.html](http://www.opennet.ru/base/sys/drbd_gentoo.txt.html)
+[http://www.gentoo.ru/node/20600](http://www.gentoo.ru/node/20600)
+[http://xgu.ru/wiki/%D0%9E%D1%82%D0%BA%D0%B0%D0%B7%D0%BE%D1%83%D1%81%D1%82%D0%BE%D0%B9%D1%87%D0%B8%D0%B2%D1%8B%D0%B9_%D0%BA%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80_%D0%B4%D0%BB%D1%8F_%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8](http://xgu.ru/wiki/%D0%9E%D1%82%D0%BA%D0%B0%D0%B7%D0%BE%D1%83%D1%81%D1%82%D0%BE%D0%B9%D1%87%D0%B8%D0%B2%D1%8B%D0%B9_%D0%BA%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80_%D0%B4%D0%BB%D1%8F_%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8)
+[http://www.lexpr.ru/heartbeat_claster](http://www.lexpr.ru/heartbeat_claster)
+[http://www.ibm.com/developerworks/ru/library/es-linuxclusterintro/](http://www.ibm.com/developerworks/ru/library/es-linuxclusterintro/)
+
+
+
+
+
+
+
+
+
+
+Simple manual failover cluster with DRBD, LVM and KVM on Ubuntu 12.04 Precise Pangolin
+
+[http://www.bluejay.nl/2012/06/23/simple-manual-failover-cluster-with-drbd-lvm-and-kvm-on-ubuntu-12-04-precise-pangolin/](http://www.bluejay.nl/2012/06/23/simple-manual-failover-cluster-with-drbd-lvm-and-kvm-on-ubuntu-12-04-precise-pangolin/)
+
+

@@ -1,0 +1,24 @@
+---
+layout: post
+title:  "npe-g2"
+date:   2013-05-18 23:29:57 +0400
+categories: npe-g2
+tags: cisco
+---
+
+# npe-g2
+[http://www.cisco.com/c/en/us/td/docs/routers/7200/install_and_upgrade/network_process_engine_install_config/npense/4448o6.html#wpxref30477](http://www.cisco.com/c/en/us/td/docs/routers/7200/install_and_upgrade/network_process_engine_install_config/npense/4448o6.html#wpxref30477)
+
+The NPE-G2 has its own Cisco IOS software image with the prefix "c7200p-" in the software images filenames, including the boot image. The NPE-G2 does not boot up with a software image with the prefix "c7200-". Previous network processing engines, or the network services engine, do not boot up with the "c7200p-" boot image. They use the prefix "c7200-".
+
+[http://www.cisco.com/c/en/us/td/docs/routers/7200/install_and_upgrade/network_process_engine_install_config/npense/4448pf.html](http://www.cisco.com/c/en/us/td/docs/routers/7200/install_and_upgrade/network_process_engine_install_config/npense/4448pf.html)
+
+[http://forum.nag.ru/forum/index.php?showtopic=63038](http://forum.nag.ru/forum/index.php?showtopic=63038)
+
+
+[http://www.cisco.com/c/en/us/products/routers/7201-router/index.html](http://www.cisco.com/c/en/us/products/routers/7201-router/index.html)
+
+The Cisco 7201 router extends the Cisco 7200 Series innovation leadership with a new 1RU compact form factor router offering not only high-performance through the integrated fixed Network Processing Engine (NPE-G2) but also a low power consumption routing solution.
+
+
+Cisco 7201 - это чистый NPE-G2

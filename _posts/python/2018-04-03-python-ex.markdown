@@ -1,0 +1,43 @@
+---
+layout: post
+title:  "python-ex"
+date:   2018-04-03 14:08:06 +0300
+categories: python
+tags: python
+---
+
+# python-ex
+if __name__ == "__main__"
+
+[http://fkn.ktu10.com/?q=node/2753](http://fkn.ktu10.com/?q=node/2753)
+[http://python.su/forum/topic/12436/](http://python.su/forum/topic/12436/)
+[http://stackoverflow.com/questions/419163/what-does-if-name-main-do](http://stackoverflow.com/questions/419163/what-does-if-name-main-do)
+
+ For example, if the python interpreter is running that module (the source file) as the main program, it sets the special __name__ variable to have a value "__main__". 
+  If this file is being imported from another module, __name__ will be set to the module's name.
+
+  __name__   - переменная содержащая __main__  если интерпритатор запустил модуль как главную программу
+  Если модуль импортирован, то __name__  содержить имя модуля
+  
+Попробую другими словами объяснить, как я сам на днях это понял.
+
+При импорте кода из данного модуля значение __name__ будет иметь имя того модуля, в который импортируется содержимое этого. 
+Значит код под условием выполняться не будет. Если запустить на выполнение сам этот файл, то условие if __name__ == ‘__main__’: выполнится.
+
+
+Вообще говоря мы его весь и исполняем. Потому что именно исполнение инструкций def, class и т.д. создает их как объекты типа “функция”, “класс” соответственно.
+Когда мы используем их из этого модуля мы ссылаемся уже на объекты, созданные этими конструкциями.
+Соответственно для того, чтобы отделить код, исполняемый при запуске модуля в качестве основного, используется конструкция
+
+
+Пример
+
+
+#!/usr/bin/env python
+
+
+def main():
+    print ("Hello")
+
+if __name__ == "__main__":
+    main()

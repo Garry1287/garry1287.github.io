@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "ddos"
+date:   2016-01-02 08:58:26 +0300
+categories: ddos
+tags: ddos
+---
+
+# ddos
+[http://habrahabr.ru/post/51574/](http://habrahabr.ru/post/51574/)
+[http://habrahabr.ru/post/213973/](http://habrahabr.ru/post/213973/)
+[http://habrahabr.ru/post/215543/](http://habrahabr.ru/post/215543/)
+[http://habrahabr.ru/post/264579/](http://habrahabr.ru/post/264579/)
+
+[https://www.us-cert.gov/ncas/alerts/TA13-088A](https://www.us-cert.gov/ncas/alerts/TA13-088A)
+
+[https://xakep.ru/2011/12/06/57950/](https://xakep.ru/2011/12/06/57950/)

@@ -1,0 +1,214 @@
+---
+layout: post
+title:  "procmail"
+date:   2014-03-29 05:25:57 +0400
+categories: mail
+tags: mail
+---
+
+# procmail
+begin routers
+
+procmail:
+  driver = accept
+  local_parts = printer
+  require_files = /root/.procmailrc:/usr/bin/procmail
+  transport = procmail_pipe
+
+procmail_pipe:
+  driver = pipe
+  command = "/usr/local/bin/procmail -t -m"
+  temp_errors = *
+  timeout_defer = true
+  timeout = 1h
+
+
+
+procmailrc
+PATH=$HOME/bin:/usr/bin:/sbin:/usr/sbin:/bin:/usr/local/bin:/usr/local/sbin
+MAILDIR=$HOME/Mail/             # Youd better make sure it exists
+LOGFILE=$HOME/log/procmail.log
+LOGABSTRACT=all
+LOCKTIMEOUT=600
+VERBOSE=yes
+YEARM=`/bin/date +%Y-%m`
+
+:0
+* ^To.*printer@sc.ru
+| /root/bin/hello.sh 
+
+
+
+
+
+
+
+
+procmail_pipe:
+driver = pipe
+command = "/usr/bin/procmail"
+user = ${local_part}
+delivery_date_add = true
+envelope_to_add = true
+return_path_add = true
+from_hack
+
+
+
+
+
+# transport
+procmail_pipe:
+  driver = pipe
+  command = /usr/local/bin/procmail -d $local_part
+  return_path_add
+  delivery_date_add
+  envelope_to_add
+  check_string = "From "
+  escape_string = ">From "
+  umask = 077
+  user = $local_part
+  group = mail
+
+# router
+procmail:
+  driver = accept
+  check_local_user
+  transport = procmail_pipe
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+begin routers
+...
+procmail:
+  driver = accept
+  check_local_user
+  local_parts = my-user
+  transport = transport_pipe_procmail
+  require_files = ${local_part}:${home}:${home}/.procmailrc:/usr/local/bin/procmail
+  no_verify
+
+begin transports
+...
+transport_pipe_procmail:
+  driver = pipe
+  command = "/usr/local/bin/procmail -t"
+  temp_errors = *
+  timeout_defer = true
+  timeout = 1h
+
+begin transports
+...
+transport_pipe_procmail:
+  driver = pipe
+  command = "/usr/local/bin/procmail -t -m /path/to/procmailrc"
+  temp_errors = *
+  timeout_defer = true
+  timeout = 1h
+
+
+
+
+
+procmailrc:
+
+Код: Выделить всё
+PATH=$HOME/bin:/usr/bin:/sbin:/usr/sbin:/bin:/usr/local/bin:/usr/local/sbin
+MAILDIR=$HOME/Mail/             # Youd better make sure it exists
+LOGFILE=$HOME/log/procmail.log
+LOGABSTRACT=all
+LOCKTIMEOUT=600
+VERBOSE=yes
+YEARM=`/bin/date +%Y-%m`
+
+:0 H
+* ^From.*MAILER-DAEMON
+/dev/null
+
+:0 c
+$YEARM
+
+:0 H
+* ^To.*my-user@myhost
+$HOME/log/test
+
+
+
+0: 
+| (formail -r; cat $HOME/vacations.txt) | sendmail -t 
+
+
+А теперь формируем сообщение (i - игнорируем сообщение об ошибках):
+:0i
+| ( formail -rI"From: postmaster@anrb.ru" -I"To:$Recip" -I"Subject: Suspicious attachment in the mail for you." -A"X-Loop: loop@loop.anrb.ru" ; date ; cat /etc/1251-1 ; echo $Snd ; cat /etc/1251-2 ; cat /etc/koi8-1 ; echo $Snd ; cat /etc/koi8-2 ; cat /etc/en1 ; echo $Snd ; cat /etc/en2 ) | /usr/sbin/sendmail -t
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+begin routers
+...
+procmail:
+  driver = accept
+  local_parts = 
+  transport = transport_pipe_procmail
+  require_files = ${local_part}:${home}:${home}/.procmailrc:/usr/local/bin/procmail
+  no_verify
+
+
+
+
+:0
+* !^FROM_DAEMON
+* !^FROM_MAILER
+* !^X-Loop: myaddress@myhost.mydomain.org
+| $HOME/bin/my.script 
+
+
+
+
+
+
+
+[http://ru.5.ispdoc.com/index.php/%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B9_%D1%84%D0%B0%D0%B9%D0%BB_Exim](http://ru.5.ispdoc.com/index.php/%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B9_%D1%84%D0%B0%D0%B9%D0%BB_Exim)
+[http://www.opennet.ru/man.shtml?topic=procmail&category=1&russian=0](http://www.opennet.ru/man.shtml?topic=procmail&category=1&russian=0)
+[http://www.vnc.org.ua/procmail/procmailrc.htm](http://www.vnc.org.ua/procmail/procmailrc.htm)
+[http://www.opennet.ru/base/net/exim_dump.txt.html](http://www.opennet.ru/base/net/exim_dump.txt.html)
+[http://reonaydo.org/nastrojka-exim-procmail/](http://reonaydo.org/nastrojka-exim-procmail/)
+[http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_pipe_transport.html](http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_pipe_transport.html)
+[http://home.arcor.de/hm-gerhards/download/netbsd_imap/exim_single_smarthost.conf](http://home.arcor.de/hm-gerhards/download/netbsd_imap/exim_single_smarthost.conf)
+[https://www.freebsd.org/doc/ru_RU.KOI8-R/books/handbook/mail-procmail.html](https://www.freebsd.org/doc/ru_RU.KOI8-R/books/handbook/mail-procmail.html)
+[http://forum.lissyara.su/viewtopic.php?t=24449](http://forum.lissyara.su/viewtopic.php?t=24449)
+[https://github.com/Exim/exim/wiki/RoutingToProcmail](https://github.com/Exim/exim/wiki/RoutingToProcmail)
+[https://forums.cpanel.net/threads/why-cant-exim-and-procmail-work-together.245801/](https://forums.cpanel.net/threads/why-cant-exim-and-procmail-work-together.245801/)

@@ -1,0 +1,861 @@
+---
+layout: post
+title:  "monit"
+date:   2011-09-12 11:18:57 +0400
+categories: linux
+tags: linux
+---
+
+# monit
+Нат правило для интернета Радиус серверам
+
+iptables -t nat -A POSTROUTING -s 192.168.128.0/24 -j SNAT --to-source 81.20.192.19
+
+
+root      6280  1.2  0.6 1904868 28220 ?       Ssl  Dec22  88:18 /usr/local/sbin/radiusd
+root     23959  0.0  0.0   8076   868 pts/0    S+   11:22   0:00 grep --color=auto radius
+
+
+
+
+mkdir /var/run/monit/
+
+
+tcp        0      0 192.168.128.8:1521      0.0.0.0:*               LISTEN      1466/tnslsnr 
+
+tcp        0      0 0.0.0.0:7788            0.0.0.0:*               LISTEN      1466/tnslsnr
+
+
+[http://linuxguru.ru/other/ustanovka-monit-v-debian/](http://linuxguru.ru/other/ustanovka-monit-v-debian/)
+
+172.16.154.1
+ping 172.16.154.4
+
+Dec 28 10:26:21 radius1 monit[29735]: touch: cannot touch `/var/lock/subsys/monit': No such file or directory
+Dec 28 10:26:26 radius1 monit[29750]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:26:26 radius1 monit[29750]: Trying the next mail server 'localhost:25'
+Dec 28 10:26:26 radius1 monit[29750]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:26:26 radius1 monit[29750]: No mail servers are available
+Dec 28 10:26:31 radius1 monit[29750]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:26:31 radius1 monit[29750]: Trying the next mail server 'localhost:25'
+Dec 28 10:26:31 radius1 monit[29750]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:26:31 radius1 monit[29750]: No mail servers are available
+Dec 28 10:26:31 radius1 monit[29750]: Alert handler failed, retry scheduled for next cycle
+Dec 28 10:28:38 radius1 monit[29750]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:28:38 radius1 monit[29750]: Trying the next mail server 'localhost:25'
+Dec 28 10:28:38 radius1 monit[29750]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:28:38 radius1 monit[29750]: No mail servers are available
+Dec 28 10:28:38 radius1 monit[29750]: Alert handler failed, retry scheduled for next cycle
+Dec 28 10:30:45 radius1 monit[29750]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:30:45 radius1 monit[29750]: Trying the next mail server 'localhost:25'
+Dec 28 10:30:45 radius1 monit[29750]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:30:45 radius1 monit[29750]: No mail servers are available
+Dec 28 10:30:45 radius1 monit[29750]: Alert handler failed, retry scheduled for next cycle
+Dec 28 10:32:50 radius1 monit: Control file syntax OK
+Dec 28 10:32:55 radius1 monit[29750]: Sendmail: error receiving data from the mailserver '192.168.128.1' -- Resource temporarily unavailable
+Dec 28 10:32:55 radius1 monit[29750]: Alert handler failed, retry scheduled for next cycle
+Dec 28 10:32:55 radius1 monit[29948]: Shutting down monit ..done
+Dec 28 10:32:56 radius1 monit: Control file syntax OK
+Dec 28 10:32:56 radius1 monit[29962]: Starting monit Starting monit daemon with http interface at [192.168.128.8:2812]
+Dec 28 10:32:56 radius1 monit[29975]: Starting monit daemon with http interface at [192.168.128.8:2812]
+Dec 28 10:32:56 radius1 monit[29977]: Starting monit HTTP server at [192.168.128.8:2812]
+Dec 28 10:32:56 radius1 monit[29977]: monit HTTP server started
+Dec 28 10:32:56 radius1 monit[29977]: 'system_radius1.sc.int' Monit started
+Dec 28 10:32:56 radius1 monit[29962]: ..done
+Dec 28 10:32:56 radius1 monit[29962]: touch: cannot touch `/var/lock/subsys/monit': No such file or directory
+Dec 28 10:33:01 radius1 monit[29977]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:33:01 radius1 monit[29977]: Trying the next mail server 'localhost:25'
+Dec 28 10:33:01 radius1 monit[29977]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:33:01 radius1 monit[29977]: No mail servers are available
+Dec 28 10:33:06 radius1 monit[29977]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:33:06 radius1 monit[29977]: Trying the next mail server 'localhost:25'
+Dec 28 10:33:06 radius1 monit[29977]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:33:06 radius1 monit[29977]: No mail servers are available
+Dec 28 10:33:06 radius1 monit[29977]: Alert handler failed, retry scheduled for next cycle
+Dec 28 10:34:31 radius1 ntp[29994]: Shutting down network time protocol daemon (NTPD)..done
+Dec 28 10:35:15 radius1 monit[29977]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:35:15 radius1 monit[29977]: Trying the next mail server 'localhost:25'
+Dec 28 10:35:15 radius1 monit[29977]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:35:15 radius1 monit[29977]: No mail servers are available
+Dec 28 10:35:15 radius1 monit[29977]: Alert handler failed, retry scheduled for next cycle
+Dec 28 10:35:17 radius1 monit[29977]: 'ntp' process is not running
+Dec 28 10:35:22 radius1 monit[29977]: Cannot open a connection to the mailserver '192.168.128.1:25' -- Connection timed out
+Dec 28 10:35:22 radius1 monit[29977]: Trying the next mail server 'localhost:25'
+Dec 28 10:35:22 radius1 monit[29977]: Cannot open a connection to the mailserver 'localhost:25' -- Transport endpoint is not connected
+Dec 28 10:35:22 radius1 monit[29977]: No mail servers are available
+Dec 28 10:35:22 radius1 monit[29977]: 'ntp' trying to restart
+Dec 28 10:35:22 radius1 monit[29977]: 'ntp' start: /etc/init.d/ntp
+Dec 28 10:30:38 radius1 ntpd[30054]: ntpd 4.2.6p3@1.2290 Sat Oct 29 17:37:03 UTC 2011 (1)
+Dec 28 10:30:38 radius1 ntpd[30055]: proto: precision = 0.552 usec
+Dec 28 10:30:38 radius1 ntpd[30055]: line 72 column 1 syntax error, unexpected T_EOC, expecting T_Default or T_Ipv4_flag or T_Ipv6_flag or T_String
+Dec 28 10:30:38 radius1 ntpd[30055]: syntax error in /etc/ntp.conf line 72, column 1
+Dec 28 10:30:38 radius1 ntpd[30055]: ntp_io: estimated max descriptors: 1024, initial socket boundary: 16
+Dec 28 10:30:38 radius1 ntpd[30055]: Listen and drop on 0 v4wildcard 0.0.0.0 UDP 123
+Dec 28 10:30:38 radius1 ntpd[30055]: Listen and drop on 1 v6wildcard :: UDP 123
+Dec 28 10:30:38 radius1 ntpd[30055]: Listen normally on 2 lo 127.0.0.1 UDP 123
+Dec 28 10:30:38 radius1 ntpd[30055]: Listen normally on 3 vlan1027 192.168.128.8 UDP 123
+Dec 28 10:30:38 radius1 ntpd[30055]: peers refreshed
+Dec 28 10:30:38 radius1 ntpd[30055]: Listening on routing socket on fd #20 for interface updates
+
+
+
+
+m/monit
+[http://linuxguru.ru/monitoring/ustanovka-i-nastrojka-mmonit/](http://linuxguru.ru/monitoring/ustanovka-i-nastrojka-mmonit/)
+[http://en.gentoo-wiki.com/wiki/Monit](http://en.gentoo-wiki.com/wiki/Monit)
+[http://mihalytch.org.ua/administration/monitoring-serverov-2-html.html](http://mihalytch.org.ua/administration/monitoring-serverov-2-html.html)
+[http://www.lissyara.su/articles/freebsd/trivia/monit/](http://www.lissyara.su/articles/freebsd/trivia/monit/)
+[http://habrahabr.ru/post/73506/](http://habrahabr.ru/post/73506/)
+[http://muff.kiev.ua/content/monit-nadezhnyi-monitoring-sistemy](http://muff.kiev.ua/content/monit-nadezhnyi-monitoring-sistemy)
+[http://linux.die.net/man/1/monit](http://linux.die.net/man/1/monit)
+[http://rus-linux.net/lib.php?name=MyLDP/admin/munin.html](http://rus-linux.net/lib.php?name=MyLDP/admin/munin.html)
+[http://habrahabr.kz/admin_793_monit-dostatochno-prostoe-no-odnovremenno-udobnoe-dostatochno-moschnoe-i-nadezhnoe-sredstva-dlya-monitoringa-vashih-serverov.html](http://habrahabr.kz/admin_793_monit-dostatochno-prostoe-no-odnovremenno-udobnoe-dostatochno-moschnoe-i-nadezhnoe-sredstva-dlya-monitoringa-vashih-serverov.html)
+[http://habrahabr.kz/admin_794_monit-mmonit-prostoy-i-besplatnyy-monitoring-neskolkih-serverov.html](http://habrahabr.kz/admin_794_monit-mmonit-prostoy-i-besplatnyy-monitoring-neskolkih-serverov.html)
+[http://www.rusdoc.ru/articles/monit__mmonit__prostoj_i_besplatnyj_monitoring_neskolkix_serverov/18582/](http://www.rusdoc.ru/articles/monit__mmonit__prostoj_i_besplatnyj_monitoring_neskolkix_serverov/18582/)
+
+
+
+
+
+
+
+
+
+1...проверка физической доступности оборудования; (PING, TRACEROUTE)
+
+2...проверка состояния (работоспособности) служб и сервисов, запущенных в сети; (MONIT)
+
+3...детальная проверка не критичных, но важных параметров функционирования сети: производительности, загрузки и т.п.;(Smart, Cacti, Zenoss, Zabbix и другие )
+    Загрузка процессора
+    Использование дискового пространства
+    Температура процессора/жесткого диска/материнской платы
+    Скорость и состояние вентилятора
+    Любые другие метрики, доступные по SNMP
+4...проверка параметров, специфичных для сервисов и служб данного конкретного окружения (наличие некоторых значений в таблицах БД, содержимое лог-файлов)
+(Логирование)
+
+5.Сетевой трафик и использование пропускной способности (cacti, ntop)
+
+6. Оповещение
+
+ 
+
+RAID-массивы контролируются:
+
+    по состоянию физических дисков (норма/сбой);
+    по состоянию логических дисковых массивов: «количество переназначенных блоков» (свидетельство о возможном повреждении поверхности диска) и «статус логических массивов» (норма/сбой).
+
+
+
+
+
+
+Мониторинг файловой системы включает в себя периодическое выполнение следующих операций:
+
+    Проверка существования файлов и папок
+    Проверка размера файла, времени модификации и его контрольной суммы
+    Проверка количества файлов в папке и их общего размера
+    Получение содержимого файла для анализа и редактирования
+    Проверка содержимого папки
+
+О состоянии аппаратного обеспечения сервера и дисковой подсистемы свидетельствуют:
+
+    аппаратные ошибки дисков;
+    состояние функции SMART;
+    дополнительная диагностика RAID;
+    производительность и загрузка дисковой подсистемы;
+    скорость реакции дисковой подсистемы;
+    объем занятого/свободного места на дисках;
+    исполнение процедур резервного копирования;
+    события аудита доступа к ресурсам файлового сервера;
+    события, связанные с квотами файловой системы;
+    конфигурация сетевого экрана, касающаяся файлового сервера;
+    DFS/FRS, DFS-R.
+
+ «Здоровье» сервера — состояние дисков (SMART), свободное место, загрузка процессора, загрузка памяти.
+
+
+
+
+    напряжение питания;
+    скорость вращения вентиляторов охладителей;
+    температура процессоров;
+    температура внутри системного блока.
+
+
+
+
+
+
+
+Logrotate configuration for monit
+
+/var/log/monit.log {
+    missingok
+    notifempty
+    size 100k
+    create 0644 root root
+    postrotate
+        /bin/kill -HUP `cat /var/run/monit.pid 2>/dev/null` 2> /dev/null || true
+    endscript
+}
+
+
+
+
+
+
+
+
+check filesystem datafs with path /dev/sda2
+  if space usage > 90% then alert
+
+check filesystem datafs with path /dev/sda1
+  if space usage > 90% then alert
+
+check filesystem datafs with path /dev/sda5
+  if space usage > 90% then alert
+
+check filesystem datafs with path /dev/sda6
+  if space usage > 90% then alert
+
+
+
+
+
+    Загрузка процессора
+check system localhost
+  if loadavg (1min) > 6 then alert
+  if loadavg (5min) > 3 then alert
+  if memory usage > 75% then alert
+  if swap usage > 25% then alert
+  if cpu usage (user) > 70% then alert
+  if cpu usage (system) > 30% then alert
+  if cpu usage (wait) > 20% then alert
+
+
+
+#  check system myhost.mydomain.tld
+#    if loadavg (1min) > 4 then alert
+#    if loadavg (5min) > 2 then alert
+#    if memory usage > 75% then alert
+#    if swap usage > 25% then alert
+#    if cpu usage (user) > 70% then alert
+#    if cpu usage (system) > 30% then alert
+#    if cpu usage (wait) > 20% then alert
+
+
+
+
+ Использование дискового пространства
+
+#  check filesystem datafs with path /dev/sdb1
+#    start program  = "/bin/mount /data"
+#    stop program  = "/bin/umount /data"
+#    if failed permission 660 then unmonitor
+#    if failed uid root then unmonitor
+#    if failed gid disk then unmonitor
+#    if space usage > 80% for 5 times within 15 cycles then alert
+#    if space usage > 99% then stop
+#    if inode usage > 30000 then alert
+#    if inode usage > 99% then stop
+#    group serve
+
+check filesystem datafs with path /dev/md2
+  if space usage > 90% then alert
+
+check filesystem datafs with path /dev/xvda3
+  if space usage > 80% then exec "/usr/local/bin/emergency.sh"
+  if space usage > 90% then alert
+
+#!/bin/sh
+/bin/rm -rf /usr/local/var/log/radius/radacct 
+
+
+Для виртуалок cpu user > 90
+	cpy sy >25	
+    Температура процессора/жесткого диска/материнской платы
+
+Температура процессора
+sensors | grep Core  | awk -F" " '{print $3}'
++58.0°C
++58.0°C
+
+sensors | grep Core  | awk -F" " '{printf "%d", $3}'
+
+
+
+
+Температура диска
+hddtemp /dev/sda
+
+или
+sudo /usr/sbin/smartctl -a /dev/sda | grep Temp | awk -F" " '{printf "%d",$10}'
+
+
+
+
+
+Monitor CPU Temperature mbmon required
+
+check program CPU with path "/usr/local/etc/monit/scripts/cpu_temp.sh"
+    if status > 60 then alert
+    group temperature
+
+Script /usr/local/etc/monit/scripts/cpu_temp.sh
+
+#!/bin/sh
+TP=`mbmon -c 1 -r | grep TEMP1 | awk '{ printf "%d",$3 }'`
+#echo $TP
+exit $TP
+
+
+
+
+
+
+
+Monitor HDD Temperature (/dev/ada0 in example) smartmontools required
+
+check program HDD_80 with path "/usr/local/etc/monit/scripts/ada0_temp.sh"
+    if status > 45 then alert
+    group temperature
+
+Script /usr/local/etc/monit/scripts/ada0_temp.sh
+
+#!/bin/sh
+TP=`/usr/local/sbin/smartctl -a /dev/ada0 | grep Temp | awk -F " " '{printf "%d",$10}'`
+echo $TP # for debug only
+exit $TP
+
+Note: Don't forget to enable SMART. Run /usr/local/sbin/smartctl -s on /dev/ada0 on every boot. 
+
+
+
+
+
+
+
+
+
+
+
+
+Примеры monit для организации мониторинга
+
+
+
+
+set daemon  10
+set logfile syslog facility log_daemon 
+check process cron with pidfile /var/run/crond.pid
+  start program = "/etc/init.d/cron start"
+  stop program  = "/etc/init.d/cron stop"
+
+     
+  For more examples, see the example section below.
+
+       Testing the RADIUS protocol
+
+       The RADIUS test is similar to the other protocol tests, but in addition allows extra optional parameters.
+
+       IF FAILED [host] [port] [type] PROTOCOL radius [SECRET string] THEN action [ELSE IF SUCCEEDED [[<X>] <Y> CYCLES] THEN action]
+
+       SECRET: you may specify an alternative secret, default is "testing123".
+
+       RADIUS example:
+
+        check process radiusd with pidfile /var/run/radiusd.pid
+              start program = "/etc/init.d/freeradius start"
+              stop program = "/etc/init.d/freeradius stop"
+              if failed host 127.0.0.1 port 1812 type udp protocol radius
+                  secret testing123
+              then alert
+              if 5 restarts within 5 cycles then timeout
+
+
+2812
+
+ check process radiusd with pidfile /usr/local/var/run/radiusd/radiusd.pid
+   start program = "/etc/init.d/rc.radiusd start"
+   stop program = "/etc/init.d/rc.radiusd stop"
+   if failed host 192.168.128.8 port 1812 type udp protocol RADIUS secret testing123 then alert
+   if 5 restarts within 5 cycles then timeout
+   depends on oracle
+
+
+1521
+
+        check process oracle with pidfile /var/run/oracle.pid
+              start program = "/etc/init.d/oracle start"
+              stop program  = "/etc/init.d/oracle stop"
+              mode active # Not necessary really, since it's the default
+              if failed port 9001 then restart
+              group database
+
+check process ntp with pidfile /var/run/ntp/ntpd.pid
+  start program = "/etc/init.d/ntp start"
+  stop program = "/etc/init.d/ntp stop"
+  if failed port 123 then restart
+
+
+check process mysql with pidfile /opt/mysql/data/myserver.mydomain.pid
+   group database
+   start program = "/etc/init.d/mysql start"
+   stop program = "/etc/init.d/mysql stop"
+   if failed host 192.168.1.1 port 3306 protocol mysql then restart
+   if 5 restarts within 5 cycles then timeout
+   depends on mysql_bin
+   depends on mysql_rc
+
+ check file mysql_bin with path /opt/mysql/bin/mysqld
+   group database
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+ check file mysql_rc with path /etc/init.d/mysql
+   group database
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+
+
+
+
+check process postgres with pidfile /var/postgres/postmaster.pid
+   group database
+   start program = "/etc/init.d/postgresql start"
+   stop  program = "/etc/init.d/postgresql stop"
+   if failed unixsocket /var/run/postgresql/.s.PGSQL.5432 protocol pgsql 
+      then restart
+   if failed host 192.168.1.1 port 5432 protocol pgsql then restart
+   if 5 restarts within 5 cycles then timeout
+
+
+
+
+
+
+udp        0      0 0.0.0.0:1812            0.0.0.0:*                           6280/radiusd        
+udp        0      0 0.0.0.0:1813            0.0.0.0:*                           6280/radiusd
+
+
+ check process sshd with pidfile /var/run/sshd.pid
+   start program  "/etc/init.d/sshd start"
+   stop program  "/etc/init.d/sshd stop"
+   if failed port 22 protocol ssh then restart
+   if 5 restarts within 5 cycles then timeout
+
+
+
+check process freeradius with pidfile "/var/run/freeradius/radiusd.pid"
+        start = "/etc/init.d/freeradius start"
+        stop = "/etc/init.d/freeradius stop"
+
+        if failed host 192.168.1.1 port 1812 type UDP  then restart
+
+        if cpu usage is greater than 60 percent for 2 cycles then alert
+        if cpu usage > 90% for 5 cycles then restart
+        if totalmem usage > 40% for 5 cycles then restart
+        if 3 restarts within 4 cycles then timeout
+
+
+
+
+check process freerad with pidfile /var/run/freeradius/freeradius.pid
+
+start program = "/etc/init.d/freeradius start"
+
+stop program = "/etc/init.d/freeradius stop"
+
+if changed pid then restart
+
+depends on postgres
+
+
+check process postgres with pidfile /var/run/postgresql/8.2-main.pid
+
+if changed pid then unmonitor
+
+if failed port 5432 protocol pgsql then unmonitor
+
+
+
+check process named with pidfile /var/lib/named/var/run/named/named.pid
+   start program = "/etc/init.d/named start"
+   stop program = "/etc/init.d/named stop"
+   if failed host 81.20.192.17 port 53 type tcp protocol dns then alert
+   if failed host 81.20.192.17 port 53 type udp protocol dns then alert
+   if 5 restarts within 5 cycles then timeout
+
+
+
+check process dhcpd with pidfile /var/lib/dhcp/var/run/dhcpd.pid
+  start program = "/etc/init.d/dhcpd start"
+  stop program  = "/etc/init.d/dhcpd stop"
+  if  failed host 172.31.3.2 port 67 type udp then restart
+  if 5 restarts within 5 cycles then timeout
+
+
+
+
+/var/lib/dhcp
+dhcpd
+/var/lib/dhcp/var/run/dhcpd.pid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Краткий список полезных OID для рабочих станций с Windows 2000/XP/2003/Vista:
+.1.3.6.1.2.1.25.1.1.0 – время работы хоста (SystemUptime);
+.1.3.6.1.2.1.25.3.3.1.2 – загрузка процессора (это начальный OID, конкретно по каждому процессору OID нужно смотреть в самой базе, т.е. для первого процессора OID может быть .1.3.6.1.2.1.25.3.3.1.2.3, для второго - .1.3.6.1.2.1.25.3.3.1.2.4);
+.1.3.6.1.2.1.25.1.6.0 – количество запущенных процессов;
+.1.3.6.1.2.1.25.2.2.0 – объем оперативной памяти, всего;
+.1.3.6.1.2.1.25.2.3.1.6.(1,2,3…) – объем свободного места на дисках
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+check process rsyslogd with pidfile /var/run/rsyslogd.pid
+   start program = "/etc/init.d/syslog start"
+   stop program = "/etc/init.d/syslog stop"
+   if failed host localhost port 514 type udp then restart
+   if 5 restarts within 5 cycles then timeout
+
+
+
+
+
+check process syslogd with pidfile /var/run/syslog-ng.pid
+   start program = "/etc/init.d/syslog start"
+   stop program = "/etc/init.d/syslog stop"
+   if 5 restarts within 5 cycles then timeout
+
+ check file syslogd_file with path /var/log/syslog
+   if timestamp > 65 minutes then alert # Have you seen "-- MARK --"?
+
+
+
+
+
+
+
+
+
+курс лекций Михаила Браво
+
+ check process exim with pidfile /var/run/exim.pid
+   group mail
+   start program = "/etc/init.d/exim start"
+   stop  program = "/etc/init.d/exim stop"
+   if failed port 25 protocol smtp then restart
+   if 5 restarts within 5 cycles then timeout
+   depends on exim_bin
+   depends on exim_rc
+
+ check file exim_bin with path /usr/sbin/exim
+   group mail
+   if failed checksum then unmonitor
+   if failed permission 4755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+ check file exim_rc with path /etc/init.d/exim
+   group mail
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor 
+
+
+CYRUS_BIN=/usr/lib/cyrus/bin/master
+PID_FILE=/var/run/cyrus.pid
+
+
+ check process cyrus with pidfile /var/run/cyrus.pid
+   group mail
+   start program = "/etc/init.d/cyrus start"
+   stop  program = "/etc/init.d/cyrus stop"
+   if 5 restarts within 5 cycles then timeout
+   if failed port 110 type TCP protocol POP then restart
+   depends on cyrus_bin
+   depends on cyrus_rc
+
+ check file cyrus_bin with path /usr/lib/cyrus/bin/master
+   group mail
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+ check file cyrus_rc with path /etc/init.d/cyrus
+   group mail
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor 
+
+
+
+
+
+ check process qpopper with pidfile /var/run/popper.pid
+   group mail
+   start program = "/etc/init.d/qpopper start"
+   stop  program = "/etc/init.d/qpopper stop"
+   if 5 restarts within 5 cycles then timeout
+   if failed port 110 type TCP protocol POP then restart
+   depends on qpopper_bin
+   depends on qpopper_rc
+
+ check file qpopper_bin with path /opt/sbin/popper
+   group mail
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+ check file qpopper_rc with path /etc/init.d/qpopper
+   group mail
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+
+
+
+
+
+mysql    122168  0.0  0.6 1849508 54576 ?       Sl   Feb18  10:30 mysqld
+
+
+
+
+
+
+
+check process bgpd with pidfile /var/run/quagga/bgpd.pid
+  start program = "/usr/local/etc/rc.d/quagga start"
+  stop program  = "/usr/local/etc/rc.d/quagga stop"
+  if failed host localhost port 2605 type tcp
+    send ""
+    expect ".*assword: "
+    then restart
+  if 3 restarts within 5 cycles then timeout
+  group quagga
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
++check process bgpd with pidfile /var/run/quagga/bgpd.pid
++	group network
++	start program = "/etc/rc.d/init.d/bgpd restart"
++	stop  program = "/etc/rc.d/init.d/bgpd stop"
++	if failed unix /var/run/quagga/bgpd.vty then restart
++	depends on bgpd_bin
++	depends on bgpd_rc
++
++check file bgpd_bin with path /usr/sbin/bgpd
++	group network
++	if failed checksum then unmonitor
++	if failed permission 755 then unmonitor
++	if failed uid root then unmonitor
++	if failed gid root then unmonitor
++
++check file bgpd_rc with path /etc/rc.d/init.d/bgpd
++	group network
++	if failed checksum then unmonitor
++	if failed permission 754 then unmonitor
++	if failed uid root then unmonitor
++	if failed gid root then unmonitor
+
+
+
+
+ check process proftpd with pidfile /var/run/proftpd.pid
+   start program = "/etc/init.d/proftpd start"
+   stop program  = "/etc/init.d/proftpd stop"
+   if failed port 21 protocol ftp then restart
+   if 5 restarts within 5 cycles then timeout
+
+
+
+
+81.20.192.32:1194
+
+
+
+
+ # vim /etc/monit.d/openvpn.conf
+
+check process openvpn with pidfile /var/run/openvpn/openvpn-srv.pid
+   start program = "/etc/init.d/openvpn start"
+   stop program = "/etc/init.d/openvpn stop"
+   if failed host 81.20.192.32 port 1194 type udp then restart
+   if 5 restarts within 5 cycles then timeout 
+
+check process pptpd with pidfile /var/run/pptpd.pid
+   start program = "/etc/init.d/pptpd start"
+   stop program = "/etc/init.d/pptpd stop"
+   if failed host 81.20.192.19 port 1723 type tcp then restart
+   if 5 restarts within 5 cycles then timeout 
+
+81.20.192.19:500
+racoon.pid
+
+
+check process racoon with pidfile /var/run/racoon.pid
+   start program = "/etc/init.d/racoon start"
+   stop program = "/etc/init.d/racoon stop"
+   if failed host 81.20.192.19 port 500 type udp then restart
+   if 5 restarts within 5 cycles then timeout 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+check process mysql with pidfile /var/run/mysql/mysqld.pid
+   group database
+   start program = "/etc/init.d/mysql start"
+   stop program = "/etc/init.d/mysql stop"
+   if failed host localhost port 3306 protocol mysql then restart
+   if 5 restarts within 5 cycles then timeout
+   depends on mysql_bin
+   depends on mysql_rc
+
+ check file mysql_bin with path /usr/sbin/mysqld
+   group database
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+ check file mysql_rc with path /etc/init.d/mysql
+   group database
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+
+
+
+
+
+
+
+
+
+ check process apache with pidfile /var/run/httpd2.pid
+   group www
+   start program = "/etc/init.d/apache2 start"
+   stop  program = "/etc/init.d/apache2 stop"
+   if failed host localhost port 80 protocol http
+   if 5 restarts within 5 cycles then timeout
+   depends on apache_bin
+   depends on apache_rc
+
+ check file apache_bin with path /usr/sbin/httpd2-prefork
+   group www
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+ check file apache_rc with path /etc/init.d/apache2
+   group www
+   if failed checksum then unmonitor
+   if failed permission 755 then unmonitor
+   if failed uid root then unmonitor
+   if failed gid root then unmonitor
+
+
+
+
+
+[http://192.168.121.11:2812/](http://192.168.121.11:2812/)		emerald
+[http://192.168.1.11:2812/](http://192.168.1.11:2812/)		sapphire
+[http://192.168.121.17:2812/](http://192.168.121.17:2812/)		quartz
+[http://10.192.10.42:2812/](http://10.192.10.42:2812/)		rock
+[http://192.168.1.111:2812/](http://192.168.1.111:2812/)		mailman.sc.ru
+[http://192.168.121.15:2812/](http://192.168.121.15:2812/)		radium.sc.ru
+[http://192.168.128.8:2812/](http://192.168.128.8:2812/)		radius1
+[http://192.168.128.6:2812/](http://192.168.128.6:2812/)		radius2
+
+
+
+
+
+ 
+
+

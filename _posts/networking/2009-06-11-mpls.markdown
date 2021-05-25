@@ -1,0 +1,362 @@
+---
+layout: post
+title:  "mpls"
+date:   2009-06-11 11:37:50 +0400
+categories: Networking
+tags: Networking
+---
+
+# mpls
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/15-mt/mp-l3-vpns-15-mt-book/mp-bgp-mpls-vpn.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/15-mt/mp-l3-vpns-15-mt-book/mp-bgp-mpls-vpn.html)
+[http://www.go-to-easyit.com/2012/04/mpls-cisco-2.html](http://www.go-to-easyit.com/2012/04/mpls-cisco-2.html)
+[http://www.go-to-easyit.com/2012/03/mpls-cisco-1.html](http://www.go-to-easyit.com/2012/03/mpls-cisco-1.html)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/15-mt/mp-l3-vpns-15-mt-book/mp-bgp-mpls-vpn.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/15-mt/mp-l3-vpns-15-mt-book/mp-bgp-mpls-vpn.html)
+[http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/13733-mpls-vpn-basic.html](http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/13733-mpls-vpn-basic.html)
+[https://supportforums.cisco.com/document/138551/bgp-pe-ce-routing-protocol-overview-mpls-vpns-part-ii](https://supportforums.cisco.com/document/138551/bgp-pe-ce-routing-protocol-overview-mpls-vpns-part-ii)
+[https://supportforums.cisco.com/document/138546/bgp-pe-ce-routing-protocol-overview-mpls-vpns-part-i](https://supportforums.cisco.com/document/138546/bgp-pe-ce-routing-protocol-overview-mpls-vpns-part-i)
+[http://www.nanog.org/meetings/nanog30/presentations/minei.pdf](http://www.nanog.org/meetings/nanog30/presentations/minei.pdf)
+
+
+[http://habrahabr.ru/post/246425/](http://habrahabr.ru/post/246425/)
+
+Control plane
+______
+RIB
+LIB
+______
+
+
+
+Data plane
+______
+FIB
+LFIB
+_______
+
+
+
+
+
+RIB - таблица маршрутизации
+
+
+LIB:
+dyn1# sh mpls ldp bindings 
+Это обмен метками
+
+Команда show mpls ip bindings показывает информацию о привязке меток полученных через протокол LDP/TDP. 
+Команда show mpls ldp bindings показывает содержимое Label Information Base.
+Какой сети принаддежить какая метка.
+
+CDE-C2#sh mpls ip binding 
+  0.0.0.0/0 
+        in label:     imp-null  
+        out label:    imp-null  lsr: 81.20.192.72:0  
+        out label:    imp-null  lsr: 81.20.204.97:0  
+        out label:    imp-null  lsr: 81.20.192.70:0  
+        out label:    imp-null  lsr: 81.20.192.71:0  
+        out label:    imp-null  lsr: 172.20.3.9:0    
+        out label:    imp-null  lsr: 81.20.192.77:0  
+        out label:    imp-null  lsr: 172.31.3.9:0    
+        out label:    imp-null  lsr: 81.20.192.68:0  
+  10.4.2.1/32 
+        out label:    840       lsr: 172.31.3.9:0    
+  10.4.2.9/32 
+        out label:    925       lsr: 172.31.3.9:0    
+  10.4.2.14/32 
+        out label:    118       lsr: 172.31.3.9:0    
+  10.4.2.41/32 
+        out label:    922       lsr: 172.31.3.9:0    
+  10.4.2.44/32 
+        out label:    56        lsr: 172.31.3.9:0    
+  10.28.12.0/30 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FIB:
+dyn1# sh ip cef
+Это cef кеш, содержит смесь arp таблицы и adjanecy table
+Для более быстрой маршрутизации используется, не нагружая процессор
+show ip cef
+Prefix              Next Hop             Interface
+0.0.0.0/0           81.20.192.5          GigabitEthernet0/1.10
+0.0.0.0/32          receive
+10.28.12.0/30       81.20.192.5          GigabitEthernet0/1.10
+10.48.254.0/24      81.20.192.12         GigabitEthernet0/1.10
+10.100.0.0/24       81.20.192.5          GigabitEthernet0/1.10
+10.148.0.0/28       81.20.192.19         GigabitEthernet0/1.10
+10.148.0.248/30     81.20.192.5          GigabitEthernet0/1.10
+10.148.254.0/30     81.20.192.12         GigabitEthernet0/1.10
+10.148.254.4/30     81.20.192.12         GigabitEthernet0/1.10
+10.255.9.8/30       81.20.192.20         GigabitEthernet0/1.10
+72.8.141.85/32      81.20.192.5          GigabitEthernet0/1.10
+
+
+
+
+
+
+LFIB:
+Label Action Next hop
+25	47	С
+
+Action - pop, либо замена метку, C - это роутер
+dyn1# sh mpls forwarding-table 
+
+CDE-C2#sh mpls forwarding-table 
+Local  Outgoing    Prefix            Bytes tag  Outgoing   Next Hop    
+tag    tag or VC   or Tunnel Id      switched   interface              
+16     Untagged    81.20.196.96/32   5048285293 Gi0/0.950  81.20.195.234 
+29     Untagged    81.20.192.48/28   133353     Gi0/1.10   81.20.192.5  
+30     Pop tag     81.20.201.71/32   0          Gi0/1.10   81.20.192.25 
+49     196         81.20.192.76/32   648103     Gi0/1.10   81.20.192.12 
+50     216         81.20.196.12/32   0          Gi0/1.10   81.20.192.12 
+
+
+
+
+
+Просмотр информации о соседях:
+dyn1# sh mpls ldp neighbor 
+
+
+
+
+ 
+
+
+ip vrf vos15
+ description MNM
+ rd 64999:15
+ export map rmVOS15out
+ route-target export 64999:15
+ route-target import 64999:15
+
+
+debug mpls
+[http://www.informit.com/library/content.aspx?b=Troubleshooting_VPNs&seqNum=54](http://www.informit.com/library/content.aspx?b=Troubleshooting_VPNs&seqNum=54)
+[http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/12492-mpls-tsh.html](http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/12492-mpls-tsh.html)
+[http://blog.ine.com/2009/12/07/broken-mpls-troubleshoot-it-we-should-mmmmm-yoda/](http://blog.ine.com/2009/12/07/broken-mpls-troubleshoot-it-we-should-mmmmm-yoda/)
+[http://www.rogerperkin.co.uk/ccie/mpls/mpls-ldp-troubleshooting/](http://www.rogerperkin.co.uk/ccie/mpls/mpls-ldp-troubleshooting/)
+[http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/12492-mpls-tsh.html](http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/12492-mpls-tsh.html)
+[https://supportforums.cisco.com/ru/discussion/11482591#3613147](https://supportforums.cisco.com/ru/discussion/11482591#3613147)
+
+[https://rekrowten.wordpress.com/2012/09/24/route-leak-between-vrfs-with-import-maps-and-export-maps/](https://rekrowten.wordpress.com/2012/09/24/route-leak-between-vrfs-with-import-maps-and-export-maps/)
+[http://www.opennet.ru/docs/RUS/mpls/testbed1.html](http://www.opennet.ru/docs/RUS/mpls/testbed1.html)
+[http://network-lab.ru/kak-rabotaet-mpls-vpn/](http://network-lab.ru/kak-rabotaet-mpls-vpn/)
+[http://network-lab.ru/kak-rabotaet-mpls-vpn/](http://network-lab.ru/kak-rabotaet-mpls-vpn/)
+
+
+mpls mtu
+[http://www.ciscopress.com/articles/article.asp?p=680824&seqNum=5](http://www.ciscopress.com/articles/article.asp?p=680824&seqNum=5)
+
+MPLS MTU
+
+Maximum transmission unit (MTU) is a well-known parameter in the IP world.
+ It indicates the maximum size of the IP packet that can still be sent on a 
+data link, without fragmenting the packet. Data links in MPLS networks also 
+have a specific MTU, but for labeled packets. Take the case of an IPv4 network implementing MPLS.
+ All IPv4 packets have one or more labels. This does imply that the labeled 
+packets are slightly bigger than the IP packets, because for every label, 
+four bytes are added to the packet. So, if n is the number of labels, n * 4 bytes are added to the size of the packet when the packet is labeled.
+
+This section explains that an MPLS MTU parameter pertains to labeled packets. 
+Furthermore, it explains what giant and baby giant frames are and how to ensure that Ethernet switches can handle them. Finally, a new parameter is introduced: MPLS Maximum Receive Unit. This parameter is used in the LFIB to keep track of how big labeled packets can be and still be forwarded without needing to fragment them.
+MPLS MTU Command
+
+The interface MTU command in Cisco IOS specifies how big a Layer 3 packet can be
+ without having to fragment it when sending it on a data link. For the Ethernet 
+encapsulation, for example, MTU is by default set to 1500. However, 
+when n labels are added, n * 4 bytes are added to an already maximum sized IP packet of 1500 bytes. This would lead to the need to fragment the packet.
+
+Cisco IOS has the mpls mtu command that lets you specify how big a 
+labeled packet can be on a data link. If, for example, you know that all packets that
+ are sent on the link have a maximum of two labels and the MTU is 1500 bytes, you can set the MPLS MTU to 1508 (1500 + 2 * 4). Thus, all labeled packets of size 1508 bytes (labels included) can be sent on the link without fragmenting them. The default MPLS MTU value of a link equals the MTU value. 
+Look at Example 3-10 to see how you can change the MPLS MTU on an interface in Cisco IOS.
+Example 3-10. Changing MPLS MTU
+
+london#show mpls interfaces fastEthernet 2/6 detail
+Interface FastEthernet2/6:
+        IP labeling enabled
+        LSP Tunnel labeling not enabled
+        BGP labeling not enabled
+        MPLS not operational
+        MTU = 1500
+london#configure terminal
+Enter configuration commands, one per line. End with CNTL/Z.
+london(config)#interface FastEthernet2/6
+london(config-if)#mpls mtu 1508
+london(config-if)#^Z
+london#
+london#show mpls interfaces fastEthernet 2/6 detail
+Interface FastEthernet2/6:
+        IP labeling enabled
+        LSP Tunnel labeling not enabled
+        BGP labeling not enabled
+        MPLS not operational
+        MTU = 1508
+
+Giant and Baby Giant Frames
+
+When a packet becomes labeled, the size increases slightly.
+ If the IP packet was already at the maximum size possible for a certain data link (full MTU), it becomes too big to be sent on that data link because of the added labels. Therefore, the frame at Layer 2 becomes a giant frame. Because 
+the frame is only slightly bigger than the maximum allowed, it is called a baby giant frame.
+
+Take the example of Ethernet: The payload can be a maximum of 1500 bytes. However, 
+if the packet is a maximum sized packet and labels are added, the packet becomes
+ slightly too big to be sent on the Ethernet link. It is possible to close one eye and allow frames that are bigger (perhaps by just a few bytes)
+to be sent on the Ethernet link, even though it is not the correct thing according to the Ethernet specifications,
+ which say that such frames should be dropped. This is, of course, possible only if the Ethernet hardware in the router and all switches in the Ethernet network support receiving and sending baby giant frames.
+
+On Ethernet data links on LSRs, you can set the MPLS MTU to 1508 bytes to allow IP packets with a size of 
+1500 bytes with two labels to be received and forwarded. If, however, the hardware of the router does not support this, 
+or if an Ethernet switch exists in between, dropping baby giant frames, you can lower the MPLS MTU parameter on the LSRs.
+ When you set the MPLS MTU to 1500, all the IP packets with a size of 1492 bytes are still forwarded, 
+because the size of the labeled packet then becomes 1500 (1492 plus 8) bytes at Layer 3. However, 
+all IP packets sized between 1493 through 1500 bytes (or more) are fragmented.
+ Because of the performance impact of fragmentation, you should use methods to avoid it, such as path MTU discovery.
+
+NOTE
+
+In some Cisco IOS releases, you cannot configure the MPLS MTU to be bigger than the interface MTU.
+Giant Frames on Switches
+
+You can also see giant and baby giant frames on Layer 2 switches because the maximum 
+Ethernet frame has increased by as many bytes as are in the label stack. 
+Configuration might be needed on the Ethernet switches to allow them to switch giant and baby giant frames.
+ Example 3-11 shows examples on how to enable jumbo Ethernet frames on an Ethernet switch.
+Example 3-11. Allowing Jumbo Frames on Ethernet Switches
+
+Cluster#conf t
+Enter configuration commands, one per line. End with CNTL/Z.
+Cluster(config)#system jumbomtu ?
+  <1500-9216> Jumbo mtu size in Bytes, default is 9216
+
+donquijote-msfc#conf t
+Enter configuration commands, one per line. End with CNTL/Z.
+donquijote-msfc(config)#int vlan 1
+donquijote-msfc(config-if)#mtu ?
+  <64-9216> MTU size in bytes
+
+Lander#conf t
+Enter configuration commands, one per line. End with CNTL/Z.
+Lander(config)#system mtu ?
+  <1500-2000> MTU size in bytes
+
+MPLS Maximum Receive Unit
+
+Maximum receive unit (MRU) is a parameter that Cisco IOS uses. 
+It informs the LSR how big a received labeled packet of a certain FEC can be that can still be forwarded out of this LSR without fragmenting it.
+ This value is actually a value per FEC (or prefix) and not just per interface. The reason for this is that labels can be added to or removed from a packet on an LSR.
+
+Think of the example of a router in which all the interfaces have an MTU of 1500 bytes. 
+This means that the biggest IP packet that can be received and transmitted on all interfaces is 1500 bytes. 
+Imagine that the packets can be labeled by adding a maximum of two labels. (Typically, 
+MPLS VPN and AToM networks label the packets respectively the frames with two labels.) 
+Also assume that the MPLS MTU is set to 1508 on all links to accommodate for the extra 8 bytes (2 times 4 bytes) for the labels. 
+A labeled packet that is transmitted on any of the links can now be 1508 bytes. If, 
+however, the operation on the incoming packet were POP, the packet could have been 
+4 bytes or 1 label bigger (thus 1512 bytes) when it was received,
+ because one label would have been popped off before transmitting the packet. If the label operation were a push, 
+however, and one label was added, the incoming packet could only have been 1504 bytes, because 4 bytes or one label would have been added—making the packet 1508 bytes—before 
+switching the packet out.
+
+As you can see, the label operation plays a role in determining the MRU.
+ Because the label operation is determined per FEC or prefix, the MRU can change per FEC or prefix. 
+Notice how in Example 3-12, the MRU changes per prefix according to the specific label operation performed on the packets.
+The LFIB shows you the value of the MRU per prefix.
+Example 3-12. Example of MRU
+
+lactometer#show mpls forwarding-table 10.200.254.2 detail
+Local  Outgoing    Prefix            Bytes tag  Outgoing   Next Hop
+tag    tag or VC   or Tunnel Id      switched   interface
+21     Pop tag     10.200.254.2/32   0          Et0/0/0    10.200.200.2
+        MAC/Encaps=14/14, MRU=1512, Tag Stack{}
+        00604700881D00024A4008008847
+        No output feature configured
+
+lactometer#show mpls forwarding-table 10.200.254.3 detail
+Local  Outgoing    Prefix            Bytes tag  Outgoing   Next Hop
+tag    tag or VC   or Tunnel Id      switched   interface
+19     17          10.200.254.3/32   0          Et0/0/0    10.200.200.2
+        MAC/Encaps=14/18, MRU=1508, Tag Stack{17}
+        00604700881D00024A4008008847 00011000
+        No output feature configured
+
+lactometer#show mpls forwarding-table 10.200.254.4 detail
+Local  Outgoing    Prefix            Bytes tag  Outgoing   Next Hop
+tag    tag or VC   or Tunnel Id      switched   interface
+20     18          10.200.254.4/32   0          Tu1        point2point
+        MAC/Encaps=14/22, MRU=1504, Tag Stack{20 18}, via Et0/0/0
+        00604700881D00024A4008008847 0001400000012000
+        No output feature configured
+
+The MRU for the prefix 10.200.254.2/32 is 1512. The packet received can be 1512 bytes, 
+because one label is popped off before it is forwarded. The MRU for prefix 10.200.254.3/32 is 1508.
+ The size of the packet does not change, because only the top label is swapped. 
+The MRU for prefix 10.200.254.4/32 is 1504. The packet received can be only 1504 bytes because one extra label is pushed
+ onto the label stack before the packet is forwarded; therefore, the packet size increases by 4 bytes.
+ The "Tag Stack" shows that one label is pushed onto the label stack after the incoming label is swapped.
+
+
+
+
+traceroute mpls
+[http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/26585-mpls-traceroute.html](http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/26585-mpls-traceroute.html)
+[http://blog.ipexpert.com/mpls-ip-ttl-propagation/](http://blog.ipexpert.com/mpls-ip-ttl-propagation/)
+[http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/26585-mpls-traceroute.html](http://www.cisco.com/c/en/us/support/docs/multiprotocol-label-switching-mpls/mpls/26585-mpls-traceroute.html)
+
+mpls ip propagate-ttl - показывает промежуточные хопы
+1 100.5.4.5 [AS 100] 56 msec
+2 100.9.5.9 [MPLS: Labels 901/605 Exp 0] 76 msec
+3 100.9.8.8 [MPLS: Labels 800/605 Exp 0] 52 msec
+4 192.168.6.6 [AS 100] 44 msec
+
+
+Не показывает промежуточные хопы
+no mpls ip propagate-ttl
+
+R4’s trace:
+
+1 100.5.4.5 [AS 100] 48 msec
+2 192.168.6.6 [AS 100] 72 msec
+
+Должно быть согласовано на всех маршрутизаторах с mpls
+
+
+
+
+leak routes mpls
+R1:
+
+ip vrf ABC
+ import map ABC-IMPORT-MAP
+!
+ip extcommunity-list standard EC_ABC permit rt 2:2
+ip extcommunity-list standard EC_DEF permit rt 3:3
+!
+ip prefix-list IMPORT_TO_ABC_FROM_DEF seq 10 permit 10.3.33.0/24 le 32
+!
+route-map ABC-IMPORT-MAP permit 10
+ match extcommunity EC_ABC
+!
+route-map ABC-IMPORT-MAP permit 20
+ match ip address prefix-list IMPORT_TO_ABC_FROM_DEF
+ match extcommunity EC_DEF
+
+
+[https://rekrowten.wordpress.com/2012/09/24/route-leak-between-vrfs-with-import-maps-and-export-maps/](https://rekrowten.wordpress.com/2012/09/24/route-leak-between-vrfs-with-import-maps-and-export-maps/)

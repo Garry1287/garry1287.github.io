@@ -1,0 +1,52 @@
+---
+layout: post
+title:  "tcpdump"
+date:   2017-07-30 12:42:15 +0300
+categories: Networking
+tags: Networking
+---
+
+# tcpdump
+[https://losst.ru/kak-polzovatsya-wireshark-dlya-analiza-trafika](https://losst.ru/kak-polzovatsya-wireshark-dlya-analiza-trafika)
+[https://isc.sans.edu/diary/Tools+for+extracting+files+from+pcaps/6961](https://isc.sans.edu/diary/Tools+for+extracting+files+from+pcaps/6961)
+[http://unix.stackexchange.com/questions/28321/how-to-recover-a-file-from-a-tcpdump](http://unix.stackexchange.com/questions/28321/how-to-recover-a-file-from-a-tcpdump)
+[https://www.sans.org/reading-room/whitepapers/forensics/extracting-files-network-packet-captures-36562](https://www.sans.org/reading-room/whitepapers/forensics/extracting-files-network-packet-captures-36562)
+[http://www.behindthefirewalls.com/2014/01/extracting-files-from-network-traffic-pcap.html](http://www.behindthefirewalls.com/2014/01/extracting-files-from-network-traffic-pcap.html)
+[http://c0decstuff.blogspot.ru/2011/07/extracting-files-from-tcpdump.html](http://c0decstuff.blogspot.ru/2011/07/extracting-files-from-tcpdump.html)
+
+    NetworkMiner ( thanx, Russ and Dentrasi.  Just found this note on running it under wine on Linux)
+    tcpxtract (suggested by John R, Chris and Doug)
+    Bro (suggested by Nicholas)
+    tcpflow (suggested by Ratufa and Chris)
+    foremost (suggested by Chris and Doug)
+    the dsniff suite (suggested by Chris and Jason)
+    Chaosreader (suggested by Chris and Parveen)
+    pyflag (suggested by Chris)
+    tcptrace (suggested by John T)
+    tcpick (suggested by Doug)
+    xtract.py from npeid (suggested by anonymous)
+
+
+
+ Posted on 3 Juli 2011 by c0decstuff
+
+Occasionally I have to analyze tcp-streams, and occasionally I came to a point where i had to extract files out of huge dumps. What I found during my last research about a year ago was not really usable - i hacked together a few lines of perl to extract exactly what i wanted - this didn't deliver exact files, but was enough to help me solve a problem.
+
+Jim Clausing, one of the more practical guys over at ISC described the same problem recently and asked the readers of the ISC-Blog for software that is able to extract files from pcap-dump. People came out with a load of promising solutions:
+
+* NetworkMiner [http://networkminer.sourceforge.ne/](http://networkminer.sourceforge.ne/)
+* tcpxtract [http://tcpxtract.sourceforge.net/)](http://tcpxtract.sourceforge.net/))
+* bro [http://www.bro-ids.org/](http://www.bro-ids.org/)
+* tcpflow [http://www.circlemud.org/~jelson/software/tcpflow/](http://www.circlemud.org/~jelson/software/tcpflow/)
+* foremost [http://foremost.sourceforge.net/](http://foremost.sourceforge.net/)
+* dsniff [http://www.monkey.org/~dugsong/dsniff/](http://www.monkey.org/~dugsong/dsniff/)
+* Chaosreader [http://chaosreader.sourceforge.net/](http://chaosreader.sourceforge.net/)
+* pyflag [http://www.pyflag.net/cgi-bin/moin.cgi](http://www.pyflag.net/cgi-bin/moin.cgi)
+* tcptrace [http://www.tcptrace.org/](http://www.tcptrace.org/)
+* tcpick [http://tcpick.sourceforge.net/](http://tcpick.sourceforge.net/)
+* xtract.py [http://www.malforge.com/npeid/xtract.py](http://www.malforge.com/npeid/xtract.py)
+
+Not all of them might do exactly what you want - but this is defintely the best overview on pcap-file-extractors I ever came across.
+
+
+[https://habrahabr.ru/post/280986/](https://habrahabr.ru/post/280986/)

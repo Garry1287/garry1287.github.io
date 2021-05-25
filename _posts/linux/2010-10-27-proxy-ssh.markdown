@@ -1,0 +1,172 @@
+---
+layout: post
+title:  "proxy-ssh"
+date:   2010-10-27 00:41:47 +0400
+categories: linux
+tags: linux
+---
+
+# proxy-ssh
+proxychains4 nmap -sT -PN -sV --open -n ЦЕЛЬ
+
+
+Если ваше прокси-соединение SSH будет использоваться часто, вам не нужно передавать их в качестве параметров каждый раз. вы можете добавить следующие строки в ~/.ssh/config
+
+Host foobar.example.com
+    ProxyCommand          nc -X connect -x proxyhost:proxyport %h %p
+    ServerAliveInterval   10
+
+затем для подключения используйте
+
+ssh foobar.example.com
+
+Второй вариан corksc
+[http://www.ubuntugeek.com/how-to-use-ssh-via-http-proxy-using-corkscrew-in-ubuntu.html](http://www.ubuntugeek.com/how-to-use-ssh-via-http-proxy-using-corkscrew-in-ubuntu.html)
+
+
+
+[http://blog.regolit.com/2013/05/13/socks-proxy-over-ssh](http://blog.regolit.com/2013/05/13/socks-proxy-over-ssh)
+[https://piratebuhta.cc/threads/cozdanie-cepochki-iz-neskolkix-ssh.15235/](https://piratebuhta.cc/threads/cozdanie-cepochki-iz-neskolkix-ssh.15235/)
+
+
+Proxy via mikrotik
+[https://netflow.by/blog/item/185-proxy-mikrotik](https://netflow.by/blog/item/185-proxy-mikrotik)
+[https://wiki.mikrotik.com/wiki/Manual%3AIP/Proxy](https://wiki.mikrotik.com/wiki/Manual%3AIP/Proxy)
+[http://www.ekzorchik.ru/2016/06/manage-internet-access-via-mikrotik/](http://www.ekzorchik.ru/2016/06/manage-internet-access-via-mikrotik/)
+
+
+1. Шаг 
+ssh -D 8888 user@myserver.ru
+
+Получаем на компе прокси через 127.0.0.1:8888
+
+2.
+
+3.Делаем p
+
+
+
+[http://teralex.ru/anonimnost/kali-linux-ves-trafik-cherez-tor.html](http://teralex.ru/anonimnost/kali-linux-ves-trafik-cherez-tor.html)
+
+127.0.0.1:9048
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------
+На машине
+socks5  127.0.0.1 9049
+socks5  127.0.0.1 9048
+
+
+С work цепляюсь на sapphire
+garry@garry-w:/etc> ssh -D 9049 garry@192.168.1.11
+
+C sapphire на iptech
+[garry@sapphire ~]$ ssh -D 9048 garry@192.168.1.126 -p 2222
+
+Имеем работу через цепочку
+garry@garry-w:~/bin> proxychains4 curl smart-ip.net/myip
+[proxychains] config file found: /etc/proxychains.conf
+[proxychains] preloading /usr/lib64/libproxychains4.so
+[proxychains] DLL init: proxychains-ng 4.11
+[proxychains] Strict chain  ...  127.0.0.1:9049  ...  127.0.0.1:9048  ...  smart-ip.net:80  ...  OK
+81.20.192.56
+
+Просто прописать 2 прокси не получиться, они по-тупому
+
+---------------------------------------
+На машине настраиваем proxychains4 c 
+socks5  127.0.0.1 9048
+
+C work цепляемся
+ssh -D 9049 garry@192.168.1.203
+
+С work цепляемся
+ssh -D 9048 -o "ProxyCommand nc -x 127.0.0.1:9049 %h %p" garry@192.168.1.126 -p 2222
+
+[garry@iptech ~]$ who
+garry    pts/1        2018-08-20 16:36 (192.168.1.203)
+
+Получаем свой tor для proxychains (тема работает)
+
+garry@garry-w:~/bin> proxychains4 curl smart-ip.net/myip
+[proxychains] config file found: /etc/proxychains.conf
+[proxychains] preloading /usr/lib64/libproxychains4.so
+[proxychains] DLL init: proxychains-ng 4.11
+[proxychains] Strict chain  ...  127.0.0.1:9048  ...  smart-ip.net:80  ...  OK
+81.20.192.56
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Пробросили порт 9050 от машины на которой запущен tor
+ ssh -t -L 127.1:9050:127.1:9999 garry@192.168.1.128 -p 2222 ssh -L 127.1:9999:127.1:9050 garry@192.168.1.126 -p 2222
+ 
+ На первой машине запущен proxychains, настроенный на 127.0.0.1:9050 (tor)
+
+ proxychains4 curl smart-ip.net/myip
+[proxychains] config file found: /etc/proxychains.conf
+[proxychains] preloading /usr/lib64/libproxychains4.so
+[proxychains] DLL init: proxychains-ng 4.11
+[proxychains] Strict chain  ...  127.0.0.1:9050  ...  smart-ip.net:80  ...  OK
+185.220.101.25
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+На мой взгляд, более менее полную анонимность может обеспечить разве что подключение через зарубежный VPN, с последующим выходом в сеть через Tor (его, при этом, можно сконфиругировать для работы с прокси, если мне не изменяет память), при этом не стоит забывать о правильно настроенном браузере, а в качестве ОС неплохо использовать какой-нибудь специальный live дистрибутив на отдельном носителе (по-моему у Tor такое есть).
+VPN крайне желательно оплачивать анонимно (например, закинув через мультикассу денег на неидентифицированный яндекс кошелек, созданный с использованием Tor, с последующей покупкой карты на plati.ru и оплаты с нее). В таком случае найти человека становится действительно сложнее, хотя нет ничего невозможного.
+
+
+
+0 Если вдаваться в нюансы — их много-много. Броузер не только правильно настроенный и правильный, но еще и через privoxy желательно. VPN учитывая разницу между средней скоростью tor и VPN я бы использовал два VPN, один свой, другой нет, но второй с большим пулом ипов. Потом уже в Tor, а еще лучше в I2P.
+
+
+
+Правильный VPN зарегистрирован в третьей стране, в юрисдикции, где законодательство не требует обязательного протоколирования (mandatory data retention) деятельности клиентов телекоммуникационных компаний. Например, такие страны как США и Гонконг. 
+
+
+ DNS leaking
+
+Следующее, на что важно обратить внимание – это DNS leaking или, другими словами, утечка DNS. Пожалуй, это самый распространенный способ потери анонимности, даже при использовании лучшего VPN. Проблема состоит в том, что интернет провайдеры назначают собственные DNS сервера всем клиентам своей сети, благодаря чему способны отслеживать DNS-запросы (всё что пишется в адресной строке браузера) своих клиентов. 
+
+Когда, Вы подключаете ВПН, предполагается, что все DNS-запросы, направляются через ВПН туннель, как и остальной трафик, что, в теории, должно исключить возможность для провайдера просматривать ваши DNS запросы. Утечка, может случиться, если браузер забудет, что Вы используете VPN и начнет обращаться к DNS-серверам, установленным по умолчанию.
+
+Проблему легко решить, но еще легче не знать о её существовании, до тех пор, пока не будет слишком поздно. Самый простой способ проверить ваш VPN на предмет DNS-leak – посетить сайт [https://www.dnsleaktest.com](https://www.dnsleaktest.com) и запустить стандартный тест. Если по результатам теста Вы увидите своё настоящие местоположение и список DNS серверов Вашего провайдера – значит соединение не полностью анонимно. Чтобы избежать утечки DNS всегда используйте сторонние DNS-сервера, например, публичные DNS-сервера от Google (8.8.8.8 и 8.8.4.4) или от OpenDNS (208.67.222.222 и 208.67.220.220)
+
+
+
+
+Самый простой способ тру анонимных платежей: цепочка яндекс деньги (закидываются в терминале где-нибудь где нет камер наблюдения) -> покупка bitcoin -> прачечная BitcoinFog -> продажа bitcoin за нужную электронную валюту. Для каждого объекта оплаты заводятся разные, никак не связанные кошельки, разные e-mail, выдумываются реалистичные контактные данные. В отдельных случаях потребуется нарисовать скан паспорта.
+
+
+
+Очень просто: ему принадлежит интернет-провайдер Freedom Hosting, предоставлявший место для веб-сайтов в подпространстве TOR и специализировавшийся якобы именно на нелегальном контенте
+
+
+Double vpn
+[https://gita-dev.ru/blog/kak-sdelat-double-vpn-podrobnaja-instruktsija/](https://gita-dev.ru/blog/kak-sdelat-double-vpn-podrobnaja-instruktsija/)
+[https://habr.com/sandbox/78897](https://habr.com/sandbox/78897)
+
+
+Проброс порта с 1.126 9050
+ssh -L 127.1:9050:127.1:9999 garry@192.168.1.128 -p 2222. ssh -L 127.1:9999:127.1:9050 garry@192.168.1.126 -p 2222
+
+
+
+
+
+
+------------------------------------------------------
+Схема
+
+Из под тора цепляемся по ssh -D на mikrotik дырявый

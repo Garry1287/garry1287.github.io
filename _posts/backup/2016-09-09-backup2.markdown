@@ -1,0 +1,654 @@
+---
+layout: post
+title:  "backup2"
+date:   2016-09-09 10:54:22 +0300
+categories: backup2
+tags: backup2
+---
+
+# backup2
+Первый вариант - tar (dar) + копирование по ssh
+(Основной вариант, так как позволяет компактно делать архивы нужных директорий, чего нам и надо)
+
+
+Второй вариант - rdiff-backup
+(аналогично rsync, будем использовать для того чтобы переносить бэкап с sapphire на хранилище)
+Заметки
+[http://blog.sozinov.eu/2006/08/backup-with-rdiff-backup.html](http://blog.sozinov.eu/2006/08/backup-with-rdiff-backup.html)
+[http://www.hilik.org.ua/rdiff-backup/](http://www.hilik.org.ua/rdiff-backup/)
+[http://habrahabr.ru/post/97685/](http://habrahabr.ru/post/97685/)
+[http://webhamster.ru/mytetrashare/index/mtb0/13480589771tu0xdqkyu](http://webhamster.ru/mytetrashare/index/mtb0/13480589771tu0xdqkyu)
+[http://www.opennet.ru/tips/info/1857.shtml](http://www.opennet.ru/tips/info/1857.shtml)
+Rsync
+[http://www.instanceof.ru/linux/rsync](http://www.instanceof.ru/linux/rsync)
+[http://www.opennet.ru/base/sys/rsync_backup.txt.html](http://www.opennet.ru/base/sys/rsync_backup.txt.html)
+[http://folk.uio.no/johnen/bontmia/](http://folk.uio.no/johnen/bontmia/)
+
+1. Бэкап всяких fstab, lvm
+2. Архивируем нужные папки
+3. Mysql
+4. Копируем на удалённый сервер по ssh (rsync может)
+5. Находим старые
+6. Удаляем старые
+
+
+1. Сохранять атрибуты файлов  include --same-owner
+ --preserve-permissions option
+
+2. 
+Ownership information can be stored in two ways: numerically or textually
+Лучше сохранять нумерном типе
+  Tar has the --numeric-owner option for that. 
+  Rdiff-backup has the --preserve-numerical-ids option
+
+Dar, tar возвращают atime в прежнее состояние после создания backup, но при этом меняется ctime
+ctime поменять самому нельзя
+Полагаться на программы, которые ориентируются на atime нельзя, так как atime может поменять многие программы
+
+--alter=atime для dar (tar)
+
+
+3. Символические и жесткие ссылки
+  Просто надо делать бэкап для отделных разделов отдельно
+4. sparse files  могут восстанавливаться в полном размере
+5. Специальные проги для Mysql
+6. ctime и проверка hash - это нормально для проверки инкриментного бэкапа
+    mtime - не критерий (файл может поменяться через losetup)
+    Rsync имеет опцию, которая проверяет изменения, но это занимает много времени. Так что сами решайте как делать
+    cp и rsync не очень надёжно при копирование в другую файловую систему, так как можно изменить данные нечаянно, но зато
+    быстрее можно найти нужный файл
+7.  Размер архива - делать под себя. На некоторых файловых системах максимальный размер файла 2Гб, он делал по 650Мб чтобы писать на CD
+8.  Опции для восстановления - для dar не надо, для tar надо быть осторожным
+--preserve-permissions
+--numeric-owner
+
+tar плохо поддерживает split
+9. Необходимо использовать опцию для rdiff-backup опцию  --preserve-numerical-ids, если восстанавливаем с помощью LiveCD
+10. Rsync - используйте опцию --delete-after чтобы при прерывании копирования не возникла ситуация, когда файл удалён, а новый ещё не забэкапился
+  --hard-links
+  --acls
+  --xattrs
+
+11.    Надо сбрасывать disk buffers командой sync, чтобы не сделать повреждённый backup
+	  sync ; sleep 2
+          mount target
+          [BACKUP-COMMAND]
+          sync ; sleep 2
+          [CLEAN-COMMAND]
+          sync ; sleep 2
+          umount
+
+
+mtime - modification time - время последней модификации (изменения) файла
+atime - access time - время последнего доступа к файлу
+ctime - change time - время последнего изменения атрибутов файла (данных которые хранятся в inode-области), оно также менятеся при модификации файла
+	      The ctime is also updated when the contents of a file change
+
+
+ctime -- In UNIX, it is not possible to tell the actual creation time of a file. 
+      The ctime--change time--is the time when changes were made to the file or directory's inode (owner, permissions, etc.).
+	The ctime is also updated when the contents of a file change. It is needed by the dump command to determine if the file needs to be backed up. You can view the ctime with the ls -lc command.
+
+atime -- The atime--access time--is the time when the data of a file was last accessed. Displaying the contents of a file or executing a shell script will update a file's atime, 
+	for example. You can view the atime with the ls -lu command.
+
+mtime -- The mtime--modify time--is the time when the actual contents of a file was last modified. This is the time displayed in a long directoring listing (ls -l).
+
+
+
+Параметр mtime - изменяется после того как изменяется содержимое файла. Например, открыли файл командой nano, дописали что-то, сохранили, закрыли, и время mtime поменялось. А как в случае с каталогами? Предполагал, что время модификации для каталога изменяется когда в каталоге создаются/удаляются файлы и подкаталоги.
+
+Параметр atime - изменяется тогда, когда мы получаем доступ к файлу, например, той же командой nano мы получаем доступ к файлу. Значит atime должен измениться. Команды cat, less, tail выводят содержимое файла, значит мы получаем доступ к нему, но не меняем его поэтому mtime меняться не должен. А как быть с каталогами? Когда меняется atime для каталога? Тут я даже не знал, что себе ответить.
+
+Параметр ctime - самый простой для моего понимания. Изменяется тогда когда изменяются права доступа к файлу (командой chmod), изменяется владелец файла (команда chown), создаются жесткие ссылки на файл (команда ln). В этом плане различий с каталогом нет, с той лишь разницей, что на каталоги нельзя создавать жесткие ссылки.
+
+
+
+
+
+
+
+Инкриментальный бэкап (нужен ли он для маленького объёма данных? - нет)
+Инкрементальный отличается от дифференцируемого только тем, что дифференцируемый делается от полного бэкапа, а инкрементальный
+от предыдущего, который может быть инкрементальным, так и полным. 
+
+
+
+Традиционно рекомендуют держать 10 бэкапов: по одному на каждый день недели, 
+а также бэкапы двухнедельной, месячной и квартальной давности — это позволит достаточно глубоко откатиться в случае порчи каких-либо данных. 
+
+
+
+Дифференцируемый
+Чем дальше по времени отстоит дифференциальный бэкап от своего полного бэкапа, тем он «тяжелее»,
+ и даже может превысить размер полного бэкапа. Решение здесь то же, что и при инкрементном подходе, — 
+разбавляйте ваши дифференциальные бэкапы полными. 
+В зависимости от интенсивности изменения защищаемых данных новый полный бэкап рекомендуется создавать после двух-пяти дифференциальных.
+
+
+
+    Максимальный «возраст» цепочек бэкапов.
+    Максимальное количество цепочек бэкапов.
+    Максимальный общий размер бэкапа.
+
+
+
+По неделе?
+
+Продумать схему, опробовать, но не применять
+создавать новый полный бэкап после нескольких инкрементных, скажем, после четырех или пяти. 
+
+
+Сделал изменения - делай бэкап
+Каждодневый бекап - хранить один ежемесячный + все за последние 30 дней
+
+
+[http://habrahabr.ru/company/acronis/blog/202500/](http://habrahabr.ru/company/acronis/blog/202500/)
+
+Один раз в неделю полный
+6 раз дифференцированный
+50 backup цепочек в год получается
+Сохранять один полный за месяц
+За год получиться 12
+храним последних 12 цепочек (3 месяца)
+alert при нехватки места
+
+
+Что должен включать скрипт
+
+Взять за основу backup_linuxsrv.sh
+tar (bzip)
+Добавить инкрементый бэкап по дням недели (команда date) + 
+проверял коды ошибок, возвращаемые в процессе работы скрипта;
+почтовые уведомления
+сохранять вывод команд (iptables, ifconfig, crontab - важные для данного сервера)
+копирование по ssh
+логирование (сохранял бы в каком-нибудь виде протокол его работы)
+
+
+/var/lib/named/127.0.0.zone
+/var/lib/named/arpa
+/var/lib/named/etc
+/var/lib/named/fake
+/var/lib/named/localhost.zone
+/var/lib/named/master
+/var/lib/named/root.hint
+/var/lib/named/slave  
+
+/var/lib/named/dev
+/var/lib/named/dyn
+/var/lib/named/var
+/var/lib/named/excl-list
+/var/lib/named/lib
+/var/lib/named/log
+/var/lib/named/named.run
+/var/lib/named/proc
+
+
+Сравнить скрипты
+1.backup_linuxsrv.sh
+TAR -cjpf, копирование по scp, логирование действий
+2.Мои tar
+tar -cfpz и scp
+3. powerbackup
+Шняга
+4.bbackup
+Аналогично через tar
+
+
+5.backup_share.sh
+tar -cvJg и работает с date (настраивается по дням)
+6.VPSbackup.LeoN.V07.sh
+tar czvf ${SAVENAME}.tar.gz $TARPAR > ${SAVENAME}.log 2>&1
+
+7. [http://pm4u.narod.ru/backup_linux.htm](http://pm4u.narod.ru/backup_linux.htm)
+tar -czvf + ssh
+
+
+
+#!/bin/bash
+cd /backups
+sudo tar cvpzf backup_`date +%Y.%m.%d_%H_%M`.tar.gz /
+find . -mtime +10 -exec rm {} \;
+
+
+
+
+
+
+Отправка backup по почте и ошибок
+[http://i-rrv.ru/wiki/index.php/Rsync_-_%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C_%D0%B8%D0%BD%D0%BA%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D0%B9_backup](http://i-rrv.ru/wiki/index.php/Rsync_-_%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C_%D0%B8%D0%BD%D0%BA%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D0%B9_backup)
+
+
+
+
+Инкрементальный backup через tar
+[http://www.gnu.org/software/tar/manual/html_node/Incremental-Dumps.html](http://www.gnu.org/software/tar/manual/html_node/Incremental-Dumps.html)
+[http://linux.yaroslavl.ru/docs/conf/gnu-util/tar/tar-9.html](http://linux.yaroslavl.ru/docs/conf/gnu-util/tar/tar-9.html)
+[http://www.opennet.ru/docs/RUS/sag/x2255.html](http://www.opennet.ru/docs/RUS/sag/x2255.html)
+[http://x-linuxnotes.blogspot.ru/2011/12/tar.html](http://x-linuxnotes.blogspot.ru/2011/12/tar.html)
+[http://linux-bash.ru/menusistem/80-share-backup.html](http://linux-bash.ru/menusistem/80-share-backup.html)
+[http://alex-at.ru/linux/tar-linux](http://alex-at.ru/linux/tar-linux)
+[http://www.opennet.ru/tips/info/2341.shtml](http://www.opennet.ru/tips/info/2341.shtml)
+[http://www.opennet.ru/man.shtml?topic=tar&category=1](http://www.opennet.ru/man.shtml?topic=tar&category=1)
+
+
+
+
+[http://www.halfgaar.net/backing-up-unix](http://www.halfgaar.net/backing-up-unix)
+
+#!/bin/sh
+tar -zcf /backup/home.tar.gz /home
+tar -zcf /backup/etc.tar.gz /etc
+
+tar -cvzpf /mnt/backup/ubuntu-sda1.tar.gz /mnt/root
+
+Создание файловой системы
+sudo mkfs.ext2 -L "boot" /dev/sdXY
+sudo mkfs.ext4 -L "home" /dev/sdXY
+
+Некоторые файловые системы поддерживают задание UUID при форматировании. Это дает возможность создать ФС с таким же UUID, 
+как у старой, что позволит избежать необходимости править fstab.
+
+Для ext2/3/4 UUID задается с помощью ключа -U, а еще больше упростить задачу можно командой вида
+
+sudo mkfs.ext4 -L "label" -U "$(sudo blkid -o value -s UUID /dev/sda1)" /dev/sda1
+
+
+ Смонтируйте свежесозданные ФС
+
+sudo mount /dev/sdXY /mnt/root
+sudo mount /dev/sdXY /mnt/root/home
+
+Теперь можно распаковать содержимое архива на место
+
+sudo tar --same-owner -xvpf /mnt/backup/ubuntu-2010-10-07.tar.bz2 -C /
+(ключ -C задает каталог, в который нужно распаковать файлы. ключ --same-owner сохраняет владельцев файлов при распаковке)
+
+
+
+
+Есть понятие full бакапа, диферинциального и инкрементального. Второй и третий дает разницу, но! 
+Диф — делает бакап разницы от последнего ПОЛНОГО до текущего момента. Инкрементальный — от ЛЮБОГО последнего бакапа до текущего момента.
+ Стандартная схема бакапа выглядит так:
+1 раз в месяц — полный
+4 раза в месяц, например по воскресеньям — дифф
+каждый день — инкриментальный.
+
+Таким образом при обрушинии системы ты ВСЕГДА теряешь максимум один день данных, а востановление в любом случаем сводится к подъему:
+ одного полного, последнего дифа и все инки между последним дифом и последним инком. :) Вот примерно та
+
+
+
+Во-во :)) Именно bacula и больше ничего не надо :))
+
+
+
+
+
+Меня в таких решениях для бэкапа всегда напрягало то, что большие и сложные системы имеют тенденцию глючить,
+ а глюки в системе бэкапов — это слишком рискованно.
+
+Мой велосипед делает примерно то же самое, только он очень простой (70 строк тривиального кода на sh) 
+и гибкий (поддержка шифрования архивов, блокирования базы данных, etc.). 
+Инкрементальные архивы делаются tar-ом (поэтому для распаковки бэкапов ничего кроме tar не требуется). 
+Задачи вроде удаления старых архивов — отлично делаются через cron+find, нет смысла встраивать их в систему создания бэкапов. 
+Задача разделения недельных/месячных архивов отлично решается через cron+указание скрипту параметром разных каталогов для бэкапа.
+ И т.д. — нет смысла ручками и с глюками реализовывать то, что отлично делают стандартные и проверенные десятилетиями утилиты.
+
+В общем, если вам нужна надёжная, простая и гибкая система бэкапов — можете попробовать мой велосипед powerbackup.
+ Для Gentoo-шников в моём оверлее есть ebuild для упрощения установки powerbackup. 
+
+
+[http://powerman.name/soft/powerbackup.html](http://powerman.name/soft/powerbackup.html)
+
+
+Мне кажется интересным вариант хранения бэкапов с использованием Dropbox (профессиональный акк. на 50 gb).
+ Инкрементальный бэкап, надежность Amazon S3, клиент для Windows, Linux, MacOS. 
+
+
+
+
+2. Backup удалённого сервера Linux
+Ситуация: на удалённом сервере (10.0.0.4) маленький жёсткий диск и резервная копия там не поместиться. 
+В этом случае создавать и сохранять резервную копию удалённого сервера будем на нашем сервере. 
+Создаём скрипт /home/pavel/backup/backup_all_remote.sh:
+
+# Backup all files on remote serv2
+#
+# Pavel Malakhov 2005.03.03
+
+ssh 10.0.0.4 "cd /; tar cvzf - . --exclude ./home/pm/backup --exclude ./home/pm/app --exclude ./usr/local/squid/var --exclude ./proc" > /home/pavel/backup/serv2_backup_all.tar.gz
+
+Для выполнения этого скрипта нужно, чтоб на удалённом сервере был разрешён вход пользователю root по протоколу ssh, 
+т.е. в /etc/ssh/sshd_config:
+
+PermitRootLogin yes
+
+Если создать сертификат на сервер, то можно будет входить и без пароля, 
+а тогда скрипт можно будет включить в /etc/crontab (см. соответствующую статью). 
+Без этого придётся вводить пароль и, соответственно, автоматического бэкапа не получится. 
+
+
+
+
+
+
+
+
+
+tar -zcvpf /backups/fullbackup.tar.gz --directory=/ --exclude=proc
+--exclude=sys --exclude=dev/pts --exclude=backups .
+
+Likewise, our untar-ing command becomes:
+
+tar -zxvpf /fullbackup.tar.gz 
+
+
+3. tar для этого дела хорош, но не совсем удобен. Если во время содания архива какой-то файл изменился, 
+tar честно доделает работу, но вернёт код ошибки. Это усложнит тебе автоматизацию работы. 
+В этом смысле cpio лучше, правда, у него есть свои баги
+
+Не забудь разобраться, что из файловой системы надо исключить (обязательно: /proc /sys, наверняка: /dev, вероятно: /tmp /var/tmp),
+ и как это сделать средствами tar.
+
+
+
+
+MySQL лучше бэкапить не копированием базы, а с помощью mysqldump, а полученный дамп архивировать.
+Это спасет от конфликта версий MySQL-сервера. Мало ли какие ситуации бывают) 
+
+mysqldump работает медленно и блокирует таблицы. Архивировать большие таблицы данным способом совершенно невозможно.
+
+Для больших и серьёзных - lvm snapshot и с него mysqldump
+
+
+
+
+
+
+
+
+
+Скрипты и пр. файлы (хоть весь каталог проекта) — SVN (по крону svn update)
+Опять же ничего стопить не надо (если конечно нет залоченных файлов). Бэкап не просто инкрементный, но еще и с контролем версий,
+ т. е. с возможностью откатиться не только на последнее состояние, но и на более раннее. 
+Так же можно как локальный репозиторий организовать, так и удаленный
+
+
+Резервное копирование данных интернет-проекта во многих случаях делится на три основные части:
+— Исходный код. Изначально резервируется системой контроля версий
+— Media-файлы. Хорошо резервируются с использованием rsync
+— База, в нашем случае MySQL. Лучший способ прозрачного резервного копирования — снятие копий с клиента репликации
+
+
+
+#!/bin/sh
+# Описываем базовые директории
+BACKUP="/srv/backup/"
+TEMP="/srv/backup/temp" #Папка удаляется после выполнения скрипта !
+PREFIX=`hostname -s`_`date +%d.%m.%y-%H:%M`
+# Описываем папки backupов
+    # Файлы системы
+    ETC="$TEMP/etc/"
+    # Файлы сервера
+    WWW="$TEMP/www/"
+    VMAIL="$TEMP/vmail/"
+    MYSQL="$TEMP/mysql/"
+# Создаем необходимые папки
+mkdir $TEMP
+#mkdir $ETC
+mkdir $WWW
+mkdir $VMAIL
+mkdir $MYSQL
+# Копируем файлы в созданые папки
+#cp -r /etc/ $ETC
+cp -r /srv/www/www.*.ru/ $WWW
+cp -r /srv/www/mail.*.ru/ $WWW
+cp -r /srv/www/workflow.*.ru/ $WWW
+cp -r /srv/vmail/* $VMAIL
+# Бэкапим mysql базы
+mysqldump -ubackup -P3306 -hlocalhost -p[pass] mail > $MYSQL/mail.sql
+mysqldump -ubackup -P3306 -hlocalhost -p[pass] webmail > $MYSQL/webmail.sql
+# Переходим в каталог с копиями
+cd $TEMP
+# Создаем архив
+tar -czvf /srv/backup/data/$PREFIX.tar.gz *
+# Очищаем папку temp
+rm -rf $TEMP
+
+Не занудства ради, а исключительно для изложения моих мыслей на эту тему лично я бы еще как минимум:
+1) d-m-y заменил бы на y-m-d для удобства сортировки в файловой системе;
+2) вместо cp -r писал cp -rp;
+3) на пайп от mysqldump я бы еще натравил bzip2;
+4) соответственно, в tar вместо -z я бы писал -y (-j);
+5) проверял коды ошибок, возвращаемые в процессе работы скрипта;
+6) сохранял бы в каком-нибудь виде протокол его работы.
+… О, еще чуть не забыл добавить:
+7) подумал бы, а зачем предварительно перед тем, как запускать tar, делать дубликат www-серверов? То есть tar напускал бы сразу на оригинал. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Откройте для себя снапшоты (LVM, ZFS). Как делать бэкап MySQL я описывал тут
+[http://habrahabr.ru/blogs/habraworks/40255/#comment_975194](http://habrahabr.ru/blogs/habraworks/40255/#comment_975194)
+Тот же функционал и гораздо больший можно получить использованием rdiff-backup как тут уже писали.
+
+А что, содержимое БД в памяти и на диске в любой момент времени идентично?
+
+После FLUSH TABLES и залочки — да 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Мне кажется, есть несколько вариантов подхода:
+
+1) лочим mysql, делаем LVM снапшот, разлочиваем. Снапшот бэкапим как-то.
+2) лочим mysql, nginx и postfix останавливаем, делаем бэкап файловой системы, всё запускаем обратно.
+3) делаем копию баз mysql с помощью mysqlhotcopy или какой-то другой дамп, делаем бэкап системы и баз.
+
+Второй случай приводит систему в более-менее стабильное состояние. Первый — в менее стабильное но самый малопростойный,
+ третий — состояние системы вообще нестабильное, но самый простой.
+
+Бэкап можно делать разными способами, но мне кажется, лучшие варианты:
+1) dar
+2) rdiff-backup
+
+dar — продвинутая версия tar, делает инкрементальные бэкапы, причём первую копию можно удалить, оставив от неё только метаинформацию. 
+Сохраняет файлы с атрибутами в файлах заданного размера — например, чтобы на CD можно было записать. 
+Пример использования — делаем первый бэкап, вытаскиваем метоинформацию, бэкап отправляем на FTP — много-много гигабайт, при следующих бэкапах используем метаинформацию как источник знаний о изменившихся файлах и отправляем на FTP инкрементальные копии. Достоинство — на локальной машине нет полной первой копии.
+
+rdiff-backup — фактически система контроля версий. Недостаток — много файлов (сколько было плюс инкрементальные копии).
+ Достоинство — иногда интересное — права на файлы хранит не только в виде идентификаторов пользователей, но и имён пользователей,
+ при восстановлении в системе с другими идентификаторами права установятся на, например, www-data правильно.
+ Ну и умеет работать с удалёнными архивами по ssh, что, правда, не очень полезно из-за возможных ошибок связи.
+ Вариант использования — сделать первый бэкап на локальной машине, rsync'ом отправить на удалённую машину, 
+стереть локальную копию и дальше работать только с удалённой. Ошибки связи могут быть, но инкрементальные копии делаются быстро. 
+И директорию, которую строит rdiff-backup, трудно записать на носители.
+
+
+
+
+
+    I recommend you stay away from tar.
+
+Я думаю, с этой рекомендацией он погорячился. Фактически его претензии к tar сводятся к необходимости указывать параметр -p 
+при восстановлении бэкапа. 
+Совет использовать --numeric-owner на самом деле корректен только при условии восстановления бэкапа полной системы, 
+а для восстановления отдельных частей (база MySQL, например) да ещё и на другой системе это абсолютно некорректно.
+
+
+
+
+А я делаю так:
+#!/bin/bash
+
+cd /home/Backup
+# Бэкап всего что нужно
+tar -cvvzf /home/Backup/back-`date '+%m_%d_%Y'`.tar.bz2 \
+/var/www/ \
+/var/lib/mysql/ \
+/etc/ \
+/var/log/ \
+/root/ \
+--exclude=/home/Backup > ./last.log
+
+# Стираем файлы бэкапа старше 30 дней
+find . -mtime +30 -exec rm '{}' \;
+# Стираем старые логи
+find /var/log/ -type f -name *\.gz -exec rm '{}' \;
+
+
+
+
+
+
+
+
+RSYNC
+[http://www.opennet.ru/base/sys/rsync_backup.txt.html](http://www.opennet.ru/base/sys/rsync_backup.txt.html)
+
+
+
+
+Мой бекап
+
+mysqldump -u root -p iptech48 > /srv/www/iptech48.sql
+tar -czvpf iptech48_3.12.13.tar.gz iptech48/
+
+scp -P 2222 *.sql garry@192.168.1.141:/home/garry/seo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Шифрование
+[http://avz.org.ua/wp/2012/02/15/creating-encrypted-backup-with-fsbackup/](http://avz.org.ua/wp/2012/02/15/creating-encrypted-backup-with-fsbackup/)
+
+
+
+
+
+
+
+
+[http://www.opennet.ru/openforum/vsluhforumID1/79571.html](http://www.opennet.ru/openforum/vsluhforumID1/79571.html)
+
+
+fsbackup
+/srv/www
+!/srv/www
+d~/srv/www/iptech48
+d~/srv/www/potolok
+d~/srv/www/usmmag
+d~/srv/www/usm-mag
+
+
+
+
+
+
+
+__DATA__
+/srv/www    #архивировть эту директорию, (директория от которые остальные шаблоны отталкиваются)
+!/srv/www       #не архивировать эту директорию
+d~/srv/www/iptech48     #сделать исключение для этих директорий
+d~/srv/www/potolok
+d~/srv/www/usmmag
+d~/srv/www/usm-mag
+f!.*\.tar\.gz           #не архивировать эти файлы
+f!.*\.gz                #не архивировать эти файлы
+
+
+
+
+
+
+
+
+
+
+
+groupadd backup
+useradd -G backup backup
+usermod -G backup backup
+useradd -d /home/backup -G backup backup
+useradd -d /home/backup -g backup backup
+
+
+
+
+
+[http://www.samag.ru/archive/article/783](http://www.samag.ru/archive/article/783)
+[http://malinsky.ru/computering/%D1%80%D0%B5%D0%B7%D0%B5%D1%80%D0%B2%D0%BD%D0%BE%D0%B5-%D0%BA%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%84%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2-%D0%B8-%D0%B1%D0%B4-%D0%BD%D0%B0-linux.html](http://malinsky.ru/computering/%D1%80%D0%B5%D0%B7%D0%B5%D1%80%D0%B2%D0%BD%D0%BE%D0%B5-%D0%BA%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%84%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2-%D0%B8-%D0%B1%D0%B4-%D0%BD%D0%B0-linux.html)
+[http://wiki.x-news.ru/index.php?title=FSBACKUP_-_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%B8%D0%BD%D0%BA%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D1%80%D0%B5%D0%B7%D0%B5%D1%80%D0%B2%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BA%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B8_%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8_%D0%A4%D0%A1](http://wiki.x-news.ru/index.php?title=FSBACKUP_-_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%B8%D0%BD%D0%BA%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D1%80%D0%B5%D0%B7%D0%B5%D1%80%D0%B2%D0%BD%D0%BE%D0%B3%D0%BE_%D0%BA%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%B8_%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8_%D0%A4%D0%A1)
+[http://avz.org.ua/wp/2012/02/15/creating-encrypted-backup-with-fsbackup/](http://avz.org.ua/wp/2012/02/15/creating-encrypted-backup-with-fsbackup/)
+
+
+
+Копирование с диска на диск
+[http://storebackup.org/](http://storebackup.org/)
+rsnapshot
+
+
+Скрипт, который делает tar и копирует файлы по ssh на другой сервер.
+
+
+
+
+12 типичных ошибок backup
+[http://habrahabr.ru/post/267881/](http://habrahabr.ru/post/267881/)
+
+
+
+
+Можно присмотреться и к этой системе
+[https://labs.riseup.net/code/projects/backupninja](https://labs.riseup.net/code/projects/backupninja)
+[http://habrahabr.ru/post/97685/](http://habrahabr.ru/post/97685/)
+
+backupninja: программа служит удобной оберткой для других утилит, позволяет централизованно управлять процессом архивации.
+Установка: apt-get install backupninja
+
+duplicity: утилита для создания инкрементальных бэкапов. Умеет работать с удаленными серверами.
+Установка: apt-get install duplicity

@@ -1,0 +1,31 @@
+---
+layout: post
+title:  "ats45-c0"
+date:   2016-08-15 10:27:31 +0300
+categories: ats45-c0
+tags: cisco
+---
+
+# ats45-c0
+interface Virtual-Template1
+ description #PPTP virtual template (CHAP authentication)
+ mtu 1492
+ ip unnumbered GigabitEthernet0/0.10
+ ip verify unicast reverse-path
+ no ip proxy-arp
+ ip flow ingress
+ ip nat inside
+ ip virtual-reassembly
+ ppp authentication ms-chap ms-chap-v2
+end
+
+interface Virtual-Template1
+ description #PPTP virtual template (CHAP authentication)
+ mtu 1492
+ ip unnumbered GigabitEthernet0/0.10
+ ip verify unicast reverse-path
+ no ip proxy-arp
+ ip flow ingress
+ ip policy route-map pptp-nat
+ ppp authentication ms-chap ms-chap-v2
+end

@@ -1,0 +1,45 @@
+---
+layout: post
+title:  "проект БД"
+date:   2018-03-04 14:16:59 +0300
+categories: sql
+tags: sql
+---
+
+# проект БД
+[https://toster.ru/q/370064](https://toster.ru/q/370064)
+
+
+
+[https://www.youtube.com/watch?v=dzSNPnjHd7Q](https://www.youtube.com/watch?v=dzSNPnjHd7Q)
+[https://www.youtube.com/watch?v=gqxdSV1re6E](https://www.youtube.com/watch?v=gqxdSV1re6E)
+[https://habr.com/ru/post/115777/](https://habr.com/ru/post/115777/)
+[http://rema44.ru/resurs/study/dbmat/prj2.pdf](http://rema44.ru/resurs/study/dbmat/prj2.pdf)
+[https://www.google.com/search?ei=qExYXO_DGrKJmgXP94b4Ag&q=mysql+workbench&oq=mysql+&gs_l=psy-ab.3.2.0i67l10.197592.199394..202401...0.0..0.76.411.6......0....1..gws-wiz.......0i71j35i39j0i131j0.V5_KTiu_imk](https://www.google.com/search?ei=qExYXO_DGrKJmgXP94b4Ag&q=mysql+workbench&oq=mysql+&gs_l=psy-ab.3.2.0i67l10.197592.199394..202401...0.0..0.76.411.6......0....1..gws-wiz.......0i71j35i39j0i131j0.V5_KTiu_imk)
+[https://itsoft.ru/docs/web/c13_erwin.php](https://itsoft.ru/docs/web/c13_erwin.php)
+[https://studopedia.su/11_13512_CASE-sredstva-proektirovaniya-baz-dannih.html](https://studopedia.su/11_13512_CASE-sredstva-proektirovaniya-baz-dannih.html)
+
+mysql workbench
+
+тренер
+    заслуги
+    возраст
+    фото
+
+зал
+    адрес
+    фото
+    удобства
+    тренажёрный зал
+    
+
+вид спорта
+    бжж
+    дзюдо
+    самбо
+    мма
+
+
+
+[https://eax.me/database-design/](https://eax.me/database-design/)
+

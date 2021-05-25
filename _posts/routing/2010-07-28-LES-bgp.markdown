@@ -1,0 +1,22 @@
+---
+layout: post
+title:  "LES-bgp"
+date:   2010-07-28 12:46:46 +0400
+categories: routing
+tags: routing
+---
+
+# LES-bgp
+ctd-c5
+
+router bgp 20866
+ address-family ipv4
+no neighbor 78.25.66.221 prefix-list deny_lesnets_from_uplinks in 
+
+
+ctd-c6
+router bgp 20866
+ address-family ipv4
+
+no neighbor 87.245.241.133 prefix-list deny_lesnets_from_uplinks in
+no neighbor 87.245.241.145 prefix-list deny_lesnets_from_uplinks in

@@ -1,0 +1,154 @@
+---
+layout: post
+title:  "logrotate2"
+date:   2010-03-30 12:40:28 +0400
+categories: logs
+tags: logs
+---
+
+# logrotate2
+-rw-------   1 root         root    15355813 авг  3 15:24 openvpn.log
+-rw-------   1 root         root         664 авг  3 15:24 openvpn-status.log
+
+/var/log/openvpn-status.log
+/var/log/openvpn.log {
+	compress
+	dateext
+	maxage 365
+	rotate 99
+	size=+1024k
+	notifempty
+	missingok
+	create 600 root root
+	sharedscripts
+	postrotate
+		 /bin/systemctl reload openvpn@openvpn-srv.service > /dev/null 2>&1 || :
+	endscript
+}
+
+
+
+named
+monit
+radiusd
+dhcpd
+racoon
+ntp
+openvpn
+
+
+
+
+
+
+
+/var/log/monit.log {
+    missingok
+    notifempty
+    size 100k
+    create 0644 root root
+    postrotate
+        /bin/systemctl reload monit.service > /dev/null 2>&1 || :
+    endscript
+}
+
+
+
+/var/named/data/named.run {
+    missingok
+    su named named
+    create 0644 named named
+    postrotate
+        /sbin/systemctl reload named.service > /dev/null 2>&1 || true
+        /sbin/systemctl reload named-chroot.service > /dev/null 2>&1 || true
+        /sbin/systemctl reload named-sdb.service > /dev/null 2>&1 || true
+        /sbin/systemctl reload named-sdb-chroot.service > /dev/null 2>&1 || true
+    endscript
+}
+
+
+
+/var/log/quagga/ospfd.log {
+    notifempty
+    missingok
+    postrotate
+        /bin/kill -USR1 `cat /var/run/quagga/ospfd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}
+
+
+/var/log/radius/radius.log {
+        monthly
+        rotate 4
+        create
+        missingok
+        compress
+        postrotate
+                /sbin/service radiusd reload
+        endscript
+}
+
+
+/var/log/samba/* {
+    notifempty
+    olddir /var/log/samba/old
+    missingok
+    sharedscripts
+    copytruncate
+}
+
+
+
+/var/log/cron
+/var/log/maillog
+/var/log/messages
+/var/log/secure
+/var/log/spooler
+{
+    sharedscripts
+    postrotate
+        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}
+
+
+
+
+/var/log/yum.log {
+    missingok
+    notifempty
+    size 30k
+    yearly
+    create 0600 root root
+}
+
+
+[http://mnorin.com/logrotate-nastrojka-rotatsii-logov.html](http://mnorin.com/logrotate-nastrojka-rotatsii-logov.html)
+[http://debianworld.ru/articles/rotaciya-logov-s-pomoshyu-logrotate-v-debian-ubuntu/](http://debianworld.ru/articles/rotaciya-logov-s-pomoshyu-logrotate-v-debian-ubuntu/)
+[http://linuxnow.ru/view.php?id=50](http://linuxnow.ru/view.php?id=50)
+[http://www.k-max.name/linux/rsyslog-na-debian-nastrojka-servera/](http://www.k-max.name/linux/rsyslog-na-debian-nastrojka-servera/)
+
+$ more /etc/logrotate.d/apache2
+/var/log/apache2/*.log {
+        weekly              # ротация раз в неделю
+        missingok           # отсутствие файла не является ошибкой
+        rotate 52           # сохраняется последние 52 ротированных файла
+        compress            # сжимать ротируемый файл
+        delaycompress       # сжимать предыдущий файл при следующей ротации 
+                            # (т.е. файл *.log.1 будет не сжат, а *.log.2 и далее сжатыми)
+        notifempty          # не обрабатывать пустые файлы
+        create 640 root adm # сразу после ротации создать пустой файл с заданными правами и пользователем
+        sharedscripts       # крипты prerotate/postrotate будут выполнены только один раз
+                            # не зависимо от количества журналов, подходящих под заданный шаблон
+        postrotate          # скрипт будет выполнен сразу после ротации
+                if [ -f "`. /etc/apache2/envvars ; echo ${APACHE_PID_FILE:-/var/run/apache2.pid}`" ]; then
+                        /etc/init.d/apache2 reload > /dev/null
+                fi
+        endscript
+}
+
+
+
+SIGUSR1
+
+[http://at4.soft.cs.uni-potsdam.de/manual/ru/stopping.html](http://at4.soft.cs.uni-potsdam.de/manual/ru/stopping.html)

@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "selinux"
+date:   2014-01-24 19:25:09 +0400
+categories: linux
+tags: linux
+---
+
+# selinux
+[http://habrahabr.ru/company/pt/blog/142423/](http://habrahabr.ru/company/pt/blog/142423/)
+[http://www.ibm.com/developerworks/ru/library/l-se_linux_02/](http://www.ibm.com/developerworks/ru/library/l-se_linux_02/)
+[http://ru.wikipedia.org/wiki/SELinux](http://ru.wikipedia.org/wiki/SELinux)
+[http://docs.fedoraproject.org/ru-RU/Fedora/13/html-single/Security-Enhanced_Linux/index.html](http://docs.fedoraproject.org/ru-RU/Fedora/13/html-single/Security-Enhanced_Linux/index.html)

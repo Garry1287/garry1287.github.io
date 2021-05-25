@@ -1,0 +1,22 @@
+---
+layout: post
+title:  "msu_group"
+date:   2016-06-08 04:00:47 +0300
+categories: Networking
+tags: Networking
+---
+
+# msu_group
+"Вася Лебедев" <vas_2002@mail.ru>
+Вася Петрушкин petruvasily@yandex.ru
+"Дима Пискулин" <dimma3@mail.ru>
+"Кемран Исмаилов" <i-kemran11@mail.ru>
+"Настя Гордиенко" <sendmesmth@inbox.ru>
+"Саша Воронцов" <asv82@yandex.ru>
+"Саша Стоянов" <sannyhome@yandex.ru>
+"Сергей Колесников" <sskss@bk.ru>
+"Таня Садовникова" <planeta-9@mail.ru>
+
+Инга Владимирова Мазаева
+Наталья
+Наталья

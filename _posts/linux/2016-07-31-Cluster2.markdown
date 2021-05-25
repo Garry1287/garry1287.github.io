@@ -1,0 +1,88 @@
+---
+layout: post
+title:  "Cluster2"
+date:   2016-07-31 15:59:09 +0300
+categories: linux
+tags: linux
+---
+
+# Cluster2
+Кластер - это группа серверов (именуемых "нодами"),
+ которые работают вместе, выполняют общие задачи и клиенты видят их как одну систему. 
+
+
+Классическая схема
+Используется два абсолютно идентичных сервера и общий дисковый RAID массив
+
+ но наиболее важные моменты работы кластера: отказ одной из нод и переход выполняемых ею задач на другую.
+
+
+
+[http://www.opennet.ru/docs/RUS/openMozix_howto/ch02.html](http://www.opennet.ru/docs/RUS/openMozix_howto/ch02.html)
+[http://www.rhd.ru/docs/manuals/enterprise/RHEL-3-Manual/rh-cs-ru-3/ch-intro.html](http://www.rhd.ru/docs/manuals/enterprise/RHEL-3-Manual/rh-cs-ru-3/ch-intro.html)
+
+
+
+
+
+Что такое виртуализация
+[http://habrahabr.ru/post/91503/](http://habrahabr.ru/post/91503/)
+
+
+Схема кластера
+[http://samag.ru/archive/article/2811](http://samag.ru/archive/article/2811)
+
+
+Ну тада надо еще городить либо clasterfs, либо HA сторадж. Glusterfs
+в овирт есть load balancing и квоты, которые можно настраивать. если хост загружен сильнее чем выставлено в политике балансировки кластера, самая «легкая» ВМ на нем переносится на другой хост, и так пока процент нагрузки не упадет ниже заданной границы.
+
+
+
+Если есть вторая, и уровень паранойи на отметке «а если упадет бомба» то это немного другой сценарий, называется DR. 
+в овирте это делается очень просто - реплицируем СХД, держим engine в виртуалке, которую точно так же реплицируем (обычно отдельный LUN на той же СХД), 
+и при падении сервисов, все поднимаем в другом месте. Что, кстати, не отменяет надобности в бекапах, так как если какая то хрень накосячится, то косяк будет реплицирован
+
+СХД - хранилище
+
+Ovirt HA cluster
+oVirt представляет собой узел управления - oVirt Engine и множество хостов виртуализации на которых запущены виртуальные машины.
+ Следовательно, для установки oVirt нам понадобится, как минимум, две машины
+
+
+    ovirt-engine - центр управления.
+    ovirt-node01 - узел на котором будут запущены виртуальные машины (их может быть больше одной).
+
+[http://www.ibm.com/developerworks/ru/library/l-virt/index.html](http://www.ibm.com/developerworks/ru/library/l-virt/index.html)
+[https://wiki.centos.org/HowTos/oVirt](https://wiki.centos.org/HowTos/oVirt)
+[http://www.thislinux.org/2013/12/ovirt-33-setup.html](http://www.thislinux.org/2013/12/ovirt-33-setup.html)
+[https://www.youtube.com/watch?v=uHCnXGUMaS0](https://www.youtube.com/watch?v=uHCnXGUMaS0)
+[http://www.ovirt.org/Cluster_emulation_modes](http://www.ovirt.org/Cluster_emulation_modes)
+[http://wiki.rosalab.ru/ru/index.php/%D0%91%D0%BB%D0%BE%D0%B3:%D0%A2%D0%BE%D1%87%D0%BA%D0%B0_%D0%A0%D0%BE%D1%81%D1%8B/%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B5%D0%B9_Ovirt_3.5_%D0%B2_%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9_%D1%81%D1%80%D0%B5%D0%B4%D0%B5_IPA_%D0%BD%D0%B0_%D0%B1%D0%B0%D0%B7%D0%B5_RELS_6.6](http://wiki.rosalab.ru/ru/index.php/%D0%91%D0%BB%D0%BE%D0%B3:%D0%A2%D0%BE%D1%87%D0%BA%D0%B0_%D0%A0%D0%BE%D1%81%D1%8B/%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B5%D0%B9_Ovirt_3.5_%D0%B2_%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9_%D1%81%D1%80%D0%B5%D0%B4%D0%B5_IPA_%D0%BD%D0%B0_%D0%B1%D0%B0%D0%B7%D0%B5_RELS_6.6)
+[http://jensd.be/550/linux/install-ovirt-on-centos-7](http://jensd.be/550/linux/install-ovirt-on-centos-7)
+
+
+[http://www.redgrid.net/uncategorized/ovirt-3-5-ha-cluster-gluster-or-drbd-iscsi-part1/](http://www.redgrid.net/uncategorized/ovirt-3-5-ha-cluster-gluster-or-drbd-iscsi-part1/)
+
+[http://integritysys.com.ua/data/uploads/solutions/virtualization/img3-ha_virtual_infrastructure.png](http://integritysys.com.ua/data/uploads/solutions/virtualization/img3-ha_virtual_infrastructure.png)
+
+
+
+
+Esxi
+[http://hutpu4.net/puplication/stroim-klaster-vmware-chast-5-sozdanie-i-nastrojka-klastera.html](http://hutpu4.net/puplication/stroim-klaster-vmware-chast-5-sozdanie-i-nastrojka-klastera.html)
+[http://www.v-grade.ru/doku.php?id=how-to-create-vmware-ha-cluster](http://www.v-grade.ru/doku.php?id=how-to-create-vmware-ha-cluster)
+
+
+Promox
+[http://habrahabr.ru/company/acronis/blog/204190/](http://habrahabr.ru/company/acronis/blog/204190/)
+
+
+Отказоустойчивое облако
+[http://habrahabr.ru/post/270187/](http://habrahabr.ru/post/270187/)
+
+Про облака
+[http://www.intuit.ru/studies/courses/673/529/lecture/11913](http://www.intuit.ru/studies/courses/673/529/lecture/11913)
+
+
+Отличное руководство по кластеру
+[https://alteeve.ca/w/AN](https://alteeve.ca/w/AN)!Cluster_Tutorial_2

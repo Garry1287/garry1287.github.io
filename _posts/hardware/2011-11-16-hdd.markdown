@@ -1,0 +1,345 @@
+---
+layout: post
+title:  "hdd"
+date:   2011-11-16 05:44:09 +0400
+categories: hardware
+tags: hardware
+---
+
+# hdd
+Структура диска
+
+[http://ru.wikipedia.org/wiki/%D0%9A%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80_%28%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%86%D0%B0_%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%29](http://ru.wikipedia.org/wiki/%D0%9A%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80_%28%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%86%D0%B0_%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%29)
+[http://rus-linux.net/lib.php?name=/MyLDP/hard/hard/hdd-2.htm](http://rus-linux.net/lib.php?name=/MyLDP/hard/hard/hdd-2.htm)
+
+
+Общий объем (байт) = C x H x S x 512 (байт),
+Цилиндр X Головка X Сектор (СHS) x 512 
+512 - это размер стандартного сектора
+
+Кластер - это несколько объединённых секторов - обычно 4096 (512 X 8) - один кластер - 8 секторов
+ кластер (allocation unit)
+
+Кластер - это блок файловой системы (block size = размеру кластера)
+
+
+Производители жестких дисков обычно поставляют свои изделия отформатированными на низком уровне. 
+Насколько я знаю, это означает, что все дисковое пространство с помощью специальных меток разбито на "сектора", размером 512 байт. 
+Такой диск (или дисковый раздел) должен быть подготовлен для использования в определенной операционной системе.
+ В MS-DOS или Windows процедура подготовки называется форматированием, а в Линукс - созданием файловой системы. 
+Создание файловой системы ext2fs заключается в создании в разделе диска определенной логической структуры. 
+Эта структура строится следующим образом. Во-первых, на диске выделяется загрузочная область(рис. 2.). 
+Загрузочная область создается в любой файловой системе. На первичном разделе она содержит загрузочную запись - фрагмент кода,
+ который инициирует процесс загрузки операционной системы при запуске. На других разделах эта область не используется. 
+Все остальное пространство на диске делится на блоки. Блок может иметь размер от 1, 2 или 4 килобайта. 
+Блок является адресуемой единицей дискового пространства. Выделение места файлам осуществляется целыми блоками, 
+поэтому при выборе размера блока приходится идти на компромисс. 
+Большой размер блока, как правило, сокращает число обращений к диску при чтении или записи файла, 
+но зато увеличивает долю нерационально используемого пространства, особенно, при наличии большого числа файлов маленького размера. 
+
+[http://linuxboss.narod.ru/linuxdoc/linux4_fs/filesystem3.htm#2.5.](http://linuxboss.narod.ru/linuxdoc/linux4_fs/filesystem3.htm#2.5.)
+
+
+
+UUID
+Опция <device>
+
+# blkid /dev/sda5
+
+/dev/sda5: UUID="5a179614-0415-48c6-a9ad-3f6ad9596619" TYPE="ext3" SEC_TYPE="ext2"
+
+Команда vol_id
+Существует еще команда vol_id. Она настолько простая, и ман к ней так понятно написан, что разобраться с ней не составит труда. Например:
+
+# vol_id /dev/sda2
+
+ID_FS_USAGE=filesystem
+ID_FS_TYPE=ntfs
+ID_FS_VERSION=3.1
+ID_FS_UUID=02E4E3A0E4E39467
+ID_FS_UUID_ENC=02E4E3A0E4E39467
+ID_FS_LABEL=Vista
+ID_FS_LABEL_ENC=Vista
+ID_FS_LABEL_SAFE=Vista
+
+
+При загрузке компьютера, программа udev записывает UUID раздела в его ноду - файл блочного устройства в директории /dev.
+ В доступной пользователю части файловой системы,
+ UUID'ы разделов можно найти в файле /etc/blkid.tab, но информация эта может оказаться устаревшей. 
+
+[http://rus-linux.net/nlib.php?name=/MyLDP/consol/HuMan/blkid-ru.html](http://rus-linux.net/nlib.php?name=/MyLDP/consol/HuMan/blkid-ru.html)
+
+
+
+
+
+
+
+
+
+
+
+Чем же так плох SATA RAID, который сейчас идет в поставке практически всех современных материнских плат? 
+Да тем что он в большинстве бюджетных решений не является аппаратным RAID-ом, 
+а является так называемым «программно-зависимым».
+
+То есть управление данными происходит не на уровне самого «железа», 
+а на уровне микрокода BIOS через драйвер ОС. От сюда и такие понятия как «драйвера» на SATA-RAID (без которых RAID видится как отдельные диски),
+от сюда и проблемы.
+
+
+Во-первых это несовместимость – сгорела материнская плата, и ищи такую же плату целиком (не контроллер),
+ нужна идентичная плата чтобы добыть свои ценные данные. 
+Хорошо если они еще выпускаются, а если это произойдет лет через 5-10? 
+Linux RAID лишен этой проблемы, т.к. находится на таком уровне абстракции, 
+что ваш RAID будет «виден» на любой материнской плате и на любом дистрибутиве Linux (в разумных рамках естественно).
+
+Во-вторых SATA RAID это доверие своих данных какому-то чужому микрокоду, который мало того что не свободен от ошибок, так еще и закрыт. 
+В отличии от Linux RAID, открытого, испытанного уже десятилетиями и вылизанного тысячами программистов, 
+с доступными спецификациями и исходными кодами. Плюс – беспроблемное свободное перемещение дисковых томов на различные материнские платы,
+ долгосрочная поддержка (всем сообществом, а не отдельным конечным вендором), 
+не требует аппаратных апгрейдов, легкость обновления, и многое другое.
+
+
+SCSI разъёмы
+[http://www.ihdd.ru/scsi-interface-description](http://www.ihdd.ru/scsi-interface-description)
+
+
+
+аппаратный рейд представляется для системы как один диск.
+
+не важно при этом, сколько винчестеров туда на деле поставлено.
+
+программный рейд (soft-raid, host-raid) на деле управляются драйвером, и для системы видны все подключённые диски.
+
+встраивают обычно - как раз последние рейды. потому как для них не обязательно ставить s-ram и аккумулятор для питания оной - в случае пропадения
+ питаня данные останутся там.
+
+
+
+
+
+
+За частую необходимо проверить диски на наличие поврежденных секторов (бед-блоки). Чем раньше их заметить тем меньше информации можно потерять или выявить неисправный диск и заменить.
+
+Для проверки жестких дисков в Linux можно воспользоваться стандартной утилитой badblocks. Утилита простая, пробегая по диску она выводит сектора повреждения. Для подробного отображения используется ключ -v.
+
+# badblocks -v /dev/sda
+
+Для лечения блогов, точнее выключения поврежденных секторов необходимо собрать в файл все поврежденные блоки диска.
+
+# badblocks /dev/sda2 > /tmp/badblocks2.txt
+
+После собранной информации о поврежденных секторах в файле /tmp/badblocks2.txt можно воспользоваться утилитой e2fsck для попытки восстановить данные и перенести из поврежденных секторов.
+
+# e2fsck -l /tmp/badblocks2.txt /dev/sda2
+
+Программа e2fsck проверяет супер блоки файловой системы, структуру файлов. Стоит заметить, что для запуска проверки файловая система должна быть размонтирована или подключен в read-only. При проверки будет попытка прочитать битые сектора (блоки) и перенос данных в рабочие.
+
+
+
+Порой необходимо проверить скорость чтения дисков для понимания: Какие диски с какими можно объединять в масив без потери производительности? Или из-за какого диска тормозит raid массив?
+
+Для быстрой диагностики HDD можно воспользоваться командой:
+
+hdparm -tT /dev/sda
+
+Или скорость чтение для уже собранного raid массива HDD в целом:
+
+hdparm -tT /dev/md0
+
+В результате мы получим примерно это:
+
+hdparm -tT /dev/sda
+
+/dev/sda:
+ Timing cached reads:   1690 MB in  2.00 seconds = 845.07 MB/sec
+ Timing buffered disk reads: 302 MB in  3.01 seconds = 100.24 MB/sec
+
+
+
+
+[http://www.it-article.ru/linux/opredelenie-k-kakomu-scsi-kontrolleru-podklyuchen-disk](http://www.it-article.ru/linux/opredelenie-k-kakomu-scsi-kontrolleru-podklyuchen-disk)
+
+
+garry:~ # hdparm -I /dev/sda | grep Number
+        Model Number:       WDC WD2500AAJS-22VTA0                   
+        Serial Number:      WD-WMART2037954
+garry:~ # hdparm -I /dev/sdb | grep Number
+        Model Number:       WDC WD5000AAKX-001CA0                   
+        Serial Number:      WD-WCAYUH038499
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. См /cat/proc/mdstat
+2. См smartctl
+
+
+Температура диска
+hddtemp /dev/sda
+
+или
+sudo /usr/sbin/smartctl -a /dev/sda | grep Temp | awk -F" " '{printf "%d",$10}'
+
+
+
+
+
+
+
+
+
+badblocks -v <имя_устройства> Например:
+
+badblocks -v /dev/sda
+
+Параметр -v включает подробный режим работы — о каждом действии программа badblocks будет выводить отчет. 
+Желательно выполнять программу в однопользовательском режиме (при загрузке init=/bin/bash), чтобы ее работе ничто не мешало.
+
+Или
+
+badblocks /dev/sda3 > /tmp/bblcks3
+
+После этого вся информация о поврежденных участках поступит в файл /tmp/bblcks3. 
+Это необходимо, т.к. далее она понадобится для проверки файловой системы.
+
+
+e2fsck -l /tmp/bblcks3 /dev/sda3
+
+Тогда при проверке будет предпринята попытка перенести информацию с поврежденного блока на целый. Иногда это удается.
+
+
+
+
+
+
+Последовательность проверки файловой системы должна быть следующая:
+1. Размонтировать файловую систему.
+2. Запустить fsck для ее проверки.
+Например, для проверки файловой системы раздела /dev/hda1 сначала размонтируем его, а потом запустим fsck:
+
+umount /dev/hda1
+fsck /dev/hda1
+
+
+
+файловая система должна быть размонтирована, или, в крайнем случае, смонтирована read-only
+
+
+Но иногда не представляется возможным размонтировать файловую систему, например, когда нужно проверить корневую файловую систему (/). В таком случае необходимо выполнить следующие действия:
+
+    Перезагрузиться в однопользовательском режиме.
+    Перемонтировать корневую файловую систему в режиме "только чтение".
+    Произвести проверку файловой системы.
+
+Для перезагрузки в однопользовательском режиме перезагрузите систему (команда reboot), а при загрузке передайте ядру параметр single.
+В однопользовательском режиме может работать только один пользователь — root, а все сервисы выключены, так что проверке файловой системы ничто не будет помешать. 
+Для перемонтирования файловой системы в режим только для чтения введите команду:
+
+ mount -о remount го -t ext3 /
+
+
+Код, возвращаемый fsck, является суммой следующих условий:
+
+    0 — нет ошибок
+    1 — ошибки файловой системы исправлены
+    2 — необходима перезагрузка системы
+    4 — ошибки файловой системы не исправлены
+    8 — в процессе проверки произошли ошибки
+    16 — неверное использование команды либо синтаксическая ошибка
+    32 — fsck была прервана пользователем
+    128 — ошибка разделяемых объектов
+
+
+Информация о файловой системе
+sudo tune2fs -l /dev/sda2
+
+
+
+
+
+
+
+badblocks -v /dev/hda1 — проверить раздел hda1 на наличие bad-блоков
+fsck /dev/hda1 — проверить/восстановить целостность linux-файловой системы раздела hda1
+fsck.ext2 /dev/hda1 или e2fsck /dev/hda1 — проверить/восстановить целостность файловой системы ext2 раздела hda1
+e2fsck -j /dev/hda1 — проверить/восстановить целостность файловой системы ext3 раздела hda1 с указанием, что журнал расположен там же
+fsck.ext3 /dev/hda1 — проверить/восстановить целостность файловой системы ext3 раздела hda1
+fsck.vfat /dev/hda1 или fsck.msdos /dev/hda1 или dosfsck /dev/hda1 — проверить/восстановить целостность файловой системы fat раздела hda1
+
+
+
+
+
+
+
+
+Структура
+[http://linux.armd.ru/common/linux/Documentation/hd_structure/index.html](http://linux.armd.ru/common/linux/Documentation/hd_structure/index.html)
+[http://www.opennet.ru/base/dev/hdd_struct.txt.html](http://www.opennet.ru/base/dev/hdd_struct.txt.html)
+
+Сделать опрос состояния и присылвать письма - SMART
+[http://xeim.blogspot.ru/2010_01_01_archive.html](http://xeim.blogspot.ru/2010_01_01_archive.html)
+[http://ru.wikipedia.org/wiki/S.M.A.R.T.](http://ru.wikipedia.org/wiki/S.M.A.R.T.)
+[http://www.lissyara.su/articles/freebsd/hardware/smartmontools/](http://www.lissyara.su/articles/freebsd/hardware/smartmontools/)
+[http://unixmemo.org.ua/2010/05/smartmontools-%D1%80%D0%B0%D1%81%D1%81%D0%BA%D0%B0%D0%B6%D0%B5%D1%82-%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%B6%D0%B8%D0%B2%D0%B0%D1%8E%D1%82-%D0%B2%D0%B0%D1%88%D0%B8-%D0%B6%D0%B5%D1%81%D1%82%D0%BA%D0%B8/](http://unixmemo.org.ua/2010/05/smartmontools-%D1%80%D0%B0%D1%81%D1%81%D0%BA%D0%B0%D0%B6%D0%B5%D1%82-%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%B6%D0%B8%D0%B2%D0%B0%D1%8E%D1%82-%D0%B2%D0%B0%D1%88%D0%B8-%D0%B6%D0%B5%D1%81%D1%82%D0%BA%D0%B8/)
+[http://wiki.dieg.info/smartmontools](http://wiki.dieg.info/smartmontools)
+[http://wiki.enchtex.info/tools/system/smartmontools](http://wiki.enchtex.info/tools/system/smartmontools)
+wiki.enchtex.info/tools/system/smartmontools
+[http://ksimute.trancom.ru/smart-hdd.shtml](http://ksimute.trancom.ru/smart-hdd.shtml)
+[http://www.lexpr.ru/node/336](http://www.lexpr.ru/node/336)
+[http://www.wandmagic.ru/news/178.html](http://www.wandmagic.ru/news/178.html)
+[http://www.openkazan.info/smartmontools_smartctl](http://www.openkazan.info/smartmontools_smartctl)
+Инженеры Яндекса о жёстких дисках
+
+
+
+
+
+
+
+
+
+
+
+
+О физике диска
+[http://citforum.ru/operating_systems/sos/glava_10.shtml](http://citforum.ru/operating_systems/sos/glava_10.shtml)
+[http://esyr.org/wiki/%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B/%D0%A4%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B](http://esyr.org/wiki/%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B/%D0%A4%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B)
+[http://cs.mipt.ru/docs/courses/osstud/12/ch12.htm](http://cs.mipt.ru/docs/courses/osstud/12/ch12.htm)
+[http://rk6.bmstu.ru/electronic_book/os/unibase/filsys.html](http://rk6.bmstu.ru/electronic_book/os/unibase/filsys.html)
+[http://linux-ve.chat.ru/book/filesystem3.html](http://linux-ve.chat.ru/book/filesystem3.html)
+[http://www.rhd.ru/docs/manuals/enterprise/RHEL-AS-2.1-Manual/install-guide/ch-partitions.html](http://www.rhd.ru/docs/manuals/enterprise/RHEL-AS-2.1-Manual/install-guide/ch-partitions.html)
+
+
+
+Смещение физических блоков (размер 4096)
+[http://habrahabr.ru/company/paragon/blog/97436/](http://habrahabr.ru/company/paragon/blog/97436/)
+
+
+Mdadm
+[http://habrahabr.ru/post/200194/](http://habrahabr.ru/post/200194/)
+
+
+
+Добавление жёсткого диска в linux
+[http://www.linuxsoft.ru/info/lib/lib/iron/hddadd.htm](http://www.linuxsoft.ru/info/lib/lib/iron/hddadd.htm)
+
+
+
+Smart
+[http://sysadm.pp.ua/linux/monitoring-systems/smart-attributes.html](http://sysadm.pp.ua/linux/monitoring-systems/smart-attributes.html)

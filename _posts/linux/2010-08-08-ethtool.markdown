@@ -1,0 +1,90 @@
+---
+layout: post
+title:  "ethtool"
+date:   2010-08-08 06:17:28 +0400
+categories: linux
+tags: linux
+---
+
+# ethtool
+[http://www.opennet.ru/man.shtml?category=8&russian=0&topic=ethtool](http://www.opennet.ru/man.shtml?category=8&russian=0&topic=ethtool)
+[http://landoflinux.com/linux_ethtool_command.html](http://landoflinux.com/linux_ethtool_command.html)
+[https://forum.ivorde.com/linux-tso-tcp-segmentation-offload-what-it-means-and-how-to-enable-disable-it-t19721.html](https://forum.ivorde.com/linux-tso-tcp-segmentation-offload-what-it-means-and-how-to-enable-disable-it-t19721.html)
+[http://tar.gz.ro/node/282](http://tar.gz.ro/node/282)
+
+
+rx-vlan-offload: off
+tx-vlan-offload: off [fixed]
+
+
+
+
+applydeltarpm
+
+
+
+[root@sapphire network-scripts]# ethtool -k enp2s0
+Features for enp2s0:
+rx-checksumming: off [fixed]
+scatter-gather: off
+        tx-scatter-gather: off
+        tx-scatter-gather-fraglist: off [fixed]
+generic-segmentation-offload: off
+generic-receive-offload: off
+rx-vlan-offload: off
+tx-vlan-offload: off [fixed]
+receive-hashing: off [fixed]
+rx-fcs: off [fixed]
+rx-all: off [fixed]
+
+
+
+
+[root@ruby network-scripts]#  ethtool -k enp5s0f0
+Features for enp5s0f0:
+rx-checksumming: on
+scatter-gather: on
+        tx-scatter-gather: on
+        tx-scatter-gather-fraglist: off [fixed]
+generic-segmentation-offload: on
+generic-receive-offload: on
+rx-vlan-offload: on
+tx-vlan-offload: on
+receive-hashing: on
+rx-fcs: off
+rx-all: off
+
+
+
+
+ethtool --offload eth2 rx on tx on
+
+
+
+Решение проблемы
+ethtool -K enp2s0 rxvlan on txvlan on
+
+
+TYPE="Ethernet"
+BOOTPROTO="none"
+NAME="enp2s0"
+UUID="0eedb138-9fe1-4e0b-a96d-f9b8823f419c"
+DEVICE="enp2s0"
+ONBOOT="yes"
+#IPADDR="81.20.192.19"
+#PREFIX="24"
+#GATEWAY="81.20.192.8"
+ETHTOOL_OPTS="-K enp2s0 rxvlan on txvlan on"
+
+
+
+
+[http://www.cromwell-intl.com/linux/performance-tuning/ethernet.html](http://www.cromwell-intl.com/linux/performance-tuning/ethernet.html)
+[https://stromasys.atlassian.net/wiki/display/KBP/Running%20CHARON%20on%20VMware%20-%20Network%20configuration](https://stromasys.atlassian.net/wiki/display/KBP/Running%20CHARON%20on%20VMware%20-%20Network%20configuration)
+[http://wiki.dieg.info/ethtool](http://wiki.dieg.info/ethtool)
+[https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s1-ethtool.html](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s1-ethtool.html)
+[http://www.unix.com/man-page/centos/8/ETHTOOL/](http://www.unix.com/man-page/centos/8/ETHTOOL/)
+[https://www.shellhacks.com/ru/change-speed-duplex-ethernet-card-linux/](https://www.shellhacks.com/ru/change-speed-duplex-ethernet-card-linux/)
+[http://forum.nag.ru/forum/index.php?showtopic=73274&st=0](http://forum.nag.ru/forum/index.php?showtopic=73274&st=0)
+
+saved_entry=CentOS Linux (3.10.0-514.16.1.el7.x86_64) 7 (Core)

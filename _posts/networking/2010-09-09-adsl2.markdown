@@ -1,0 +1,278 @@
+---
+layout: post
+title:  "adsl2"
+date:   2010-09-09 10:32:34 +0400
+categories: Networking
+tags: Networking
+---
+
+# adsl2
+      1  ADL 0/1/13            1   35   LAN 0/0/505          --   --    1    1
+      2  ADL 0/1/1             0   33   LAN 0/0/574          --   --    1    1
+      3  ADL 0/1/2             0   33   LAN 0/0/524          --   --    1    1
+      4  ADL 0/1/3             0   33   LAN 0/0/557          --   --    1    1
+      5  ADL 0/1/4             2   36   LAN 0/0/502          --   --    1    1
+      6  ADL 0/1/5             3   37   LAN 0/0/503          --   --    1    1
+      7  ADL 0/1/6             4   38   LAN 0/0/504          --   --    1    1
+      8  ADL 0/1/7             0   33   LAN 0/0/572          --   --    1    1
+      9  ADL 0/1/8             0   33   LAN 0/0/561          --   --    1    1
+     10  ADL 0/1/9             0   33   LAN 0/0/540          --   --    1    1
+     11  ADL 0/1/10            0   33   LAN 0/0/541          --   --    1    1
+     12  ADL 0/1/11            0   33   LAN 0/0/543          --   --    1    1
+     13  ADL 0/1/12            0   33   LAN 0/0/546          --   --    1    1
+     14  ADL 0/1/14            2   36   LAN 0/0/539          --   --    1    1
+     15  ADL 0/1/15            0   33   LAN 0/0/521          --   --    1    1
+     16  ADL 0/1/16            0   33   LAN 0/0/562          --   --    1    1
+     17  ADL 0/2/1             0   33   LAN 0/0/558          --   --    1    1
+     18  ADL 0/2/2             6   40   LAN 0/0/506          --   --    1    1
+     19  ADL 0/2/3             8   35   LAN 0/0/529          --   --    1    1
+     20  ADL 0/2/4             2   36   LAN 0/0/532          --   --    1    1
+     21  ADL 0/2/5             0   33   LAN 0/0/533          --   --    1    1
+     22  ADL 0/2/6             4   32   LAN 0/0/535          --   --    1    1
+     23  ADL 0/2/7             5   39   LAN 0/0/537          --   --    1    1
+     24  ADL 0/2/8             7   41   LAN 0/0/536          --   --    1    1
+     25  ADL 0/2/9             0   33   LAN 0/0/509          --   --    1    1
+     26  ADL 0/2/10            0   33   LAN 0/0/570          --   --    1    1
+     27  ADL 0/2/11            0   33   LAN 0/0/571          --   --    1    1
+     28  ADL 0/2/12            0   33   LAN 0/0/547          --   --    1    1
+     29  ADL 0/2/13            0   33   LAN 0/0/555          --   --    1    1
+     30  ADL 0/2/14            0   33   LAN 0/0/573          --   --    1    1
+     31  ADL 0/2/15            0   33   LAN 0/0/575          --   --    1    1
+     32  ADL 0/2/16            0   33   LAN 0/0/576          --   --    1    1
+     33  ADL 0/3/1             0   33   LAN 0/0/501          --   --    1    1
+     34  ADL 0/3/2             2   36   LAN 0/0/512          --   --    1    1
+     35  ADL 0/3/3             5   39   LAN 0/0/515          --   --    1    1
+     36  ADL 0/3/4             0   33   LAN 0/0/523          --   --    1    1
+     37  ADL 0/3/5             6   40   LAN 0/0/516          --   --    1    1
+     38  ADL 0/3/6             8   42   LAN 0/0/518          --   --    1    1
+     39  ADL 0/3/7             0   33   LAN 0/0/549          --   --    1    1
+     40  ADL 0/3/8             0   33   LAN 0/0/551          --   --    1    1
+     41  ADL 0/3/9             0   33   LAN 0/0/552          --   --    1    1
+     42  ADL 0/3/11            0   33   LAN 0/0/581          --   --    1    1
+     43  ADL 0/3/10            0   33   LAN 0/0/580          --   --    1    1
+     44  ADL 0/3/12            0   33   LAN 0/0/582          --   --    1    1
+     45  ADL 0/3/13            0   33   LAN 0/0/583          --   --    1    1
+     46  ADL 0/3/14            0   33   LAN 0/0/511          --   --    1    1
+     47  ADL 0/3/15            0   33   LAN 0/0/508          --   --    1    1
+
+
+[http://ctd-z1.sc.int/](http://ctd-z1.sc.int/)
+
+Stellconstraction /  501
+LPpRE /  508
+stinvest /  513
+r-stinol /  514
+chermetauto /  516
+andritz /  522
+pem.scru /  525
+Tehmash /  549
+Miloserdie /  551
+Kokshimmontag /  552
+InterStroi.sc.ru /  559
+ural /  575
+
+
+username garry secret 5 $1$s14F$DZtXO7un6BMbFkz2tcXb30
+username skynick secret 5 $1$6e44$ABGyYai65wk1b.uC5R/rR1
+username paul secret 5 $1$.SXD$/IebpyVzY.NUYhAKEb2XT.
+username pheonix secret 5 $1$/hYV$wQxqFKRkXIDRbt0BuyQ700
+
+
+
+
+indezit-z0
+548 impex-bankomat.sc.ru
+550 KMB-IPVPN	
+701 Sodexso
+702 custom.sc.ru
+705 tetra-inet.sc.ru
+706 kelly-services
+707 merlony.sc.ru
+709 alpha-indesit
+710 Adekko
+
+[http://indesit-z1.sc.int/](http://indesit-z1.sc.int/)
+GrandAvot /  712
+
+
+
+
+
+
+1 	enabled 	svyaznoi.sc.ru	,		, 	asym2048 		 adsl2  	 1  	
+ 	2 	enabled 	evroinvest	,		, 	asym2048 		adsl2+ 	1 	
+ 	3 	enabled 	sportmaster	,		, 	sym512 		adsl2+ 	1 	
+ 	4 	enabled 	IP bondarenko	,		, 	asym2048 		auto 	1 	
+ 	5 	enabled 	Kuleshov	,		, 	asym2048 		auto 	1 	
+ 	6 	disabled 	port is unstable	,		, 	sym256 		glite 	1 	
+ 	7 	enabled 	Melo-Fresh-1	,		, 	sym256 		glite 	1 	
+ 	8 	enabled 	Melo-Fresh-2	,		, 	sym256 		glite 	1 	
+ 	9 	enabled 	malyshlandia	,		, 	sym256 		glite 	1 	
+ 	10 	enabled 	systerov	,		, 	asym2048 		adsl2 	1 	
+ 	11 	enabled 	kinomir-prokat	,		, 	sym512 		adsl2+ 	1 	
+ 	12 	enabled 	IP Gulevskaya	,		, 	gulevskaya 		auto 	1 	
+evroinvest /  101
+kuleshov /  102
+svyaznoi /  200
+SportMaster /  202
+Bondarenko /  203
+Evroset /  204
+Melo-Fresh-1 /  205
+Melo-Fresh-2 /  206
+rtm-malysh /  207
+rtm-systerov /  208
+rtm-kinomir /  209
+rtm-Gulevskaya /  210
+
+
+
+
+
+
+Ostin	,		, 	sym512 		 auto  	 1  	
+ 	2 	enabled 	alians	,		, 	sym2048 		adsl2+ 	1 	
+ 	3 	enabled 	livetsov.sc.ru	,		, 	sym2048 		auto 	1 	
+ 	4 	enabled 	euroset.sc.ru	,		, 	sym256 		auto 	1 	
+ 	5 	enabled 	babkin.sc.ru
+
+
+Euroset' /  204
+Ostin /  211
+Alians /  212
+Daineko /  214
+livetsov /  215
+
+
+
+
+
+
+
+
+
+
+
+a6-z0
+polys.sc.ru	,	443002	, 	sym256 		 glite  	 1  	
+ 	2 	enabled 	MPM-Service.sc.ru	,	515495	, 	sym256 		glite 	1 	
+ 	3 	enabled 	ZMI.sc.ru	,	516455	, 	sym256 		glite 	1 	
+ 	4 	enabled 	SeverStell	,	51-64-47	, 	sym256 		glite 	1 	
+ 	5 	enabled 	Liter-A6
+
+
+polys.sc.ru /  538
+ZMI /  553
+MPM-Servise /  556
+SeverStell /  560
+Liter-A6 /  565
+
+
+
+
+
+
+
+
+u12-z0
+
+Penoplast  682 
+promoborud-48 635 
+u12-rich 634 
+u12-dknew  632 
+u12-prom48  635 
+lars  696 
+
+
+
+p2k
+crossmedia  837 
+berlit@katukova  603 
+
+
+
+
+
+
+
+
+
+
+
+
+real-z0
+1 	enabled 	0stin.sc.ru	,		, 	sym256 		 glite  	 1  	
+ 	2 	enabled 	modis.sc.ru	,		, 	sym256 		glite 	1 	
+ 	3 	enabled 	rosta.sc.ru	,		, 	sym256 		glite 	1 	
+ 	4 	enabled 	WhiteWind	,		, 	sym2048 		auto 	1 	
+ 	5 	enabled 	modis IPVPN	,		, 	sym512 		glite 	1 	
+ 	6 	enabled 	Eldorado	,		, 	sym512 		gdmt 	1 	
+ 	7 	enabled 	valtera	,		, 	sym2048 		auto 	1 	
+ 	8 	enabled 	SlavInvest	,		, 	sym2048 		auto 	1 	
+ 	9 	enabled 	Rilar
+
+
+ostin /  608
+modis /  609
+ROSTA /  612
+White_Wind /  613
+Eldorado /  614
+valtera /  615
+SlavInvest /  623
+Rilar /  685
+Modis_IPVN /  846
+
+
+
+Karamishevo
+
+
+
+
+
+
+
+
+
+Mar 26 05:01:06 81.20.192.29 1777: Mar 26 02:01:05.457: %SYS-4-SNMP_WRITENET: SNMP WriteNet request. Writing current configuration to 81.20.192.19
+Mar 26 09:37:51 81.20.192.29 1778: Mar 26 06:37:50.395: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Mar 26 09:37:51 81.20.192.29 1779: Mar 26 06:37:50.695: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Mar 26 09:37:52 81.20.192.29 1780: Mar 26 06:37:51.411: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Mar 26 09:38:51 81.20.192.29 1781: Mar 26 06:38:50.398: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Mar 26 09:38:51 81.20.192.29 1782: Mar 26 06:38:50.698: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Mar 26 09:38:52 81.20.192.29 1783: Mar 26 06:38:51.414: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Mar 26 09:39:03 81.20.192.29 1784: Mar 26 06:39:02.466: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Mar 26 09:39:07 81.20.192.29 1785: Mar 26 06:39:06.058: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Mar 26 09:39:11 81.20.192.29 1786: Mar 26 06:39:10.471: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+
+
+
+
+
+
+
+
+
+
+
+
+hostname sapphire-ospfd
+password 8 bJtio7irznZAg
+enable password 8 4Dl3X8NkvS/Gk
+log stdout
+service password-encryption
+!
+interface eth0
+ description Backbone interface
+!
+interface eth1
+ description LAN interface
+!
+interface vlan10
+ description Backbone interface (1000BaseT)
+ ip ospf priority 0
+! Zebra configuration saved from vty
+!   2004/10/13 23:13:34
+!
+hostname sapphire-ospfd
+password 8 bJtio7irznZAg
+enable password 8 4Dl3X8NkvS/Gk

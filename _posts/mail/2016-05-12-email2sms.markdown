@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "email2sms"
+date:   2016-05-12 05:20:25 +0300
+categories: mail
+tags: mail
+---
+
+# email2sms
+[http://shom.kz/cacti-plugins/](http://shom.kz/cacti-plugins/)
+[http://shom.kz/gnokii/](http://shom.kz/gnokii/)
+[http://www.iamroot.ru/2013/06/centos-sms-megafon-modem.html](http://www.iamroot.ru/2013/06/centos-sms-megafon-modem.html)
+
+мегафон почта, sms.ru

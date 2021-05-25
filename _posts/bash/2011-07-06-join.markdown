@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "join"
+date:   2011-07-06 15:06:08 +0400
+categories: join
+tags: join
+---
+
+# join
+join
+[http://www.opennet.ru/man.shtml?category=1&russian=&topic=join](http://www.opennet.ru/man.shtml?category=1&russian=&topic=join)
+
+Содержимое 2 файлов
+
+cat a.txt
+1 a
+2 b
+4 d
+
+cat b.txt
+1 1
+2 2
+3 3
+
+
+Объединяет файлы по первому полю
+join a.txt b.txt
+1 a 1
+2 b 2
+
+Выводит все необъединённые (непарные)  записи из первого файла, в добавление к объединённым
+ join -a 1 a.txt b.txt
+1 a 1
+2 b 2
+4 d
+
+Выводит все необъединённые (непарные)  записи из второго файла, в добавление к объединённым
+join -a 2 a.txt b.txt
+1 a 1
+2 b 2
+3 3
+
+Выводит все необъединённые (непарные)  записи из первого файла, без объединённых
+join -v 1 a.txt b.txt
+4 d
+
+Выводит все необъединённые (непарные)  записи из второго файла, без объединённых
+join -v 2 a.txt b.txtt
+3 3

@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "license"
+date:   2009-05-13 20:54:21 +0400
+categories: license
+tags: cisco
+---
+
+# license
+Activation on 15 Ios
+[https://www.cisco.com/c/en/us/td/docs/routers/access/sw_activation/SA_on_ISR.html#pgfId-1204791](https://www.cisco.com/c/en/us/td/docs/routers/access/sw_activation/SA_on_ISR.html#pgfId-1204791)
+
+[https://software.cisco.com/download/home/277641082/type/282786567/release/12.3?dtid=osscdc000283](https://software.cisco.com/download/home/277641082/type/282786567/release/12.3?dtid=osscdc000283)
+[https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cucme/admin/configuration/manual/cmeadm/cmeinstl.html](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cucme/admin/configuration/manual/cmeadm/cmeinstl.html)
+

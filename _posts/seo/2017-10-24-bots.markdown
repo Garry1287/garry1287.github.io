@@ -1,0 +1,92 @@
+---
+layout: post
+title:  "bots"
+date:   2017-10-24 06:42:17 +0300
+categories: seo
+tags: seo
+---
+
+# bots
+основатель компании по автоматизации бизнеса SugarTalk
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+
+Антон Горбунов, основатель компании TelegramRobotics
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+
+
+@autopartsbot, как и 80% остальных заказов TelegramRobotics, относится к обычным древовидным ботам.
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+
+Важное преимущество заключается в дешевой кроссплатформенности ботов. Написав бота для Facebook, бизнес получает установки на всех операционных системах, где есть приложение Facebook», — подчеркивает Сергей Кулешов, заместитель генерального директора «1С-Битрикс». Не нужно создавать отдельного бота, например, для iOS и Android.
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+ них появились конструкторы чат-ботов: Botpult, Botsfactory, Leecero, Meya.ai, Pandorabots и др.
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+
+Chatfuel
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+
+Павел Доронин, основатель Chatbots Community, считает, что российские разработчики — одни из лидеров мирового рынка чат-ботов.
+
+Российское сообщество разработчиков чат-ботов Chatbots Community самое большое в Европе. Оно насчитывает 1500 специалистов. Независимый рейтинг «100 Bot People To
+
+Подробнее на РБК:
+[http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e](http://www.rbc.ru/own_business/11/10/2016/57f4d4b09a79470fc8973c6e)
+
+
+
+
+
+
+
+[https://botogram.io/promo](https://botogram.io/promo)
+
+
+
+[http://manybot.io/](http://manybot.io/)
+[https://chatfuel.com/create-chatbot-for-telegram](https://chatfuel.com/create-chatbot-for-telegram)
+
+
+Продажа ботов
+[https://storebot.me/](https://storebot.me/)
+
+[http://www.pokeroff.ru/principy-raboty-pokernogo-bota-dlya-habrahabr-post-1364633](http://www.pokeroff.ru/principy-raboty-pokernogo-bota-dlya-habrahabr-post-1364633)
+
+
+Создание ботов
+[https://core.telegram.org/bots](https://core.telegram.org/bots)
+[https://core.telegram.org/bots/api](https://core.telegram.org/bots/api)
+
+
+Чат бот
+[https://habrahabr.ru/post/281559/](https://habrahabr.ru/post/281559/)
+
+[https://habrahabr.ru/post/264035/](https://habrahabr.ru/post/264035/)
+[https://github.com/Surzhikov/TelegramSiteHelper](https://github.com/Surzhikov/TelegramSiteHelper)
+
+[https://habrahabr.ru/post/302688/](https://habrahabr.ru/post/302688/)
+[https://habrahabr.ru/post/262247/](https://habrahabr.ru/post/262247/)
+[https://habrahabr.ru/company/spottle/blog/303528/](https://habrahabr.ru/company/spottle/blog/303528/)
+
+
+
+
+Чёрный заработок
+[http://money.rbc.ru/news/58c2d2a89a7947ef7749d2d2](http://money.rbc.ru/news/58c2d2a89a7947ef7749d2d2)

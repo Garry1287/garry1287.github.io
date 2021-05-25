@@ -1,0 +1,29 @@
+---
+layout: post
+title:  "e-mail"
+date:   2016-03-30 16:32:14 +0300
+categories: mail
+tags: mail
+---
+
+# e-mail
+[http://www.protocols.ru/files/RFC/RFC-2821.pdf](http://www.protocols.ru/files/RFC/RFC-2821.pdf)
+[http://www.opds.sut.ru/old/electronic_manuals/mail/1_Struct_el_soob.htm](http://www.opds.sut.ru/old/electronic_manuals/mail/1_Struct_el_soob.htm)
+[http://www.opds.sut.ru/old/electronic_manuals/mail/3_SMTP.htm](http://www.opds.sut.ru/old/electronic_manuals/mail/3_SMTP.htm)
+[http://www.opds.sut.ru/old/electronic_manuals/mail/](http://www.opds.sut.ru/old/electronic_manuals/mail/)
+[http://opds.sut.ru/old/electronic_manuals/mail/5_IMAP.htm](http://opds.sut.ru/old/electronic_manuals/mail/5_IMAP.htm)
+[http://citforum.ru/nets/semenov/4/44/imap4443.shtml](http://citforum.ru/nets/semenov/4/44/imap4443.shtml)
+[http://citforum.ru/internet/servers/glava2_4.shtml](http://citforum.ru/internet/servers/glava2_4.shtml)
+[http://www.protocols.ru/files/RFC/rfc1123.pdf](http://www.protocols.ru/files/RFC/rfc1123.pdf)
+[http://book.itep.ru/4/44/imap4443.htm](http://book.itep.ru/4/44/imap4443.htm)
+[http://www.mailinfo.ru/story02/06/17/5381043](http://www.mailinfo.ru/story02/06/17/5381043)
+[http://anatolypn.livejournal.com/966.html](http://anatolypn.livejournal.com/966.html)
+[http://www.protocols.ru/files/RFC/RFC-2821.pdf](http://www.protocols.ru/files/RFC/RFC-2821.pdf)
+[http://rfc2.ru/2060.rfc/print](http://rfc2.ru/2060.rfc/print)
+[https://ru.wikipedia.org/wiki/IMAP](https://ru.wikipedia.org/wiki/IMAP)
+[http://habrahabr.ru/company/truevds/blog/262819/](http://habrahabr.ru/company/truevds/blog/262819/)
+
+
+Exim
+[http://vds-admin.ru/mail/poleznye-komandy-pochtovogo-servera-exim-shpargalka](http://vds-admin.ru/mail/poleznye-komandy-pochtovogo-servera-exim-shpargalka)
+[http://www.opennet.ru/base/net/exim_options.txt.html](http://www.opennet.ru/base/net/exim_options.txt.html)

@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "wifi"
+date:   2014-12-07 16:31:27 +0300
+categories: wifi
+tags: wifi
+---
+
+# wifi
+[https://habrahabr.ru/company/megafon/blog/331082/](https://habrahabr.ru/company/megafon/blog/331082/)
+[http://linkmeup.ru/blog/260.html](http://linkmeup.ru/blog/260.html)

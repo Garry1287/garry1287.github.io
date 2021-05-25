@@ -1,0 +1,33 @@
+---
+layout: post
+title:  "mail_bash"
+date:   2018-07-27 11:20:13 +0300
+categories: mail_bash
+tags: mail_bash
+---
+
+# mail_bash
+#!/bin/sh
+/usr/bin/bzcat /var/log/asterisk/cdr-csv/rotated/Master.csv-`date +%Y%m%d`.bz2 | grep 540313 > /home/garry/ringlog/Master_$(date +%Y%m%d).cvs
+echo 'This is yesterday rings' | mail -s "Rings to 540313 from yesterday - `date --date="1 days ago" +%Y%m%d`" -a /home/garry/ringlog/Master_$(date +%Y%m%d).cvs  igordzu@yandex.ru
+/usr/bin/bzcat /var/log/asterisk/cdr-csv/rotated/Master.csv-`date +%Y%m%d`.bz2 | grep 540313 | awk -F"," '{ print $2,$11,$16}'  | mail -r admin@ast.sc.ru -s "Rings to 540313 from yesterday - `date --date="1 days ago" +%Y%m%d`" balkon6140@mail.ru 
+
+
+
+
+
+
+
+
+echo radius restarted | mail -r root@ruby.sc.ru -s "radius restarted" monit@sc.ru
+
+
+11:07:59.816850 IP ruby.sc.ru.34028 > sapphire.sc.ru.smtp: 
+
+S 1740285406:1740285406(0) win 5840 <mss 1460,sackOK,timestamp 303925731 0,nop,wscale 3>
+
+
+
+
+
+[http://articles-hosting.ru/234/skript-dlya-avtomaticheskogo-povtornogo-zapuska-apache-pri-padenie.html](http://articles-hosting.ru/234/skript-dlya-avtomaticheskogo-povtornogo-zapuska-apache-pri-padenie.html)

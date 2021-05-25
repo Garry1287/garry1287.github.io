@@ -1,0 +1,28 @@
+---
+layout: post
+title:  "nlmk-inet"
+date:   2018-06-25 21:30:00 +0300
+categories: zavod
+tags: zavod
+---
+
+# nlmk-inet
+# Добрый день!
+
+# На CDE-C3 и CDE-C2 создан интерфейс
+
+interface GigabitEthernet0/0.4001
+ description #Temp clone NLMK Internet Link #smithy 23.03.2012
+ encapsulation dot1Q 4001
+ ip address 81.20.192.129 255.255.255.252
+ rate-limit input 102400000 19200000 38600000 conform-action transmit exceed-action drop
+ rate-limit output 102400000 19200000 38600000 conform-action transmit exceed-action drop
+ no cdp enable
+end
+
+
+# и маршрут
+ip route 81.20.194.0 255.255.255.0 81.20.192.130
+
+
+Сейчас интерфейс активен на CDE-C2

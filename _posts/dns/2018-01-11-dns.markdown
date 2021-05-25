@@ -1,0 +1,114 @@
+---
+layout: post
+title:  "dns"
+date:   2018-01-11 15:19:12 +0300
+categories: dns
+tags: dns
+---
+
+# dns
+[http://redhat-club.org/2011/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-dns-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-bind-%D0%B2-rhel-centos-fedora](http://redhat-club.org/2011/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-dns-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-bind-%D0%B2-rhel-centos-fedora)
+
+[http://adminubuntu.net/2011/03/03/logi-bind9-v-otdelnyie-faylyi.html](http://adminubuntu.net/2011/03/03/logi-bind9-v-otdelnyie-faylyi.html)
+[http://info.nic.ru/st/8/out_268.shtml](http://info.nic.ru/st/8/out_268.shtml)
+[http://info.nic.ru/st/8/out_264.shtml](http://info.nic.ru/st/8/out_264.shtml)
+[http://www.maxblogs.ru/index.php?id=60](http://www.maxblogs.ru/index.php?id=60)
+[http://habrahabr.ru/post/137587/](http://habrahabr.ru/post/137587/)
+
+[http://info.nic.ru/st/8/out_263.shtml](http://info.nic.ru/st/8/out_263.shtml)
+[http://info.nic.ru/st/8/out_262.shtml](http://info.nic.ru/st/8/out_262.shtml)
+Делегирование 2 способами
+
+
+Зона sc.int
+
+
+sc.int. IN NS ns.sc.ru.
+
+garry IN NS ns.garry.sc.int.
+ns.garry IN A 81.20.192.54
+
+
+В зоне 192.20.81.in-addr.arpa
+прописать
+54              IN      PTR     ns.garry.sc.int.
+
+
+Зона garry.sc.int
+
+;
+
+garry.sc.int. IN      SOA     ns.garry.sc.int.       garry.garry.sc.int. (
+                                2012081401              ;Serial
+                                28800                   ; Refresh every 100 hours
+                                1800                    ; Retry after 1 hour
+                                604800                  ; Expire after 1000 hours
+                                86400                   ; minimum TTL is 10 hours
+                                )               ; minimum
+
+                IN NS           ns.garry.sc.int.
+                IN A            192.168.1.141
+ns              IN A            192.168.1.141
+oper            IN A            192.168.1.141
+
+Нужна обратная зона для 81.20.192.54
+
+
+
+Stub пример
+На родительском в named.conf
+
+zone "garry2.sc.int" {
+    type stub;
+    file "garry2.sc.int";
+    masters {81.20.192.54;};
+}
+
+
+На дочернем
+zone "garry2.sc.int" in {
+        type master;
+        file "master/garry2.sc.int";
+        allow-transfer {81.20.192.16;};
+};
+
+
+На родительском
+в родительской зоне sc.int запись
+
+garry2          IN      NS              ns.garry.sc.int. 
+
+
+На дочернем
+Файл garry2.sc.int (master зона)
+
+;$TTL 1W
+@               IN SOA          ns.garry.sc.int.  garry.ns.garry.sc.int. (
+                                2012081702              ;Serial
+                                28800                   ; Refresh every 100 hours
+                                1800                    ; Retry after 1 hour
+                                604800                  ; Expire after 1000 hours
+                                86400                   ; minimum TTL is 10 hours
+                                )               ; minimum
+
+                IN NS           ns.garry.sc.int.
+                IN A            192.168.1.133
+gladis          IN A            192.168.1.230
+
+
+
+Родительский подтянет зону
+$ORIGIN .
+$TTL 86400      ; 1 day
+garry2.sc.int           IN SOA  ns.garry.sc.int. garry.ns.garry.sc.int. (
+                                2012081702 ; serial
+                                28800      ; refresh (8 hours)
+                                1800       ; retry (30 minutes)
+                                604800     ; expire (1 week)
+                                86400      ; minimum (1 day)
+                                )
+                        NS      ns.garry.sc.int.
+
+По хорошему надо и на мастере и на славе родительском делать stub зоны, чтобы они автоматически подтягивались с дочернего мастера (или слейва -тут уж как сконфигурируешь)
+
+

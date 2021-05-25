@@ -1,0 +1,37 @@
+---
+layout: post
+title:  "zabbix"
+date:   2013-10-22 01:01:15 +0400
+categories: zabbix
+tags: zabbix
+---
+
+# zabbix
+[https://www.zabbix.com/forum/forumdisplay.php?f=21&order=desc&daysprune=365&page=48](https://www.zabbix.com/forum/forumdisplay.php?f=21&order=desc&daysprune=365&page=48)
+[https://www.zabbix.com/forum/index.php](https://www.zabbix.com/forum/index.php)
+[https://www.zabbix.com/forum/forumdisplay.php?f=21&order=desc&page=3](https://www.zabbix.com/forum/forumdisplay.php?f=21&order=desc&page=3)
+[https://www.zabbix.com/forum/showthread.php?t=46312](https://www.zabbix.com/forum/showthread.php?t=46312)
+[https://www.zabbix.com/forum/showthread.php?t=24206](https://www.zabbix.com/forum/showthread.php?t=24206)
+[https://www.zabbix.com/forum/showpost.php?p=61416&postcount=5](https://www.zabbix.com/forum/showpost.php?p=61416&postcount=5)
+[https://www.zabbix.com/forum/showthread.php?t=15400](https://www.zabbix.com/forum/showthread.php?t=15400)
+[https://www.zabbix.com/forum/showthread.php?t=22053](https://www.zabbix.com/forum/showthread.php?t=22053)
+[https://www.zabbix.com/forum/showthread.php?t=16433&highlight=cabletron](https://www.zabbix.com/forum/showthread.php?t=16433&highlight=cabletron)
+[https://www.zabbix.com/forum/showthread.php?t=15400](https://www.zabbix.com/forum/showthread.php?t=15400)
+[http://it.kuchuk.net/2013/04/zabbix.html](http://it.kuchuk.net/2013/04/zabbix.html)
+[http://www.ignix.ru/book/freebsd/network/zabbix_templates](http://www.ignix.ru/book/freebsd/network/zabbix_templates)
+bsdadmin.ru/index.php/zabbix/197-zabbix-channel
+[http://www.tune-it.ru/web/tiamat/home/-/blogs/17465](http://www.tune-it.ru/web/tiamat/home/-/blogs/17465)
+[http://www.linuxjournal.su/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-zabbix-%D1%87%D0%B0%D1%81%D1%82/](http://www.linuxjournal.su/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-zabbix-%D1%87%D0%B0%D1%81%D1%82/)
+[http://habrahabr.ru/company/zabbix/blog/193460/](http://habrahabr.ru/company/zabbix/blog/193460/)
+[http://rtfm.co.ua/zabbix-nastrojka-monitoringa-elementy-dannyx-items-grafiki-graphs-shablony-teamplates/](http://rtfm.co.ua/zabbix-nastrojka-monitoringa-elementy-dannyx-items-grafiki-graphs-shablony-teamplates/)
+zabbix.sc.int/templates.php?ddreset=1&sid=5443b42e5f506326
+[http://habrahabr.ru/company/zabbix/blog/193460/](http://habrahabr.ru/company/zabbix/blog/193460/)
+[http://habrahabr.ru/company/zabbix/blog/203050/](http://habrahabr.ru/company/zabbix/blog/203050/)
+[http://www.tune-it.ru/web/tiamat/home/-/blogs/17465](http://www.tune-it.ru/web/tiamat/home/-/blogs/17465);jsessionid=1d1ca481ebd9fad72a7e957317ad
+[http://rtfm.co.ua/zabbix-nastrojka-monitoringa-elementy-dannyx-items-grafiki-graphs-shablony-teamplates/](http://rtfm.co.ua/zabbix-nastrojka-monitoringa-elementy-dannyx-items-grafiki-graphs-shablony-teamplates/)
+
+
+
+
+[https://habr.com/post/220379/](https://habr.com/post/220379/)
+[https://habr.com/post/126963/](https://habr.com/post/126963/)

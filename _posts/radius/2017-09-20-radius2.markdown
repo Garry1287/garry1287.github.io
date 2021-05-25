@@ -1,0 +1,930 @@
+---
+layout: post
+title:  "radius2"
+date:   2017-09-20 17:35:10 +0300
+categories: radius
+tags: radius
+---
+
+# radius2
+## some need locations variables
+
+# Различные файловые переменные.
+# Приведено для gentoo.
+# Если ставите из исходников,
+# скопируйте эти переменные из 
+# /opt/freeradius/etc/raddb/radiusd.conf 
+
+prefix = /usr
+exec_prefix = ${prefix}
+sysconfdir = /etc
+localstatedir = /var
+sbindir = ${exec_prefix}/sbin
+logdir = ${localstatedir}/log/radius
+raddbdir = ${sysconfdir}/raddb
+radacctdir = ${logdir}/radacct
+
+# Месторасположение конфигурационных и лог файлов.
+confdir = ${raddbdir}
+run_dir = ${localstatedir}/run/radiusd
+
+# Каталог с подгружаемыми модулями.
+libdir = ${exec_prefix}/lib
+
+# Месторасположение pid-файла. Содержащего идентификатор процесса.
+pidfile = ${run_dir}/radiusd.pid
+
+# Имя пользователя и группа от которых запускается FreeRADIUS
+user = radiusd
+group = radiusd
+
+# Максимальное время (в секундах) используемое для обработки запроса.
+max_request_time = 30
+
+# Удалить запросы которые обрабатываются более чем max_request_time
+delete_blocked_requests = no
+
+# Время ожидания (в секундах) перед очисткой reply запроса отправленного NAS.
+cleanup_delay = 5
+
+# Максимальное количество запросов хранимых сервером. Это число должно быть равно количеству клиентов помноженному на 256.
+# К примеру для четырех клиентов оно будет 1024.
+max_requests = 5120
+
+
+#Использовать все доступные интерфейсы.
+bind_address = *
+
+# Закрепить за FreeRADIUS конкретный port. Если указан ноль, 
+# то значение берется из /etc/services
+port = 0
+
+# Запретить/разрешить ip адреса в dns имена.
+# Включение этой опции может сильно снизить производительность.
+hostname_lookups = no
+
+# Создавать/несоздавать отладочные файлы при падении сервера.
+allow_core_dumps = no
+
+#  Разрешить использование регулярных выражений.
+regular_expressions     = yes
+extended_expressions    = yes
+
+# Записывать полный User-Name аттрибут если найден в запросе.
+log_stripped_names = no
+
+# Записывать в лог попытки авторизации.
+log_auth = yes
+
+#  Записывать в логи пароли при авторизации.
+#  log_auth_badpass  - не корректные пароли
+#  log_auth_goodpass - корректные пароли
+
+log_auth_badpass = yes
+log_auth_goodpass = no
+
+# Включить/выключить коллизию пользователей.
+usercollide = no
+
+# конвертировать логин и/или пароль до или после авторизации.
+lower_user = no
+lower_pass = no
+
+# удалить пробелы в логине и/или пароле.
+nospace_user = no
+nospace_pass = no
+
+# настройки безопасности от возможных DoS аттак.
+security {
+
+        # Максимальное допустимое количество аттрибутов в RADIUS пакете.
+        max_attributes = 200
+
+        # Задержка (в секундах) перед отправкой Access-Reject пакета.
+        reject_delay = 1
+
+        # Не отвечать на запросы Status-Server 
+        status_server = no
+
+}
+
+
+# Конфигрурация клиентов RADIUS сервера.
+# Описывается в отдельном файле. 
+$INCLUDE  ${confdir}/clients.conf
+
+# Отключить snmp поддержку.
+snmp=no
+
+# Настрока пула процессов.
+
+thread pool {
+
+        # количество первоначально запущенных процессов.
+        start_servers = 5
+
+        #  Максимально возможное количество процессов.
+        max_servers = 32
+
+        # Динамическая регулировка количества процессов. 
+        min_spare_servers = 3
+        max_spare_servers = 10
+
+        # Количество принимаемых запросов процессом. МОжет помочь при утечках памяти в 
+        # RADIUS сервере. Если выставить 300, процессы будут периодически перегружаться 
+        # для уборки мусора.
+        max_requests_per_server = 0
+
+}
+
+# Секция конфигурации динамических модулей.
+
+modules {
+
+        # Модуль PAP авторизации. 
+        # Необходим для обработки запросов с PAP авторизацией.
+        # encryption_scheme указывает в каком виде хранятся пароли.
+        # clear - подразумевает в открытом виде.
+        pap {
+                encryption_scheme = clear
+        }
+
+        # Модуль CHAP авторизации.
+        # Необходим для обработки запросов с CHAP авторизацией.
+        # authtype подразумевает обработку запросов только с аттрибутом Auth-Type=CHAP
+        chap {
+                authtype = CHAP
+        }
+
+        # Модуль преобработки запросов.
+        # Т.е. перед авторизацией пакета.
+        preprocess {
+        # huntgroups - хинт группы см. файл huntgoups.
+        # hints - хинты.
+        
+                huntgroups = ${confdir}/huntgroups
+                hints = ${confdir}/hints
+
+        # Обработка Cisco VSA.
+                with_cisco_vsa_hack = no
+
+        }
+
+        # Модуль Microsoft CHAP авторизации.
+        # Поддерживает так же еще и Microsoft CHAP v2 
+        # authtype подразумевает обработку запросов только с аттрибутом Auth-Type=MS-CHAP
+        # use_mppe = no указывает на отсутствие шифрования VPN туннеля.
+        mschap {
+                authtype = MS-CHAP
+                use_mppe = no
+        }
+        
+        # Модуль записей Livingston RADIUS типа.
+        # usersfile содержит авторизационные записи пользователей.
+        # Рекомендуется использовать только для тестов и выставления значений по умолчанию.
+        # acctusersfile содержит пользователей подлежащих учету (аккаунтингу).
+        # compat - совместимость.  При использовании файлов только FreeRADIUS можно отключить.
+        files {        
+                usersfile = ${confdir}/users
+                acctusersfile = ${confdir}/acct_users
+                compat = no
+        }
+
+        # Запись детального лога аккаунтинговых пакетов.
+        detail {
+                detailfile = ${radacctdir}/%{Client-IP-Address}/detail-%Y%m%d
+                detailperm = 0600
+        }
+
+        # Запись детального лога пакетов авторизации.
+        detail auth_log {
+                detailfile = ${radacctdir}/%{Client-IP-Address}/auth-detail-%Y%m%d
+                detailperm = 0600
+        }
+
+
+        # Запись детального лога reply пакетов.
+        #
+        detail reply_log {
+                detailfile = ${radacctdir}/%{Client-IP-Address}/reply-detail-%Y%m%d
+                detailperm = 0600
+        }
+
+        # Создать уникальный ключ для аккаунтинг сессии.
+        # Многие NAS повторно используют  Acct-Session-ID. 
+        # key перечисление аттрибутов для генерации Acct-Session-ID
+        acct_unique {
+                key = "User-Name, Acct-Session-Id, NAS-IP-Address, Client-IP-Address, NAS-Port-Id"
+        }
+
+        #  Конфигурация авторизации и аккаунтинга посредством СУБД
+        #  содержится в отдельном файле cakesql.conf
+        $INCLUDE  ${confdir}/cakesql.conf
+
+}
+
+# Авторизация 
+# сначала идет пакет передается в preprocess
+# где может быть модифицирован.
+# Далее chap mschap обрабатывают chap и mschap авторизацию.
+
+authorize {
+        preprocess
+        chap
+        mschap
+
+        # Ведем логи пакетов авторизации.
+        auth_log
+        files
+        # отключаем авторизацию через sql 
+        # сначала необходимо отладить проверить на уровне файлов.
+        #cake_sql
+}
+
+# Аунтификация
+# Секция содержит модули доступные, для аунтификации.
+
+authenticate {
+            
+       Auth-Type PAP { pap }
+       Auth-Type CHAP { chap }
+       Auth-Type MS-CHAP { mschap }
+}
+
+# Преобразование аккаунтинговых пакетов.
+
+preacct {
+        preprocess
+}
+
+
+#
+#  Секция ведения аккаунтинга.
+#
+accounting {
+        # Создание Acct-Session-Id если ваш NAS генрит их вполне корректно можете 
+        # убрать.
+        acct_unique
+
+        # Создавать detail лог.
+        detail
+
+        # Помещать аккаунтинговые пакеты в СУБД
+        # cake_sql
+}
+
+# Секция ведения логов reply-пакетов
+post-auth {
+
+        # Вести детальный лог репли пакетов.
+        reply_log
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# секция описывает клиента c ip адресом 127.0.0.1.
+# secret - секретное слово указывается еще на NAS желательно выбрать что-то отличное от test
+# shortname - короткое имя используемое в качестве псевдонима.
+# nastype - используется radcheck.pl т.е. внешним скриптом. В нашей системе оно используется. 
+# Поэтому выставленно other.
+# Подобным же образом добавьте других клиентов.
+client 127.0.0.1 {
+       secret = test
+       shortname = localhost
+       nastype = other
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# тестовый пользователь. Если будете тестировать с pppd и mschap авторизацией пропишите
+# Auth-Type:=MS-CHAP вместо Auth-Type:=Local, иначе RADIUS сервер не авторизует клиента.
+
+test            Auth-Type:=Local, User-Password == "test"
+#test            Auth-Type:=MS-CHAP, User-Password == "test"
+                Service-Type = Framed-User,
+                Framed-Protocol = PPP,
+                Framed-IP-Address = 192.168.0.200,
+                Framed-IP-Netmask = 255.255.255.0,
+                Framed-Route = "192.168.1.0/24 192.168.200.204/32 1",
+                Reply-Message = "Just Test",
+                Acct-Interim-Interval = 60,
+#               Session-Timeout = 120,
+                Framed-Routing = Broadcast-Listen,
+                Framed-Compression = None
+
+
+
+
+
+
+b15-indsysl
+                Encrypted-Password = "d6SC..OqgniO2",
+                Cisco-Pair = "lcp:interface-config=rate-limit input 256000 48000 96000 conform-action transmit exceed-action drop",
+                Cisco-Pair = "lcp:interface-config=rate-limit output 256000 48000 96000 conform-action transmit exceed-action drop"
+
+
+i.bobkina
+                Mail-Registration-Date = "Jul  2 2009",
+                Roaming = 0,
+                Encrypted-Password = "BfO2h3F.cU/d.",
+                Comment = "I.Bobkina (Directorat request)",
+                User-Mail-Resources = "i.bobkina",
+                User-Contract = "2006030700",
+                Registration-Date = "Mar  7 2006",
+                Mail-Password = "HcQ/B27OtRLQs"
+
+
+user Cleartext-Password := "blegh"
+  Service-Type = Framed-User,
+  Framed-Protocol = PPP,
+  Framed-IP-Address = 192.168.5.78,
+  Framed-IP-Netmask = 255.255.255.240
+
+
+
+
+
+
+no access-list 10 permit 10.4.2.0 0.0.0.255
+no access-list 10 deny   any
+
+access-list 10 permit 10.4.0.0 0.0.255.255
+access-list 10 deny   any
+
+radius-server host 81.20.192.10 auth-port 1645 acct-port 1646 non-standard
+
+
+
+
+
+
+
+radius-server host 81.20.192.10 auth-port 1645 acct-port 1646 non-standard
+radius-server retransmit 10
+radius-server timeout 10
+radius-server key 7 123456
+radius-server vsa send accounting
+radius-server vsa send authentication
+
+
+
+
+
+81.20.192.22 {
+        # secret and password are mapped through the "secrets" file.
+        secret      = 123456
+        nastype     = cisco
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  realm IPASS {
+                format = prefix
+                delimiter = "/"
+        }
+
+        #  'username@realm'
+        #
+        realm suffix {
+                format = suffix
+                delimiter = "@"
+        }
+
+        #  'username%realm'
+        #
+        realm realmpercent {
+                format = suffix
+                delimiter = "%"
+        }
+
+        #
+        #  'domain\user'
+        #
+        realm ntdomain {
+                format = prefix
+                delimiter = "\\"
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        checkval {
+                # The attribute to look for in the request
+                item-name = Calling-Station-Id
+
+                # The attribute to look for in check items. Can be multi valued
+                check-name = Calling-Station-Id
+
+                # The data type. Can be
+                # string,integer,ipaddr,date,abinary,octets
+                data-type = string
+
+                # If set to yes and we dont find the item-name attribute in the
+                # request then we send back a reject
+                # DEFAULT is no
+                #notfound-reject = no
+        }
+
+
+
+
+
+
+
+         preprocess {
+                huntgroups = ${confdir}/huntgroups
+                hints = ${confdir}/hints
+
+                # This hack changes Ascend's wierd port numberings
+                # to standard 0-??? port numbers so that the "+" works
+                # for IP address assignments.
+                with_ascend_hack = no
+                ascend_channels_per_line = 23
+
+                # Windows NT machines often authenticate themselves as
+                # NT_DOMAIN\username
+                #
+                # If this is set to 'yes', then the NT_DOMAIN portion
+                # of the user-name is silently discarded.
+                #
+                # This configuration entry SHOULD NOT be used.
+                # See the "realms" module for a better way to handle
+                # NT domains.
+                with_ntdomain_hack = no
+
+                # Specialix Jetstream 8500 24 port access server.
+                #
+                # If the user name is 10 characters or longer, a "/"
+                # and the excess characters after the 10th are
+                # appended to the user name.
+                #
+                # If you're not running that NAS, you don't need
+                # this hack.
+                with_specialix_jetstream_hack = no
+
+                # Cisco (and Quintum in Cisco mode) sends it's VSA attributes
+                # with the attribute name *again* in the string, like:
+                #
+                #   H323-Attribute = "h323-attribute=value".
+                #
+                # If this configuration item is set to 'yes', then
+                # the redundant data in the the attribute text is stripped
+                # out.  The result is:
+                #
+                #  H323-Attribute = "value"
+                #
+                # If you're not running a Cisco or Quintum NAS, you don't
+                # need this hack.
+                with_cisco_vsa_hack = yes
+        }
+
+
+
+
+
+
+
+
+
+
+        # Livingston-style 'users' file
+        #
+        files {
+                # The default key attribute to use for matches.  The content
+                # of this attribute is used to match the "name" of the
+                # entry.
+                #key = "%{Stripped-User-Name:-%{User-Name}}"
+
+                usersfile = ${confdir}/users
+                acctusersfile = ${confdir}/acct_users
+                preproxy_usersfile = ${confdir}/preproxy_users
+
+                #  If you want to use the old Cistron 'users' file
+                #  with FreeRADIUS, you should change the next line
+                #  to 'compat = cistron'.  You can the copy your 'users'
+                #  file from Cistron.
+                compat = no
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        detail {
+                #  Note that we do NOT use NAS-IP-Address here, as
+                #  that attribute MAY BE from the originating NAS, and
+                #  NOT from the proxy which actually sent us the
+                #  request.  The Client-IP-Address attribute is ALWAYS
+                #  the address of the client which sent us the
+                #  request.
+                #
+                #  The following line creates a new detail file for
+                #  every radius client (by IP address or hostname).
+                #  In addition, a new detail file is created every
+                #  day, so that the detail file doesn't have to go
+                #  through a 'log rotation'
+                #
+                #  If your detail files are large, you may also want
+                #  to add a ':%H' (see doc/variables.txt) to the end
+                #  of it, to create a new detail file every hour, e.g.:
+                #
+                #   ..../detail-%Y%m%d:%H
+                #
+                #  This will create a new detail file for every hour.
+                #
+                detailfile = ${radacctdir}/%{Client-IP-Address}/detail-%Y%m%d
+
+                #
+                #  The Unix-style permissions on the 'detail' file.
+                #
+                #  The detail file often contains secret or private
+                #  information about users.  So by keeping the file
+                #  permissions restrictive, we can prevent unwanted
+                #  people from seeing that information.
+                detailperm = 0600
+
+                #
+                #  Every entry in the detail file has a header which
+                #  is a timestamp.  By default, we use the ctime
+                #  format (see "man ctime" for details).
+                #
+                #  The header can be customized by editing this
+                #  string.  See "doc/variables.txt" for a description
+                #  of what can be put here.
+                #
+                header = "%t"
+
+                 #
+                # Certain attributes such as User-Password may be
+                # "sensitive", so they should not be printed in the
+                # detail file.  This section lists the attributes
+                # that should be suppressed.
+                #
+                # The attributes should be listed one to a line.
+                #
+                #suppress {
+                        # User-Password
+                #}
+
+        }
+
+
+
+
+
+       #
+        #  Many people want to log authentication requests.
+        #  Rather than modifying the server core to print out more
+        #  messages, we can use a different instance of the 'detail'
+        #  module, to log the authentication requests to a file.
+        #
+        #  You will also need to un-comment the 'auth_log' line
+        #  in the 'authorize' section, below.
+        #
+        # detail auth_log {
+                # detailfile = ${radacctdir}/%{Client-IP-Address}/auth-detail-%Y%m%d
+
+                #
+                #  This MUST be 0600, otherwise anyone can read
+                #  the users passwords!
+                # detailperm = 0600
+
+                # You may also strip out passwords completely
+                #suppress {
+                        # User-Password
+                #}
+        # }
+
+        #
+        #  This module logs authentication reply packets sent
+        #  to a NAS.  Both Access-Accept and Access-Reject packets
+        #  are logged.
+        #
+        #  You will also need to un-comment the 'reply_log' line
+        #  in the 'post-auth' section, below.
+        #
+        # detail reply_log {
+                # detailfile = ${radacctdir}/%{Client-IP-Address}/reply-detail-%Y%m%d
+
+                # detailperm = 0600
+        # }
+
+        #
+        #  This module logs packets proxied to a home server.
+        #
+        #  You will also need to un-comment the 'pre_proxy_log' line
+        #  in the 'pre-proxy' section, below.
+        #
+      #
+        # detail pre_proxy_log {
+                # detailfile = ${radacctdir}/%{Client-IP-Address}/pre-proxy-detail-%Y%m%d
+
+                #
+                #  This MUST be 0600, otherwise anyone can read
+                #  the users passwords!
+                # detailperm = 0600
+
+                # You may also strip out passwords completely
+                #suppress {
+                        # User-Password
+                #}
+        # }
+
+        #
+        #  This module logs response packets from a home server.
+        #
+        #  You will also need to un-comment the 'post_proxy_log' line
+        #  in the 'post-proxy' section, below.
+        #
+        # detail post_proxy_log {
+                # detailfile = ${radacctdir}/%{Client-IP-Address}/post-proxy-detail-%Y%m%d
+
+                # detailperm = 0600
+        # }
+
+        #
+        #  The rlm_sql_log module appends the SQL queries in a log
+        #  file which is read later by the radsqlrelay program.
+        #
+        #  This module only performs the dynamic expansion of the
+        #  variables found in the SQL statements. No operation is
+        #  executed on the database server. (this could be done
+        #  later by an external program) That means the module is
+        #  useful only with non-"SELECT" statements.
+        #
+        #  See rlm_sql_log(5) manpage.
+        #
+
+       #
+#       sql_log {
+#               path = "${radacctdir}/sql-relay"
+#               acct_table = "radacct"
+#               postauth_table = "radpostauth"
+#               sql_user_name = "%{%{User-Name}:-DEFAULT}"
+#
+#               Start = "INSERT INTO ${acct_table} (AcctSessionId, UserName, \
+#                NASIPAddress, FramedIPAddress, AcctStartTime, AcctStopTime, \
+#                AcctSessionTime, AcctTerminateCause) VALUES                 \
+#                ('%{Acct-Session-Id}', '%{User-Name}', '%{NAS-IP-Address}', \
+#                '%{Framed-IP-Address}', '%S', '0', '0', '');"
+#               Stop = "INSERT INTO ${acct_table} (AcctSessionId, UserName,  \
+#                NASIPAddress, FramedIPAddress, AcctStartTime, AcctStopTime, \
+#                AcctSessionTime, AcctTerminateCause) VALUES                 \
+#                ('%{Acct-Session-Id}', '%{User-Name}', '%{NAS-IP-Address}', \
+#                '%{Framed-IP-Address}', '0', '%S', '%{Acct-Session-Time}',  \
+#                '%{Acct-Terminate-Cause}');"
+#               Alive = "INSERT INTO ${acct_table} (AcctSessionId, UserName, \
+#                NASIPAddress, FramedIPAddress, AcctStartTime, AcctStopTime, \
+#                AcctSessionTime, AcctTerminateCause) VALUES                 \
+#                ('%{Acct-Session-Id}', '%{User-Name}', '%{NAS-IP-Address}', \
+#                '%{Framed-IP-Address}', '0', '0', '%{Acct-Session-Time}','');"
+#
+#               Post-Auth = "INSERT INTO ${postauth_table}                   \
+#                (username, pass, reply, authdate) VALUES                            \
+#                ('%{User-Name}', '%{User-Password:-Chap-Password}',         \
+#                '%{reply:Packet-Type}', '%S');"
+#       }
+
+        #
+        #  Create a unique accounting session Id.  Many NASes re-use
+        #  or repeat values for Acct-Session-Id, causing no end of
+        #  confusion.
+        #
+        #  This module will add a (probably) unique session id
+        #  to an accounting packet based on the attributes listed
+        #  below found in the packet.  See doc/rlm_acct_unique for
+        #  more information.
+        #
+        acct_unique {
+                key = "User-Name, Acct-Session-Id, NAS-IP-Address, Client-IP-Address, NAS-Port"
+        }
+
+
+        #  Include another file that has the SQL-related configuration.
+        #  This is another file only because it tends to be big.
+        #
+        $INCLUDE sql.conf
+        #  For Cisco VoIP specific accounting with Postgresql,
+        #  use:         ${confdir}/sql/postgresql/voip-postpaid.conf
+        #
+        #  You will also need the sql schema from:
+        #        src/billing/cisco_h323_db_schema-postgres.sql
+        #  Note: This config can be use AS WELL AS the standard sql
+        #  config if you need SQL based Auth
+
+
+        #  Write a 'utmp' style file, of which users are currently
+        #  logged in, and where they've logged in from.
+        #
+        #  This file is used mainly for Simultaneous-Use checking,
+        #  and also 'radwho', to see who's currently logged in.
+        #
+        radutmp {
+                #  Where the file is stored.  It's not a log file,
+                #  so it doesn't need rotating.
+                #
+                filename = ${logdir}/radutmp
+
+                #  The field in the packet to key on for the
+                #  'user' name,  If you have other fields which you want
+                #  to use to key on to control Simultaneous-Use,
+                #  then you can use them here.
+                #
+                #  Note, however, that the size of the field in the
+                #  'utmp' data structure is small, around 32
+                #  characters, so that will limit the possible choices
+                #  of keys.
+                #
+                #  You may want instead: %{Stripped-User-Name:-%{User-Name}}
+                username = %{User-Name}
+
+
+                #  Whether or not we want to treat "user" the same
+                #  as "USER", or "User".  Some systems have problems
+                #  with case sensitivity, so this should be set to
+                #  'no' to enable the comparisons of the key attribute
+                #  to be case insensitive.
+                #
+                case_sensitive = yes
+
+                #  Accounting information may be lost, so the user MAY
+                #  have logged off of the NAS, but we haven't noticed.
+                #  If so, we can verify this information with the NAS,
+                #
+                #  If we want to believe the 'utmp' file, then this
+                #  configuration entry can be set to 'no'.
+                #
+                check_with_nas = yes
+               # Set the file permissions, as the contents of this file
+                # are usually private.
+                perm = 0600
+
+                callerid = "yes"
+        }
+
+        # "Safe" radutmp - does not contain caller ID, so it can be
+        # world-readable, and radwho can work for normal users, without
+        # exposing any information that isn't already exposed by who(1).
+        #
+        # This is another 'instance' of the radutmp module, but it is given
+        # then name "sradutmp" to identify it later in the "accounting"
+        # section.
+        radutmp sradutmp {
+                filename = ${logdir}/sradutmp
+                perm = 0644
+                callerid = "no"
+        }
+
+        # attr_filter - filters the attributes received in replies from
+        # proxied servers, to make sure we send back to our RADIUS client
+        # only allowed attributes.
+        attr_filter attr_filter.post-proxy {
+                attrsfile = ${confdir}/attrs
+        }
+
+        # attr_filter - filters the attributes in the packets we send to
+        # the RADIUS home servers.
+        attr_filter attr_filter.pre-proxy {
+                attrsfile = ${confdir}/attrs.pre-proxy
+        }
+
+        # Enforce RFC requirements on the contents of Access-Reject
+        # packets.  See the comments at the top of the file for
+        # more details.
+        #
+        attr_filter attr_filter.access_reject {
+                key = %{User-Name}
+                attrsfile = ${confdir}/attrs.access_reject
+        }
+
+        #  Enforce RFC requirements on the contents of the
+        #  Accounting-Response packets.  See the comments at the
+        #  top of the file for more details.
+        #
+        attr_filter attr_filter.accounting_response {
+                key = %{User-Name}
+                attrsfile = ${confdir}/attrs.accounting_response
+        }
+        #  counter module:
+        #  This module takes an attribute (count-attribute).
+        #  It also takes a key, and creates a counter for each unique
+        #  key.  The count is incremented when accounting packets are
+        #  received by the server.  The value of the increment depends
+        #  on the attribute type.
+        #  If the attribute is Acct-Session-Time or of an integer type we add
+        #  the value of the attribute. If it is anything else we increase the
+        #  counter by one.
+        #
+        #  The 'reset' parameter defines when the counters are all reset to
+        #  zero.  It can be hourly, daily, weekly, monthly or never.
+        #
+        #  hourly: Reset on 00:00 of every hour
+        #  daily: Reset on 00:00:00 every day
+        #  weekly: Reset on 00:00:00 on sunday
+        #  monthly: Reset on 00:00:00 of the first day of each month
+        #
+        #  It can also be user defined. It should be of the form:
+        #  num[hdwm] where:
+        #  h: hours, d: days, w: weeks, m: months
+        #  If the letter is ommited days will be assumed. In example:
+        #  reset = 10h (reset every 10 hours)
+        #  reset = 12  (reset every 12 days)
+        #
+        #
+        #  The check-name attribute defines an attribute which will be
+        #  registered by the counter module and can be used to set the
+        #  maximum allowed value for the counter after which the user
+        #  is rejected.
+        #  Something like:
+        #
+        #  DEFAULT Max-Daily-Session := 36000
+        #          Fall-Through = 1
+        #
+        #  You should add the counter module in the instantiate
+        #  section so that it registers check-name before the files
+        #  module reads the users file.
+        #
+        #  If check-name is set and the user is to be rejected then we
+        #  send back a Reply-Message and we log a Failure-Message in
+        #  the radius.log
+        #
+        #  If the count attribute is Acct-Session-Time then on each
+        #  login we send back the remaining online time as a
+        #  Session-Timeout attribute ELSE and if the reply-name is
+        #  set, we send back that attribute.  The reply-name attribute
+        #  MUST be of an integer type.
+        #
+        #  The counter-name can also be used instead of using the check-name
+        #  like below:
+        #
+
+
+
+
+

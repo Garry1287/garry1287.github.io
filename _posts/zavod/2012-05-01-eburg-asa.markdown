@@ -1,0 +1,793 @@
+---
+layout: post
+title:  "eburg-asa"
+date:   2012-05-01 16:48:04 +0400
+categories: zavod
+tags: zavod
+---
+
+# eburg-asa
+1. Назначить разные уровни безопасности
+ inet 0
+ vpn 50
+ inside 100
+
+
+interface Ethernet0/0
+ nameif vpn
+ security-level 50
+ ip address 10.202.255.254 255.255.255.252 
+!
+interface Ethernet0/1
+ nameif inet
+ security-level 0
+ ip address 82.112.59.170 255.255.255.252 
+!
+interface Ethernet0/2
+ nameif video
+ security-level 100
+ ip address 10.202.0.1 255.255.255.0 
+!
+interface Ethernet0/3
+ nameif inside
+ security-level 100
+ ip address 10.202.255.249 255.255.255.252 
+!             
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 192.168.1.1 255.255.255.0 
+ management-only
+
+
+
+2. Создать object-group
+
+object-group network NLMK_NET
+  network-object 10.0.0.0 255.0.0.0
+  network-object 172.19.4.0 255.255.252.0
+  network-object 192.168.5.0 255.255.255.128
+  network-object 192.168.254.80 255.255.255.248
+
+access-list no-nat extended permit ip 10.202.0.0 255.255.0.0 object-group NLMK_NET 
+
+
+3. Разрешить входящий траффик на vpn интерфейсе
+   На интернет интерфейсе входящие запретить (не делать access_list)
+    Не делать
+
+access-list vpn_access_in extended permit ip object-group NLMK_NET any
+access-group vpn_access_in in interface vpn
+
+access-list inside_access_in extended permit ip any any 
+access-list inside_access_in extended permit tcp any any 
+access-list inside_access_in extended permit udp any any 
+access-list inside_access_in extended permit icmp any any 
+access-group inside_access_in in interface inside
+  
+access-list video_access_in extended permit ip any any 
+access-list video_access_in extended permit tcp any any 
+access-list video_access_in extended permit udp any any 
+access-group video_access_in in interface video
+
+
+Этот добавить
+access-group vpn_access_in in interface vpn
+
+Этот удалить
+access-group outside_access_in in interface vpn
+
+
+3. Сделать nat
+
+
+
+global (inet) 1 interface
+nat (inside) 1 10.202.4.0 255.255.255.0
+nat (inside) 0 access-list no-nat
+
+
+
+
+4. Дефолт сделать в инет
+   Прописать vpn маршруты в сторону CE
+Добавить
+route vpn 10.0.0.0 255.0.0.0 10.202.255.253 1
+route vpn 172.19.4.0 255.255.252.0 10.202.255.253 1
+route vpn 192.168.5.0 255.255.255.128 10.202.255.253 1
+route vpn 192.168.254.80 255.255.255.248 10.202.255.253 1
+
+Удалить
+route vpn 0.0.0.0 0.0.0.0 10.202.255.253 1
+Оставить
+route inside 10.202.4.0 255.255.255.0 10.202.255.250 1
+Добавить 
+route inet 0.0.0.0 0.0.0.0 82.112.59.169 1
+
+
+
+5. Настроить backup
+На саппфире
+
+6. Cкросировать с GI0/2 2911 Сisco на ASA eth1
+
+7. На СЕ
+Убрать 
+interface GigabitEthernet0/1
+  no ip nat inside
+
+interface GigabitEthernet0/2
+ shutdown
+
+no ip nat inside source list 20 interface GigabitEthernet0/2 overload
+access-list 20 permit 10.202.4.0 0.0.0.255
+
+Удалить все маршруты
+
+ip route 0.0.0.0 0.0.0.0 82.112.59.169
+ip route 10.202.0.0 255.255.0.0 Null0
+ip route 10.202.2.0 255.255.255.0 10.202.255.254
+ip route 10.202.4.0 255.255.255.0 10.202.255.254
+ip route 10.202.255.248 255.255.255.252 10.202.255.254
+
+
+
+backup catalysta
+
+interface FastEthernet0/3
+ description #Test vpn user
+ switchport access vlan 1011
+ switchport mode access
+ load-interval 30
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+
+
+
+
+
+
+
+
+
+
+
+На ASA
+
+interface Ethernet0/0
+ nameif vpn
+ security-level 50
+ ip address 10.202.255.254 255.255.255.252 
+!
+interface Ethernet0/1
+ nameif inet
+ security-level 0
+ ip address 82.112.59.170 255.255.255.252 
+!
+interface Ethernet0/2
+ nameif video
+ security-level 100
+ ip address 10.202.0.1 255.255.255.0 
+!
+interface Ethernet0/3
+ nameif inside
+ security-level 100
+ ip address 10.202.255.249 255.255.255.252 
+!             
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 192.168.1.1 255.255.255.0 
+ management-only
+
+
+
+Настройка Nat
+ip route 0.0.0.0 0.0.0.0 10.202.255.249
+ip route 10.26.5.240 255.255.255.255 10.202.255.249
+ip route 10.186.4.0 255.255.255.0 10.202.255.249
+
+
+
+
+ip route 10.0.0.0 255.0.0.0 10.202.255.249
+ip route 172.19.4.0 255.255.252.0 10.202.255.249
+ip route 192.168.5.0 255.255.255.128 10.202.255.249
+ip route  192.168.254.80 255.255.255.248 10.202.255.249
+
+
+
+
+name 192.168.254.80 NLMK-ISPDn-HW1000 description NLMK ViPNet Core subnet
+name 10.0.0.0 MPLS-network
+
+object-group network DM_INLINE_NETWORK_2
+ network-object 172.19.4.0 255.255.252.0
+ network-object 192.168.5.0 255.255.255.128
+ network-object NLMK-ISPDn-HW1000 255.255.255.248
+
+
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_2 
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 MPLS-network 255.0.0.0 
+
+
+1)access-list NLMK extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_1 
+Разрешает доступ из внутренней сети (локалки) к сетям DM_INLINE_NETWORK_1 
+Вот этим 
+object-group network DM_INLINE_NETWORK_1
+ network-object 172.19.4.0 255.255.252.0
+ network-object 192.168.5.0 255.255.255.128
+ network-object 192.168.254.80 255.255.255.248
+
+2)access-list no-nat разрешает доступ из локалки к тем же сетям и впн НЛМК
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_2 
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 MPLS-network 255.0.0.0 
+
+
+3)access-list outside_access_in разрешате с портов из DM_INLINE_SERVICE_1 к асе со внешнего интерфейса
+access-list outside_access_in extended permit object-group DM_INLINE_SERVICE_1 any host outside 
+
+4)access-list outside_authentication резрешаем Радченко и Пашкову цепляться по ssh на внешний ip
+access-list outside_authentication extended permit tcp object-group Admin-NLMK host outside eq ssh
+
+5)access-list inside_access_in разрешаем из локалки куда угодно
+access-list inside_access_in extended permit ip 10.100.209.0 255.255.255.0 any log disable 
+
+6)access-list InterLink_access_in разрешает достууп из сетей нлмк, ебурга. мегафона к внутренним сетям
+access-list InterLink_access_in extended permit ip object-group DM_INLINE_NETWORK_3 10.100.209.0 255.255.255.0 log disable 
+access-list InterLink_access_in extended permit ip Eburg 255.255.0.0 10.100.209.0 255.255.255.0 
+access-list InterLink_access_in extended permit ip Megafon-3G 255.255.0.0 10.100.209.0 255.255.255.0 
+
+
+
+
+
+Разрешаем из локалки входящий траффик на внутренний интерфейс
+access-group inside_access_in in interface inside
+
+Разрешаем входящий траффик из НЛМК сети на интерфейс outside (внешний)
+access-group outside_access_in in interface outside
+
+Разрешает входящий траффик из сетей нлмк, ебурга. мегафона к внутренним сетям на интерфейс InterLink (VPN интерфейс)
+access-group InterLink_access_in in interface InterLink
+
+
+
+
+
+
+
+global (inet) 1 interface
+nat (inside) 1 10.202.4.0 255.255.255.0
+
+nat (inside) 0 access-list no-nat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+flash/asa825-k8.bin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. no forward interface Vlan2
+2. По умолчанию наверно порты в 1 влане access
+
+interface Vlan1
+ nameif inside
+ security-level 100
+ ip address 10.100.209.254 255.255.255.0 
+!
+interface Vlan2
+ nameif outside
+ security-level 0
+ ip address 79.175.7.218 255.255.255.252 
+!
+interface Vlan3
+ no forward interface Vlan2
+ nameif InterLink
+ security-level 50
+ ip address 10.100.223.253 255.255.255.252 
+!
+interface Ethernet0/0
+ switchport access vlan 2
+!
+interface Ethernet0/1
+ switchport access vlan 3
+!
+interface Ethernet0/2
+!
+interface Ethernet0/3
+!
+interface Ethernet0/4
+!
+interface Ethernet0/5
+!
+interface Ethernet0/6
+!
+interface Ethernet0/7
+
+
+
+
+
+
+3. same-security-traffic permit intra-interface
+4  Созданы access-list
+
+1)access-list NLMK extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_1 
+Разрешает доступ из внутренней сети (локалки) к сетям DM_INLINE_NETWORK_1 
+Вот этим 
+object-group network DM_INLINE_NETWORK_1
+ network-object 172.19.4.0 255.255.252.0
+ network-object 192.168.5.0 255.255.255.128
+ network-object 192.168.254.80 255.255.255.248
+
+2)access-list no-nat разрешает доступ из локалки к тем же сетям и впн НЛМК
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_2 
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 MPLS-network 255.0.0.0 
+
+
+3)access-list outside_access_in разрешате с портов из DM_INLINE_SERVICE_1 к асе со внешнего интерфейса
+access-list outside_access_in extended permit object-group DM_INLINE_SERVICE_1 any host outside 
+
+4)access-list outside_authentication резрешаем Радченко и Пашкову цепляться по ssh на внешний ip
+access-list outside_authentication extended permit tcp object-group Admin-NLMK host outside eq ssh
+
+5)access-list inside_access_in разрешаем из локалки куда угодно
+access-list inside_access_in extended permit ip 10.100.209.0 255.255.255.0 any log disable 
+
+6)access-list InterLink_access_in разрешает достууп из сетей нлмк, ебурга. мегафона к внутренним сетям
+access-list InterLink_access_in extended permit ip object-group DM_INLINE_NETWORK_3 10.100.209.0 255.255.255.0 log disable 
+access-list InterLink_access_in extended permit ip Eburg 255.255.0.0 10.100.209.0 255.255.255.0 
+access-list InterLink_access_in extended permit ip Megafon-3G 255.255.0.0 10.100.209.0 255.255.255.0 
+
+5. Это для ната наружу
+global (outside) 1 interface
+nat (inside) 1 10.100.209.0 255.255.255.0
+
+6. Внутрь пропускать без ната (для vpn)
+nat (inside) 0 access-list no-nat
+
+7. Прокиывает внуть порты 
+static (inside,outside) tcp interface XXX RDP 3389 netmask 255.255.255.255 
+static (inside,outside) tcp interface YYY Activ 2602 netmask 255.255.255.255 
+static (inside,outside) tcp interface YYYY Activ 9899 netmask 255.255.255.255 
+static (inside,outside) tcp interface ZZZ Activ ssh netmask 255.255.255.255 
+
+8. Разрешаем из локалки входящий траффик на внутренний интерфейс
+access-group inside_access_in in interface inside
+
+Разрешаем входящий траффик из НЛМК сети на интерфейс outside (внешний)
+access-group outside_access_in in interface outside
+
+Разрешает входящий траффик из сетей нлмк, ебурга. мегафона к внутренним сетям на интерфейс InterLink (VPN интерфейс)
+access-group InterLink_access_in in interface InterLink
+
+
+
+9.Маршрутизация Все маршруты в сторону vpn через 10.100.223.254, а в инет через дефорлт
+route InterLink 172.19.4.0 255.255.252.0 10.100.223.254 1 track 500
+route InterLink 192.168.5.0 255.255.255.128 10.100.223.254 1 track 500
+route InterLink NLMK-ISPDn-HW1000 255.255.255.248 10.100.223.254 1 track 500
+route outside 0.0.0.0 0.0.0.0 79.175.7.217 1
+route InterLink MPLS-network 255.0.0.0 10.100.223.254 1
+route InterLink 10.186.254.1 255.255.255.255 10.100.223.254 1
+
+
+
+: Saved
+: Written by enable_15 at 06:23:17.047 MSK Fri May 25 2012
+!
+ASA Version 8.2(2) 
+!
+hostname VM-TULA
+enable password XXX encrypted
+passwd XXX encrypted
+names
+name 172.19.x.x tftp-server
+name 81.20.194.x0 pashkov-vi
+name 81.20.194.x1 radchenko-iv
+name 10.100.209.y Activ
+name 10.100.209.y1 RDP
+name 79.175.7.218 outside
+name 192.168.254.80 NLMK-ISPDn-HW1000 description NLMK ViPNet Core subnet
+name 10.0.0.0 MPLS-network
+name 10.186.4.0 NLMK-RA description Remote access from NLMK for tech support
+name 10.9.0.0 Megafon-3G description 3G-connections by Megafon
+name 10.98.0.0 Eburg
+!
+interface Vlan1
+ nameif inside
+ security-level 100
+ ip address 10.100.209.254 255.255.255.0 
+!
+interface Vlan2
+ nameif outside
+ security-level 0
+ ip address outside 255.255.255.252 
+!
+interface Vlan3
+ no forward interface Vlan2
+ nameif InterLink
+ security-level 50
+ ip address 10.100.223.253 255.255.255.252 
+!
+interface Ethernet0/0
+ switchport access vlan 2
+!
+interface Ethernet0/1
+ switchport access vlan 3
+!
+interface Ethernet0/2
+!
+interface Ethernet0/3
+!
+interface Ethernet0/4
+!
+interface Ethernet0/5
+!
+interface Ethernet0/6
+!
+interface Ethernet0/7
+!
+boot system disk0:/asa-822-k8.bin
+ftp mode passive
+clock timezone MSK 3
+same-security-traffic permit intra-interface
+object-group network obj_any
+object-group network Admin-NLMK
+ description IT-administrators from NLMK
+ network-object host radchenko-iv
+ network-object host pashkov-vi
+object-group network DM_INLINE_NETWORK_2
+ network-object 172.19.4.0 255.255.252.0
+ network-object 192.168.5.0 255.255.255.128
+ network-object NLMK-ISPDn-HW1000 255.255.255.248
+object-group network DM_INLINE_NETWORK_1
+ network-object 172.19.4.0 255.255.252.0
+ network-object 192.168.5.0 255.255.255.128
+ network-object NLMK-ISPDn-HW1000 255.255.255.248
+object-group service tcp-activ tcp
+ port-object eq 2602
+ port-object eq 9899
+ port-object eq 222
+object-group service tcp-rdp tcp
+ port-object eq 33389
+object-group service DM_INLINE_SERVICE_1
+ service-object tcp eq 2602 
+ service-object tcp eq 33389 
+ service-object tcp eq 9899 
+ service-object tcp eq domain 
+ service-object udp eq domain 
+ service-object tcp eq 222 
+object-group network DM_INLINE_NETWORK_3
+ network-object NLMK-RA 255.255.255.0
+ network-object 172.19.4.0 255.255.252.0
+ network-object NLMK-ISPDn-HW1000 255.255.255.248
+ network-object 192.168.5.0 255.255.255.128
+access-list NLMK extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_1 
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 object-group DM_INLINE_NETWORK_2 
+access-list no-nat extended permit ip 10.100.209.0 255.255.255.0 MPLS-network 255.0.0.0 
+access-list outside_access_in extended permit object-group DM_INLINE_SERVICE_1 any host outside 
+access-list outside_authentication extended permit tcp object-group Admin-NLMK host outside eq ssh 
+access-list inside_access_in extended permit ip 10.100.209.0 255.255.255.0 any log disable 
+access-list InterLink_access_in extended permit ip object-group DM_INLINE_NETWORK_3 10.100.209.0 255.255.255.0 log disable 
+access-list InterLink_access_in extended permit ip Eburg 255.255.0.0 10.100.209.0 255.255.255.0 
+access-list InterLink_access_in extended permit ip Megafon-3G 255.255.0.0 10.100.209.0 255.255.255.0 
+pager lines 24
+logging enable
+logging console errors
+logging monitor errors
+logging buffered errors
+logging asdm informational
+mtu inside 1500
+mtu outside 1500
+mtu InterLink 1500
+icmp unreachable rate-limit 1 burst-size 1
+asdm image disk0:/asdm-625.bin
+asdm location radchenko-iv 255.255.255.255 inside
+asdm location tftp-server 255.255.255.255 inside
+asdm location Activ 255.255.255.255 inside
+asdm location RDP 255.255.255.255 inside
+asdm location NLMK-ISPDn-HW1000 255.255.255.248 inside
+asdm location MPLS-network 255.0.0.0 inside
+asdm location NLMK-RA 255.255.255.0 inside
+asdm location Megafon-3G 255.255.0.0 inside
+asdm location Eburg 255.255.0.0 inside
+no asdm history enable
+arp timeout 14400
+global (outside) 1 interface
+nat (inside) 0 access-list no-nat
+nat (inside) 1 10.100.209.0 255.255.255.0
+static (inside,outside) tcp interface XXX RDP 3389 netmask 255.255.255.255 
+static (inside,outside) tcp interface YYY Activ 2602 netmask 255.255.255.255 
+static (inside,outside) tcp interface YYYY Activ 9899 netmask 255.255.255.255 
+static (inside,outside) tcp interface ZZZ Activ ssh netmask 255.255.255.255 
+access-group inside_access_in in interface inside
+access-group outside_access_in in interface outside
+access-group InterLink_access_in in interface InterLink
+route InterLink 172.19.4.0 255.255.252.0 10.100.223.254 1 track 500
+route InterLink 192.168.5.0 255.255.255.128 10.100.223.254 1 track 500
+route InterLink NLMK-ISPDn-HW1000 255.255.255.248 10.100.223.254 1 track 500
+route outside 0.0.0.0 0.0.0.0 79.175.7.217 1
+route InterLink MPLS-network 255.0.0.0 10.100.223.254 1
+route InterLink 10.186.254.1 255.255.255.255 10.100.223.254 1
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+dynamic-access-policy-record DfltAccessPolicy
+aaa authentication match outside_authentication outside LOCAL
+aaa authentication ssh console LOCAL 
+aaa local authentication attempts max-fail 2
+http server enable
+http 10.100.209.0 255.255.255.0 inside
+http 81.20.194.0 255.255.255.0 outside
+no snmp-server location
+no snmp-server contact
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+sla monitor 500
+ type echo protocol ipIcmpEcho 10.186.254.1 interface InterLink
+ num-packets 20
+ frequency 20
+sla monitor schedule 500 life forever start-time now
+crypto ipsec transform-set T-NLMK esp-des esp-sha-hmac 
+crypto ipsec security-association lifetime seconds 28800
+crypto ipsec security-association lifetime kilobytes 4608000
+crypto map OUTMAP-NLMK 10 match address NLMK
+crypto map OUTMAP-NLMK 10 set peer 81.20.194.x 
+crypto map OUTMAP-NLMK 10 set transform-set T-NLMK
+crypto map OUTMAP-NLMK interface outside
+crypto ca trustpoint ASDM_TrustPoint0
+ enrollment terminal
+ subject-name CN=VM-TULA
+ crl configure
+crypto isakmp identity address 
+crypto isakmp enable outside
+crypto isakmp policy 5
+ authentication pre-share
+ encryption des
+ hash sha
+ group 2
+ lifetime 28800
+!
+track 500 rtr 500 reachability
+telnet timeout 5
+ssh radchenko-iv 255.255.255.255 outside
+ssh pashkov-vi 255.255.255.255 outside
+ssh timeout 5
+ssh version 1
+console timeout 0
+management-access inside
+
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+webvpn
+group-policy DfltGrpPolicy attributes
+ vpn-tunnel-protocol IPSec svc 
+username admin-NLMK password .cUsOwMtjyzDxjW8 encrypted privilege 15
+username admin-NLMK attributes
+ service-type admin
+tunnel-group 81.20.194.x type ipsec-l2l
+tunnel-group 81.20.194.x ipsec-attributes
+ pre-shared-key $1$iNpo2w5x$oxlBkYP6nOHZ6d1t.A5IC
+!
+class-map global-class
+ match default-inspection-traffic
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect ftp 
+  inspect h323 h225 
+  inspect h323 ras 
+  inspect rsh 
+  inspect rtsp 
+  inspect sqlnet 
+  inspect skinny  
+  inspect sunrpc 
+  inspect xdmcp 
+  inspect sip  
+  inspect netbios 
+  inspect tftp 
+  inspect ip-options 
+  inspect pptp 
+policy-map global-policy
+ class global-class
+  inspect dns 
+  inspect tftp 
+  inspect icmp 
+  inspect sip  
+!
+service-policy global_policy global
+prompt hostname context 
+Cryptochecksum:35976d84cb51b31c6fa65fab3646b115
+: end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+До ASA 8.4.1 репликация таблицы маршрутизации OSPF в failover-е не поддерживалась, соответственно, после failover новая активная ASA строит все заново, в случае OSPF на это уходит 40 секунд.
+
+Начиная с 8.4.1 это поддерживается, но пока с багами, если честно :-)))
+
+ Александр_1111111111111 (Александр_111) [more]	[редактировалось автором] 2011-06-30 11:38:25
+
+
+
+
+Апну тему.
+У кого нибудь вообще работает связка ospf+failover?
+У меня на стенде соседние коммутаторы сбрасывают соседство и через 40 секунд устанавливают новое.
+Судя по всему репликация не проходит и при смене актива заново устанавливаются отношения соседства.
+Версия софта 8.4.3
+to Aleks305:
+Поделитесь опытом, вы реализовали или нет данный проект? 
+
+
+Работает.
+Как сказал Сергей выше, с версии 8.4(1) аса передает таблицу маршрутизации на failover. Однако при смене активного юнита, новая активная нода строит OSPF соседство заново. Однако при этом таблица маршрутизации сохраняется, соответственно как только поднимаются соседи, ASA сразу же начинает сливать им свои маршруты, за счет этого время конвергенции OSPF в сети здорово снижается. Вот информация от вендора:
+"Restrictions/Caveats
+In the existing implementation, when the active unit goes down and the standby unit takes over as active, the
+OSPF re-convergence takes place on new ACTIVE. After failover, the peer router keep the routes intact for
+some time (since it gets the HELLO messages from the new ACTIVE) and once re-convergence on ASA
+new ACTIVE unit is completed the route entry on the peer is deleted and updated again. The time taken for
+deletion and updation is approximately 2 to 3 seconds. And also during switchover from active to standby
+(for approximately ~2 sec), traffic loss is seen. This is failover related and is the minimum time to bring up
+interfaces, swap IP & MAC from active to standby and start processing packets."
+
+Чтобы использовать плюсы данной фичи, Вам нужно оттюнить таймера OSPF в домене. 
+
+
+
+
+
+То есть здесь проблема не в аса, а в ее соседях, которые работают с дефолтными таймерами. Попробую с утра потюнить таймеры. 
+
+Можно еще на несколько секунд уменьшить время конвергенции, но для этого нужно тюнить еще таймера LSA,SPF.
+ Вот очень хорошая статья Петра Лопухова [http://blog.ine.com/2010/06/02/ospf-fast-convergenc/](http://blog.ine.com/2010/06/02/ospf-fast-convergenc/) 
+
+
+One workaround is what you mentioned..tweak hello timers of OSPF..the other option would be due to lower the failover poll time, 
+however don't lower it too much as it might trigger false failover/switchovers
+
+ Dynamic Routing and Failover
+
+Dynamic routes are not replicated to the standby unit or failover group in a failover configuration. 
+Therefore, immediately after a failover occurs, some packets received by the security appliance may be dropped 
+because of a lack of routing information or routed to a default static route while the routing table is repopulated
+by the configured dynamic routing protocols. 
+

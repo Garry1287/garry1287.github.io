@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "top"
+date:   2010-03-28 18:07:41 +0400
+categories: linux
+tags: linux
+---
+
+# top
+[http://habrahabr.ru/post/114082/](http://habrahabr.ru/post/114082/)
+[http://www.linuxopen.ru/2010/01/21/15-primerov-ispolzovanija-v-linux.html](http://www.linuxopen.ru/2010/01/21/15-primerov-ispolzovanija-v-linux.html)
+
+vmstat
+lsattr
+ps -ef | more
+
+Документирование конфигурации
+Внедрите механизм управления изменениями
+Внесите рекомендуемые изменения в настройки
+[http://www.ibm.com/developerworks/ru/library/au-system_bottlenecks/](http://www.ibm.com/developerworks/ru/library/au-system_bottlenecks/)
+
+
+Листинг 4. Сохранение стандартного вывода
+
+		 
+# ./myscript.sh 1>myscript.out
+
+
+Листинг 5. Сохранение стандартных сообщений об ошибках
+
+		 
+# ./myscript.sh 2>myscript.err
+
+
+Листинг 6. Сохранение стандартного вывода и сообщений об ошибках в один файл
+
+		 
+			
+# ./myscript.sh > myscript.out 2>&1

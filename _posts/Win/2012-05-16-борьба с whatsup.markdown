@@ -1,0 +1,91 @@
+---
+layout: post
+title:  "борьба с whatsup"
+date:   2012-05-16 04:38:47 +0400
+categories: Win
+tags: Win
+---
+
+# борьба с whatsup
+Gparted использовал для расширения диска
+[http://www.chicagotech.net/Windows/disk1.htm](http://www.chicagotech.net/Windows/disk1.htm)
+[https://pete.wtf/2009/04/07/how-to-extend-windows-boot-volumes-in-vmware/](https://pete.wtf/2009/04/07/how-to-extend-windows-boot-volumes-in-vmware/)
+[http://b14esh.com/?p=1252](http://b14esh.com/?p=1252)
+
+1 Установить WhatsUp 12 (удалить предыдущий)
+2 Снести MS SQL 2005 Express Edition
+3 Установить Standart Edition
+
+
+Создать БД
+
+
+sqlcmd -E -S "UNISPRINT" -Q "restore filelistonly from disk = 'C:\Documents and Settings\garry\My Documents\database18.05.15.dat'"
+sqlcmd -E -S "UNISPRINT" -Q "ALTER DATABASE WhatsUp SET SINGLE_USER WITH ROLLBACK IMMEDIATE"
+sqlcmd -E -S "UNISPRINT" -Q "RESTORE DATABASE [WhatsUp] FROM DISK='C:\Documents and Settings\garry\My Documents\database18.05.15.dat' WITH REPLACE, MOVE 'WhatsUp_dat' TO 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.mdf', MOVE 'WhatsUp_log' To 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.ldf'"
+
+Спасибо индусу
+[http://blog.sqlauthority.com/2007/02/25/sql-server-restore-database-backup-using-sql-script-t-sql/](http://blog.sqlauthority.com/2007/02/25/sql-server-restore-database-backup-using-sql-script-t-sql/)
+[http://www.askit.ru/custom/sql2005_admin/m6/06_06_db_restore.htm](http://www.askit.ru/custom/sql2005_admin/m6/06_06_db_restore.htm)
+[http://snakeproject.ru/rubric/article.php?art=tsql_restore_backup_server](http://snakeproject.ru/rubric/article.php?art=tsql_restore_backup_server)
+
+4.Дальше по руководству
+
+ [http://docs.ipswitch.com/WhatsUp_Gold_v12/WebHelp/index.htm?alternative_database_setups.htm?toc.htm](http://docs.ipswitch.com/WhatsUp_Gold_v12/WebHelp/index.htm?alternative_database_setups.htm?toc.htm)
+[http://docs.ipswitch.com/NM/79_WhatsUp%20Gold%20v15/05_Additional%20resources/Migration/WhatsUp%20Gold%20v15%20Database%20Migration%20Guide.pdf](http://docs.ipswitch.com/NM/79_WhatsUp%20Gold%20v15/05_Additional%20resources/Migration/WhatsUp%20Gold%20v15%20Database%20Migration%20Guide.pdf)
+ Единственное 
+Click to select the SQL Server authentication... option, then enter the credentials for the SQL user on your SQL server. Click Next.
+Оставил windows auth
+
+
+5. Надо проапгрейдить схему
+[http://docs.ipswitch.com/WhatsUp_Gold_v12/WebHelp/index.htm?17631.htm?toc.htm](http://docs.ipswitch.com/WhatsUp_Gold_v12/WebHelp/index.htm?17631.htm?toc.htm)
+
+
+cscript upgrade_db.vbs -S "UNISPRINT" -d "WhatsUp"
+
+
+
+
+
+
+
+
+
+
+Полезное
+Создание БД 
+[http://www.kodyaz.com/articles/how-to-create-a-database-in-sql-server-2005.aspx](http://www.kodyaz.com/articles/how-to-create-a-database-in-sql-server-2005.aspx)
+
+SQLCMD
+[http://www.mssqltips.com/sqlservertip/2478/connecting-to-sql-server-using-sqlcmd-utility/](http://www.mssqltips.com/sqlservertip/2478/connecting-to-sql-server-using-sqlcmd-utility/)
+
+[http://forum.ru-board.com/topic.cgi?forum=5&topic=24719&start=0](http://forum.ru-board.com/topic.cgi?forum=5&topic=24719&start=0)
+
+
+
+
+
+
+
+Понять, что за сервер
+sqlcmd -E -S "UNISPRINT" -Q "SELECT SERVERPROPERTY('productversion'), SERVERPROPERTY ('productlevel'), SERVERPROPERTY ('edition')"
+
+Enterprise Edition
+
+Эта ошибка говорит о нехватке месте для БД вроде бы
+
+    Database Connection Error (80004005) - WUGspace
+    [https://community.whatsupgold.com/...database...](https://community.whatsupgold.com/...database...)
+
+Перевести эту страницу
+5 июля 2012 г. - Сообщений: 6 - ‎Авторов: 3
+Launching WhatsUp Gold Admin Console give the following error. Error: Database Connection Error (80004005) Error=80004005.
+
+
+
+
+
+sqlcmd -E -S "UNISPRINT" -Q "restore filelistonly from disk = 'C:\Documents and Settings\garry\My Documents\database29.09.2015.dat'"
+sqlcmd -E -S "UNISPRINT" -Q "ALTER DATABASE WhatsUp SET SINGLE_USER WITH ROLLBACK IMMEDIATE"
+sqlcmd -E -S "UNISPRINT" -Q "RESTORE DATABASE [WhatsUp] FROM DISK='C:\Documents and Settings\garry\My Documents\database29.09.2015.dat' WITH REPLACE, MOVE 'WhatsUp_dat' TO 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.mdf', MOVE 'WhatsUp_log' To 'C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data\WhatsUp.ldf'"

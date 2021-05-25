@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "drupal"
+date:   2012-10-11 10:38:36 +0400
+categories: seo
+tags: seo
+---
+
+# drupal
+[http://habrahabr.ru/post/200340/](http://habrahabr.ru/post/200340/)

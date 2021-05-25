@@ -1,0 +1,47 @@
+---
+layout: post
+title:  "iostat"
+date:   2018-12-04 06:55:34 +0300
+categories: linux
+tags: linux
+---
+
+# iostat
+iostat показывал, что есть постоянная нагрузка на диск в 800-820 Blk_wrtn/s
+Начал поиск процессов, которые могли бы заниматься записью. Выполнение
+
+echo 1 > /proc/sys/vm/block_dump
+
+
+дало странный результат: виновниками оказались
+
+kjournald(483): WRITE block 76480 on md0 
+и 
+md0_raid1(481): WRITE block 154207744 on sdb2
+md0_raid1(481): WRITE block 154207744 on sda3
+
+
+Ext3 находится в режиме data=writeback, noatime, да и на диск ничего не пишется, разве что кроме логов.
+
+ Но логи какие писались вчера — такие и пишутся сегодня, их объем не возрос, то есть iowait тоже не дожен был возрасти.
+
+
+local6.info                                             /var/log/dhcpd.log
+
+
+оказалось, что при записи через syslog для каждой строки делается sync. З
+апросов к dhcp-серверу довольно много, генерируется много событий, которые попадают в лог, и вызывается много sync.
+Исправление на
+
+local6.info                                             -/var/log/dhcpd.log
+
+
+
+Нет. Указание минуса перед именем файла отключает sync на диск при каждой записи в лог,
+ что повышает производительность, но может привести к тому, что при сбое данные могут оказаться фактически не записанными на диск.
+Выдержка из man syslog.conf на эту тему:
+
+    You may prefix each entry with the minus ''-'' sign to omit syncing the file after every
+    logging. Note that you might lose information if the system crashes right behind a write
+    attempt. Nevertheless this might give you back some performance, especially if you run
+    programs that use logging in a very verbose manner.

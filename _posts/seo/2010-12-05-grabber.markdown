@@ -1,0 +1,73 @@
+---
+layout: post
+title:  "grabber"
+date:   2010-12-05 22:20:48 +0300
+categories: seo
+tags: seo
+---
+
+# grabber
+NewsGrabberJC.pro
+FeedGator
+
+DleSpars
+
+[http://webmasters.ru/forum/f91/dlespars-besshablonnyi-parser-graber-dlya-dle-saitov-otlozhennaya-publikaciya-i-mnogoe-drugoe-50770/](http://webmasters.ru/forum/f91/dlespars-besshablonnyi-parser-graber-dlya-dle-saitov-otlozhennaya-publikaciya-i-mnogoe-drugoe-50770/)
+[http://tj-s.ru/tod/universalnyiy-parser-dlya-joomla.html](http://tj-s.ru/tod/universalnyiy-parser-dlya-joomla.html)
+[http://web-data-extractor.net/my-services/joomla-parser/](http://web-data-extractor.net/my-services/joomla-parser/)
+
+Настройка граббинга
+[http://forum.wpgrabber.biz/viewtopic.php?t=2](http://forum.wpgrabber.biz/viewtopic.php?t=2)
+[http://forum.wpgrabber.biz/viewforum.php?f=2](http://forum.wpgrabber.biz/viewforum.php?f=2)
+[http://wmasteru.org/threads/joomlagrabber.5427/](http://wmasteru.org/threads/joomlagrabber.5427/)
+
+
+Граббинг по cron
+usr/bin/wget -O /dev/null -q http://сайт.ру/index.php?option=com_joomlagrabber&task=run >/dev/null 2>&
+
+
+
+
+
+
+
+
+
+
+
+Настройка CRON-задания для обновления лент в JoomlaGrabber
+
+        tushov_ru
+        June 21st, 2011
+
+    Для автоматического запуска процесса обновления лент необходимо создать всего одно CRON-задание на запуск PHP-скрипта по адресу:
+
+    /administrator/components/com_joomlagrabber/daemon.php
+
+    команда запуска php-скрипта зависит от условий и настроек хостинга, потому за подробностями настройки CRON’а обращайтесь в свою тех. поддержку, читайте F.A.Q. хостера и т.д.
+
+    За 1 запуск CRON-задания происходит обновление 1 ленты!
+
+    Для поочередного обновления всех включенных (опубликованных) лент необходимо правильно расставить интервал обновления для них.
+
+    Пример.
+
+    CRON-задание запускается через каждые 5 минут (300 сек.)
+
+    Допустим Мы выбрали период обновления для «первой» ленты равный 1 часу (60 * 60 = 3600 с.)
+
+    выставляем периоды обновления в секундах!!! для лент:
+
+    1 лента – 3600
+
+    2 лента – 3840 (3600 + 60*4)
+
+    3 лента – 4080 (3600 + 60*4 + 60*4)
+
+    4 лента – 4320 (3600 + 60*4 + 60*4 + 60*4)
+
+    и т.д.
+
+    таким образом нам надо будет уложить периоды обновления всех наших лент в диапазон 1 часа, т.е. лента с периодом равным 3600 + 3600 уже не обновится, потому что подойдет очередь обновления нашей первой ленты с периодом равным 3600.
+
+    При определении коэффициента нарастания (я выбрал 60 * 4 = 240 с.) необходимо учитывать интервал запуска CRON-задания, в моём примере он запускается через каждые 5 минут. 4 минуты я взял с небольшим запасом (5 минут – 1).

@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "ios_safe"
+date:   2010-08-29 05:20:31 +0400
+categories: ios_safe
+tags: cisco
+---
+
+# ios_safe
+service tcp-keepalives-in
+service tcp-keepalives-out
+
+[http://www.citrin.ru/net:tempate_catalyst](http://www.citrin.ru/net:tempate_catalyst)

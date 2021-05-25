@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "mpls-qos2"
+date:   2011-05-19 23:46:46 +0400
+categories: Networking
+tags: Networking
+---
+
+# mpls-qos2
+[http://www.opennet.ru/docs/RUS/qos_oper/#mozTocId152860](http://www.opennet.ru/docs/RUS/qos_oper/#mozTocId152860)
+[https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/ios/12-2SX/configuration/guide/book/mplsqos.pdf](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/ios/12-2SX/configuration/guide/book/mplsqos.pdf)

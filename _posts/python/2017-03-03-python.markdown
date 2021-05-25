@@ -1,0 +1,67 @@
+---
+layout: post
+title:  "python"
+date:   2017-03-03 12:10:47 +0300
+categories: python
+tags: python
+---
+
+# python
+[http://habrahabr.ru/post/205944/](http://habrahabr.ru/post/205944/)
+[http://habrahabr.ru/company/yandex/blog/205382/](http://habrahabr.ru/company/yandex/blog/205382/)
+[http://www.ibm.com/developerworks/ru/library/os-python-kvm-scripting1/](http://www.ibm.com/developerworks/ru/library/os-python-kvm-scripting1/)
+
+
+
+
+
+
+	
+
+Установка на CentOS7
+
+Edit: if you use CentOS7, the repo EPEL7 has (finally!) python 3.4:
+
+sudo yum install epel-release
+sudo yum install python34
+
+
+
+Eclipse + PyDev
+
+перешёл на Geany. Сейчас на бубунте, но возвращаться на Eric4 нет желани
+
+Можно Использовать "родную" для Python оболочку IDLE. Для 3-го Питона sudo apt-get install idle3. Есть и вовсе продвинутые. Я одно время использовал свободным вариантом Wing IDE 101 с сайта [http://wingware.com.](http://wingware.com.) Весьма и весьма продвинутая IDE. Можно и более громоздкую Komodo, но для нормальной работы вполне хватает IDLE.
+
+ Urxvt + Vim + ipython + grep
+urxvt + vim + sr 
+
+
+setlocal tabstop=4
+setlocal softtab
+
+
+[https://wiki.python.org/moin/PythonEditors](https://wiki.python.org/moin/PythonEditors)
+
+
+--------------------------------------------------------------------------------------
+Virtualenv
+-----------------------------------------------------------------------------------------
+--no-site-packages
+-p /usr/bin/python2.7
+  -p PYTHON_EXE, --python=PYTHON_EXE
+                        The Python interpreter to use, e.g.,
+                        --python=python2.5 will use the python2.5 interpreter
+                        to create the new environment.  The default is the
+                        interpreter that virtualenv was installed with
+                        (/usr/bin/python3)
+
+
+
+
+virtualenv --no-site-packages --python=python2.5 env2
+
+
+ virtualenv --no-site-packages --python=python2.7 env2
+
+[http://proft.me/2010/04/3/python-i-okruzhenie-virtualenv/](http://proft.me/2010/04/3/python-i-okruzhenie-virtualenv/)

@@ -1,0 +1,650 @@
+---
+layout: post
+title:  "ntp.conf"
+date:   2013-07-17 02:33:07 +0400
+categories: linux
+tags: linux
+---
+
+# ntp.conf
+Бывает broadcast 
+client/server
+peer2peer
+
+
+
+Поднять два ntp сервера и везде прописывать их
+
+ntp
+Проверить работоспособность сервера можно например так:
+ntpdate -q 3.pool.ntp.org
+
+Теперь можно проверить состояние синхронизации:
+# ntpq -p
+
+
+
+ntp.conf
+server 1.ru.pool.ntp.org 
+server 2.ru.pool.ntp.org 
+server 3.ru.pool.ntp.org 
+server ntp2.vniiftri.ru
+server ntp3.vniiftri.ru
+
+restrict default ignore 
+
+#For local networks
+restrict 172.16.0.0 mask 255.255.0.0 nomodify notrap nopeer
+#For PSI network
+restrict 81.20.192.0 mask 255.255.240.0 nomodify notrap nopeer
+#For VPN NLMK
+restrict 10.0.0.0 mask 255.0.0.0 nomodify notrap nopeer
+
+
+
+##
+## Miscellaneous stuff
+##
+
+driftfile /var/lib/ntp/drift/ntp.drift       
+# path for drift file
+
+logfile /var/log/ntp                  
+# alternate log file
+# logconfig =syncstatus + sysevents
+# logconfig =all
+
+restict server 1.ru.pool.ntp.org 
+restict server 2.ru.pool.ntp.org 
+restict server 3.ru.pool.ntp.org 
+restict server ntp2.vniiftri.ru
+restict server ntp3.vniiftri.ru
+
+
+
+
+
+
+
+
+
+Authentication Options
+Authentication allows a matching passwords to be specified by the NTP server and associated clients. NTP keys are stored in the ntp.keys file in the following format: Key-number M Key (The M stands for MD5 encryption), e.g.:
+
+1 M secret 5 M RaBBit 7 M TiMeLy 10 M MYKEY
+
+In the NTP configuration file ntp.conf, specify which of the keys specified above are trusted, i.e. are secure and you want to use. Any keys specified in the keys file but not trusted will not be used for authentication, e.g.:
+
+trustedkey 1 7 10
+
+The NTP server is now configured for authentication.
+
+Client Configuration for Authentication
+The client needs to be configured with similar information as the server, however, you may use a subset of the keys specified on the server. A different subset of keys can be used on different clients, e.g.:
+
+Client A)
+1 M secret 7 M TiMeLy
+
+trustedkey 1 7
+
+Client B)
+1 M secret 5 M RaBBit 7 M TiMeLy 10 M MYKEY
+
+trustedkey 7 10
+
+Essentially authentication is used by the client to authenticate that the time server is who he says he is, and that no rogue server intervenes. The key is encrypted and sent to the client by the server where it is unencrypted and checked against the client keys to ensure a match. 
+
+
+
+
+
+
+
+ Simple Client Configuration
+
+This is the minimum configuration for an NTP Client which just needs "good enough" time.
+
+   driftfile /var/lib/ntp/ntp.drift
+   server 0.pool.ntp.org iburst
+   server 1.pool.ntp.org iburst
+   server 2.pool.ntp.org iburst
+   server 3.pool.ntp.org iburst
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ntp logging
+ntp clock-period 17180548
+ntp access-group peer 30
+ntp server 81.20.192.19 prefer
+
+ntp logging
+ntp access-group peer 30
+ntp server 10.192.10.190 prefer
+
+
+
+show ntp associations
+
+[http://evilrouters.net/2008/11/23/basic-ntp-configuration-for-cisco-routers/](http://evilrouters.net/2008/11/23/basic-ntp-configuration-for-cisco-routers/)
+[http://www.k-max.name/linux/ntp-server-na-linux/](http://www.k-max.name/linux/ntp-server-na-linux/)
+[http://www.ntp.org/ntpfaq/NTP-s-config-adv.htm](http://www.ntp.org/ntpfaq/NTP-s-config-adv.htm)
+[http://adminbook.ru/index.php?men2=4-1/251](http://adminbook.ru/index.php?men2=4-1/251)
+[http://www.opennet.ru/base/sys/ntpd_setup.txt.html](http://www.opennet.ru/base/sys/ntpd_setup.txt.html)
+[http://wiki.lissyara.su/wiki/Ntp](http://wiki.lissyara.su/wiki/Ntp)
+[http://support.ntp.org/bin/view/Main/DocumentationIndex](http://support.ntp.org/bin/view/Main/DocumentationIndex)
+[http://www.eecis.udel.edu/~mills/ntp/html/accopt.html](http://www.eecis.udel.edu/~mills/ntp/html/accopt.html)
+[http://www.lissyara.su/articles/freebsd/tuning/ntp_settings/](http://www.lissyara.su/articles/freebsd/tuning/ntp_settings/)
+[http://www.eecis.udel.edu/~mills/ntp/html/accopt.html](http://www.eecis.udel.edu/~mills/ntp/html/accopt.html)
+[http://telecom.opennet.ru/cisco/ntp.shtml](http://telecom.opennet.ru/cisco/ntp.shtml)
+[http://www.cisco.com/en/US/tech/tk869/tk769/technologies_white_paper09186a0080117070.shtml](http://www.cisco.com/en/US/tech/tk869/tk769/technologies_white_paper09186a0080117070.shtml)
+[http://www.ntp.org/ntpfaq/NTP-s-config-adv.htm](http://www.ntp.org/ntpfaq/NTP-s-config-adv.htm)
+[http://support.ntp.org/bin/view/Support/AccessRestrictions](http://support.ntp.org/bin/view/Support/AccessRestrictions)
+[http://www.brennan.id.au/09-Network_Time_Protocol.html](http://www.brennan.id.au/09-Network_Time_Protocol.html)
+[http://www.eecis.udel.edu/~mills/ntp/html/accopt.html](http://www.eecis.udel.edu/~mills/ntp/html/accopt.html)
+[http://evilrouters.net/2008/11/23/basic-ntp-configuration-for-cisco-routers/](http://evilrouters.net/2008/11/23/basic-ntp-configuration-for-cisco-routers/)
+[http://www.ntp.org/ntpfaq/NTP-s-config-adv.html](http://www.ntp.org/ntpfaq/NTP-s-config-adv.html)
+
+peer 192.168.1.11 iburst
+broadcast
+broadcastclient 
+
+
+0.opensuse.pool.ntp.org, 1.opensuse.pool.ntp.org, 2.opensuse.pool.ntp.org, or 3.opensuse.pool.ntp.org
+
+
+
+Адрес сервера NTP
+Чтобы выбрать адрес сервера NTP, используйте запись Адрес. Чтобы найти сервер NTP, получите информацию у вашего администратора сети или интернет-провайдера.
+Выбор сервера
+Чтобы выбрать сервер NTP из обнаруженных в локальной сети или из списка известных серверов NTP, нажмите Выбрать и выберите между Локальный сервер NTP и Открытый сервер NTP.
+Проверка доступности сервера
+Для проверки того, что выбранный сервер работает и отвечает, нажмите Тест.
+Параметры
+Для точной настройки источника синхронизации внесите параметры в текстовое поле Параметры. Для информации см. /usr/share/doc/packages/xntp-doc/confopt.htm.
+Параметры управлением доступом
+Определите флаги управлением доступа (директива restrict в /etc/ntp.conf) для этого сервера,
+указав, какие действия удалённого узла могут осуществляться с вашим демоном NTP. По умолчанию установлено в notrap nomodify noquery. 
+Этот параметр доступен, только если вы отметили опцию Ограничить службу NTP только настроенными серверами в Настройках безопасности. 
+
+
+
+
+
+garry:/usr/share/doc/packages/ntp-doc # ntpdate -q 81.20.192.59
+server 81.20.192.59, stratum 16, offset 0.008101, delay 0.02631
+18 Jan 12:05:43 ntpdate[12529]: no server suitable for synchronization found
+garry:/usr/share/doc/packages/ntp-doc # ntpdate -q 81.20.192.59
+server 81.20.192.59, stratum 2, offset 0.027117, delay 0.02629
+18 Jan 12:10:15 ntpdate[12904]: adjust time server 81.20.192.59 offset 0.027117 sec
+
+ntpq -p
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ rock.sc.ru      62.117.76.141    2 u   23   64    1    0.695    0.047   0.000
+ sapphire.sc.int .INIT.           1 u   22   64    1    0.407  -25.217   0.000
+
+
+ntptrace
+localhost: stratum 3, offset 0.000311, synch distance 0.068225
+sapphire.sc.int: stratum 2, offset 0.003954, synch distance 0.080475
+62.117.76.138: timed out, nothing received
+***Request timed out
+
+
+
+
+ignore
+	Deny all packets and queries
+kod
+	Send Kiss-Of-Death packet on access violation
+nomodify
+	Deny ntpq / ntpdc queries that attempt to modify the server. 
+Deny ntpq and ntpdc queries which attempt to modify the state of the server (i.e., run time reconfiguration). 
+Queries which return information are permitted.
+
+notrap
+	Deny control message trap service
+noquery
+	Deny all ntpq / ntpdc queries. Time service is not affected
+noserve 	Deny all queries - except ntpq / ntpdc
+notrust
+	Deny access unless cryptographically authenticated (ver 4.2 onwards)
+nopeer
+	Deny all packets that attempt to establish a peer association
+
+
+Тут остановимся по-подробнее.
+remote - имена удаленных ntp серверов (в нашем случае полученные из пулов 0/1/2/3.ua.pool.ntp.org)
+refid - сервер, с которым производит синхронизацию удаленный сервер ntp
+st - стратум (уровень) удаленного сервера. 1 - самый высокий, эти сервера для вычисления точного времени используют специальное дорогостоящее оборудование; 16 - рядовая машина/клиент.
+t - тип пира (u = unicast, m = multicast)
+when - указывает на то, как давно была произведена синхронизация с сервером
+poll - частота в секундах, с которой NTP демон синхронизируется с пиром
+reach - состояние доступности сервера, это значение стабилизируется на уровне 377 если последних 8 попыток синхронизации с удаленным сервером были успешны
+delay - он и в Африке delay - задержка (в миллисекундах) ответа от сервера
+offset - разница в миллисекундах между системным временем и временем удаленного сервера; значение с минусом - отставание, с плюсом - наши часики спешат
+jitter - смещение времени на удаленном сервере
+
+Теперь немного о значках, следа от имени пира:
+"*" - пир, с которым последний раз у нас была выполнена синхронизация
+"+" - "хороший" (пригодный для обновления) сервер
+"-" - "плохой" (непригодный для обновления) сервер
+"х" - сервер не отвечает
+
+x - фальшивый источник по алгоритму пересечения;
+. - исключён из списка кандидатов из-за большого расстояния;
+- - удалено из списка кандидатов алгоритмом кластеризации;
++ - входит в конечный список кандидатов;
+# - выбран для синхронизации, но есть 6 лучших кандидатов;
+* - выбран для синхронизации;
+o - выбран для синхронизации, но используется PPS;
+пробел - слишком большой уровень, цикл или явная ошибка;
+
+iptables -A allowed_ports -s 192.168.1.0/24 -d 192.168.1.11/32 -p udp -m udp --dport 123 -j ACCEPT 
+
+[https://groups.google.com/forum/?hl=ru&fromgroups=#](https://groups.google.com/forum/?hl=ru&fromgroups=#)!msg/fido7.ru.unix.bsd/jVQNfL7U0Go/1_5ZTJHxoFEJ
+
+noquery - запрещает запросы, 
+nomodify
+notrap - запрещает контрольные сообщения
+
+
+
+
+restrict numeric-address [mask {numericc-mask}] [flag] - задает ограничение доступа: 
+пакеты сортируются и маскам, берется исходный адрес и последовательно сравнивается, 
+от последнего удачного сравнения берется флаг  [flag]доступа:
+
+    нет флагов - дать доступ;
+    ignore - игнорировать все пакеты;
+    noquery - игнорировать пакеты NTP 6 и 7 (запрос и модификация состояния);
+    nomodify - игнорировать пакеты NTP 6 и 7 (модификация состояния);
+    limited - обслуживать только ограниченное количество клиентов из данной сети;
+    nopeer - обслуживать хост, но не синхронизироваться с ним;
+
+ntp clock-period 17179794
+ntp peer 81.20.192.2
+ntp peer 80.240.109.22
+
+
+
+    nomodify -- "Do not allow this host/subnet to modify the ntpd settings even if they have the correct keys." 
+By default ntpd requires authentication with symmetric keys for modifications made with ntpdc. 
+So if you don't configure symmetric keys for your ntpd, or keep them properly safeguarded, 
+you don't need to use 'nomodify' unless you are concerned that the NTP authentication scheme might be compromised. 
+
+Не разрешает модифицировать установки ntpd даже если ключи корректны. Используется если ключи скомпроментирована
+
+    noserve -- "Do not serve time to this host/subnet." 
+This option is really intended to be used when you want to allow a host/subnet to access your ntpd only 
+for monitoring and/or remote configuration. 
+
+Не обслуживает временем эти хосты или сети
+
+    notrust -- "Ignore all NTP packets that are not cryptographically authenticated." 
+This option tells ntpd to ignore all packets which are not crytographically authenticated 
+(note that this is a change from ntp-4.1.x). 
+DO NOT use "notrust" unless ntp crypto (i.e. symmetric keys or autokey) has been properly configured on "both ends" 
+of an ntp association (e.g. your ntpd and a remote time server, your ntpd and a client). 
+See 6.5.3.1. notrust changed between versions 4.1 and 4.2 for more information. 
+
+Игнорирует не аутентифицированные пакеты ntp
+
+    noquery -- "Do not allow this host/subnet to query your ntpd status." 
+The ntpd status query features provided by ntpq/ntpdc 
+will reveal some information about the system running ntpd (e.g. OS version, ntpd version) 
+that you many not wish others to know. You need to decide if concealing this information is more important
+ than the possible benefits of allowing your clients to see synchronization information about your ntpd. 
+Не разрешать обращаться к себе
+
+
+
+Установка ntp сервера
+  ntp server nist.netservicesgroup.com
+
+Let’s verify our NTP associations and status:
+  show ntp associations
+  show ntp status
+
+
+Configuring R1 to act as an NTP server is easy enough — it’s already done
+
+Configuring NTP Authentication
+For server
+ ntp authenticate
+ ntp authentication-key 10 md5 ThereIsTimeForEverything
+ ntp trusted-key 10
+
+For client
+ ntp authenticate
+ ntp authentication-key 10 md5 ThereIsTimeForEverything
+ ntp trusted-key 10
+ ntp server 172.16.12.1 key 10
+
+
+
+
+
+
+
+Заданные вручную дата и время сохраняют свое значение только на время непрерывной работы маршрутизатора. 
+После его выключения или перезагрузки установленное ранее время сбрасывается, хотя в некоторых маршрутизаторах и серверах доступа 
+(как и в других изделиях Cisco) есть энергонезависимая память для часов, как у BIOS персонального компьютера.
+ В момент загрузки маршрутизатора время из календаря считывается в clock и далее clock сам ведет часы. 
+При продолжительной работе время clock и время в календаре маршрутизатора могут незначительно отличаться друг от друга. 
+ Для устранения этого расхождения у команды clock существует параметр calendar-valid для периодической синхронизации календаря и времени clock, 
+которое генерирует кварцевый резонатор:
+clock calendar-valid
+
+ntp update-calendar
+ntp update-calendar используют для обновления hardware clock (calendar)
+
+(NTP мастер 4 stratum)
+ntp master 4
+
+
+!--- Configures the access control groups for
+!--- the public servers and peers for additional
+!--- security.
+
+
+access-list 5 permit <I-TS-1>
+access-list 5 permit <I-TS-2>
+access-list 5 permit <I-TS-3>
+access-list 5 permit <A0-R2>
+access-list 5 permit <A0-R3>
+access-list 5 deny any
+
+
+!--- Configures the access control groups for the
+!--- clients to this node for additional security.
+
+
+access-list 6 permit <A1-R1>
+access-list 6 permit <A1-R2>
+access-list 6 permit <A1-R3>
+access-list 6 deny any
+
+
+!--- Restricts the IP addresses for the peers
+!--- and clients.
+
+ 
+ntp access-group peer 5
+ntp access-group serve-only 6
+
+ntp server <I-TS-1>
+ntp server <I-TS-2>
+ntp server <I-TS-3>
+ntp peer <A0-R2> 
+ntp peer <A0-R3>
+
+
+ntp source Loopback0
+
+
+
+
+
+
+
+Настройка на ciso роутере
+
+service timestamps debug datetime msec localtime
+service timestamps log datetime localtime 
+clock timezone MSK +3
+clock calendar-valid
+ntp update-calendar
+access-list 61 remark NTP: access-group peer
+access-list 61 permit 81.20.196.53
+access-list 61 permit 81.20.196.54
+access-list 61 deny any
+access-list 62 remark NTP: access-group serve-only
+access-list 62 permit 192.168.0.0 0.0.255.255
+access-list 62 permit 172.20.0.0 0.0.255.255
+access-list 62 permit 81.20.192.0 0.0.15.255
+access-list 62 deny any
+ntp logging
+ntp access-group peer 61
+ntp access-group serve-only 62
+ntp server 81.20.196.53 prefer
+ntp server 81.20.196.54
+
+
+
+
+
+
+Настройка на vpn
+service timestamps debug datetime msec localtime
+service timestamps log datetime localtime
+clock timezone MSK +3
+clock calendar-valid
+ntp update-calendar
+access-list 61 remark NTP: access-group peer
+access-list 61 permit 10.192.10.252
+access-list 61 permit 10.192.10.253
+access-list 61 deny any
+access-list 62 remark NTP: access-group serve-only
+access-list 62 permit 10.0.0.0 0.255.255.255
+access-list 62 deny any
+ntp access-group peer 61
+ntp access-group serve-only 62
+ntp logging
+ntp server 10.192.10.252 prefer
+ntp server 10.192.10.253
+
+
+
+
+NTP ASA
+ntp server 10.192.10.252 prefer
+ntp server 10.192.10.253
+
+
+ntp authentication-key 5555 md5 Jk7b3n4Adv
+ntp trusted-key 5555
+ntp server 10.192.10.190 key 5555 source outside prefer
+ntp authenticate
+
+
+
+an 22 21:31:35.467: %BGP-3-NOTIFICATION: sent to neighbor 10.192.10.201 4/0 (hold time expired) 0 bytes 
+.Jan 23 03:11:18.790: %BGP-3-NOTIFICATION: sent to neighbor 10.192.10.201 4/0 (hold time expired) 0 bytes 
+
+
+
+
+
+
+
+
+ Сервисы
+
+Часы (сбрасываются даже при перезагрузке на 1 марта 1993 года) хранятся в формате UTC. Используются протоколы NTP (прием и передача - включен по умолчанию - при перезагрузке и при выключении на пару минут время сохраняется), SNTP на кисках серии 1000 (только прием - выключен по умолчанию).
+
+    посмотреть
+    show clock [detail]
+    установить вручную
+    clock set hh:mm:ss день месяц год
+    аутентификация NTP:
+        ntp authenticate - включить
+        ntp authentication-key number md value - задать значение ключа
+        ntp trusted-key номер-ключа - знающий этот ключ может синхронизовать нас 
+    определить соседей:
+    ntp peer ip-address [version номер] [key номер-ключа][source интерфейс] [prefer]
+    определить сервер:
+    ntp server ip-address [version номер] [key номер-ключа][source интерфейс] [prefer]
+    широковещательная рассылка
+    ntp broadcast [version версия]
+    получать широковещательную рассылку
+    ntp broadcast client
+    установить предполагаемое значение задержки при широковещательной рассылке
+    ntp broadcastdelay микросекунд
+    управление доступом (номер ACL задается базовой командой access-list)(по умолчанию все разрешено, даже синхронизация с незнакомыми системами! - сделать)
+    ntp access-group query-only/serve-only/serve/peer номер-ACL
+    запретить NTP сервис на определенном интерфейсе
+    ntp disable
+    если киска имеет несколько IP-адресов то можно определить исходный IP-адрес в NTP-пакетах
+    ntp source интерфейс
+    определить киску как властный источник времени, даже если она не синхронизована с внешним миром
+    ntp master [слой]
+    задать размер аппаратного тика (теоретически 250 Гц) в единицах 2^-32
+    ntp clock-period единиц
+    максимальное число соседей NTP-протокола (сделать!)
+    ntp max-associations число
+    посмотреть статус
+    show ntp status
+    посмотреть список соседей
+    show ntp associations [detail]
+    откуда SNTP будет запрашивать NTP пакеты
+    sntp server адрес [version версия]
+    SNTP будет брать NTP пакеты из широковещательных потоков
+    sntp broadcast client
+    посмотреть сосотояние SNTP (Cisco 100x)
+    show sntp
+    задать часовой пояс - почему только целое число часов?
+    clock timezone имя(MSK) смещение(3)
+    задать летнее время (по правилам) (last Sun Mar 2:00 last Sun Sep 2:00)
+    clock summer-time имя(MSD) recurring first/last/номер-недели-начала день-недели месяц hh:mm first/last/номер-недели-окончания день-недели месяц hh:mm [смещение-в-минутах]
+    задать летнее время непосредственно
+    clock summer-time имя месяц-начала день год hh:mm месяц-окончания день год hh:mm [смещение-в-минутах]
+    на Cisco 4500 и Cisco 7000 есть батареечный календарь 
+
+Летнее и зимнее время
+clock summer-time MSD recurring last Sun Mar 2:00 last Sun Oct 2:00
+
+
+
+
+
+
+10.98.254.2	Maxi_Group-S0_eburg
+10.98.0.253		Voip-Maxi_Group
+10.192.10.94		Stk-CE0
+10.192.10.98		Sov_CE0
+10.98.98.7(8)		ASA failover
+10.98.98.3		Sov_lb
+10.98.98.2		Catalyst_sov
+10.98.98.6		Stk_lb
+10.98.98.5		Catalyst_stk
+10.98.254.73		Maxi_Group-C0 ebur
+10.98.254.14		Maxi_Group-C2(Berezovskii)
+10.98.254.30		Maxi_Group-S2
+10.98.254.10(10.192.10.106)		Maxi_Group-C1(Revda)
+10.98.254.22		Maxi_Group-S1
+10.98.254.26		Maxi_Group-C3(N.Sergii)
+10.98.254.34		Maxi_Group-S3
+
+
+MG-Sov-Ce0 uptime is 2 weeks, 2 days, 2 hours, 15 minutes
+MG-Sov-LB0 uptime is 2 weeks, 2 days, 2 hours, 16 minutes
+Sov-Switch uptime is 2 weeks, 2 days, 2 hours, 15 minutes
+
+MG-STK-CE0 uptime is 11 weeks, 3 hours, 34 minutes
+STK-Switch uptime is 11 weeks, 3 hours, 44 minutes
+STK-LB1 uptime is 11 weeks, 3 hours, 37 minutes
+
+
+tcomm.adm@sc.ru
+tsbill@sc.ru
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+server ntp1.sc.ru
+server ntp2.sc.ru 
+
+restrict ntp1.sc.ru  nomodify notrap noquery
+restrict ntp2.sc.ru  nomodify notrap noquery
+
+
+
+
+
+
+
+
+
+
+
+Пример конфига клиента
+
+
+
+server 127.127.1.0
+# local clock (LCL)
+fudge 127.127.1.0  stratum 10
+# LCL is unsynchronized
+
+##
+## Add external Servers using
+## # rcntp addserver <yourserver>
+## 
+
+##
+## Miscellaneous stuff
+##
+
+driftfile /var/lib/ntp/drift/ntp.drift
+# path for drift file
+
+logfile /var/log/ntp
+# alternate log file
+# logconfig =syncstatus + sysevents
+# logconfig =all
+
+# statsdir /tmp/                # directory for statistics files
+# filegen peerstats  file peerstats  type day enable
+# filegen loopstats  file loopstats  type day enable
+# filegen clockstats file clockstats type day enable
+
+#
+# Authentication stuff
+#
+keys /etc/ntp.keys
+# path for keys file
+trustedkey 1
+# define trusted keys
+requestkey 1
+server ntp1.sc.ru  iburst
+server ntp2.sc.ru  iburst
+restrict ntp1.sc.ru
+restrict ntp2.sc.ru
+
+
+iptables -I allow_ports 6 -s 81.20.192.0/27 -p udp -m udp --dport 123 -j ACCEPT 
+
+
+
+
+    Я не очень понимаю, почему время аппаратное должно быть UTC, это же неудобно.
+
+можешь их поставить в локальное же если неудобно
+надо в скрипте /etc/sysconfig/clock установить переменную "UTC'' в значение "UTC=true'' или "UTC=false'', в точности нахождения этого файла не уверен :) , давно не видел RH-based 
+
+
+
+[http://www.okey.com.ua/node/4](http://www.okey.com.ua/node/4)

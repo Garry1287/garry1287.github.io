@@ -1,0 +1,564 @@
+---
+layout: post
+title:  "asa-nat"
+date:   2017-11-12 07:58:19 +0300
+categories: asa-nat
+tags: cisco
+---
+
+# asa-nat
+NAT control requires that packets traversing from an inside interface to an outside interface match a NAT rules
+Когда включен nat control пакеты не пропускаются с интерфейса inside на интерфейс outside без nat правила
+
+identity nat (nat 0) пропускает во вне без нат трансляции с реальным адресом, но нельзя начать соединение из вне
+nat 0 192.168.0.0 255.255.255.0 
+NAT exemption (nat 0 access-list command) в данном случае, это аналогично identity nat, но возможно соединение из вне
+access-list NATEX permit ip 10.1.0.0 255.255.0.0 10.2.0.0 255.255.0.0
+nat (IntNet) 0 access-list NATEX
+
+Если включен nat control то нужны nat правила, чтобы передавался траффик
+Если же надо не natить один из адресов, то нужно использовать identity nat 
+
+
+
+
+    NAT Exemption (nat 0 access-list)
+    Policy NAT (static access-list)
+    Static NAT (static без указания номера порта)
+    Static PAT (static с указанием номера порта)
+    Policy NAT (nat id access-list)
+    Dynamic NAT, dynamic PAT (nat id)
+
+
+
+
+
+
+ Bypassing NAT When NAT Control is Enabled
+
+If you enable NAT control, then inside hosts must match a NAT rule when accessing outside hosts. If you do not want to perform NAT for some hosts, then you can bypass NAT for those hosts (alternatively, you can disable NAT control). You might want to bypass NAT, for example, if you are using an application that does not support NAT (see the "When to Use Application Protocol Inspection" section for information about inspection engines that do not support NAT).
+
+You can configure traffic to bypass NAT using one of three methods. All methods achieve compatibility with inspection engines. However, each method offers slightly different capabilities, as follows:
+
+•Identity NAT (nat 0 command)—When you configure identity NAT (which is similar to dynamic NAT), you do not limit translation for a host on specific interfaces; you must use identity NAT for connections through all interfaces. Therefore, you cannot choose to perform normal translation on real addresses when you access interface A, but use identity NAT when accessing interface B. Regular dynamic NAT, on the other hand, lets you specify a particular interface on which to translate the addresses. Make sure that the real addresses for which you use identity NAT are routable on all networks that are available according to your access lists.
+
+For identity NAT, even though the mapped address is the same as the real address, you cannot initiate a connection from the outside to the inside (even if the interface access list allows it). Use static identity NAT or NAT exemption for this functionality.
+
+•Static identity NAT (static command)—Static identity NAT lets you specify the interface on which you want to allow the real addresses to appear, so you can use identity NAT when you access interface A, and use regular translation when you access interface B. Static identity NAT also lets you use policy NAT, which identifies the real and destination addresses when determining the real addresses to translate (see the "Policy NAT" section for more information about policy NAT). For example, you can use static identity NAT for an inside address when it accesses the outside interface and the destination is server A, but use a normal translation when accessing the outside server B.
+
+•NAT exemption (nat 0 access-list command)—NAT exemption allows both translated and remote hosts to initiate connections. Like identity NAT, you do not limit translation for a host on specific interfaces; you must use NAT exemption for connections through all interfaces. However, NAT exemption does let you specify the real and destination addresses when determining the real addresses to translate (similar to policy NAT), so you have greater control using NAT exemption. However unlike policy NAT, NAT exemption does not consider the ports in the access list.
+
+[http://www.mianet.ru/index.php/sysadmin/cisco/126--nat---pixasa](http://www.mianet.ru/index.php/sysadmin/cisco/126--nat---pixasa)
+
+
+
+Phase: 8      
+Type: NAT     
+Subtype: rpf-check
+Result: DROP  
+Config:       
+static (vlan12,vlan100) tcp interface h323 10.98.0.253 h323 netmask 255.255.255.255 
+  match tcp vlan12 host 10.98.0.253 eq 1720 vlan100 any
+    static translation to 81.16.116.142/1720
+    translate_hits = 0, untranslate_hits = 8
+Additional Information:
+ Forward Flow based lookup yields rule:
+ out id=0xa7a5be08, priority=5, domain=nat-reverse, deny=false
+        hits=4, user_data=0xa7a14bd8, cs_id=0x0, flags=0x0, protocol=6
+        src ip=0.0.0.0, mask=0.0.0.0, port=0
+        dst ip=10.98.0.253, mask=255.255.255.255, port=1720, dscp=0x0
+
+
+
+name 192.168.1.105 voip-ip
+
+
+static (PSI-DMZ,PSI-White) tcp interface 3389 192.168.253.2 3389 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) tcp interface h323 voip-ip h323 netmask 255.255.255.255 
+static (PSI-LAN,PSI-DMZ) tcp interface 1719 voip-ip 1719 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) tcp interface 1503 voip-ip 1503 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) tcp interface 1731 voip-ip 1731 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) udp interface 1025 voip-ip 1025 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) udp interface 1027 voip-ip 1027 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) udp interface 1028 voip-ip 1028 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) udp interface 1031 voip-ip 1030 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) udp interface 1029 voip-ip 1029 netmask 255.255.255.255 
+static (PSI-LAN,PSI-White) udp interface 1026 voip-ip 1026 netmask 255.255.255.255 
+
+no static (vlan12,vlan100) tcp interface h323 10.98.0.253 h323 netmask 255.255.255.255
+
+
+static (vlan12,vlan100) interface 10.98.0.253 netmask 255.255.255.255 
+
+
+
+
+access-list permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1718
+
+access-list 100 extended permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1718
+
+!--- Command to allow the incoming RAS UDP port.
+
+access-list 100 extended permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1719
+
+!--- Command to allow the incoming h323 protocol traffic.
+
+access-list 100 extended permit tcp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq h323
+
+access-list 100 extended permit tcp 81.20.192.0 255.255.240.0 host 81.16.116.142 eq h323
+access-list 100 extended permit udp 81.20.192.0 255.255.240.0 host 81.16.116.142 eq 1718
+access-list 100 extended permit udp 81.20.192.0 255.255.240.0 host 81.16.116.142 eq 1719
+
+
+
+pager lines 24
+mtu inside 1500
+mtu outside 1500
+no failover
+asdm image disk0:/asdm-522.bin
+no asdm history enable
+arp timeout 14400
+
+!--- Command to redirect the h323 protocol traffic received on outside interface to 
+!--- inside interface for the specified IP address.
+
+static (inside,outside) 172.16.1.5 10.1.1.10 netmask 255.255.255.255
+
+access-group 100 in interface outside
+
+
+MG-ASA1(config)# static (vlan12,vlan100) interface 81.16.116.142 netmask 255.2$
+WARNING: All traffic destined to the IP address of the vlan100 interface is being redirected.
+WARNING: Users will not be able to access any service enabled on the vlan100 interface.
+
+
+
+
+
+
+
+Ещё раз всем здравствуйте, есть проблема котору я не знаю как решить.
+есть следующее :
+ip address outside 212.198.212.210 255.255.255.192
+ip address inside 192.168.0.1 255.255.255.0
+route outside 0.0.0.0 0.0.0.0 212.198.212.211 1
+
+static (inside,outside) 192.168.0.3 212.198.212.210 netmask 255.255.255.255 0 0
+
+И далее весь трафик идущий на 212.198.212.210 - попадает на 192.168.0.3 
+
+
+
+
+
+
+>[оверквотинг удален]
+>access-group outside_access_in in interface outside
+>в таком ваианте даже работает но есть побочный эфект.
+>нет доступа с наружи к асе по ssh, то есть железяка потерена!
+>надо идти с консолью, или ехать в гости для подключения из
+>нутри!
+>как этого избежать?
+>
+>хорошо а если надо развить ситуацию:
+>скажем надо с 195.х.х.х:8080 пробросить на 192.168.1.3:80
+>как это сделать?
+
+замени static на такую конструкцию:
+static(inside,outside)tcp 195.x.x.x 8080 192.168.1.2 80 netmask 255.255.255.255
+
+
+
+
+
+
+
+ASA1(config)# static (inside,outside) tcp OutsideIP http InsideHost http 
+
+
+static (vlan12,vlan100) tcp 81.16.116.42 http 10.98.0.253 http 
+
+
+static (vlan12,vlan100) interface 81.16.116.142 netmask 255.255.255.255
+
+
+static (vlan12,vlan100) 81.16.116.42 10.98.0.253
+
+
+static (vlan12,vlan100) 81.16.116.42 10.98.0.253 netmask 255.255.255.255
+
+static (vlan100,vlan12) 81.20.204.141 10.98.0.1netmask 255.255.255.255
+
+
+
+
+Phase: 7      
+Type: NAT
+Subtype: rpf-check
+Result: DROP
+Config:
+static (vlan12,vlan100) 81.16.116.42 10.98.0.253 netmask 255.255.255.255 
+  match ip vlan12 host 10.98.0.253 vlan100 any
+    static translation to 81.16.116.42
+    translate_hits = 0, untranslate_hits = 0
+Additional Information:
+ Forward Flow based lookup yields rule:
+ out id=0xa7a3e8e0, priority=5, domain=nat-reverse, deny=false
+        hits=0, user_data=0xa7f3bcc8, cs_id=0x0, flags=0x0, protocol=0
+        src ip=0.0.0.0, mask=0.0.0.0, port=0
+        dst ip=10.98.0.253, mask=255.255.255.255, port=0, dscp=0x0
+
+
+
+
+
+NAT policies on Interface vlan12:
+  match ip vlan12 host 10.98.0.253 vlan100 any
+    static translation to 81.16.116.42
+    translate_hits = 0, untranslate_hits = 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+name 192.168.1.105 voip-ip
+
+static (PSI-LAN,PSI-White) tcp interface h323 voip-ip h323 netmask 255.255.255.255 
+static (PSI-LAN,PSI-DMZ) tcp interface 1719 voip-ip 1719 netmask 255.255.255.255 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    static (dmz,outside) 100.1.70.99 10.1.2.2
+    nat-control
+
+
+    nat (outside) 1 0 0 outside
+    global (dmz) 1 interface
+
+Wow, this is nice. It should perform Dynamic NAT translation on packets originated from the Outside
+ and translate them to the DMZ interface’s IP address. 
+Let’s look at PT output:
+
+
+UN-NAT,
+nat (outside) 1 0.0.0.0 0.0.0.0 outside
+
+
+
+global (outside) 1 interface
+nat (inside) 1 0.0.0.0 0.0.0.0
+
+
+
+Натить все во вне
+    nat (outside) 1 0 0 outside
+    
+
+global (dmz) 1 interface
+
+
+
+nat (vlan12) 5 10.98.0.253 255.255.255.255
+global (vlan100) 5 interface 
+
+
+If you want to initiate a connection from the DMZ to inside then dynamic 
+NAT rules will not work. You will need to set up either a nat exemption or a static NAT  ie.
+
+NAT exemption
+
+access-list NATEX permit ip 10.1.0.0 255.255.0.0 10.2.0.0 255.255.0.0
+
+nat (IntNet) 0 access-list NATEX
+
+static NAT
+
+static (IntNet, DMZNet) 10.1.0.0 10.1.0.0 netmask 255.255.0.0
+
+Jon
+
+
+
+nat (vlan12) 0 access-list VOIP-MAXI
+access-list VOIP-MAXI permit 10.98.0.253 255.255.255.255 81.20.192.0 255.255.240.0
+
+
+
+
+access-list 100 extended permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1718
+
+!--- Command to allow the incoming RAS UDP port.
+
+access-list 100 extended permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1719
+
+!--- Command to allow the incoming h323 protocol traffic.
+
+access-list 100 extended permit tcp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq h323
+
+
+static (inside,outside) 172.16.1.5 10.1.1.10 netmask 255.255.255.255
+access-group 100 in interface outside
+
+
+
+
+
+packet-tracer input vlan12 tcp 10.98.0.253 h323 81.20.204.141 h323
+
+
+packet-tracer input vlan12 tcp 10.98.0.253 h323 81.20.204.141 h323
+
+packet-tracer input vlan100 tcp 81.20.204.141 h323 81.16.116.142 h323
+
+
+static (vlan12,vlan100) 81.16.116.142 10.98.0.253 netmask 255.255.255.255
+
+static (vlan12,vlan100) interface 10.98.0.253 netmask 255.255.255.255
+static (vlan100,vlan12) interface 81.20.192.0 netmask 255.255.240.0
+
+
+no access-list 100 extended permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1718 
+no access-list 100 extended permit udp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq 1719 
+no access-list 100 extended permit tcp 10.2.2.0 255.255.255.0 host 172.16.1.5 eq h323 
+
+
+access-list 100 extended permit udp 81.20.192.0 255.255.240.0 host 81.16.116.42 eq 1718 
+access-list 100 extended permit udp 81.20.192.0 255.255.240.0 host 81.16.116.42 eq 1719 
+access-list 100 extended permit tcp 81.20.192.0 255.255.240.0 host 81.16.116.42 eq h323 
+
+
+no access-list 100 extended permit udp 81.20.192.0 255.255.240.0 host 81.16.116.42 eq 1718 
+no access-list 100 extended permit udp 81.20.192.0 255.255.240.0 host 81.16.116.42 eq 1719 
+no access-list 100 extended permit tcp 81.20.192.0 255.255.240.0 host 81.16.116.42 eq h323
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+В статье блога пишите -
+[http://www.anticisco.ru/blogs/?p=72](http://www.anticisco.ru/blogs/?p=72)
+
+Т.к. адреса связаны жестко, можно инициировать сессию как изнутри, с адреса источника real_address, 
+так и снаружи, на адрес назначения translated_address. Именно про это свойство я говорю, что статическая трансляция работает в обе стороны.
+
+
+А в обсуждении проблемы на форуме
+[http://www.anticisco.ru/forum/viewtopic.php?f=2&t=954](http://www.anticisco.ru/forum/viewtopic.php?f=2&t=954)
+
+Что-то у меня не вырисовывается стройная картинка.
+
+ТАкого понятия, как SNAT и DNAT в ASA (и вообще у циски) нет.
+Циска всегда делает трансляции сразу в обе стороны. Разница лишь в том, с какой стороны можно инициировать СЕССИЮ.
+
+Если трансляция статическая
+static (in,out) GLOB_IP LOC_IP (можно делать с портами static (in,out) tcp GLOB_IP PORT2 LOC_IP PORT1)
+то она работает в обе стороны:
+со стороны внутреннего (первого, указанного в скобочках) интерфейса наружу (в сторону второго) - SNAT, а обратно - DNAT, 
+т.е. можно обратиться снаружи на глобальный адрес и прокинуться на частный с подменой адреса назначения.
+
+Получается, что изнутри трансляция получается согласно packet-tracer
+
+packet-tracer input inside tcp 10.0.0.253 34567  81.x.x.141 h323
+
+...
+
+Result:       
+input-interface: inside
+input-status: up
+input-line-status: up
+output-interface: outside
+output-status: up
+output-line-status: up
+Action: allow 
+
+
+
+
+А снаружи не проходит
+packet-tracer input outside tcp 81.x.x.141 34567 10.0.0.253 h323
+...
+
+Phase: 7
+Type: NAT
+Subtype: rpf-check
+Result: DROP
+Config:
+static (inside,outside) interface 10.0.0.253 netmask 255.255.255.255 
+  match ip inside host 10.98.0.253 outside any
+    static translation to 81.x.x.142
+    translate_hits = 3, untranslate_hits = 121
+Additional Information:
+
+Result:
+input-interface: outside
+input-status: up
+input-line-status: up
+output-interface: inside
+output-status: up
+output-line-status: up
+Action: drop
+Drop-reason: (acl-drop) Flow is denied by configured rule
+
+Получается, что сессия может инициироваться только с inside. Как сделать так, чтобы сессия могла инициироваться с обеих сторон?
+ Возможно ли это вообще сделать и как?
+
+
+[http://www.anticisco.ru/blogs/?p=72](http://www.anticisco.ru/blogs/?p=72)
+[http://www.cisco.com/en/US/products/ps6120/products_configuration_example09186a008081042c.shtml#configs3](http://www.cisco.com/en/US/products/ps6120/products_configuration_example09186a008081042c.shtml#configs3)
+[http://www.cisco.com/en/US/products/hw/vpndevc/ps2030/products_configuration_example09186a008069bf1b.shtml](http://www.cisco.com/en/US/products/hw/vpndevc/ps2030/products_configuration_example09186a008069bf1b.shtml)
+[http://www.cisco.com/en/US/docs/security/asa/asa82/configuration/guide/nat_overview.html#wp1088419](http://www.cisco.com/en/US/docs/security/asa/asa82/configuration/guide/nat_overview.html#wp1088419)
+[http://xgu.ru/wiki/Cisco_ASA/NAT](http://xgu.ru/wiki/Cisco_ASA/NAT)
+[http://www.cisco.com/en/US/docs/security/asa/asa82/configuration/guide/nat_control.html#wp1081420](http://www.cisco.com/en/US/docs/security/asa/asa82/configuration/guide/nat_control.html#wp1081420)
+[http://www.ccie1.com/?p=361](http://www.ccie1.com/?p=361)
+[http://alexandremspmoraes.wordpress.com/2012/03/13/dealing-with-identity-nat-on-asa-pre-and-post-8-3-configuration-models/](http://alexandremspmoraes.wordpress.com/2012/03/13/dealing-with-identity-nat-on-asa-pre-and-post-8-3-configuration-models/)
+[http://www.anticisco.ru/forum/viewtopic.php?f=2&t=954](http://www.anticisco.ru/forum/viewtopic.php?f=2&t=954)
+[http://www.akvilona.ru/serv/cisco/a_instruction.htm](http://www.akvilona.ru/serv/cisco/a_instruction.htm)
+[https://supportforums.cisco.com/thread/1003401](https://supportforums.cisco.com/thread/1003401)
+
+[http://cskt-here.blogspot.ru/2010/07/network-address-translation-nat-with.html](http://cskt-here.blogspot.ru/2010/07/network-address-translation-nat-with.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ASA NAT 8.3
+[http://info-gold.org/4read/83nat](http://info-gold.org/4read/83nat)
+[http://www.anticisco.ru/blogs/?p=1064](http://www.anticisco.ru/blogs/?p=1064)
+[http://www.anticisco.ru/blogs/?p=1055](http://www.anticisco.ru/blogs/?p=1055)
+[http://www.anticisco.ru/blogs/?p=1046](http://www.anticisco.ru/blogs/?p=1046)
+[http://www.cisco.com/en/US/docs/security/asa/asa84/configuration/guide/nat_objects.html](http://www.cisco.com/en/US/docs/security/asa/asa84/configuration/guide/nat_objects.html)
+[http://www.anticisco.ru/blogs/?p=1077](http://www.anticisco.ru/blogs/?p=1077)
+
+
+
+
+
+
+
+
+
+
+
+
+
+Необходимо пробросить h323 порт через ASA, чтобы из интернета с adpack(ip 81.x.x.141) была доступна голосовая циска
+(ip 10.0.0.253), которая в локалке. 
+На ASA 
+Cisco Adaptive Security Appliance Software Version 8.0(4) 
+Hardware:   ASA5510, 1024 MB RAM, CPU Pentium 4 Celeron 1600 MHz
+
+На outside интерфейсе 
+
+interface Ethernet0/1.100
+ vlan 100
+ nameif outside
+ security-level 0
+ ip address 82.x.x.142 255.255.255.252
+
+На inside
+
+interface Ethernet0/1.12
+ vlan 12
+ nameif inside
+ security-level 100
+ ip address 10.0.0.1 255.255.255.0
+
+
+Интернета нет и не надо. Нужен доступ извне только для adpack
+
+Чтобы не зарезать ничего пока сделал такой access-list
+
+access-list outside_access_in extended permit ip any any 
+access-list outside_access_in extended permit tcp any any 
+access-list outside_access_in extended permit udp any any 
+access-list outside_access_in extended permit icmp any any
+
+access-group outside_access_in in interface outside
+
+Включил инспекцию, согласно руководству
+[http://www.cisco.com/en/US/products/ps6120/products_configuration_example09186a008081042c.shtml#configs3](http://www.cisco.com/en/US/products/ps6120/products_configuration_example09186a008081042c.shtml#configs3)
+
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect h323 h225 
+  inspect h323 ras 
+
+Прописал статический nat
+static (vlan12,vlan100) interface 10.98.0.253 netmask 255.255.255.255 
+
+Если вместо asa был linux, то сделал бы 2 правила
+-A PREROUTING -s ip_adpack -d outside_ip -p tcp -m tcp --dport XXXX -j DNAT --to-destination 10.0.0.253:XXXX
+-A POSTROUTING -s 10.0.0.253/32 -d ip_addpack/32 -o outside -j SNAT --to-source outside_ip 
+
+Вместо XXXX порты для h323 (не знаю заработало бы или нет для h323, но для http точно работает)
+
+
+Не могу понять логику работы static nat
+
+
+
+
+
+
+
+

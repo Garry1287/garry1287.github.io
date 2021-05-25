@@ -1,0 +1,44 @@
+---
+layout: post
+title:  "cacti"
+date:   2012-05-15 01:29:49 +0400
+categories: cacti
+tags: cacti
+---
+
+# cacti
+
+Cacti HowTo (график на основе скрипта)
+
+[http://habrahabr.ru/post/62312/](http://habrahabr.ru/post/62312/)
+
+[http://en.opensuse.org/Cacti](http://en.opensuse.org/Cacti)
+[http://hostinfo.ru/articles/773](http://hostinfo.ru/articles/773)
+[http://hostinfo.ru/articles/787](http://hostinfo.ru/articles/787)
+[http://www.linuxspace.org/archives/4877](http://www.linuxspace.org/archives/4877)
+[http://habrahabr.ru/post/211254/](http://habrahabr.ru/post/211254/)
+[http://i-notes.org/nodeny-snmpd-cacti-grafik-chislo-polzovatelej-onlajn/](http://i-notes.org/nodeny-snmpd-cacti-grafik-chislo-polzovatelej-onlajn/)
+[http://habrahabr.ru/post/115493/](http://habrahabr.ru/post/115493/)
+[http://habrahabr.ru/post/115493/](http://habrahabr.ru/post/115493/)
+[http://wiki.russianfedora.pro/index.php?title=Cacti](http://wiki.russianfedora.pro/index.php?title=Cacti)
+[http://habrahabr.ru/post/115493/](http://habrahabr.ru/post/115493/)
+
+[http://toha.su/post/tag/cacti/](http://toha.su/post/tag/cacti/)
+[http://shom.kz/cacti-templates/](http://shom.kz/cacti-templates/)
+[http://shom.kz/cacti-install-howto-on-ubuntu/](http://shom.kz/cacti-install-howto-on-ubuntu/)
+[http://muff.kiev.ua/content/cacti-snimaem-statistiku-ustroistv-po-snmp](http://muff.kiev.ua/content/cacti-snimaem-statistiku-ustroistv-po-snmp)
+
+Полученные данные Poller складывает в RRD-файлы, которые лежат в папке /var/www/cacti/. Обратите на это внимание - база данных здесь своя в виде RRD-файлов. 
+Сама Cacti использует базу MySQL только для хранения административной информации - логины, пароли, ссылки на RRD-файлы и т.д. 
+
+
+UPS графики
+[http://muff.kiev.ua/content/nut-cacti-risuem-grafiki-raboty-ups](http://muff.kiev.ua/content/nut-cacti-risuem-grafiki-raboty-ups)
+
+Добавить завтра
+[http://cacti2.sc.ru/data_sources.php?action=ds_edit&id=938](http://cacti2.sc.ru/data_sources.php?action=ds_edit&id=938)
+DEF:a='/srv/www/cacti/rra/lipka-s0_traffic_in_938.rrd':'traffic_in':AVERAGE \
+DEF:b='/srv/www/cacti/rra/lipka-s0_traffic_in_938.rrd':'traffic_out':AVERAGE \
+
+
+lipka-s0_traffic_in_938.rrd

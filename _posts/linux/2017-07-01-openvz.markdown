@@ -1,0 +1,27 @@
+---
+layout: post
+title:  "openvz"
+date:   2017-07-01 22:45:25 +0300
+categories: linux
+tags: linux
+---
+
+# openvz
+[http://proadminz.ru/wp-content/uploads/2013/01/OpenVZ_Manual_RUS.pdf](http://proadminz.ru/wp-content/uploads/2013/01/OpenVZ_Manual_RUS.pdf)
+[http://wiki.openvz.org/Veth](http://wiki.openvz.org/Veth)
+[http://www.altlinux.org/OpenVZ](http://www.altlinux.org/OpenVZ)
+[http://forum.openvz.org/index.php?t=msg&goto=4929](http://forum.openvz.org/index.php?t=msg&goto=4929)
+[http://www.ibm.com/developerworks/ru/library/l-openvz_2/index.html](http://www.ibm.com/developerworks/ru/library/l-openvz_2/index.html)
+[http://www.qinet.ru/2009/06/75/](http://www.qinet.ru/2009/06/75/)
+[http://www.linux.org.ru/forum/admin/8886114](http://www.linux.org.ru/forum/admin/8886114)
+[http://forum.openvz.org/index.php?t=msg&th=7742&](http://forum.openvz.org/index.php?t=msg&th=7742&)
+[http://wiki.openvz.org/Virtual_Ethernet_device](http://wiki.openvz.org/Virtual_Ethernet_device)
+[http://gnu.su/plugins/forum/forum_viewtopic.php?561](http://gnu.su/plugins/forum/forum_viewtopic.php?561)
+
+
+[http://blog.shaggy-cat.ru/2010/03/openvz_25.html](http://blog.shaggy-cat.ru/2010/03/openvz_25.html)
+[http://traditio-ru.org/wiki/OpenVZ](http://traditio-ru.org/wiki/OpenVZ)
+[http://forum.ispsystem.com/ru/showthread.php?t=16966](http://forum.ispsystem.com/ru/showthread.php?t=16966)
+[http://gnu.su/plugins/forum/forum_viewtopic.php?224](http://gnu.su/plugins/forum/forum_viewtopic.php?224)
+wiki.openvz.org/Kernel_flavors
+[http://habrahabr.ru/post/211915/](http://habrahabr.ru/post/211915/)

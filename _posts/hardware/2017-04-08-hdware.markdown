@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "hdware"
+date:   2017-04-08 10:55:38 +0300
+categories: hardware
+tags: hardware
+---
+
+# hdware
+badblocks -s -o /home/garry/badblock-sda /dev/sda
+Checking for bad blocks (read-only test): done 
+
+
+
+
+
+
+
+Телефон Panasonic KX-TS2365RUW
+
+Компьютер
+Монитор -  LG Flatron L1734S-BN
+Процессор Intel(R) Pentium(R) Dual  CPU  E2160  @ 1.80GHz
+
+Жесткий диск
+Model Family:     Western Digital Caviar Blue Serial ATA
+Device Model:     WDC WD2500AAJS-22VTA0
+Serial Number:    WD-WMART2037954
+LU WWN Device Id: 5 0014ee 000da0f2f
+Firmware Version: 01.01B01
+User Capacity:    250,059,350,016 bytes [250 GB]
+
+Клавиатура
+Genius W2036 KB-06X2
+
+Мышь
+Oklick Optical mouse 143M
+
+Материнская плата
+MSI N 1996
+
+
+hgf
+
+
+echo $(arch)

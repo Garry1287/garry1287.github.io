@@ -1,0 +1,88 @@
+---
+layout: post
+title:  "useradd"
+date:   2014-05-07 10:01:50 +0400
+categories: linux
+tags: linux
+---
+
+# useradd
+[http://yapro.ru/web-master/unix/useradd.html](http://yapro.ru/web-master/unix/useradd.html)
+
+Создадим пользователя vivek и добавим его в группу developers. Залогиньтесь как пользователь root:
+
+Например добавим пользователя vivek: 
+
+    useradd -g users -G admins,ftp,www,developers -s /bin/bash -p xxxx -d /home/ghost -m vivek
+
+    -d домашний каталог
+    -s задать стартовую оболочку (/bin/sh) - после можно изменить в файле /etc/passwd
+    -p пароль
+    -g основная группа, к которой приписывается пользователь (Группа должна существовать)
+    -G другие группы к которой приписывается пользователь
+    -m создать для пользователя домашний каталог
+    xxxx символьный пароль пользователя
+
+Убедимся что группа developers существует:
+
+
+
+
+ groupadd developers
+
+
+
+
+useradd -g billing -G sshaccess -s /bin/bash -d /home/bill -m bill
+
+
+Добавляем в группу
+sudo usermod -G med uwsgi
+
+
+
+
+
+
+
+
+AllowUsers garry smithy usmmag usm-mag backup usmgarant woox sucden
+
+
+
+
+
+
+
+[root@host ad]# mkdir cgi-bin
+[root@host ad]# mkdir log
+[root@host ad]# mkdir public_html
+[root@host ad]# mkdir tmp
+[root@host ad]# ls
+
+ln -s public_html/ www
+
+
+
+dd if=/dev/mapper/vg_kvmhost1-lv_win2003_copy of=/dev/mapper/vg_kvmhost1-lv_win2003 
+
+
+
+dd if=/dev/mapper/vg_kvmhost1-lv_win2003_copy of=/dev/mapper/vg_kvmhost1-lv_win2003 
+
+
+
+
+iptables -t nat -I PREROUTING 3 -d 192.168.253.49 -p tcp -m tcp --dport 8880 --to-destination 192.168.1.136:8080
+
+
+helpdesk helpdesk
+
+
+
+ find /srv/www/balkon3/public_html/ -type f | xargs chmod 644
+find /srv/www/balkon3/public_html/ -type d | xargs chmod 755
+
+
+create database kakprosto_db;
+GRANT ALL PRIVILEGES ON kakprosto_db.* TO kakuser@localhost IDENTIFIED BY 'porok184';

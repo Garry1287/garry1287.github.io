@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "RIPE-job"
+date:   2018-08-05 23:31:43 +0300
+categories: Networking
+tags: Networking
+---
+
+# RIPE-job
+[https://www.ripe.net/about-us/staff/working-at-the-ripe-ncc/current-openings/ip-resource-analyst](https://www.ripe.net/about-us/staff/working-at-the-ripe-ncc/current-openings/ip-resource-analyst)
+
+[https://www.ripe.net/participate/meetings/ripe-meetings/take-part-remotely](https://www.ripe.net/participate/meetings/ripe-meetings/take-part-remotely)
+[https://www.ripe.net/participate/ripe/ripe-fellowship](https://www.ripe.net/participate/ripe/ripe-fellowship)
+[https://www.ripe.net/participate/ripe/tf](https://www.ripe.net/participate/ripe/tf)

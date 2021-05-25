@@ -1,0 +1,35 @@
+---
+layout: post
+title:  "jekyll"
+date:   2016-03-25 06:52:04 +0300
+categories: seo
+tags: seo
+---
+
+# jekyll
+
+
+
+zypper install ruby-devel
+zypper search gcc
+zypper install gcc-c++
+
+gem install bundle jekyll
+
+jekyll.ruby2.5 -v
+
+cd /home/garry/MyBlog/
+
+jekyll.ruby2.5 new iptech-blo
+
+bundle.ruby2.5 exec jekyll.ruby2.5 serve
+
+
+
+ git commit -m "first blog commit"
+
+git remote add origin [https://github.com/Garry1287/iptech.github.io.git](https://github.com/Garry1287/iptech.github.io.git)
+garry-w:/home/garry/MyBlog/test-blog # git pull origin
+
+
+ git push -u origin master

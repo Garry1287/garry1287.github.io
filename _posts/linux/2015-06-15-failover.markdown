@@ -1,0 +1,374 @@
+---
+layout: post
+title:  "failover"
+date:   2015-06-15 08:23:22 +0300
+categories: linux
+tags: linux
+---
+
+# failover
+Основной настраиваем нормально, так как должна быть конфигурация asa failover
+
+А резервный только
+failover    #включает файловер
+failover lan unit primary #выбираем мастера
+failover lan interface new-link Ethernet0/3	#Интерфейс для файловера
+failover link new-link Ethernet0/3 #определяет файловер интерфейс как stateful файловер
+failover interface ip new-link 10.90.252.9 255.255.255.252 standby 10.90.252.10	#Назначает ip
+monitor-interface vlan12	#Включает мониторинг файловера на этих интерфейсах
+monitor-interface vlan18
+
+
+
+
+interface Ethernet0/0                                                                                                                                        
+ nameif outside                                                                                                                                              
+ security-level 100                                                                                                                                          
+ ip address 10.98.99.9 255.255.255.248 standby 10.98.99.10                                                                                                   
+ ospf cost 10                                                                                                                                                
+ ospf mtu-ignore                                                                                                                                             
+!                                                                                                                                                            
+interface Ethernet0/1                                                                                                                                        
+ no nameif                                                                                                                                                   
+ no security-level                                                                                                                                           
+ no ip address                                                                                                                                               
+!                                                                                                                                                            
+interface Ethernet0/1.11                                                                                                                                     
+ vlan 11
+ nameif vlan11
+ security-level 100
+ ip address 10.98.254.5 255.255.255.252 
+ ospf cost 100
+!             
+interface Ethernet0/1.12
+ vlan 12      
+ nameif vlan12
+ security-level 100
+ ip address 10.98.0.1 255.255.255.0 standby 10.98.0.254 
+ ospf cost 100
+!             
+interface Ethernet0/1.16
+ vlan 16      
+ nameif vlan16
+ security-level 100
+ ip address 10.98.254.17 255.255.255.252 
+ ospf cost 100
+!             
+interface Ethernet0/1.18
+ vlan 18      
+ nameif vlan18
+ security-level 100
+ ip address 10.98.16.1 255.255.255.0 standby 10.98.16.254 
+ ospf cost 100
+!             
+interface Ethernet0/2
+ shutdown     
+ no nameif    
+ no security-level
+ no ip address
+!             
+interface Ethernet0/3
+ description LAN/STATE Failover Interface
+
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 10.98.98.7 255.255.255.0 standby 10.98.98.8 
+ ospf cost 10 
+ management-only
+!             
+
+
+
+
+
+
+
+failover      
+failover lan unit secondary
+failover lan interface new-link Ethernet0/3
+failover link new-link Ethernet0/3
+failover interface ip new-link 10.90.252.9 255.255.255.252 standby 10.90.252.10
+monitor-interface vlan12
+monitor-interface vlan18
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface Ethernet0/0
+ nameif outside
+ security-level 100
+ ip address 10.98.99.9 255.255.255.248 standby 10.98.99.10 
+ ospf cost 10
+ ospf mtu-ignore
+!
+interface Ethernet0/1
+ no nameif
+ no security-level
+ no ip address
+!
+interface Ethernet0/1.11
+ vlan 11
+ nameif vlan11
+ security-level 100
+ ip address 10.98.254.5 255.255.255.252 
+ ospf cost 100
+!
+interface Ethernet0/1.12
+ vlan 12
+ nameif vlan12
+ security-level 100
+ ip address 10.98.0.1 255.255.255.0 standby 10.98.0.254 
+ ospf cost 100
+!
+interface Ethernet0/1.16
+ vlan 16
+ nameif vlan16
+ security-level 100
+ ip address 10.98.254.17 255.255.255.252 
+ ospf cost 100
+!
+interface Ethernet0/1.18
+ vlan 18
+ nameif vlan18
+ security-level 100
+ ip address 10.98.16.1 255.255.255.0 standby 10.98.16.254 
+ ospf cost 100
+!             
+interface Ethernet0/2
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface Ethernet0/3
+ description LAN/STATE Failover Interface
+!
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 10.98.98.7 255.255.255.0 standby 10.98.98.8 
+ ospf cost 10
+ management-only
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface Ethernet0/0
+ nameif outside
+ security-level 100
+ ip address 10.98.99.9 255.255.255.248 standby 10.98.99.10 
+ ospf cost 10
+ ospf mtu-ignore
+!
+
+
+
+
+
+interface Ethernet0/1
+ no nameif
+ no security-level
+ no ip address
+!
+!
+interface Ethernet0/1.12
+ vlan 12
+ nameif vlan12
+ security-level 100
+ ip address 10.98.0.1 255.255.255.0 standby 10.98.0.254 
+ ospf cost 100
+!
+!
+interface Ethernet0/1.18
+ vlan 18
+ nameif vlan18
+ security-level 100
+ ip address 10.98.16.1 255.255.255.0 standby 10.98.16.254 
+ ospf cost 100
+!
+interface Ethernet0/1.65
+ vlan 65
+ nameif vlan65
+ security-level 100
+ ip address 10.98.254.66 255.255.255.248 standby 10.98.254.67 
+ ospf cost 100
+!
+interface Ethernet0/1.72
+ vlan 72
+ nameif vlan72
+ security-level 100
+ ip address 10.98.254.74 255.255.255.248 standby 10.98.254.75 
+ ospf cost 100
+!
+
+
+
+
+
+
+
+!
+interface Ethernet0/3
+ description LAN/STATE Failover Interface
+!
+
+
+
+
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 10.98.98.7 255.255.255.0 standby 10.98.98.8 
+ ospf cost 10
+ management-only
+
+
+
+
+
+
+
+
+
+
+
+
+failover    #включает файловер
+failover lan unit primary #выбираем мастера
+failover lan interface new-link Ethernet0/3	#Интерфейс для файловера
+failover link new-link Ethernet0/3 #определяет файловер интерфейс как stateful файловер
+failover interface ip new-link 10.90.252.9 255.255.255.252 standby 10.90.252.10	#Назначает ip
+monitor-interface vlan12	#Включает мониторинг файловера на этих интерфейсах
+monitor-interface vlan18
+
+
+
+Подключение через свитч рекомендуется. У нас в решениях мы на эту деталь упора не делали, ибо там все схематично :)
+Свитч (а вернее 2 порта в одном ВЛАНе) нужен для более устойчивой работы: если вылетает карточка, используемая для фейловера, 
+то без свитча на второй АСЕ тут же пропадет линк и она вывалится из фейловера.
+Если же есть посередине коммутатор, то на второй АСЕ линк физически не упадет 
+и просто произойдет штатное переключение между основной и запасной АСОй.
+
+
+
+
+Понимание failover
+1. Hardware stateless - когда случается, то соединение теряется
+2. Stateful failover -  соединение не теряется
+
+Hardware бывает 2 типов
+1. Active/active - это когда используется 2 контекста
+2. Active/stanby 
+
+У нас используется Active/stanby stateful failover
+
+Health Monitoring - мониторинг link up/down  линка выделенного для failover (failover link) Мониторит падения, 
+сетевую активность, arp и броадкаст пинг
+С помощью него определяется подняты ли оба unit
+
+Failover link используется для обмена информацией между unit-ами
+Есть 2 типа failover link - могут использоваться одновременно
+1. LAN-based failover
+    Используется дополнительный порт на обоих unit. Ни хостов, ни роутеров не используется внутри этих интерфейсов
+    Lan based может использоваться как stateful failover
+        Lan based используется для hardware stateless
+2. Stateful failover
+    Физические требования те же самые - или через свитч отделным вланом или непосредственно друг к другу
+    Используется для stateful failover
+    
+
+With stateful failover the active ASA replicates the state table to the standby ASA. 
+As such, if the active ASA fails the standby ASA can take over transparently without any interruption to service 
+(more or less, some exceptions apply).
+
+
+With lan-based failover the standby ASA waits idle, ready to take over if the primary ASA fails.  
+However, the standby ASA has no information about the state of any connections that the active ASA was processing. 
+As such, after failover all connections need to be re-established.  This is not necessarily transparent to end users.
+
+
+
+
+При работе failover ip адрес и mac переходит с одного unit на другой (при обычном переходе)
+
+Redundant interfaces - это 2 интерфейса использующихся как active/standby на одной асе, если один вылетает, то второй в ап
+Не имеет отношение по сути к failover. Его можно сделать как failover link
+
+При конфигурировании standby ip адресов им необходимо доступ ко всем подсетям, как и primary (нужна сеть /29)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Принять порт в Maxi-s0
+Вланом выдернуть
+
+
+
+  inspect h323 h225 
+  inspect h323 ras 
+
+interface Ethernet0/1.100
+ vlan 100
+ nameif vlan100
+ security-level 0
+ ip address 81.16.116.142 255.255.255.252
+
+
+81.20.192.0 255.255.240.0
+ip route 81.20.192.0 255.255.240.0 Null0
+
+
+route vlan100 81.20.192.0 255.255.240.0 81.16.116.141 1
+
+access-group outside_access_in in interface vlan100
+
+
+static (vlan12,vlan100) tcp interface h323 10.98.0.253 h323 netmask 255.255.255.255
+Либо всё вынуть
+static (vlan12,vlan100) tcp interface 10.98.0.253 netmask 255.255.255.255
+
+
+[http://www.cisco.com/en/US/products/ps6120/products_configuration_example09186a008081042c.shtml](http://www.cisco.com/en/US/products/ps6120/products_configuration_example09186a008081042c.shtml)
+
+
+
+

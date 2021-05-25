@@ -1,0 +1,30 @@
+---
+layout: post
+title:  "netpath"
+date:   2016-02-05 13:34:49 +0300
+categories: Networking
+tags: Networking
+---
+
+# netpath
+1. Git для конфигов, предупреждение если конфиг не был забэкаплен
+2. Template configuration files
+3. Ansible и аналоги попробовать
+4. Zabbix
+
+swtoolz - вроде полезная вещь
+[https://github.com/xcme/swtoolz-core](https://github.com/xcme/swtoolz-core)
+
+
+NAT_GTX
+Март 2016 отредактировано Март 2016
+Ребята, если дело стоит за серьёзными сетевыми инструментами, советую копнуть в сторону-
+[https://kb.nocproject.org/display/SITE/NOC](https://kb.nocproject.org/display/SITE/NOC)
+Когда я работал в операторе связи, разворачивали эту систему, скажу что это достаточно мощный инструмент.
+По началу NOC работал как сборщик конфигов, конфиги можно сравнивать на предмет изменений построчно что очень удобно, всегда можно понять кто и что менял. И это только маленький кусочек возможностей этой системы.
+
+У нас есть 2 подкаста на эту тему
+[http://linkmeup.ru/blog/114.html](http://linkmeup.ru/blog/114.html) # Интеллектуальные Системы Контроля Работы Сети и проект NOC
+[http://linkmeup.ru/blog/150.html](http://linkmeup.ru/blog/150.html) # Системы мониторинга и управления сетью
+
+Приятного прослушивания :) 

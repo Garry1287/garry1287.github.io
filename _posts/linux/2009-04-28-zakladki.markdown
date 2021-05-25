@@ -1,0 +1,187 @@
+---
+layout: post
+title:  "zakladki"
+date:   2009-04-28 21:03:52 +0400
+categories: linux
+tags: linux
+---
+
+# zakladki
+TOR
+[http://www.liveinternet.ru/users/linux_loader/post88796400/](http://www.liveinternet.ru/users/linux_loader/post88796400/)
+[http://www.ylsoftware.com/news/369](http://www.ylsoftware.com/news/369)
+[http://via-est-vita.org.ua/soft/1061----tor.html](http://via-est-vita.org.ua/soft/1061----tor.html)
+[http://lib.rus.ec/b/319949/read](http://lib.rus.ec/b/319949/read)
+[http://samoychka.org/forum/viewthread.php?forum_id=62&thread_id=649](http://samoychka.org/forum/viewthread.php?forum_id=62&thread_id=649)
+[http://mysilverjeep.info/torstart.htm](http://mysilverjeep.info/torstart.htm)
+[https://www.torproject.org/docs/faq.html.en#DoesntWork](https://www.torproject.org/docs/faq.html.en#DoesntWork)
+[http://www.privoxy.org/](http://www.privoxy.org/)
+[http://privoxy.webhost.ru/user-manual/index.html](http://privoxy.webhost.ru/user-manual/index.html)
+[http://privoxy.webhost.ru/articles/1140233460000000.htm](http://privoxy.webhost.ru/articles/1140233460000000.htm)
+[http://privoxy.webhost.ru/articles/1175332640110637.htm](http://privoxy.webhost.ru/articles/1175332640110637.htm)
+[http://torcheck.xenobite.eu/](http://torcheck.xenobite.eu/)
+[http://rightanon.blogspot.ch/2012/09/tor.html](http://rightanon.blogspot.ch/2012/09/tor.html)
+
+Приблуды к Tor
+[http://rightanon.blogspot.se/2012/11/firefox.html](http://rightanon.blogspot.se/2012/11/firefox.html)
+
+
+Ddos
+[http://staff.washington.edu/dittrich/misc/ddos/](http://staff.washington.edu/dittrich/misc/ddos/)
+[http://www.faqs.org/rfcs/bcp/bcp38.html](http://www.faqs.org/rfcs/bcp/bcp38.html)
+[http://www.hackzone.ru/news/apache_anti_ddos.html](http://www.hackzone.ru/news/apache_anti_ddos.html)
+[http://habrahabr.ru/company/highloadlab/blog/68557/](http://habrahabr.ru/company/highloadlab/blog/68557/)
+[http://habrahabr.ru/post/136166/](http://habrahabr.ru/post/136166/)
+[http://habrahabr.ru/post/134359/](http://habrahabr.ru/post/134359/)
+[http://habrahabr.ru/post/134331/](http://habrahabr.ru/post/134331/)
+[http://habrahabr.ru/post/134264/](http://habrahabr.ru/post/134264/)
+[http://habrahabr.ru/post/131469/](http://habrahabr.ru/post/131469/)
+[http://habrahabr.ru/post/84172/](http://habrahabr.ru/post/84172/)
+[http://www.avalon.ru/PPS/CPP/Courses/About/?CourseID=636](http://www.avalon.ru/PPS/CPP/Courses/About/?CourseID=636)
+
+[http://www.cisco.com/web/about/ac123/ac147/archived_issues/index.html](http://www.cisco.com/web/about/ac123/ac147/archived_issues/index.html)
+[http://www.cisco.com/en/US/products/hw/vpndevc/ps2030/products_tech_note09186a0080094e8a.shtml](http://www.cisco.com/en/US/products/hw/vpndevc/ps2030/products_tech_note09186a0080094e8a.shtml)
+[http://www.cisco.com/en/US/products/ps6120/products_tech_note09186a00809763ea.shtml](http://www.cisco.com/en/US/products/ps6120/products_tech_note09186a00809763ea.shtml)
+[https://supportforums.cisco.com/thread/2161068](https://supportforums.cisco.com/thread/2161068)
+[http://www.cisco.com/web/about/ac123/ac147/archived_issues/ipj_9-4/syn_flooding_attacks.html](http://www.cisco.com/web/about/ac123/ac147/archived_issues/ipj_9-4/syn_flooding_attacks.html)
+
+
+Brootforce
+[http://www.xakep.ru/post/49191/](http://www.xakep.ru/post/49191/)
+
+
+
+
+
+
+Sysctl
+[http://habrahabr.ru/post/108240/](http://habrahabr.ru/post/108240/)
+[http://www.irqbalance.org/](http://www.irqbalance.org/)
+[http://notes.ghost.dn.ua/node/65](http://notes.ghost.dn.ua/node/65)
+[http://linux.die.net/man/8/sysctl](http://linux.die.net/man/8/sysctl)
+[http://netsago.org/ru/notes/2008/10/](http://netsago.org/ru/notes/2008/10/)
+[http://www.itpad.ru/?p=1154](http://www.itpad.ru/?p=1154)
+[http://www.lissyara.su/articles/freebsd/security/sysctl/](http://www.lissyara.su/articles/freebsd/security/sysctl/)
+[http://mannix.ru/poleznoe/linux-nastrojka-nat-servera-marshrutizatora-i-preryvanij-pri-uvelichenii-obemov-trafika.html](http://mannix.ru/poleznoe/linux-nastrojka-nat-servera-marshrutizatora-i-preryvanij-pri-uvelichenii-obemov-trafika.html)
+[http://www.opennet.ru/tips/1417_tcp_linux_kernel_tune_optimization_speed.shtml](http://www.opennet.ru/tips/1417_tcp_linux_kernel_tune_optimization_speed.shtml)
+[http://www.opennet.ru/tips/273_tcp_win_proc_subnet_tune_linux_sysctl_forward_port_ip_time_x_udp_config_window_buffer_file_coredump_timeout_fault_sync_select.shtml](http://www.opennet.ru/tips/273_tcp_win_proc_subnet_tune_linux_sysctl_forward_port_ip_time_x_udp_config_window_buffer_file_coredump_timeout_fault_sync_select.shtml)
+[http://nikitushkin.wordpress.com/2011/02/12/%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2-%D1%8F%D0%B4%D1%80%D0%B0-sysctl-%D0%B4%D0%BB%D1%8F-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB/](http://nikitushkin.wordpress.com/2011/02/12/%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2-%D1%8F%D0%B4%D1%80%D0%B0-sysctl-%D0%B4%D0%BB%D1%8F-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB/)
+
+[http://avz.org.ua/wp/2011/03/08/linux-server-reboot/](http://avz.org.ua/wp/2011/03/08/linux-server-reboot/)
+[http://www.opennet.ru/docs/RUS/GigabitEthernet/](http://www.opennet.ru/docs/RUS/GigabitEthernet/)
+
+CPU
+[http://www.cisco.com/en/US/products/hw/routers/ps133/products_tech_note09186a00800a70f2.shtml](http://www.cisco.com/en/US/products/hw/routers/ps133/products_tech_note09186a00800a70f2.shtml)
+
+[http://www.cisco.com/en/US/tech/tk365/technologies_tech_note09186a0080093f22.shtml](http://www.cisco.com/en/US/tech/tk365/technologies_tech_note09186a0080093f22.shtml)
+
+IP2ROUTE
+[http://www.opennet.ru/base/net/iproute2_cebka.txt.html](http://www.opennet.ru/base/net/iproute2_cebka.txt.html)
+[http://habrahabr.ru/post/108690/](http://habrahabr.ru/post/108690/)
+[http://www.oszone.net/2834/](http://www.oszone.net/2834/)
+
+
+
+UDEV
+[http://www.gentoo.org/doc/ru/udev-guide.xml](http://www.gentoo.org/doc/ru/udev-guide.xml)
+[http://citkit.ru/articles/245/](http://citkit.ru/articles/245/)
+[http://rus-linux.net/lib.php?name=MyLDP/sys-conf/udev.html](http://rus-linux.net/lib.php?name=MyLDP/sys-conf/udev.html)
+
+
+conntrack
+[http://habrahabr.ru/post/111056/](http://habrahabr.ru/post/111056/)
+[http://conntrack-tools.netfilter.org/manual.html](http://conntrack-tools.netfilter.org/manual.html)
+[https://www.kernel.org/doc/ols/2004/ols2004v2-pages-251-260.pdf](https://www.kernel.org/doc/ols/2004/ols2004v2-pages-251-260.pdf)
+
+
+
+
+
+
+
+Документооборот
+[http://habrahabr.ru/company/alee/blog/137407/](http://habrahabr.ru/company/alee/blog/137407/)
+
+[http://www.dokuwiki.ru/](http://www.dokuwiki.ru/)
+[http://ru.wikipedia.org/wiki/MediaWiki](http://ru.wikipedia.org/wiki/MediaWiki)
+
+[http://www.naudoc.ru/solutions/free/](http://www.naudoc.ru/solutions/free/)
+[http://www.mainpyrus.org/](http://www.mainpyrus.org/)
+[http://www.archivista.ch/en/](http://www.archivista.ch/en/)
+[http://www.openkm.com/en/](http://www.openkm.com/en/)
+[http://www.citeck.ru/alfresco-ecm](http://www.citeck.ru/alfresco-ecm)
+[http://fengoffice.com/web/index.php](http://fengoffice.com/web/index.php)
+[http://www.redmine.org/](http://www.redmine.org/)
+
+
+
+
+
+nterface FastEthernet0/48
+  description Client (3)
+  switchport access vlan 3
+  switchport mode access
+  switchport nonegotiate
+  switchport voice vlan 9
+  logging event spanning-tree
+  logging event status
+  srr-queue bandwidth share 10 10 60 20
+  priority-queue out
+  mls qos trust device cisco-phone
+  mls qos trust cos
+  storm-control broadcast level pps 1k 100
+  storm-control multicast level pps 1k
+  storm-control action shutdown
+  auto qos voip cisco-phone
+  spanning-tree portfast
+  service-policy input AutoQoS-Police-CiscoPhone
+  ip dhcp snooping limit rate 10
+end
+
+
+sh run int fa0/13
+
+interface FastEthernet0/13
+  description Client (3)
+  switchport access vlan 3
+  switchport mode access
+  switchport nonegotiate
+  switchport voice vlan 9
+  logging event spanning-tree
+  logging event status
+  srr-queue bandwidth share 10 10 60 20
+  priority-queue out
+  mls qos trust device cisco-phone
+  mls qos trust cos
+  storm-control broadcast level pps 1k 100
+  storm-control multicast level pps 1k
+  storm-control action shutdown
+  auto qos voip cisco-phone
+  spanning-tree portfast
+  service-policy input AutoQoS-Police-CiscoPhone
+  ip dhcp snooping limit rate 10
+end 
+
+interface GigabitEthernet0/1
+  description Po1:sw-f3-d01
+  switchport mode trunk
+  switchport nonegotiate
+  logging event status
+  srr-queue bandwidth share 10 10 60 20
+  queue-set 2
+  priority-queue out
+  mls qos trust cos
+  auto qos voip trust
+  channel-group 1 mode auto
+  ip dhcp snooping trust
+end
+
+
+Матрица: перезагрузка
+В фильме есть эпизод, в котором Тринити взламывает компьютер электросети. Обычно, когда дело касается хакеров и вирусов, создатели фильмов предпочитают поместить на экран компьютера эффектно выглядящий, но не имеющий никакого отношения к действительности «мультик». В «Матрице: Перезагрузка» поступили по-другому: Тринити действительно взламывает компьютер.
+Первым делом Тринити запускает сканер портов Nmap. Это существующая в реальности программа, использующаяся для поиска незащищённых портов, которыми можно воспользоваться для проникновения в систему.
+Nmap сканирует IP-адрес 10.2.2.2 и находит открытый порт 22. Этот порт используется SSH.
+Следующий шаг Тринити: она запускает эксплойт под названием sshnuke, который, как следует из появившейся на консоли надписи, пытается воспользоваться уязвимостью SSH CRC32. Это реально существующая уязвимость SSH, которая была обнаружена в начале 2001 года. Правда, нужно заметить, что о существовании хакерской программы sshnuke пока ничего неизвестно.
+Тем не менее, программа делает своё дело, и Тринити немедленно меняет администраторский пароль на Z1ON0101, с помощью которого она входит в систему. Открывается консоль с правами администратора системы. Пользуясь правами администратора, Тринити отключает аварийную систему перераспределения энергии.
+0101 в двоичной системе равняется 5 в десятичной. То есть пароль можно прочитать как ZION5. Скорее всего, это ссылка на дальнейшие события в фильме — позже создатель Матрицы упоминает, что Зион был разрушен пять раз.
+Вероятно, это единственный случай в истории Голливуда, когда взлом компьютера был показан настолько достоверно и детально.

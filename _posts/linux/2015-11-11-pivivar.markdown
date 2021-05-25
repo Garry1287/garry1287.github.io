@@ -1,0 +1,99 @@
+---
+layout: post
+title:  "pivivar"
+date:   2015-11-11 21:20:01 +0300
+categories: linux
+tags: linux
+---
+
+# pivivar
+#xxx_dev=eth1
+root@midge:/etc/network# ifconfig
+eth0      Link encap:Ethernet  HWaddr A0:43:D3:B5:75:00  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:429849 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:498910 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:302658013 (288.6 MiB)  TX bytes:391688138 (373.5 MiB)
+          Interrupt:9 
+
+eth0.210  Link encap:Ethernet  HWaddr A0:43:D3:B5:75:00  
+          inet addr:192.168.200.26  Bcast:192.168.200.255  Mask:255.255.255.252
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:264497 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:431745 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:83549384 (79.6 MiB)  TX bytes:382066678 (364.3 MiB)
+
+eth0.3122 Link encap:Ethernet  HWaddr A0:43:D3:B5:75:00  
+          inet addr:81.20.203.84  Bcast:81.255.255.255  Mask:255.255.255.224
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:165352 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:67165 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:219108629 (208.9 MiB)  TX bytes:9478292 (9.0 MiB)
+
+eth1      Link encap:Ethernet  HWaddr A0:43:D3:B5:75:01  
+          inet addr:192.168.107.2  Bcast:0.0.0.0  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:504809 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:426157 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:383364473 (365.6 MiB)  TX bytes:306590146 (292.3 MiB)
+          Interrupt:9 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+root@midge:/etc/network# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.200.24  0.0.0.0         255.255.255.252 U     0      0        0 eth0.210
+81.20.203.64    0.0.0.0         255.255.255.224 U     0      0        0 eth0.3122
+192.168.101.0   192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.4.0     192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.103.0   192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.1.0     192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.108.0   192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.201.0   192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.104.0   192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.106.0   192.168.200.25  255.255.255.0   UG    0      0        0 eth0.210
+192.168.107.0   0.0.0.0         255.255.255.0   U     0      0        0 eth1
+0.0.0.0         81.20.203.65    0.0.0.0         UG    0      0        0 eth0.3122
+
+
+
+
+
+
+/sbin/ifconfig eth0 down
+/sbin/ifconfig eth0 0.0.0.0 up
+/sbin/vconfig add eth0 210
+/sbin/vconfig add eth0 3122
+/sbin/ifconfig eth0.210 192.168.200.26 netmask 255.255.255.252 up
+/sbin/ifconfig eth0.3122 81.20.203.84 netmask 255.255.255.224 up
+/sbin/route add -net 192.168.1.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.4.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.201.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.101.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.103.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.104.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.106.0/24 gw 192.168.200.25
+/sbin/route add -net 192.168.108.0/24 gw 192.168.200.25
+
+/sbin/route add default gw 81.20.203.65
+
+/usr/sbin/iptables -t nat -A POSTROUTING -o eth0.3122 -j SNAT --to-source 81.20.203.84
+/usr/sbin/iptables -t nat -A PREROUTING -p tcp -d 81.20.203.84 --dport 8300:8320 -j DNAT --to-destination 192.168.107.134
+
+
+
+
+
+
+

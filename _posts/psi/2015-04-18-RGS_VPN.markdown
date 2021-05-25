@@ -1,0 +1,54 @@
+---
+layout: post
+title:  "RGS_VPN"
+date:   2015-04-18 22:15:38 +0300
+categories: PSI
+tags: PSI
+---
+
+# RGS_VPN
+ctd-c3
+
+CTD-C3#sh run int Fa0/0.3027
+Building configuration...
+
+Current configuration : 379 bytes
+!
+interface FastEthernet0/0.3027
+ description #RosGosStah-Sovintel #pheonix 8.09.2010
+ encapsulation dot1Q 3027
+ ip vrf forwarding rosgosstah-sovintel
+ ip address 10.148.129.5 255.255.255.252
+ rate-limit input 1024000 192000 384000 conform-action transmit exceed-action drop
+ rate-limit output 1024000 192000 384000 conform-action transmit exceed-action drop
+ no cdp enable
+end
+
+no ip address 10.148.129.5 255.255.255.252
+ip address 172.17.48.5 255.255.255.252
+
+no ip route vrf rosgosstah-sovintel 10.48.14.0 255.255.255.0 10.148.129.6
+no ip route vrf rosgosstah-sovintel 10.48.15.250 255.255.255.255 10.148.129.6
+no ip route vrf rosgosstah-sovintel 10.48.148.0 255.255.255.0 10.148.129.6
+
+ip route vrf rosgosstah-sovintel 10.48.14.0 255.255.255.0 172.17.48.6
+ip route vrf rosgosstah-sovintel 10.48.15.250 255.255.255.255 172.17.48.6
+ip route vrf rosgosstah-sovintel 10.48.148.0 255.255.255.0 172.17.48.6
+
+
+cde-c3
+
+interface GigabitEthernet0/0.960
+ description #RosGosStrah-Sovintel #pheonix 08.09.2010                                                                                                       
+ encapsulation dot1Q 960                                                                                                                                     
+ ip vrf forwarding rosgosstah-sovintel                                                                                                                       
+ ip address 10.148.129.2 255.255.255.252                                                                                                                     
+ rate-limit input 1024000 192000 384000 conform-action transmit exceed-action drop                                                                           
+ rate-limit output 1024000 192000 384000 conform-action transmit exceed-action drop                                                                          
+end  
+
+no ip address 10.148.129.2 255.255.255.252
+ip address 172.17.48.2 255.255.255.252
+
+no ip route vrf rosgosstah-sovintel 0.0.0.0 0.0.0.0 10.148.129.1
+ip route vrf rosgosstah-sovintel 0.0.0.0 0.0.0.0 172.17.48.1

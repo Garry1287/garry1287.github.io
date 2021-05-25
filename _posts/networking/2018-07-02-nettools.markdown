@@ -1,0 +1,24 @@
+---
+layout: post
+title:  "nettools"
+date:   2018-07-02 08:34:14 +0300
+categories: Networking
+tags: Networking
+---
+
+# nettools
+lsof
+[http://handynotes.ru/2010/01/unix-utility-lsof.html](http://handynotes.ru/2010/01/unix-utility-lsof.html)
+
+ss
+[http://losst.ru/monitoring-setevyh-podklyuchenij-v-linux](http://losst.ru/monitoring-setevyh-podklyuchenij-v-linux)
+ss -or state established '( dport = :ssh or sport = :ssh )'
+[http://guruadmin.ru/page/setevaja-statistika-tcp-udp-i-informacija-o-ispolzuemyh-soketah-v-linux-komanda-ss](http://guruadmin.ru/page/setevaja-statistika-tcp-udp-i-informacija-o-ispolzuemyh-soketah-v-linux-komanda-ss)
+Список всех TCP сокетов в состоянии FIN-WAIT-1 для httpd в сети 202.54.1/24:
+# ss -o state fin-wait-1 '( sport = :http or sport = :https )' dst 202.54.1/24
+
+Note that many states like syn-sent, syn-recv would not show any sockets most of the time, since sockets remain in such states for a very short time. It would be ideal to use the watch command to detect such socket states in real time.
+
+Here is an example
+
+$ watch -n 1 "ss -t4 state syn-sent"

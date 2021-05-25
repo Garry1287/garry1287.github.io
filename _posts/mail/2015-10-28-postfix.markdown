@@ -1,0 +1,30 @@
+---
+layout: post
+title:  "postfix"
+date:   2015-10-28 17:50:01 +0300
+categories: mail
+tags: mail
+---
+
+# postfix
+iptables -A INPUT -p tcp -m multiport --dports 25,110,143,443,465,587,993,995,11211 -j ACCEPT
+iptables -A OUTPUT -p tcp -m multiport --sports 25,110,143,443,465,587,993,995,11211 -j ACCEPT 
+
+
+Ограничивает количество подлкючений с одного ip
+[http://farmal.in/2011/07/borba-s-ddos-atakami-sredstvami-iptables-i-sysctl/](http://farmal.in/2011/07/borba-s-ddos-atakami-sredstvami-iptables-i-sysctl/)
+[http://unix.stackexchange.com/questions/139285/limit-max-connections-per-ip-address-and-new-connections-per-second-with-iptable](http://unix.stackexchange.com/questions/139285/limit-max-connections-per-ip-address-and-new-connections-per-second-with-iptable)
+
+iptables -A INPUT -p tcp --syn --dport 80 -m connlimit --connlimit-above 20 -j REJECT --reject-with tcp-reset 
+
+iptables -I INPUT 7 -p tcp  --syn --dport 80 -m connlimit --connlimit-above 32  -j REJECT --reject-with tcp-reset 
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -I INPUT 9 -p udp --dport 53 -m connlimit --connlimit-above 8 -j DROP
+iptables -A INPUT -p udp --dport 53 -j ACCEPT
+iptables -I INPUT 11 -p tcp --dport 53 -m connlimit --connlimit-above 8 -j DROP
+iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+iptables -I INPUT 15 -p tcp --syn --dport 25 -m connlimit --connlimit-above 8 -j REJECT --reject-with tcp-reset 
+iptables -I INPUT 16 -p tcp --dport 25 -j ACCEPT
+
+iptables -I INPUT 7 -s 192.168.1.0/24  -p tcp -m multiport --dports 110,143 -j ACCEPT
+

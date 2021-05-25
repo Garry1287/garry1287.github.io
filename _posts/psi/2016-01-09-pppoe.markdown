@@ -1,0 +1,254 @@
+---
+layout: post
+title:  "pppoe"
+date:   2016-01-09 15:19:01 +0300
+categories: PSI
+tags: PSI
+---
+
+# pppoe
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authentication ppp default group radius
+aaa authorization network default group radius
+aaa accounting update periodic 15
+aaa accounting network default start-stop group radius
+
+
+bba-group pppoe global
+ virtual-template 1
+ pppoe limit per-mac 1
+ ac name PSI
+
+interface FastEthernet0/0
+ description # Uplink to CDE-C2 (802.1q multiplexed interface)
+ no ip address
+ ip route-cache flow
+ duplex full
+ speed 100
+
+
+
+
+interface FastEthernet0/0.3997
+ description #PPPoE termination endpoint for xDSL jur client
+ encapsulation dot1Q 3997
+ pppoe enable
+end
+
+
+interface Virtual-Template1
+ description # PPPoE virtual template
+ ip unnumbered FastEthernet0/0
+ no ip proxy-arp
+ ip virtual-reassembly
+ ppp authentication chap callin
+!
+
+radius-server host 81.20.192.6 auth-port 1645 acct-port 1646 non-standard
+radius-server retransmit 10
+radius-server timeout 10
+radius-server key 7 111D1C16031B050B557878
+radius-server vsa send accounting
+radius-server vsa send authentication
+
+
+**************************************************************************
+
+
+aaa authentication ppp default group radius
+aaa authorization network default group radius
+aaa accounting update periodic 15
+aaa accounting network default start-stop group radius
+
+
+no vpdn enable
+!
+no vpdn-group 1
+! Default PPTP VPDN group
+ description # PPTP test
+ accept-dialin
+  protocol pptp
+  virtual-template 1
+ local name CTD-C0.sc.ru
+
+Повесить ip на FastEthernet0/0
+
+vlan 3997
+
+bba-group pppoe global
+ virtual-template 1
+ pppoe limit per-mac 1
+ ac name PSI-NLMK
+
+interface FastEthernet0/0
+ description # NLMK Link 802.1q multiplexed # Woland 07.06.2007 #LN 101_1
+ no ip address
+ ip route-cache flow
+ no ip mroute-cache
+ load-interval 30
+ speed 100
+ full-duplex
+ no cdp enable
+
+
+interface Virtual-Template1
+ description # PPPoE virtual template
+ ip unnumbered Loopback1
+ no ip proxy-arp
+ ip virtual-reassembly
+ ppp authentication chap callin
+!
+
+radius-server host 81.20.192.6 auth-port 1645 acct-port 1646 non-standard
+radius-server retransmit 10
+radius-server timeout 10
+radius-server key 7 111D1C16031B050B557878
+radius-server vsa send accounting
+radius-server vsa send authentication
+
+
+
+
+
+interface FastEthernet0/1.3997
+ description #PPPoE termination endpoint for xDSL jur client
+ encapsulation dot1Q 3997
+ pppoe enable
+!
+
+3773	KISA-TEMP - 
+930	KISA-485-TEST
+198	WIMAX-UPLINK-TEST
+199	WIMAX-DNLINK-TEST
+150	RADIO-ACCESS-POINTS
+901	K9-OFFICE
+902	K9-RADIO-VPN
+
+
+
+ip vrf rtk-probussines-rtk
+ rd 20866:314
+ route-target export 20866:3140
+ route-target import 20866:3140
+ maximum routes 500 100
+
+
+iptables -t nat -A PREROUTING -s 195.34.240.24/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 443 -j DNAT --to-destination 192.168.1.30:4461
+iptables -t nat -A PREROUTING -d 81.20.192.33/32 -p tcp -m tcp --dport 443 -j DNAT --to-destination 192.168.1.30:4459
+
+
+Traffic Segmentation + local proxy arp
+
+
+Private VLAN, Protected port, Traffic Segmentation (одно и тоже)
+VLAN ACL
+DHCP Snooping, Port Security, IP Source Guard и Dynamic ARP Inspection
+DHCP Snooping, IP Source Guard и Port Security
+arp spoofing
+arp proxy
+dhcp spoofing
+options 82 dhcp
+Private VLAN
+DHCP Snooping
+IP Source Guard
+Port Security
+Dynamic ARP Inspection
+loop detections
+
+
+Хорошая архитектура, только одно замечание по терминологии. То, что у Cisco называется private vlan, соответствует supervlan или assymetric vlan у других производителей ([http://tools.ietf.org/html/draft-sanjib-private-vlan-10).](http://tools.ietf.org/html/draft-sanjib-private-vlan-10).) То, о чем вы пишете, у Cisco называется private vlan edge (protected ports), а у Dlink - traffic segmentation.
+
+
+И окажется этот первый мак как раз адресом шлюза сегмента(бывало такое. Когда двум разным абонентам приходила умная мысль о том, что можно использовать двух провайдеров, подцепившись к ним через коммутатор). Нужно злее -- статиком на uplink-е коммутаторов доступа мак-адрес L3 интерфейса агрегации вбивать.
+
+C6506-1(config)#int vlan 10
+C6506-1(config-if)#ip local-proxy-arp
+
+Похоже это баг операционной системы.
+Вот нашёл инструкцию.
+[http://wiki.lanexpress.ru/index.php/%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0_868](http://wiki.lanexpress.ru/index.php/%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0_868)
+
+Может поможет и просто перезапуск dns клиента. Можно и вбивать вместо dns имени pptp-сервера его ip.
+Но лучше этого не делать, так как мы можем в ближайшем времени начать использовать 2 pptp-сервера под одним dns именем.
+
+Код
+interface Vlan100
+ip address 10.32.X.X 255.255.240.0
+ip helper-address 10.32.X.Y
+no ip redirects
+ip local-proxy-arp
+
+vlan filter BLOCK_LAN vlan-list 100
+
+vlan access-map BLOCK_LAN 10
+action drop
+match ip address 101
+vlan access-map BLOCK_LAN 20
+action forward
+
+! блокировка нежелательного трафика
+access-list 101 permit tcp any any eq 135
+access-list 101 permit tcp any any eq 139
+access-list 101 permit tcp any any eq 445
+...
+! отключение абонентов
+access-list 101 permit ip 10.32.Y.Y 255.255.255.255 any
+...
+! все остальное разрешить
+access-list 101 deny   ip any any
+
+
+
+ACL организован именно таким образом (дропается тот трафик, который разрешается ACL 101) в силу разных причин, но общая идея должна быть понятна. Если хочется, чтобы пользователи имели возможность ходить на портал в случае блокировки, то в начало ACL надо написать соответствующий deny statement на IP адрес портала.
+
+по id коммутатора и порту - само правильное будет ИМХО
+мак в расчет не берется (т.к. может смениться)
+
+[http://forum.dlink.ru/viewtopic.php?t=96363&highlight=3526+DHCP](http://forum.dlink.ru/viewtopic.php?t=96363&highlight=3526+DHCP)
+[http://forum.dlink.ru/viewtopic.php?t=91312&highlight=3526+DHCP](http://forum.dlink.ru/viewtopic.php?t=91312&highlight=3526+DHCP)
+
+
+[http://forum.nag.ru/forum/index.php?showtopic=53786&st=0&p=463083&#entry463083](http://forum.nag.ru/forum/index.php?showtopic=53786&st=0&p=463083&#entry463083)
+
+
+
+вилан на юзера, юзеры 192.168.1.х/24, шлюз 192.168.1.254:
+на циске (пример с 65хх-суп2)
+физика:
+CODE
+interface GigabitEthernet9/10
+switchport
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan 425,459-466,468-470 // список виланов, подаваемых к юзерам
+switchport mode trunk
+no ip address
+
+
+Логика:
+CODE
+interface Vlan425
+ip unnumbered Loopback123321
+
+Виланов делаем потребное количество, на всех один лупбэк
+CODE
+interface Loopback123321
+ip address 192.168.1.254 255.255.255.0
+no ip redirects
+
+На юзера пишем роутинг
+CODE
+ip route 192.168.1.1 255.255.255.255 vlan425
+
+
+для передачи маршрутов соседям используем OSPF .
+
+Нелегалы работать не будут в принципе - ибо л2 связи между ними нет, только л3.
+
+
+
+
+1.Traffic segmentation
+

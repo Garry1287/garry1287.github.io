@@ -1,0 +1,158 @@
+---
+layout: post
+title:  "vienna-asa"
+date:   2011-10-10 22:27:37 +0400
+categories: zavod
+tags: zavod
+---
+
+# vienna-asa
+: Saved
+: Written by enable_15 at 03:18:24.108 UTC Thu Apr 24 2014
+!
+ASA Version 9.1(1) 
+!
+hostname Vienna-ASA0
+names
+!
+interface GigabitEthernet0/0
+ description TO_BALANCERS_SWITCH0_FA0/7(access_vlan_1967)
+ nameif inside
+ security-level 100
+ ip address 10.170.253.1 255.255.255.248 
+!
+interface GigabitEthernet0/1
+ description TO_JuniperFirewall(access_vlan_1966)
+ nameif outside
+ security-level 100
+ ip address 10.170.25.4 255.255.255.0 
+!
+interface GigabitEthernet0/2
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/3
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/4
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface GigabitEthernet0/5
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface Management0/0
+ management-only
+ nameif management
+ security-level 100
+ ip address 10.170.250.31 255.255.255.0 
+!
+boot system disk0:/asa911-smp-k8.bin
+ftp mode passive
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+access-list outside_access_in extended permit ip any any 
+access-list outside_access_in extended permit tcp any any 
+access-list outside_access_in extended permit udp any any 
+access-list outside_access_in extended permit icmp any any 
+access-list inside_access_in extended permit ip any any 
+access-list inside_access_in extended permit tcp any any 
+access-list inside_access_in extended permit udp any any 
+access-list inside_access_in extended permit icmp any any 
+pager lines 24
+logging asdm informational
+mtu inside 1500
+mtu outside 1500
+mtu management 1500
+no failover
+icmp unreachable rate-limit 1 burst-size 1
+asdm image disk0:/asdm-66114.bin
+no asdm history enable
+arp timeout 14400
+no arp permit-nonconnected
+access-group inside_access_in in interface inside
+access-group outside_access_in in interface outside
+!
+router ospf 110
+ router-id 10.170.253.1
+ network 10.170.253.0 255.255.255.248 area 0
+ area 0
+ log-adj-changes
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+!
+route outside 10.170.0.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.2.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.4.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.6.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.8.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.10.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.12.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.14.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.16.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.18.0 255.255.254.0 10.170.25.1 1
+route outside 10.170.21.0 255.255.255.0 10.170.25.1 1
+route outside 10.170.22.0 255.255.255.0 10.170.25.1 1
+route outside 10.170.23.0 255.255.255.0 10.170.25.1 1
+route outside 10.170.24.0 255.255.255.0 10.170.25.1 1
+timeout xlate 3:00:00
+timeout pat-xlate 0:00:30
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+timeout tcp-proxy-reassembly 0:01:00
+timeout floating-conn 0:00:00
+dynamic-access-policy-record DfltAccessPolicy
+user-identity default-domain LOCAL
+aaa authentication ssh console LOCAL 
+crypto ipsec security-association pmtu-aging infinite
+crypto ca trustpool policy
+telnet timeout 5
+ssh 10.192.10.0 255.255.255.0 inside
+ssh 10.170.250.0 255.255.255.0 management
+ssh timeout 5
+console timeout 0
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect h323 h225 
+  inspect h323 ras 
+  inspect rsh 
+  inspect rtsp 
+  inspect esmtp 
+  inspect skinny  
+  inspect sunrpc 
+  inspect xdmcp 
+  inspect sip  
+  inspect netbios 
+  inspect tftp 
+  inspect ip-options 
+!
+service-policy global_policy global
+prompt hostname context 
+no call-home reporting anonymous
+Cryptochecksum:12fdbd50d99a90921ca2e60462e832d7
+: end

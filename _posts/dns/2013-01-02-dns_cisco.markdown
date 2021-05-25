@@ -1,0 +1,78 @@
+---
+layout: post
+title:  "dns_cisco"
+date:   2013-01-02 01:38:46 +0400
+categories: dns
+tags: dns
+---
+
+# dns_cisco
+Cisco router можно настроить в качестве кеширующего DNS сервера. Это удобно в небольших офисах, где нет серверов Windows и AD.
+Общий вид команд выглядит следующим образом:
+
+ip domain lookup
+ip domain timeout 2
+ip domain name office.local
+ip host name1 192.168.0.11
+ip host name2 192.168.0.12
+ip name-server 192.168.2.3
+ip name-server 178.23.144.5
+ip name-server 8.8.8.8
+ip name-server 8.8.4.4
+ip dns server
+
+ip domain lookup - включает трансляцию имён в ip адреса основанную на dns. Этот параметр включен по умолчанию. Часто его выключают чтобы маршрутизатор не "зависал" при вводе ошибочной команды, но для нашей цели его необходимо включить.
+ip name-server - этот параметр задаёт адрес одного или нескольких серверов имён (dns). Приоритет определяется сверху вниз.
+ip domain name - задаёт имя домена по умолчанию для пользователей Cisco IOS software для разрешения "неопознаных" доменных имён (имена без суффикса.
+ip dns server - включаем собственно кеширующий DNS сервер на циске
+
+Конструкция ip host name1 192.168.0.11 работает подобно файлу hosts в windows.
+
+Проверка:
+show ip dns view
+
+
+
+
+
+
+
+
+ip domain lookup - включает трансляцию имён в ip адреса основанную на dns. Этот параметр включен по умолчанию.
+
+ip name-server - этот параметр задаёт адрес одного или нескольких серверов имён (dns).
+
+ip domain name - задаёт имя домена по умолчанию для пользователей Cisco IOS software для разрешения "неопознаных" доменных имён (имена без десятичных доменных имён.
+
+можно указать список доменов
+
+router(config)#ip domain list office.local
+router(config)#ip domain list office.ru
+
+
+Примечание: если здесь не задан сисок доменов, то будет использоваться деректива ip domain-name указанная в глобальной конфигурации ( ip domain-name) И наоборот, если указан список доменов, то ip domain-name не используется.
+
+ip dns server - включаем собственно форвард на циске
+
+Опционально:
+
+!Добавить хосты
+router(config)#ip host webserver.office.local 192.168.0.100
+router(config)#ip host mailserver.office.local 192.168.0.101
+
+
+!
+!Таймаут (default is 3 seconds)
+router(config)#ip domain timeout 5
+
+
+!
+!Число попыток отресолвить (Default is "2" times):
+router(config)#ip domain retry 5
+
+Configuring DNS on Cisco Routers
+[http://www.cisco.com/en/US/tech/tk648/tk362/technologies_tech_note09186a00800c525f.shtml](http://www.cisco.com/en/US/tech/tk648/tk362/technologies_tech_note09186a00800c525f.shtml) 
+
+
+
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/15-sy/dns-15-sy-book.pdf](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/15-sy/dns-15-sy-book.pdf)

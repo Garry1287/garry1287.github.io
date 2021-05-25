@@ -1,0 +1,181 @@
+---
+layout: post
+title:  "ffmpeg"
+date:   2015-10-10 17:25:14 +0300
+categories: linux
+tags: linux
+---
+
+# ffmpeg
+Новый синтаксис
+[https://habrahabr.ru/post/333664/](https://habrahabr.ru/post/333664/)
+
+
+
+
+
+
+
+
+
+ffmpeg -i свадебный\ фильм\ ольги\ и\ владимира.mov -vcodec libx264 -vpre slow -crf 22 -threads 0 -acodec libmp3lame -ar 44100 -ab 128k olga_vladimir.mkv
+
+ Duration: 01:27:35.72, start: 0.000000, bitrate: 34550 kb/s
+    Stream #0:0(eng): Video: h264 (Main) (avc1 / 0x31637661), yuv420p(tv, bt709), 1920x1080, 34420 kb/s, SAR 1920:1920 DAR 16:9, 25 fps, 25 tbr, 25 tbn, 50 tbc (default)
+
+-b   ABR - Average BitRate. Установка базового (усреднённого) битрейта, - уровня потока данных видео или аудио в секунду
+-s 1920x1080 - разрешение
+-r 25 - количество кадров в секунду.
+-vcodec qtrle - видеокодек QuickTime.
+-ab 128k - аудио битрейт
+ -ac каналы
+           Установите число аудио каналов (по умолчанию = 1). 
+-acodec кодек
+           Группа аудио кодек для кодека. Используйте "copy" особое значение для указания
+           что RAW Codec данные должны быть скопированы, как есть. 
+ -ar частота
+           Установите частоту дискретизации звука (по умолчанию = 44100 Гц).
+
+       -ab битрейт
+           Установить аудио битрейт в бит / с (по умолчанию = 64K). 
+
+
+-concat  объединяет файлы сделать дома.
+Пример ffmpeg -i concat:"1.MOV|2.MOV" -vcodec libx264 output.mkv
+
+
+
+Видео: XviD, 720x304 (2.35:1), 23.976 fps, 2044 Kbps, 0.389 bt/px
+Аудио: MP3, 48.0 KHz, 2 ch, 128 Kbps, CBR 
+
+Видео: Xvid 720x304 23.976fps 1 816 Kbps
+Аудио: Dolby AC3 48000Hz stereo 192kbps 
+
+Видео: 720x304 (2.37:1), 23.976 fps, XviD build 65 ~1834 kbps avg, 0.35 bit/pixel
+Аудио: 48 kHz, AC3 Dolby Digital, 3/2 (L,C,R,l,r) + LFE ch, ~384 kbps
+
+
+Видео: XviD build 65, 720x304 (2.37:1), 23.976 fps, ~1536 kbps avg, 0.293 bit/pixel
+Аудио 1: 48 kHz, AC3 Dolby Digital, 3/2 (L,C,R,l,r) + LFE ch, ~384 kbps avg (RUS)
+
+
+
+
+50 гигов
+Тип релиза: Blu-ray 1080p
+Контейнер: BDMV
+Video: MPEG-4 AVC Video 20852 kbps 1080p / 23,976 fps / 16:9 / High Profile 4.1
+Audio: DTS-HD Master Audio English 5334 kbps 7.1 / 48 kHz / 5334 kbps / 24-bit (DTS Core: 5.1 / 48 kHz / 1509 kbps / 24-bit)
+Audio: Dolby Digital Audio Czech 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+Audio: Dolby Digital Audio Russian 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+Audio: Dolby Digital Audio Thai 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+Audio: Dolby Digital Audio Turkish 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+Audio: Dolby Digital Audio Ukrainian 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+
+
+36 гигов
+Тип релиза: Blu-ray 1080p
+Контейнер: BDMV
+Video: MPEG-4 AVC Video 20856 kbps 1080p / 23,976 fps / 16:9 / High Profile 4.1
+Audio: DTS-HD Master Audio English 5339 kbps 7.1 / 48 kHz / 5339 kbps / 24-bit (DTS Core: 5.1 / 48 kHz / 1509 kbps / 24-bit)
+Audio: Dolby Digital Audio Czech 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+Audio: Dolby Digital Audio Russian 448 kbps 5.1 / 48 kHz / 448 kbps / DN -4dB
+Audio: Dolby Digital Audio English 192 kbps 2.0 / 48 kHz / 192 kbps / DN -4dB / Dolby Surround
+
+8 гигов
+Видео: 1152x480p (2.40:1), 23,976 fps, H.264 ~4 490 kbps avg, 0.331 bit/pixel
+Аудио #1: 48 kHz, AC3, 3/2 (L,C,R,l,r) + LFE ch, ~448.00 kbps avg | Профессиональный (полное дублирование) [BD CEE]
+
+
+1,5 гига
+Видео: XviD build 65, 720x304 (2.37:1), 23.976 fps, ~1099 kbps avg, 0.209 bit/pixel
+Аудио: 48 kHz, MPEG Layer 3, 2 ch, ~128.00 kbps avg (Dub со вст. AVO Сербин)
+
+2,18 гига
+Видео: XviD build 65, 720x304 (2.37:1), 23.976 fps, ~1383 kbps avg, 0.263 bit/pixel
+Аудио: 48 kHz, AC3 Dolby Digital, 3/2 (L,C,R,l,r) + LFE ch, ~448 kbps avg (Dub со вст. AVO)
+
+
+4,38 гига
+Видео: 720 x 304; 23.976 fps; 1889 kbps; 0.36 bit/pixel
+Аудио: 48 kHz; 6 ch; 384.00 kbps; AC3 Dolby Digital 
+
+
+
+2 ffmpeg -i  -i свадебный\ фильм\ ольги\ и\ владимира.mov -f avi -vcodec libxvid -r 25 -acodec libmp3lame -ab 128k -s 720x304 olga_vladimir.avi
+
+
+ffmpeg -i pict0010.mov -f avi pict0010.avi
+
+
+You can use the scale filter to resize the output. 
+It has the advantage of calculating the width or height for you while preserving the aspect, so you only need to give it one dimension (this will result in 400x267):
+Code:
+
+Получается можно задать всего одну сторону.
+
+./ffmpeg -i movie1.m4v -vf scale=400:-1 movie1.avi
+
+
+
+
+For example, a 640 × 480 VGA image has a SAR of 640/480 = 4:3, and if displayed on a 4:3 display (DAR = 4:3) has square pixels, hence a PAR of 1:1.
+ By contrast, a 720 × 576 D-1 PAL image has a SAR of 720/576 = 5:4, but is displayed on a 4:3 display (DAR = 4:3).
+
+PAR - это соотношение длины и ширины пикселя
+Pixel aspect ratio 
+
+    SAR × PAR = DAR.
+
+Rearranging (solving for PAR) yields:
+
+    PAR = DAR/SAR. 
+
+[http://en.wikipedia.org/wiki/Pixel_aspect_ratio](http://en.wikipedia.org/wiki/Pixel_aspect_ratio)
+
+ffmpeg -i kino.mkv -vcodec mpeg4 -vb 500K -acodec libfaac -ar 44100 -ab 256K -ac 2 -vf «scale=320:135,pad=320:240:0:53:black,unsharp» -vol 700 -y kino.mp4
+
+Расшифровываю -vf «scale=320:135,pad=320:240:0:53:black,unsharp»
+
+scale=320:135 – указываем ПРОПОРЦИОНАЛЬНЫЕ оригинальным размерам фильма размеры выходного файла.
+pad=320:240:0:53:black – 320:240 – реальный размер экрана телефона, :0:53 – по шкале Х – сдвиг 0, по шкале Y – сдвиг 53 пикселя.
+:black,unsharp – Полосы будут черного (black) цвета. Можно добавить четкости unsharp. А можно и не добавлять. У этого фильтра тоже есть настройки. Нужно читать. 
+
+[http://habrahabr.ru/post/129461/](http://habrahabr.ru/post/129461/)
+
+[http://sexwithlinux.blogspot.ru/2011/03/ffmpeg.html](http://sexwithlinux.blogspot.ru/2011/03/ffmpeg.html)
+[http://linuxway.ru/poleznoe/konvertirovanie-multimedia-fajlov-pri-pomoshhi-ffmpeg/](http://linuxway.ru/poleznoe/konvertirovanie-multimedia-fajlov-pri-pomoshhi-ffmpeg/)
+[http://help.ubuntu.ru/wiki/ffmpeg](http://help.ubuntu.ru/wiki/ffmpeg) - хорошее руководство
+[http://uppod.ru/talk_70](http://uppod.ru/talk_70)
+[http://www.ekzorchik.ru/wordpress/2012/02/ffmpeg-examples/](http://www.ekzorchik.ru/wordpress/2012/02/ffmpeg-examples/)
+[http://habrahabr.ru/post/171213/](http://habrahabr.ru/post/171213/)
+
+
+
+
+
+
+
+ffmpeg -i свадебный\ фильм\ ольги\ и\ владимира.mov -f avi -vcodec libxvid -acodec libmp3lame -ab 128k -s 960x540 olga_vladimir.avi
+Получилось     Stream #0:0(eng): Video: mpeg4 (libxvid) (xvid / 0x64697678), yuv420p, 960x540 [SAR 1:1 DAR 16:9], q=2-31, 200 kb/s, 25 fps, 25 tbn, 25 tbc (default)
+Качество херня
+
+
+ffmpeg -threads 2 -i concat:"/home/garry/cinema/2013/2013-07-06/20130706234029.MTS|/home/garry/cinema/2013/2013-07-06/20130706234142.MTS|/home/garry/cinema/2013/2013-07-06/20130706234252.MTS|/home/garry/cinema/2013/2013-07-06/20130706234415.MTS|/home/garry/cinema/2013/2013-07-06/20130706234500.MTS|/home/garry/cinema/2013/2013-07-06/20130706234516.MTS|/home/garry/cinema/2013/2013-07-06/20130706234736.MTS|/home/garry/cinema/2013/2013-07-06/20130706235013.MTS|/home/garry/cinema/2013/2013-07-06/20130706235642.MTS" -f mkv -vcodec libxvid -acodec libmp3lame -ab 128k -s 1920x1080 first.mkv
+
+Сработал этот
+ffmpeg -threads 2 -i concat:"/home/garry/cinema/2013/2013-07-06/20130706234029.MTS|/home/garry/cinema/2013/2013-07-06/20130706234142.MTS|/home/garry/cinema/2013/2013-07-06/20130706234252.MTS|/home/garry/cinema/2013/2013-07-06/20130706234415.MTS|/home/garry/cinema/2013/2013-07-06/20130706234500.MTS|/home/garry/cinema/2013/2013-07-06/20130706234516.MTS|/home/garry/cinema/2013/2013-07-06/20130706234736.MTS|/home/garry/cinema/2013/2013-07-06/20130706235013.MTS|/home/garry/cinema/2013/2013-07-06/20130706235642.MTS" -f avi -vcodec libx264 -acodec libmp3lame -ab 128k -s 1920x1080 first.avi
+
+ffmpeg -threads 2 -i свадебный\ фильм\ ольги\ и\ владимира.mov -f mkv -vcodec libx264 -acodec libmp3lame -ab 128k -s 1920x1080 olga_vladimir.mkv
+
+
+
+
+
+Рабочая ffmpeg -threads 2 -i concat:"/home/garry/cinema/2013/2013-09-06/20130906101016.MTS|/home/garry/cinema/2013/2013-09-06/20130906103254.MTS|/home/garry/cinema/2013/2013-09-06/20130906103613.MTS|/home/garry/cinema/2013/2013-09-06/20130906103921.MTS|/home/garry/cinema/2013/2013-09-06/20130906104322.MTS|/home/garry/cinema/2013/2013-09-06/20130906104451.MTS|/home/garry/cinema/2013/2013-09-06/20130906104639.MTS|/home/garry/cinema/2013/2013-09-06/20130906105146.MTS|/home/garry/cinema/2013/2013-09-06/20130906103123.MTS|/home/garry/cinema/2013/2013-09-06/20130906103447.MTS|/home/garry/cinema/2013/2013-09-06/20130906103709.MTS|/home/garry/cinema/2013/2013-09-06/20130906104046.MTS|/home/garry/cinema/2013/2013-09-06/20130906104405.MTS|/home/garry/cinema/2013/2013-09-06/20130906104553.MTS|/home/garry/cinema/2013/2013-09-06/20130906105023.MTS" -f avi -vcodec libx264 -acodec libmp3lame -ab 128k -s 1920x1080 greece3.avi
+
+
+
+
+Последнее видео
+ ffmpeg -threads 2 -i DSCN0087.MOV -f matroska  -vcodec libx264 -acodec libmp3lame -ab 128k -s 1920x1080 DSCN0087.mkv

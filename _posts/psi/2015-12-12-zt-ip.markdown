@@ -1,0 +1,2476 @@
+---
+layout: post
+title:  "zt-ip"
+date:   2015-12-12 17:11:50 +0300
+categories: PSI
+tags: PSI
+---
+
+# zt-ip
+217.107.196.45
+
+
+/opt/rkn/foxrknserver
+
+
+
+lvcreate -L10G -s -n snaphot_test.local /dev/vmstore/test.local
+lvconvert --merge /dev/vmstore/snaphot_test.local
+
+
+whois -h whois.ripe.net AS201250
+
+inetnum:        217.107.196.0 - 217.107.199.255
+netname:        ZT-LPTSK-NET
+descr:          Zelenaya Lipetsk Network
+country:        RU
+admin-c:        LSV84-RIPE
+tech-c:         LSV84-RIPE
+status:         ASSIGNED PA
+mnt-by:         OOOSET-MNT
+mnt-domains:    MNT-LIPETSK-ZT
+mnt-lower:      MNT-LIPETSK-ZT
+mnt-routes:     MNT-LIPETSK-ZT
+created:        2014-12-05T15:21:25Z
+last-modified:  2014-12-05T15:21:25Z
+source:         RIPE
+
+person:         Sergey V Lavrinenko
+address:        Moscow, Russia
+phone:          +74956492462
+nic-hdl:        LSV84-RIPE
+mnt-by:         MNT-ICG-ZT
+created:        2014-12-02T17:25:06Z
+last-modified:  2017-12-05T08:52:04Z
+source:         RIPE # Filtered
+
+% Information related to '217.107.196.0/22AS201250'
+
+route:          217.107.196.0/22
+descr:          Lipetsk Zelenaya Tochka
+origin:         AS201250
+mnt-by:         MNT-LIPETSK-ZT
+created:        2014-12-10T15:10:15Z
+last-modified:  2014-12-10T15:10:15Z
+source:         RIPE
+
+% This query was served by the RIPE Database Query Service version 1.92.6 (ANGUS)
+
+
+
+router ospf 100
+ router-id 213.234.199.1
+ auto-cost reference-bandwidth 50000
+ redistribute connected subnets
+ passive-interface default
+ no passive-interface GigabitEthernet6/1
+ no passive-interface GigabitEthernet6/2
+ no passive-interface Vlan203
+ no passive-interface Vlan205
+ no passive-interface Vlan1111
+ network 213.234.199.0 0.0.0.63 area 0.0.0.0
+ default-information originate always
+
+
+router ospf 101
+!
+router isis
+ net 49.4800.2132.3419.9001.00
+ is-type level-1
+ advertise passive-only
+ metric-style wide
+ log-adjacency-changes
+
+
+
+
+
+
+pe38-bb.lip.7606>sh ip bgp summary 
+BGP router identifier 213.234.199.1, local AS number 64523
+BGP table version is 208010557, main routing table version 208010557
+742731 network entries using 106953264 bytes of memory
+1467533 path entries using 117402640 bytes of memory
+239981/126653 BGP path/bestpath attribute entries using 36477112 bytes of memory
+198727 BGP AS-PATH entries using 8201268 bytes of memory
+3 BGP ATTR_SET entries using 120 bytes of memory
+19822 BGP community entries using 1233588 bytes of memory
+191 BGP extended community entries using 6646 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 270274518 total bytes of memory
+2411 received paths for inbound soft reconfiguration
+BGP activity 5608772/4865685 prefixes, 33338445/31870569 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+81.20.196.249   4        20866  174339 17937816 208010482    0    0 15w5d           3
+81.211.5.245    4         3216 23122776 17567649 208010482    0    0 17w4d      727325
+83.169.199.73   4        31133 14170336  108756 208010482    0    0 4w6d       737100
+
+87.226.170.133  4        12389       0       0        1    0    0 never    Idle
+89.20.131.67    4        12714       0       0        1    0    0 never    Idle
+95.167.89.90    4        12389       0       0        1    0    0 never    Idle
+172.31.255.253  4       202778       0       0        1    0    0 3w4d     Idle
+195.239.222.41  4         3216       0       0        1    0    0 never    Idle
+
+217.107.196.1   4        64523 1313862  329590 208010558    0    0 29w4d         295
+217.107.196.3   4        64523 1265517  329574 208010558    0    0 29w4d         303
+
+217.107.196.4   4        64523       0       0        1    0    0 never    Active
+
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  5.3.82.0/24      81.211.5.245                         100 3216 9049 202778 i
+ *>  81.20.192.0/20   81.211.5.245                         100 3216 20866 i
+ *>  81.20.194.0/24   81.211.5.245                         100 3216 20866 60833 i
+ *>  81.20.195.0/24   81.211.5.245                         100 3216 20866 i
+ *>  81.20.196.0/22   81.211.5.245                         100 3216 20866 i
+ *>  81.20.200.0/22   81.211.5.245                         100 3216 20866 i
+ *>  81.20.200.0/21   81.211.5.245                         100 3216 20866 i
+ *>  81.20.204.0/22   81.211.5.245                         100 3216 20866 i
+ *>  91.190.64.0/20   81.20.196.249            0             0 20866 i
+ *>  213.59.132.0/22  0.0.0.0                  0         32768 i
+ *>  213.59.155.0     0.0.0.0                  0         32768 i
+ *>  213.59.158.0     0.0.0.0                  0         32768 i
+ *>  217.107.196.0/22 0.0.0.0                  0         32768 i
+
+
+
+
+AS 64512 – 65535   - серые AS
+
+router bgp 64523
+ bgp router-id 213.234.199.1
+ bgp always-compare-med
+ bgp log-neighbor-changes
+ bgp confederation identifier 201250
+ bgp confederation peers 8402 201250 
+ bgp deterministic-med
+ neighbor 81.20.196.249 remote-as 20866
+ neighbor 81.20.196.249 description PSI
+ neighbor 81.211.5.245 remote-as 3216
+ neighbor 81.211.5.245 description BeelineBGP
+ neighbor 83.169.199.73 remote-as 31133
+ neighbor 83.169.199.73 description MEGAFON
+ neighbor 217.107.196.1 remote-as 64523
+ neighbor 217.107.196.3 remote-as 64523
+ neighbor 217.107.196.4 remote-as 64523
+!
+
+ address-family ipv4
+  network 213.59.132.0 mask 255.255.252.0
+  network 213.59.155.0
+  network 213.59.158.0
+  network 213.234.199.1 mask 255.255.255.255 route-map LIP-LOOPBACK
+  network 217.107.196.0 mask 255.255.252.0
+  aggregate-address 95.31.247.0 255.255.255.0 summary-only attribute-map AGGREGATE-TO-BGP
+  aggregate-address 89.179.102.0 255.255.255.0 summary-only attribute-map AGGREGATE-TO-BGP
+  aggregate-address 89.179.100.0 255.255.255.0 summary-only attribute-map AGGREGATE-TO-BGP
+  redistribute static route-map STATIC-TO-BGP
+  redistribute connected
+ 
+  neighbor 81.20.196.249 activate
+  neighbor 81.20.196.249 soft-reconfiguration inbound
+  neighbor 81.211.5.245 activate
+  neighbor 81.211.5.245 send-community both
+  neighbor 81.211.5.245 weight 100
+  neighbor 81.211.5.245 route-map ToBeeline out
+  neighbor 83.169.199.73 activate
+  neighbor 83.169.199.73 send-community
+  neighbor 83.169.199.73 weight 100
+  neighbor 83.169.199.73 prefix-list Megafon-out out
+  neighbor 83.169.199.73 route-map ToMegafon out
+
+  neighbor 217.107.196.1 activate
+    neighbor 217.107.196.1 soft-reconfiguration inbound
+  neighbor 217.107.196.1 prefix-list FOX-BRAS-REAL-IPS in
+  neighbor 217.107.196.1 prefix-list FOX-BRAS-REAL-IPS out
+    neighbor 217.107.196.3 activate
+  neighbor 217.107.196.3 soft-reconfiguration inbound
+  neighbor 217.107.196.3 prefix-list FOX-BRAS-REAL-IPS in
+  neighbor 217.107.196.3 prefix-list FOX-BRAS-REAL-IPS out
+    neighbor 217.107.196.4 activate
+  neighbor 217.107.196.4 soft-reconfiguration inbound
+  neighbor 217.107.196.4 prefix-list FOX-BRAS-REAL-IPS in
+  neighbor 217.107.196.4 prefix-list FOX-BRAS-REAL-IPS out
+ exit-address-family
+ !
+ address-family ipv4 multicast
+  neighbor IBGP-PEER-RR send-community both
+  neighbor IBGP-PEER-RR route-reflector-client
+  neighbor IBGP-PEER-RR next-hop-self
+  neighbor IBGP-PEER-CL send-community both
+  neighbor IBGP-PEER-CL next-hop-self
+  neighbor IBGP-PEER-CL soft-reconfiguration inbound
+  neighbor IBGP-PEER-CL route-map IBGP-PEER-CL out
+  neighbor 89.20.131.67 activate
+  neighbor 195.239.222.41 activate
+ exit-address-family
+!
+ip forward-protocol nd
+
+
+
+ip bgp-community new-format
+ip community-list standard IPTV-LIP permit 8402:11391
+ip community-list expanded LIP-AGGREGATE permit 8402:1133
+ip community-list expanded MPLS-LOOPBACK permit 8402:1007
+ip community-list expanded LIP-SELF-ORIG permit 8402:1130
+ip community-list expanded LIP-PEER permit 8402:1131
+ip community-list expanded LIP-CUST permit 8402:1132
+ip community-list expanded LIP-PRIVATE permit 8402:1139
+ip community-list expanded LIP-LOOPBACK permit 8402:1137
+no ip http server
+no ip http secure-server
+
+ip pim rp-address 213.234.199.1 override
+ip pim send-rp-discovery scope 100
+ip msdp peer 195.239.252.162
+ip msdp peer 194.67.0.95
+ip msdp peer 194.67.0.229
+ip msdp peer 79.104.32.40 connect-source Vlan1101
+ip msdp peer 89.20.131.67
+ip msdp cache-sa-state
+ip msdp rpf rfc3618
+
+
+
+ip route 0.0.0.0 0.0.0.0 83.169.199.73
+ip route 10.42.0.0 255.255.255.0 10.251.0.1
+ip route 10.69.108.2 255.255.255.255 217.107.196.60
+ip route 10.69.108.3 255.255.255.255 217.107.196.49
+ip route 10.69.110.110 255.255.255.255 217.107.196.25
+ip route 10.69.110.240 255.255.255.255 217.107.196.1
+ip route 10.69.110.241 255.255.255.255 217.107.196.3
+ip route 10.69.110.242 255.255.255.255 217.107.196.10
+ip route 10.69.110.243 255.255.255.255 217.107.196.3
+ip route 10.69.110.244 255.255.255.255 217.107.196.4
+ip route 10.69.110.246 255.255.255.255 217.107.196.1
+ip route 10.69.110.249 255.255.255.255 217.107.196.9
+ip route 10.148.0.0 255.255.255.240 172.31.255.218
+ip route 10.148.0.32 255.255.255.224 172.31.255.218
+ip route 10.148.2.0 255.255.254.0 172.31.255.218
+ip route 10.210.0.0 255.255.252.0 Tunnel3
+ip route 10.210.3.254 255.255.255.255 217.107.196.48
+ip route 10.255.101.112 255.255.255.240 172.31.255.228
+ip route 52.0.252.0 255.255.252.0 83.169.199.73
+ip route 52.6.195.0 255.255.255.0 83.169.199.73
+ip route 52.6.223.0 255.255.255.0 83.169.199.73
+ip route 54.84.153.0 255.255.255.0 83.169.199.73
+ip route 64.233.160.0 255.255.224.0 83.169.199.73
+ip route 64.233.162.0 255.255.255.0 83.169.199.73
+ip route 78.107.152.0 255.255.255.0 172.31.255.228
+ip route 78.107.161.0 255.255.255.0 172.31.255.228
+ip route 78.107.168.0 255.255.255.0 172.31.255.228
+ip route 78.107.196.0 255.255.252.0 172.31.255.228
+ip route 78.107.230.238 255.255.255.255 78.107.230.226
+ip route 78.140.251.0 255.255.255.0 83.169.199.73
+ip route 79.104.32.40 255.255.255.255 195.239.222.41
+ip route 85.21.78.93 255.255.255.255 172.31.255.228
+ip route 85.21.79.0 255.255.255.0 172.31.255.228
+ip route 85.21.192.0 255.255.255.0 172.31.255.228
+ip route 89.20.157.48 255.255.255.248 89.20.131.67
+ip route 89.20.157.54 255.255.255.255 89.20.131.67
+ip route 89.20.157.56 255.255.255.248 89.20.131.67
+ip route 95.167.89.90 255.255.255.255 87.226.170.133
+ip route 159.65.119.101 255.255.255.255 Null0
+ip route 159.89.16.93 255.255.255.255 Null0
+ip route 172.28.0.0 255.255.224.0 217.107.196.1
+ip route 172.28.0.0 255.255.255.0 172.31.255.218
+ip route 172.28.48.0 255.255.240.0 217.107.196.9
+ip route 172.28.64.0 255.255.240.0 217.107.196.3
+ip route 172.28.84.0 255.255.252.0 217.107.196.4
+ip route 173.194.0.0 255.255.0.0 83.169.199.73
+ip route 173.194.71.0 255.255.255.0 83.169.199.73
+ip route 173.194.222.0 255.255.255.0 83.169.199.73
+ip route 188.125.93.100 255.255.255.255 83.169.199.73
+ip route 192.168.117.0 255.255.255.0 172.31.255.218
+ip route 192.168.118.0 255.255.255.0 172.31.255.218
+ip route 192.168.120.0 255.255.255.0 172.31.255.218
+ip route 192.168.121.2 255.255.255.255 172.31.255.218
+ip route 192.168.122.0 255.255.254.0 172.31.255.218
+ip route 192.168.124.0 255.255.252.0 172.31.255.218
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pe38-bb.lip.7606>sh ip ospf topology-info 
+
+            OSPF Router with ID (217.107.196.97) (Process ID 101)
+
+
+                Base Topology (MTID 0)
+
+ Topology priority is 64
+ Router is not originating router-LSAs with maximum metric
+ Number of areas transit capable is 0
+ Initial SPF schedule delay 5000 msecs
+ Minimum hold time between two consecutive SPFs 10000 msecs
+ Maximum wait time between two consecutive SPFs 10000 msecs
+
+            OSPF Router with ID (213.234.199.1) (Process ID 100)
+
+
+                Base Topology (MTID 0)
+
+ Topology priority is 64
+ Redistributing External Routes from,
+    connected, includes subnets in redistribution
+ Router is not originating router-LSAs with maximum metric
+ Number of areas transit capable is 0
+ Initial SPF schedule delay 5000 msecs
+ Minimum hold time between two consecutive SPFs 10000 msecs
+ Maximum wait time between two consecutive SPFs 10000 msecs
+    Area BACKBONE(0.0.0.0)
+        SPF algorithm last executed 1d15h ago
+        SPF algorithm executed 12501 times
+        Area ranges are
+
+
+
+S*    0.0.0.0/0 [1/0] via 83.169.199.73
+
+
+pe38-bb.lip.7606>sh ip ospf neighbor 
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+172.31.255.222    1   FULL/DR         00:00:38    172.31.255.222  Vlan1111
+10.39.3.48        1   FULL/DR         00:00:36    10.69.109.246   Vlan205
+10.39.3.49        1   FULL/BDR        00:00:37    10.69.109.250   Vlan203
+
+
+Loopback100 is up, line protocol is up 
+  Internet Address 213.234.199.1/32, Area 0.0.0.0, Attached via Network Statement
+  Process ID 100, Router ID 213.234.199.1, Network Type LOOPBACK, Cost: 1
+  Topology-MTID    Cost    Disabled    Shutdown      Topology Name
+        0           1         no          no            Base
+  Loopback interface is treated as a stub Host
+Vlan1111 is up, line protocol is up 
+  Internet Address 172.31.255.221/30, Area 0.0.0.0, Attached via Interface Enable
+  Process ID 100, Router ID 213.234.199.1, Network Type BROADCAST, Cost: 50
+  Topology-MTID    Cost    Disabled    Shutdown      Topology Name
+        0           50        no          no            Base
+  Enabled by interface config, including secondary ip addresses
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 172.31.255.222, Interface address 172.31.255.222
+  Backup Designated router (ID) 213.234.199.1, Interface address 172.31.255.221
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    oob-resync timeout 40
+    Hello due in 00:00:04
+  Supports Link-local Signaling (LLS)
+  Cisco NSF helper support enabled
+  IETF NSF helper support enabled
+  Can be protected by per-prefix Loop-Free FastReroute
+  Can be used for per-prefix Loop-Free FastReroute repair paths
+  Index 4/4, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 44
+  Last flood scan time is 0 msec, maximum is 4 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1 
+    Adjacent with neighbor 172.31.255.222  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Vlan205 is up, line protocol is up 
+  Internet Address 10.69.109.245/30, Area 0.0.0.0, Attached via Interface Enable
+  Process ID 100, Router ID 213.234.199.1, Network Type BROADCAST, Cost: 50
+  Topology-MTID    Cost    Disabled    Shutdown      Topology Name
+        0           50        no          no            Base
+  Enabled by interface config, including secondary ip addresses
+  Transmit Delay is 1 sec, State BDR, Priority 1
+  Designated Router (ID) 10.39.3.48, Interface address 10.69.109.246
+  Backup Designated router (ID) 213.234.199.1, Interface address 10.69.109.245
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 10
+    oob-resync timeout 40
+    Hello due in 00:00:07
+  Supports Link-local Signaling (LLS)
+  Cisco NSF helper support enabled
+  IETF NSF helper support enabled
+  Can be protected by per-prefix Loop-Free FastReroute
+  Can be used for per-prefix Loop-Free FastReroute repair paths
+  Index 3/3, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 44
+  Last flood scan time is 0 msec, maximum is 4 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1 
+    Adjacent with neighbor 10.39.3.48  (Designated Router)
+  Suppress hello for 0 neighbor(s)
+Vlan204 is up, line protocol is up 
+  Internet Address 10.69.109.253/30, Area 0.0.0.0, Attached via Interface Enable
+  Process ID 100, Router ID 213.234.199.1, Network Type BROADCAST, Cost: 50
+  Topology-MTID    Cost    Disabled    Shutdown      Topology Name
+        0           50        no          no            Base
+  Enabled by interface config, including secondary ip addresses
+  Transmit Delay is 1 sec, State DR, Priority 1
+  Designated Router (ID) 213.234.199.1, Interface address 10.69.109.253
+  No backup designated router on this network
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 10
+    oob-resync timeout 40
+    No Hellos (Passive interface) 
+  Supports Link-local Signaling (LLS)
+  Cisco NSF helper support enabled
+  IETF NSF helper support enabled
+  Can be protected by per-prefix Loop-Free FastReroute
+  Can be used for per-prefix Loop-Free FastReroute repair paths
+  Index 2/2, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 0, maximum is 0
+  Last flood scan time is 0 msec, maximum is 0 msec
+  Neighbor Count is 0, Adjacent neighbor count is 0 
+  Suppress hello for 0 neighbor(s)
+Vlan203 is up, line protocol is up 
+  Internet Address 10.69.109.249/30, Area 0.0.0.0, Attached via Interface Enable
+  Process ID 100, Router ID 213.234.199.1, Network Type BROADCAST, Cost: 50
+  Topology-MTID    Cost    Disabled    Shutdown      Topology Name
+        0           50        no          no            Base
+  Enabled by interface config, including secondary ip addresses
+  Transmit Delay is 1 sec, State DR, Priority 1
+  Designated Router (ID) 213.234.199.1, Interface address 10.69.109.249
+  Backup Designated router (ID) 10.39.3.49, Interface address 10.69.109.250
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 10
+    oob-resync timeout 40
+    Hello due in 00:00:03
+  Supports Link-local Signaling (LLS)
+  Cisco NSF helper support enabled
+  IETF NSF helper support enabled
+  Can be protected by per-prefix Loop-Free FastReroute
+  Can be used for per-prefix Loop-Free FastReroute repair paths
+  Index 1/1, flood queue length 0
+  Next 0x0(0)/0x0(0)
+  Last flood scan length is 1, maximum is 44
+  Last flood scan time is 0 msec, maximum is 4 msec
+  Neighbor Count is 1, Adjacent neighbor count is 1 
+    Adjacent with neighbor 10.39.3.49  (Backup Designated Router)
+  Suppress hello for 0 neighbor(s)
+
+
+
+
+
+O E2     10.145.111.128/26 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.128.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.129.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.145.130.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.145.131.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.145.132.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.145.133.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.134.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.145.135.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.144.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.145.0/24 [110/20] via 10.69.109.250, 2d05h, Vlan203
+O E2     10.145.146.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.147.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.148.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.149.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.150.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.145.151.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.145.152.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.145.153.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.145.160.0/24 [110/20] via 10.69.109.250, 2d00h, Vlan203
+O E2     10.145.161.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.145.162.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.163.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.145.164.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.165.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.166.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.167.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.168.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.169.0/24 [110/20] via 10.69.109.250, 3w3d, Vlan203
+O E2     10.145.170.0/24 [110/20] via 10.69.109.250, 1d05h, Vlan203
+O E2     10.145.176.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.177.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.178.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.179.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.180.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.181.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.182.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.183.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.184.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.185.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.192.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.193.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.194.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.195.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.196.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.197.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.198.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.145.199.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.145.200.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.202.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.145.224.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.225.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.226.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.227.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.229.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.230.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.231.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 6w1d, Vlan205
+O E2     10.145.232.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.145.233.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.0.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.1.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.2.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.3.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.4.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.14.0/23 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                        [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.162.16.0/23 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                        [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.162.18.0/23 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                        [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.162.33.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.34.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.35.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.36.0/24 [110/20] via 10.69.109.246, 5w0d, Vlan205
+O E2     10.162.37.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.38.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.162.39.0/24 [110/20] via 10.69.109.246, 5w0d, Vlan205
+O E2     10.162.41.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.58.0/24 [110/20] via 10.69.109.250, 6d04h, Vlan203
+O E2     10.169.59.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.60.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.61.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.62.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.63.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.64.0/24 [110/20] via 10.69.109.250, 1w5d, Vlan203
+O E2     10.169.65.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.66.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.67.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.68.0/24 [110/20] via 10.69.109.250, 5w0d, Vlan203
+O E2     10.169.70.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.71.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.72.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.73.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.74.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.75.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.76.0/24 [110/20] via 10.69.109.250, 1w5d, Vlan203
+O E2     10.169.77.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.78.0/24 [110/20] via 10.69.109.250, 1w5d, Vlan203
+O E2     10.169.79.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.80.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.81.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.82.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.83.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.84.0/24 [110/20] via 10.69.109.250, 1w0d, Vlan203
+O E2     10.169.85.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.86.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.87.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.88.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.89.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.169.90.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.91.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.112.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.113.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.114.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.115.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.116.0/24 [110/20] via 10.69.109.246, 1w6d, Vlan205
+O E2     10.169.117.0/24 [110/20] via 10.69.109.246, 1w6d, Vlan205
+O E2     10.169.118.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.119.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.120.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.128.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.129.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.130.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.131.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.132.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.133.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.134.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.135.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.136.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.144.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.145.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.146.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.147.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.148.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.149.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.150.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.151.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.152.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.153.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.160.0/24 [110/20] via 10.69.109.250, 6w1d, Vlan203
+O E2     10.169.161.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.162.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.163.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.164.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.165.0/24 [110/20] via 10.69.109.250, 1w6d, Vlan203
+O E2     10.169.166.0/24 [110/20] via 10.69.109.250, 1w6d, Vlan203
+O E2     10.169.167.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.168.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.176.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.177.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.178.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.179.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.180.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.181.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.182.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.183.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.184.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.192.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.193.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.194.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.195.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.196.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.197.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.198.0/24 [110/20] via 10.69.109.250, 6w5d, Vlan203
+                         [110/20] via 10.69.109.246, 6w5d, Vlan205
+O E2     10.169.199.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.200.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.201.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.169.202.0/24 [110/20] via 10.69.109.250, 6w5d, Vlan203
+                         [110/20] via 10.69.109.246, 6w5d, Vlan205
+O E2     10.169.208.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.209.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.210.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.211.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.212.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.213.0/24 [110/20] via 10.69.109.250, 6w0d, Vlan203
+O E2     10.169.214.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.215.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.224.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.225.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.226.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.227.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.228.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.229.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.230.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.231.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.232.0/24 [110/20] via 10.69.109.250, 1d16h, Vlan203
+O E2     10.169.233.0/24 [110/20] via 10.69.109.250, 1d16h, Vlan203
+O E2     10.169.240.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.241.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.242.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.243.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.244.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.245.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.246.0/24 [110/20] via 10.69.109.250, 2w6d, Vlan203
+O E2     10.169.247.0/24 [110/20] via 10.69.109.250, 3w3d, Vlan203
+O E2     10.169.248.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.169.249.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.0.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.1.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.2.0/24 [110/20] via 10.69.109.246, 2w3d, Vlan205
+O E2     10.194.3.0/24 [110/20] via 10.69.109.246, 2w3d, Vlan205
+O E2     10.194.4.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.5.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.6.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.7.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.8.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.10.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.16.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.17.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.18.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.19.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.20.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.22.0/24 [110/20] via 10.69.109.250, 3w4d, Vlan203
+O E2     10.194.23.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.24.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.25.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.32.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.33.0/24 [110/20] via 10.69.109.250, 3w4d, Vlan203
+                        [110/20] via 10.69.109.246, 3w4d, Vlan205
+O E2     10.194.34.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.35.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.36.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.37.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.38.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.39.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.40.0/24 [110/20] via 10.69.109.250, 2w6d, Vlan203
+                        [110/20] via 10.69.109.246, 2w6d, Vlan205
+O E2     10.194.48.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.49.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.50.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.51.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.53.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.54.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.55.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.56.0/24 [110/20] via 10.69.109.250, 6w1d, Vlan203
+O E2     10.194.57.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.58.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.64.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.65.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.66.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.67.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.68.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.69.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.70.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.71.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.72.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.80.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.81.0/24 [110/20] via 10.69.109.246, 1d16h, Vlan205
+O E2     10.194.82.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.83.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.84.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.85.0/24 [110/20] via 10.69.109.246, 2w0d, Vlan205
+O E2     10.194.86.0/24 [110/20] via 10.69.109.246, 6w6d, Vlan205
+O E2     10.194.87.0/24 [110/20] via 10.69.109.246, 1w1d, Vlan205
+O E2     10.194.88.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.89.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.90.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.96.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.97.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.98.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.99.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.100.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.101.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.102.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.103.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.104.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.105.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.106.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.112.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.113.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.114.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.115.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.116.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.117.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.118.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.119.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.120.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.128.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.129.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.130.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.131.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.132.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.133.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.134.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.135.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.136.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.137.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.144.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.145.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.146.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.147.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.148.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.149.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.150.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.151.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.152.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.153.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.194.160.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.161.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.162.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.163.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.164.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.165.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.166.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.167.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.168.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.176.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.177.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.178.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.179.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.180.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.181.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.182.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.183.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.184.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.192.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.193.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.194.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.195.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.197.0/24 [110/20] via 10.69.109.250, 6d15h, Vlan203
+O E2     10.194.198.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.199.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.200.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.201.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.194.208.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.209.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.210.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.211.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.212.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.213.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.214.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.215.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.216.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.194.224.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.225.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.226.0/24 [110/20] via 10.69.109.250, 4d17h, Vlan203
+O E2     10.194.227.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.228.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.229.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.231.0/24 [110/20] via 10.69.109.250, 4d17h, Vlan203
+O E2     10.194.232.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.194.240.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.241.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.242.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.243.0/24 [110/20] via 10.69.109.246, 3w5d, Vlan205
+O E2     10.194.244.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.245.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.246.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.247.0/24 [110/20] via 10.69.109.246, 3w5d, Vlan205
+O E2     10.194.248.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.194.249.0/24 [110/20] via 10.69.109.246, 3w5d, Vlan205
+O E2     10.194.251.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.0.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.1.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.2.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.3.0/24 [110/20] via 10.69.109.246, 5w0d, Vlan205
+O E2     10.200.4.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.5.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.6.0/24 [110/20] via 10.69.109.246, 5w0d, Vlan205
+O E2     10.200.11.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.12.0/24 [110/20] via 10.69.109.246, 1w6d, Vlan205
+O E2     10.200.13.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.14.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.15.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.16.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.17.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.18.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.19.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.22.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.23.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.24.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.25.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.26.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.27.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.28.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.29.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.30.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.31.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.32.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.33.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.34.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.35.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.36.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.37.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.38.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.40.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.54.0/24 [110/20] via 10.69.109.250, 6w1d, Vlan203
+O E2     10.200.55.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.56.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.57.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.58.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.59.0/24 [110/20] via 10.69.109.250, 1w6d, Vlan203
+O E2     10.200.60.0/24 [110/20] via 10.69.109.250, 1w6d, Vlan203
+O E2     10.200.61.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.62.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.65.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.66.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.67.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.68.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.69.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.70.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.71.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.72.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.73.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.76.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.77.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.78.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.79.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.80.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.81.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.82.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.83.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.84.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.87.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.88.0/24 [110/20] via 10.69.109.246, 1d16h, Vlan205
+O E2     10.200.89.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.90.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.91.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.92.0/24 [110/20] via 10.69.109.246, 2w0d, Vlan205
+O E2     10.200.93.0/24 [110/20] via 10.69.109.246, 6w6d, Vlan205
+O E2     10.200.94.0/24 [110/20] via 10.69.109.246, 1w1d, Vlan205
+O E2     10.200.95.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.96.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.97.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.98.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.99.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.100.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.101.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.102.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.103.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.104.0/24 [110/20] via 10.69.109.250, 6w5d, Vlan203
+                         [110/20] via 10.69.109.246, 6w5d, Vlan205
+O E2     10.200.105.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.106.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.107.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.108.0/24 [110/20] via 10.69.109.250, 6w5d, Vlan203
+                         [110/20] via 10.69.109.246, 6w5d, Vlan205
+O E2     10.200.109.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.110.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.111.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.112.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.113.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.114.0/24 [110/20] via 10.69.109.250, 6w0d, Vlan203
+O E2     10.200.115.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.116.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.120.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.121.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.122.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.123.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.124.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.125.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.126.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.127.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.128.0/24 [110/20] via 10.69.109.250, 1d16h, Vlan203
+O E2     10.200.129.0/24 [110/20] via 10.69.109.250, 1d16h, Vlan203
+O E2     10.200.131.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.132.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.133.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.134.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.135.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.136.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.137.0/24 [110/20] via 10.69.109.250, 2w6d, Vlan203
+O E2     10.200.138.0/24 [110/20] via 10.69.109.250, 3w3d, Vlan203
+O E2     10.200.139.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.142.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.143.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.144.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.145.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.146.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.148.0/24 [110/20] via 10.69.109.250, 3w4d, Vlan203
+O E2     10.200.149.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.150.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.151.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.153.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.154.0/24 [110/20] via 10.69.109.250, 3w4d, Vlan203
+                         [110/20] via 10.69.109.246, 3w4d, Vlan205
+O E2     10.200.155.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.156.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.157.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.158.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.159.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.160.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.161.0/24 [110/20] via 10.69.109.250, 2w6d, Vlan203
+                         [110/20] via 10.69.109.246, 2w6d, Vlan205
+O E2     10.200.164.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.165.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.166.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.167.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.169.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.170.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.171.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.172.0/24 [110/20] via 10.69.109.250, 6w1d, Vlan203
+O E2     10.200.173.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.174.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.200.175.0/24 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.176.0/24 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.177.0/24 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.178.0/24 [110/290] via 10.69.109.246, 4w6d, Vlan205
+O E2     10.200.179.0/24 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.180.0/24 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.181.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.182.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.183.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.184.0/24 [110/20] via 10.69.109.246, 3w5d, Vlan205
+O E2     10.200.185.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.186.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.187.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.188.0/24 [110/20] via 10.69.109.246, 3w5d, Vlan205
+O E2     10.200.189.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.190.0/24 [110/20] via 10.69.109.246, 3w5d, Vlan205
+O E2     10.200.192.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.193.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.194.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.195.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.196.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.197.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.198.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.199.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.200.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.201.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.202.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.200.203.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.204.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.205.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.206.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.207.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.208.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.209.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.210.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.211.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.214.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.215.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.216.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.217.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.218.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.219.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.220.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.221.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.222.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.200.225.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.226.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.227.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.228.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.229.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.230.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.231.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.232.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.233.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.236.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.237.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.238.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.239.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.241.0/24 [110/20] via 10.69.109.250, 6d15h, Vlan203
+O E2     10.200.242.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.243.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.244.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.245.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.200.247.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.248.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.249.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.250.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.251.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.252.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.253.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.254.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.200.255.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.201.2.0/24 [110/20] via 10.69.109.250, 4d17h, Vlan203
+O E2     10.201.3.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.4.0/24 [110/20] via 10.69.109.250, 4d17h, Vlan203
+O E2     10.201.5.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.6.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.7.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.9.0/24 [110/20] via 10.69.109.250, 4d17h, Vlan203
+O E2     10.201.10.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.13.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.14.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.15.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.17.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.18.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.19.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 6w1d, Vlan205
+O E2     10.201.20.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.21.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.24.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.25.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.26.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.27.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.35.0/24 [110/20] via 10.69.109.250, 6w6d, Vlan203
+O E2     10.201.36.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.37.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.38.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.39.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.40.0/24 [110/20] via 10.69.109.250, 6w6d, Vlan203
+O E2     10.201.41.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.46.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.47.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.48.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.49.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.50.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.51.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.52.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.53.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.57.0/24 [110/20] via 10.69.109.246, 3w2d, Vlan205
+O E2     10.201.58.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.59.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.60.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.61.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.62.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.63.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.64.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.65.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.66.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.67.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.68.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.201.69.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.70.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.201.71.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.72.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.73.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.74.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.75.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.76.0/24 [110/20] via 10.69.109.250, 3w3d, Vlan203
+O E2     10.201.79.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.80.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.81.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.82.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.83.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.84.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.85.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.201.86.0/24 [110/20] via 10.69.109.250, 3w2d, Vlan203
+O E2     10.201.87.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.89.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.90.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.91.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.92.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.93.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.94.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.95.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.96.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.97.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.98.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.99.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.100.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.201.101.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.102.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.103.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.104.0/24 [110/20] via 10.69.109.246, 2w5d, Vlan205
+O E2     10.201.105.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.106.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.107.0/24 [110/20] via 10.69.109.246, 2w5d, Vlan205
+O E2     10.201.108.0/24 [110/20] via 10.69.109.246, 2w5d, Vlan205
+O E2     10.201.109.0/24 [110/20] via 10.69.109.246, 2w5d, Vlan205
+O E2     10.201.110.0/24 [110/20] via 10.69.109.246, 2w5d, Vlan205
+O E2     10.201.111.0/24 [110/20] via 10.69.109.246, 14:39:37, Vlan205
+O E2     10.201.112.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.113.0/24 [110/20] via 10.69.109.246, 14:39:38, Vlan205
+O E2     10.201.114.0/24 [110/20] via 10.69.109.246, 1w2d, Vlan205
+O E2     10.201.115.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.116.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.117.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.118.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.119.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.120.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.121.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.122.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.124.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.126.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.127.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.201.128.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.129.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.130.0/24 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.201.131.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.132.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.133.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.137.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.138.0/24 [110/20] via 10.69.109.250, 2d05h, Vlan203
+O E2     10.201.139.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.140.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.141.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.142.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.143.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.144.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.145.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.201.146.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.147.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                         [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.201.148.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                         [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.201.149.0/24 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                         [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.201.150.0/24 [110/20] via 10.69.109.246, 5w3d, Vlan205
+O E2     10.201.151.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.152.0/24 [110/20] via 10.69.109.246, 4w4d, Vlan205
+O E2     10.201.153.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.154.0/24 [110/20] via 10.69.109.246, 5w3d, Vlan205
+O E2     10.201.155.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.156.0/24 [110/20] via 10.69.109.246, 5w3d, Vlan205
+O E2     10.201.157.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.158.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.159.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.160.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.161.0/24 [110/20] via 10.69.109.246, 4w4d, Vlan205
+O E2     10.201.162.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.163.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.165.0/24 [110/20] via 10.69.109.246, 4w5d, Vlan205
+O E2     10.201.166.0/24 [110/20] via 10.69.109.246, 5w5d, Vlan205
+O E2     10.201.167.0/24 [110/20] via 10.69.109.246, 5w5d, Vlan205
+O E2     10.201.168.0/24 [110/20] via 10.69.109.246, 5w5d, Vlan205
+O E2     10.201.169.0/24 [110/20] via 10.69.109.246, 5w5d, Vlan205
+O E2     10.201.170.0/24 [110/20] via 10.69.109.246, 5w5d, Vlan205
+O E2     10.201.171.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.172.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.173.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.174.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.175.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.176.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.177.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.178.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.179.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.180.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.181.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.182.0/24 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.201.183.0/24 [110/20] via 10.69.109.250, 2d00h, Vlan203
+O E2     10.201.184.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+                         [110/20] via 10.69.109.246, 4w4d, Vlan205
+O E2     10.201.185.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.186.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.188.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.201.189.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.193.0/24 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.201.194.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.201.203.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.211.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.216.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.220.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.221.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.222.0/24 [110/20] via 10.69.109.246, 1w6d, Vlan205
+O E2     10.201.223.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.224.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.240.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.241.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.242.0/24 [110/20] via 10.69.109.246, 1w6d, Vlan205
+O E2     10.201.243.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.244.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.246.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.247.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.248.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.249.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.250.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.251.0/24 [110/20] via 10.69.109.246, 3w2d, Vlan205
+O E2     10.201.252.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.253.0/24 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.201.254.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.201.255.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.0.0/20 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.16.0/20 [110/20] via 10.69.109.250, 4w2d, Vlan203
+                        [110/20] via 10.69.109.246, 4w4d, Vlan205
+O E2     10.202.32.0/23 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.202.34.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.202.35.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.36.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.202.37.0/24 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     10.202.38.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.39.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.40.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.41.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.202.42.0/24 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.0.0/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.32/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.64/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.96/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.128/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.160/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.192/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.0.224/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.1.0/27 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     10.204.1.96/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.1.128/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.1.160/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.1.192/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.2.0/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.2.32/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.2.64/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.2.96/27 [110/20] via 10.69.109.250, 6w1d, Vlan203
+O E2     10.204.2.128/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.2.160/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.2.192/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.2.224/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.3.0/27 [110/20] via 10.69.109.246, 2w3d, Vlan205
+O E2     10.204.3.32/27 [110/20] via 10.69.109.246, 2w3d, Vlan205
+O E2     10.204.3.64/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.3.96/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.3.128/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.3.160/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.3.192/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.4.32/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.4.64/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.4.96/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.5.128/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.5.160/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.5.192/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.5.224/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.0/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.32/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.64/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.96/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.128/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.160/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.6.192/27 [110/20] via 10.69.109.246, 5w4d, Vlan205
+O E2     10.204.7.0/27 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.7.32/27 [110/290] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.7.64/27 [110/290] via 10.69.109.246, 4w6d, Vlan205
+O E2     10.204.8.128/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.10.64/27 [110/20] via 10.69.109.250, 1w6d, Vlan203
+O E2     10.204.12.96/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.12.128/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.12.160/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.12.192/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.12.224/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.13.0/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.13.32/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.13.64/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.13.128/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.13.192/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.13.224/27 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.204.14.0/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.14.32/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.14.64/27 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     10.204.14.96/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.14.128/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.14.160/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.15.32/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.15.64/27 [110/20] via 10.69.109.250, 2d05h, Vlan203
+O E2     10.204.15.96/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.15.128/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.15.160/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.15.192/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.15.224/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.16.0/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.16.32/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+O E2     10.204.16.64/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     10.204.19.128/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.20.224/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.23.32/27 [110/20] via 10.69.109.246, 14:39:37, Vlan205
+O E2     10.204.23.128/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.23.160/27 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.25.192/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.27.128/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                          [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.204.27.160/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                          [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.204.27.192/27 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                          [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     10.204.28.224/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                          [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.0/27 [110/20] via 10.69.109.250, 3w4d, Vlan203
+                        [110/20] via 10.69.109.246, 3w4d, Vlan205
+O E2     10.204.29.32/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.64/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.96/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                         [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.128/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                          [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.160/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                          [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.192/27 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                          [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     10.204.29.224/27 [110/20] via 10.69.109.250, 2w6d, Vlan203
+                          [110/20] via 10.69.109.246, 2w6d, Vlan205
+O E2     10.204.30.64/27 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.204.30.96/27 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.204.30.128/27 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.204.30.160/27 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.204.30.192/27 [110/20] via 10.69.109.246, 3w2d, Vlan205
+O E2     10.204.30.224/27 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.204.31.0/27 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     10.204.32.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.33.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.34.0/24 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     10.204.255.0/30 [110/20] via 10.69.109.250, 7w0d, Vlan203
+      172.31.0.0/16 is variably subnetted, 13 subnets, 3 masks
+O E2     172.31.255.16/30 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2  192.168.151.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.152.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.153.0/24 [110/20] via 172.31.255.222, 6w0d, Vlan1111
+O E2  192.168.154.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.155.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.156.0/24 [110/20] via 172.31.255.222, 6w0d, Vlan1111
+O E2  192.168.157.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.158.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.159.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.160.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.161.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.162.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.163.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.164.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.165.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+O E2  192.168.166.0/24 [110/20] via 172.31.255.222, 7w0d, Vlan1111
+      213.59.132.0/24 is variably subnetted, 9 subnets, 2 masks
+O E2     213.59.132.32/28 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.132.96/28 [110/20] via 10.69.109.250, 1d04h, Vlan203
+O E2     213.59.132.128/27 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     213.59.132.160/28 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.132.176/28 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.132.192/28 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     213.59.132.208/28 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.132.224/28 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.132.240/28 [110/20] via 10.69.109.250, 7w0d, Vlan203
+      213.59.133.0/28 is subnetted, 15 subnets
+O E2     213.59.133.0 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.133.16 [110/20] via 10.69.109.250, 4w2d, Vlan203
+                       [110/20] via 10.69.109.246, 4w4d, Vlan205
+O E2     213.59.133.32 [110/20] via 10.69.109.246, 2d11h, Vlan205
+O E2     213.59.133.48 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.64 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                       [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.80 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                       [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.96 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.112 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.128 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.144 [110/20] via 10.69.109.250, 7w0d, Vlan203
+                        [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.160 [110/20] via 10.69.109.250, 6w6d, Vlan203
+O E2     213.59.133.176 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.133.208 [110/20] via 10.69.109.250, 3w4d, Vlan203
+                        [110/20] via 10.69.109.246, 3w4d, Vlan205
+O E2     213.59.133.224 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     213.59.133.240 [110/20] via 10.69.109.250, 7w0d, Vlan203
+      213.59.134.0/28 is subnetted, 14 subnets
+O E2     213.59.134.0 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.134.16 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     213.59.134.32 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.134.48 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.134.64 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.134.80 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.134.96 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.134.112 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     213.59.134.128 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     213.59.134.144 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     213.59.134.160 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.134.176 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.134.224 [110/20] via 10.69.109.250, 4w2d, Vlan203
+O E2     213.59.134.240 [110/20] via 10.69.109.246, 1w6d, Vlan205
+      213.59.135.0/28 is subnetted, 16 subnets
+O E2     213.59.135.0 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.135.16 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.135.32 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.135.48 [110/20] via 10.69.109.250, 4w0d, Vlan203
+                       [110/20] via 10.69.109.246, 3w6d, Vlan205
+O E2     213.59.135.64 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.135.80 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.135.96 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.135.112 [110/20] via 10.69.109.250, 1d15h, Vlan203
+O E2     213.59.135.128 [110/20] via 10.69.109.246, 7w0d, Vlan205
+O E2     213.59.135.144 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.135.160 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.135.176 [110/20] via 10.69.109.250, 7w0d, Vlan203
+O E2     213.59.135.192 [110/20] via 10.69.109.250, 1w1d, Vlan203
+O E2     213.59.135.208 [110/20] via 10.69.109.246, 5w1d, Vlan205
+O E2     213.59.135.224 [110/20] via 10.69.109.250, 1d15h, Vlan203
+                        [110/20] via 10.69.109.246, 2d11h, Vlan205
+
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+pe38-bb.lip.7606#sh ip bgp neighbors 217.107.196.1 advertised-routes 
+BGP table version is 208127042, local router ID is 213.234.199.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  213.59.155.0     0.0.0.0                  0         32768 i
+ *>  217.107.197.0    217.107.196.1            0         32768 ?
+ *>  217.107.198.248/29
+                       217.107.196.3            0         32768 ?
+
+Total number of prefixes 3 
+
+
+
+
+pe38-bb.lip.7606#sh ip bgp neighbors 217.107.196.3 advertised-routes 
+BGP table version is 208127222, local router ID is 213.234.199.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  213.59.155.0     0.0.0.0                  0         32768 i
+ *>  217.107.197.0    217.107.196.1            0         32768 ?
+ *>  217.107.198.248/29
+                       217.107.196.3            0         32768 ?
+
+Total number of prefixes 3 
+
+
+
+pe38-bb.lip.7606#sh ip bgp neighbors 217.107.196.3 rou               
+pe38-bb.lip.7606#sh ip bgp neighbors 217.107.196.3 routes 
+BGP table version is 208127292, local router ID is 213.234.199.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 10.11.0.5/32     217.107.196.3            0      0      0 ?
+ *>i 10.11.0.6/32     217.107.196.3            0      0      0 ?
+ *>i 10.11.0.7/32     217.107.196.3            0      0      0 ?
+ *>i 10.11.0.8/32     217.107.196.3            0      0      0 ?
+ *>i 10.11.0.9/32     217.107.196.3            0      0      0 ?
+ *>i 10.11.0.10/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.11/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.14/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.16/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.17/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.18/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.21/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.24/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.25/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.26/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.28/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.29/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.31/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.33/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.36/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.39/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.44/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.45/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.46/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.48/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.49/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.53/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.54/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.55/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.57/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.58/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.59/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.60/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.61/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.64/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.66/32    217.107.196.3            0      0      0 ?
+ *>i 10.11.0.74/32    217.107.196.3            0      0      0 ?
+ * i 213.59.155.0     217.107.196.3            0      0      0 i
+ *>i 213.59.155.2/32  217.107.196.3            0      0      0 ?
+ *>i 213.59.155.12/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.13/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.17/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.21/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.25/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.27/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.28/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.29/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.31/32 217.107.196.3            0      0      0 ?
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 213.59.155.32/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.49/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.60/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.61/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.62/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.76/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.78/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.81/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.82/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.90/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.95/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.96/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.97/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.98/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.99/32 217.107.196.3            0      0      0 ?
+ *>i 213.59.155.100/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.103/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.105/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.108/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.109/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.110/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.120/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.126/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.127/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.129/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.130/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.131/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.132/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.140/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.142/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.144/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.145/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.146/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.147/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.153/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.159/32
+     Network          Next Hop            Metric LocPrf Weight Path
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.160/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.163/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.168/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.169/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.172/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.174/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.176/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.178/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.182/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.184/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.185/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.186/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.190/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.195/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.197/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.206/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.209/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.210/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.212/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.213/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.214/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.217/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.220/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.227/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.233/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.238/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.240/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.245/32
+     Network          Next Hop            Metric LocPrf Weight Path
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.247/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.250/32
+                       217.107.196.3            0      0      0 ?
+ *>i 213.59.155.253/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.1/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.197.2/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.197.3/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.197.8/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.197.9/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.197.10/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.11/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.13/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.16/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.19/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.23/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.26/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.27/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.28/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.30/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.31/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.36/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.38/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.45/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.46/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.47/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.48/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.51/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.54/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.56/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.58/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.64/32
+                       217.107.196.3            0      0      0 ?
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 217.107.197.65/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.68/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.70/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.73/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.74/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.75/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.76/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.78/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.79/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.80/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.82/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.85/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.88/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.92/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.95/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.96/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.98/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.103/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.106/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.107/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.118/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.119/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.121/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.122/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.123/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.124/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.130/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.131/32
+                       217.107.196.3            0      0      0 ?
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 217.107.197.134/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.140/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.141/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.145/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.149/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.151/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.154/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.163/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.165/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.172/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.175/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.177/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.179/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.180/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.184/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.192/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.194/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.199/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.200/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.211/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.214/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.216/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.220/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.223/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.224/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.225/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.226/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.227/32
+                       217.107.196.3            0      0      0 ?
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 217.107.197.228/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.230/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.231/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.232/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.233/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.237/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.238/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.241/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.245/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.197.248/32
+                       217.107.196.3            0      0      0 ?
+ * i 217.107.198.0    217.107.196.3            0      0      0 i
+ *>i 217.107.198.1/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.198.3/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.198.7/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.198.8/32 217.107.196.3            0      0      0 ?
+ *>i 217.107.198.11/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.12/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.15/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.17/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.18/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.22/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.26/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.27/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.28/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.29/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.34/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.35/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.36/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.44/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.45/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.46/32
+     Network          Next Hop            Metric LocPrf Weight Path
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.53/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.58/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.65/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.67/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.68/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.72/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.74/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.75/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.76/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.78/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.80/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.81/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.82/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.83/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.85/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.87/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.88/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.92/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.102/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.107/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.108/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.110/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.114/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.117/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.120/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.123/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.126/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.130/32
+     Network          Next Hop            Metric LocPrf Weight Path
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.134/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.136/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.140/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.142/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.144/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.145/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.146/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.147/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.149/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.151/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.152/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.155/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.157/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.158/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.161/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.169/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.173/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.179/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.184/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.185/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.190/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.191/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.195/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.196/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.198/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.199/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.200/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.201/32
+     Network          Next Hop            Metric LocPrf Weight Path
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.204/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.205/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.207/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.208/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.209/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.215/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.217/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.218/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.219/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.226/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.235/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.239/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.242/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.249/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.250/32
+                       217.107.196.3            0      0      0 ?
+ *>i 217.107.198.255/32
+                       217.107.196.3            0      0      0 ?
+
+
+                       
+                       
+                       
+pe38-bb.lip.7606#sh ip bgp neighbors 217.107.196.1 routes 
+BGP table version is 208127413, local router ID is 213.234.199.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>i 10.11.0.1/32     217.107.196.1            0      0      0 ?
+ *>i 10.11.0.2/32     217.107.196.1            0      0      0 ?
+ *>i 10.11.0.3/32     217.107.196.1            0      0      0 ?
+ *>i 10.11.0.4/32     217.107.196.1            0      0      0 ?
+ *>i 10.11.0.12/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.13/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.15/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.19/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.22/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.23/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.27/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.30/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.34/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.35/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.37/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.38/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.40/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.41/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.42/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.43/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.47/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.50/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.51/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.56/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.62/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.63/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.65/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.67/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.68/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.69/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.70/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.71/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.72/32    217.107.196.1            0      0      0 ?
+ *>i 10.11.0.73/32    217.107.196.1            0      0      0 ?
+ * i 213.59.155.0     217.107.196.1            0      0      0 i
+ *>i 213.59.155.4/32  217.107.196.1            0      0      0 ?
+ *>i 213.59.155.8/32  217.107.196.1            0      0      0 ?
+ *>i 213.59.155.14/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.15/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.16/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.19/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.20/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.23/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.24/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.26/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.30/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.33/32 217.107.196.1            0      0      0 ?
+ *>i 213.59.155.35/32 217.107.196.1            0      0      0 ?
+ --More-- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------
+4900
+Gateway of last resort is 10.69.109.249 to network 0.0.0.0
+
+ip route 0.0.0.0 0.0.0.0 10.69.109.249
+ip route 213.234.199.1 255.255.255.255 10.69.109.249
+
+
+username 51gvo secret 5 $1$5xu8$wgbp7KaY9ULfqx8GU/mCY0
+username ztlip password 7 140D06070514
+username bee privilege 15 password 7 130712175F59527D
+
+
+
+ip domain-name lip.zelenaya.net
+ip name-server 217.107.196.35
+
+
+no ip source-route
+no ip gratuitous-arps
+no ip bootp server
+
+
+
+
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+errdisable recovery cause security-violation
+errdisable recovery cause channel-misconfig
+errdisable recovery cause pagp-flap
+errdisable recovery cause dtp-flap
+errdisable recovery cause link-flap
+errdisable recovery cause gbic-invalid
+errdisable recovery cause psecure-violation
+errdisable recovery cause dhcp-rate-limit
+errdisable recovery cause unicast-flood
+errdisable recovery cause vmps
+errdisable recovery interval 60
+power redundancy-mode redundant
+
+
+
+interface Loopback0
+ description router-id
+ ip address 10.39.3.49 255.255.255.255
+Сеть просто для router-id OSPF
+
+
+router ospf 100
+ router-id 10.39.3.49
+ log-adjacency-changes
+ auto-cost reference-bandwidth 100000
+ passive-interface default
+ no passive-interface Vlan203
+ no passive-interface Vlan207
+ no passive-interface Vlan208
+ no passive-interface Vlan1017
+ no passive-interface Vlan1023
+ no passive-interface Vlan1129
+ no passive-interface Vlan1138
+ no passive-interface Vlan1139
+ no passive-interface Vlan1140
+ no passive-interface Vlan1141
+ no passive-interface Vlan1142
+ no passive-interface Vlan1144
+ no passive-interface Vlan1145
+ no passive-interface Vlan1146
+ network 10.39.3.49 0.0.0.0 area 0
+ network 10.69.96.8 0.0.0.3 area 0
+ network 10.69.96.68 0.0.0.3 area 0
+ network 10.69.96.180 0.0.0.3 area 0
+ network 10.69.109.32 0.0.0.3 area 0
+ network 10.69.109.36 0.0.0.3 area 0
+ network 10.69.109.40 0.0.0.3 area 0
+ network 10.69.109.108 0.0.0.3 area 0
+ network 10.69.109.116 0.0.0.3 area 0
+ network 10.69.109.144 0.0.0.3 area 0
+ network 10.69.109.148 0.0.0.3 area 0
+ network 10.69.109.152 0.0.0.3 area 0
+ network 10.69.109.220 0.0.0.3 area 0
+ network 10.69.109.228 0.0.0.3 area 0
+!         
+ip route 0.0.0.0 0.0.0.0 10.69.109.249
+ip route 213.234.199.1 255.255.255.255 10.69.109.249
+no ip http server
+!         
+ip pim rp-address 213.234.199.1 override
+
+
+
+
+
+snmp-server community readzt RO 68
+snmp-server community wreadzt RW 69
+snmp-server trap link ietf
+snmp-server enable traps snmp linkdown linkup coldstart warmstart
+snmp-server enable traps transceiver all
+snmp-server enable traps cpu threshold
+snmp-server enable traps envmon fan shutdown supply temperature status
+snmp-server enable traps ipmulticast
+snmp-server enable traps msdp
+snmp-server enable traps pim neighbor-change
+snmp-server host 217.107.196.35 version 2c readzt 
+snmp-server host 217.107.196.61 version 2c wreadz
+
+
+
+---------------------------------------------------------
+-A INPUT -p tcp -m multiport --dports 22 -j fail2ban-ssh
+-A FORWARD -j NETFLOW
+-A FORWARD -s 217.107.196.0/24 -j ACCEPT
+-A FORWARD -s 217.107.197.0/24 -j ACCEPT
+-A FORWARD -s 217.107.198.0/24 -j ACCEPT
+-A FORWARD -s 213.59.155.0/24 -j ACCEPT
+-A FORWARD -d 217.118.87.98/32 -j ACCEPT
+-A FORWARD -d 85.21.78.93/32 -j ACCEPT
+-A FORWARD -d 78.107.199.116/32 -j ACCEPT
+-A FORWARD -d 78.107.196.0/22 -j ACCEPT
+-A FORWARD -d 195.14.40.141/32 -j ACCEPT
+-A FORWARD -s 10.0.0.0/8 -j ISG --session-init --init-mode src
+-A FORWARD -d 10.0.0.0/8 -j ISG
+-A FORWARD -s 213.59.132.0/22 -j ISG --session-init --init-mode src
+-A FORWARD -d 213.59.132.0/22 -j ISG
+
+-A PREROUTING -s 10.0.0.0/8 -p tcp -m tcp --dport 80 -m isg --service-name  REDIRECT -j DNAT --to-destination 10.48.253.38
+-A PREROUTING -s 10.0.0.0/8 -p tcp -m tcp --dport 80 -m isg --service-name  TRANSFER -j DNAT --to-destination 10.48.253.138
+-A PREROUTING -d 217.107.196.43/32 -i eth5.10 -p tcp -m tcp --dport 1723 -j DNAT --to-destination 10.145.111.162
+-A PREROUTING -d 217.107.196.43/32 -i eth5.10 -p gre -j DNAT --to-destination 10.145.111.162
+-A POSTROUTING -s 10.0.0.0/8 -o eth5.10 -j SNAT --to-source 213.59.158.0-213.59.158.127 --persistent
+-A POSTROUTING -s 172.28.0.0/16 -o eth5.10 -j SNAT --to-source 213.59.158.0-213.59.158.127 --persistent
+
+
+quagga     976  0.3  0.4  97804 74020 ?        Ss    2018 1713:13 /usr/lib/quagga/zebra --daemon -A 127.0.0.1
+quagga    1020  1.2  0.5 108920 84732 ?        Ss    2018 5610:27 /usr/lib/quagga/ripd --daemon -A 127.0.0.1
+
+
+root      5036  0.0  0.0  46216 11256 ?        S     2018  15:27 /usr/bin/perl -w /opt/ISG/bin/ISGd.pl
+root      5037 28.5  0.0  48516 14120 ?        R     2018 84036:28 /usr/bin/perl -w /opt/ISG/bin/ISGd.pl
+root      5039  0.0  0.0  46216 11272 ?        S     2018   1:37 /usr/bin/perl -w /opt/ISG/bin/ISGd.pl
+root      5040  0.0  0.0  46348 11808 ?        S     2018   0:49 /usr/bin/perl -w /opt/ISG/bin/ISGd.pl
+
+
+/opt/ISG/bin/ISGd.pl
+
+[http://wiki.ubilling.net.ua/doku.php?id=linux_isg](http://wiki.ubilling.net.ua/doku.php?id=linux_isg)
+[https://forum.nag.ru/index.php?/topic/53156-isg-v-linux/&page=39](https://forum.nag.ru/index.php?/topic/53156-isg-v-linux/&page=39)
+[https://forum.nag.ru/index.php?/topic/53156-isg-v-linux/&page=33](https://forum.nag.ru/index.php?/topic/53156-isg-v-linux/&page=33)
+[https://ixnfo.com/ispolzovanie-linux-isg.html](https://ixnfo.com/ispolzovanie-linux-isg.html)
+[http://wiki.mikbill.ru/billing/nas_access_server/linuxisg](http://wiki.mikbill.ru/billing/nas_access_server/linuxisg)
+[https://www.lanbilling.ru/lanbilling-cisco-isg](https://www.lanbilling.ru/lanbilling-cisco-isg)
+[http://extime.vn.ua/?q=node/55](http://extime.vn.ua/?q=node/55)
+
+[https://bitbucket.org/Undefvoid/linux-isg.git](https://bitbucket.org/Undefvoid/linux-isg.git)
+
+ip unnumbered linux
+[https://habr.com/ru/post/71689/](https://habr.com/ru/post/71689/)
+
+garry@NAT3:~$  ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:25:90:2d:b5:94 brd ff:ff:ff:ff:ff:ff
+    inet 217.107.196.26/27 brd 217.107.196.31 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::225:90ff:fe2d:b594/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eth1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 00:25:90:2d:b5:95 brd ff:ff:ff:ff:ff:ff
+4: eth2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 00:25:90:2d:b5:96 brd ff:ff:ff:ff:ff:ff
+5: eth3: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 00:25:90:2d:b5:97 brd ff:ff:ff:ff:ff:ff
+6: eth4: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 90:e2:ba:a8:5e:e8 brd ff:ff:ff:ff:ff:ff
+7: eth5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 10000
+    link/ether 90:e2:ba:a8:5e:e9 brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::92e2:baff:fea8:5ee9/64 scope link 
+       valid_lft forever preferred_lft forever
+8: gre0@NONE: <NOARP> mtu 1476 qdisc noop state DOWN group default 
+    link/gre 0.0.0.0 brd 0.0.0.0
+9: gretap0@NONE: <BROADCAST,MULTICAST> mtu 1462 qdisc noop state DOWN group default qlen 1000
+    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+10: eth5.10@eth5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 90:e2:ba:a8:5e:e9 brd ff:ff:ff:ff:ff:ff
+    inet 217.107.196.43/27 brd 217.107.196.63 scope global eth5.10
+       valid_lft forever preferred_lft forever
+    inet6 fe80::92e2:baff:fea8:5ee9/64 scope link 
+       valid_lft forever preferred_lft forever
+11: eth5.20@eth5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 90:e2:ba:a8:5e:e9 brd ff:ff:ff:ff:ff:ff
+    inet 10.48.253.38/24 brd 10.48.253.255 scope global eth5.20
+       valid_lft forever preferred_lft forever
+    inet 10.48.253.138/24 brd 10.48.253.255 scope global secondary eth5.20:0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::92e2:baff:fea8:5ee9/64 scope link 
+       valid_lft forever preferred_lft forever
+
+
+
+
+/sbin/ifconfig eth5 txqueuelen 10000
+/sbin/ethtool -A eth5 autoneg off rx off tx off
+/sbin/ethtool -G eth5 tx 4096
+/sbin/ethtool -G eth5 rx 4096
+/sbin/ethtool -K eth5 ntuple on
+/sbin/ethtool -K eth5 gso off gro off tso off
+
+#/usr/sbin/set_irq_affinity eth5
+/usr/local/bin/set_irq_affinity eth5
+
+/bin/ip route add blackhole 217.107.199.128/25
+
+echo 1048576 > /proc/sys/net/core/rmem_max
+/bin/echo 8753330 > /proc/sys/net/ipv4/netfilter/ip_conntrack_max
+/bin/echo 8753330 > /sys/module/nf_conntrack/parameters/hashsize
+
+exit 0
+
+
+ip route 217.107.199.128 255.255.255.128 217.107.196.44
+ip route 213.59.158.0 255.255.255.128 217.107.196.43
+
+
+garry@NAT4:~$ sudo iptables-save
+
+We trust you have received the usual lecture from the local System
+Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for garry: 
+# Generated by iptables-save v1.4.21 on Thu Jan 31 09:44:57 2019
+*mangle
+:PREROUTING ACCEPT [3077077952073:2875543401791250]
+:INPUT ACCEPT [1784928757:733559611368]
+:FORWARD ACCEPT [3052757270724:2873264568166530]
+:OUTPUT ACCEPT [22861631893:5088350311913]
+:POSTROUTING ACCEPT [3074185605401:2876675307704927]
+COMMIT
+# Completed on Thu Jan 31 09:44:57 2019
+# Generated by iptables-save v1.4.21 on Thu Jan 31 09:44:57 2019
+*nat
+:PREROUTING ACCEPT [43905537832:5182054462632]
+:INPUT ACCEPT [30745616:1894057760]
+:OUTPUT ACCEPT [257959162:72263134347]
+:POSTROUTING ACCEPT [1944851448:2005499692205]
+-A PREROUTING -s 10.0.0.0/8 -p tcp -m tcp --dport 80 -m isg --service-name  REDIRECT -j DNAT --to-destination 10.48.253.40
+-A POSTROUTING -s 10.0.0.0/8 -o eth5.10 -j SNAT --to-source 217.107.199.129-217.107.199.254 --persistent
+-A POSTROUTING -s 172.28.0.0/16 -o eth5.10 -j SNAT --to-source 217.107.199.129-217.107.199.254 --persistent
+COMMIT
+# Completed on Thu Jan 31 09:44:57 2019
+# Generated by iptables-save v1.4.21 on Thu Jan 31 09:44:57 2019
+*filter
+:INPUT ACCEPT [1416229941:580294889198]
+:FORWARD ACCEPT [2408613444699:2261713497961847]
+:OUTPUT ACCEPT [18263476553:4294990021478]
+-A FORWARD -j NETFLOW
+-A FORWARD -s 217.107.196.0/24 -j ACCEPT
+-A FORWARD -s 217.107.197.0/24 -j ACCEPT
+-A FORWARD -s 217.107.198.0/24 -j ACCEPT
+-A FORWARD -s 213.59.155.0/24 -j ACCEPT
+-A FORWARD -d 217.118.87.98/32 -j ACCEPT
+-A FORWARD -d 85.21.78.93/32 -j ACCEPT
+-A FORWARD -d 78.107.199.116/32 -j ACCEPT
+-A FORWARD -d 78.107.196.0/22 -j ACCEPT
+-A FORWARD -d 195.14.40.141/32 -j ACCEPT
+-A FORWARD -s 10.0.0.0/8 -j ISG --session-init --init-mode src
+-A FORWARD -d 10.0.0.0/8 -j ISG
+-A FORWARD -s 213.59.132.0/22 -j ISG --session-init --init-mode src
+-A FORWARD -d 213.59.132.0/22 -j ISG
+COMMIT
+# Completed on Thu Jan 31 09:44:57 2019
+
+
+Радиус сервера
+### You can specify as many as you want RADIUS servers. If server with lower index
+### is not answering, server with next index will be tried (0, 1, 2, etc...).
+$cfg{radius_auth}{0} = { server => "217.107.196.46:1812", timeout => 5, secret => "lip1bras" };
+$cfg{radius_acct}{0} = { server => "217.107.196.46:1813", timeout => 5, secret => "lip1bras" };
+
+$cfg{nas_identifier} = "217.107.196.44"; ## By default equals to NAS IP-address
+
+

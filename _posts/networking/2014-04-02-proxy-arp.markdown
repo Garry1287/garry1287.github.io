@@ -1,0 +1,26 @@
+---
+layout: post
+title:  "proxy-arp"
+date:   2014-04-02 16:11:13 +0400
+categories: Networking
+tags: Networking
+---
+
+# proxy-arp
+local-proxy-arp
+Означает, что общение между 2 хостами в одной сети ведётся через роутер, а не напрямую
+Для защиты делается. Мы так делаем, чтобы разделить пользователей pptp на одном коммутаторе
+Влан на коммутатор
+
+interface Vlan1407
+ description #Studenovskaya 20 p2
+ ip address 172.20.141.1 255.255.255.224
+ ip access-group 33 in
+ ip access-group 33 out
+ ip helper-address 172.31.3.2
+ no ip redirects
+ ip local-proxy-arp
+ ip route-cache same-interface
+
+
+proxty-arp прозрачно пропускает arp через роутер, организует общую локалку, будто в середине нет роутера

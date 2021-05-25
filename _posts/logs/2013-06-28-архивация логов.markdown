@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "архивация логов"
+date:   2013-06-28 04:19:46 +0400
+categories: logs
+tags: logs
+---
+
+# архивация логов
+find /var/log/HOSTS -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;
+find /var/log/BACKBONE -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;
+find /var/log/Phone -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;
+find /var/log/Router -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;
+find /var/log/SWITCH -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;
+find /var/log/VPN-NLMK -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;
+find /var/log/White -type f -mtime +1  -name "*.log"  -exec bzip2 '{}' \;

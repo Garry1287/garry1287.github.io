@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "exim"
+date:   2014-10-29 11:14:12 +0300
+categories: mail
+tags: mail
+---
+
+# exim
+[http://vitalium.org/2010/02/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-eximdovecot-%D0%B2-linux/](http://vitalium.org/2010/02/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-eximdovecot-%D0%B2-linux/)
+[http://www.info-x.org/freebsd/email/nastroika_pochtovoi_sistemy_agent_peresylki_pochty_exim.html](http://www.info-x.org/freebsd/email/nastroika_pochtovoi_sistemy_agent_peresylki_pochty_exim.html)
+[http://www.linux.org.ru/forum/admin/7831037](http://www.linux.org.ru/forum/admin/7831037)
+linuxforum.ru/viewtopic.php?id=21934
+[http://muff.kiev.ua/content/exim-nastroika-pochtovogo-servera-na-baze-exim-s-khraneniem-spiska-polzovatelei-v-bd-mysql-i](http://muff.kiev.ua/content/exim-nastroika-pochtovogo-servera-na-baze-exim-s-khraneniem-spiska-polzovatelei-v-bd-mysql-i)
+[http://linuxforum.kz/index.php?topic=1875.0](http://linuxforum.kz/index.php?topic=1875.0)
+[http://almightydrews.wordpress.com/2011/03/23/exim_relay_two_domains/](http://almightydrews.wordpress.com/2011/03/23/exim_relay_two_domains/)
+[http://www.linux.org.ru/forum/admin/9470392](http://www.linux.org.ru/forum/admin/9470392)
+[http://www.lanberry.ru/linux/sozdanie-pochtovogo-servera-na-baze-mta-exim](http://www.lanberry.ru/linux/sozdanie-pochtovogo-servera-na-baze-mta-exim)
+[http://welinux.ru/post/5311/](http://welinux.ru/post/5311/)
+[http://ivanpesin.info/translations/lg/lg92/okopnik.html](http://ivanpesin.info/translations/lg/lg92/okopnik.html)
+[http://www.ibm.com/developerworks/ru/library/l-post_system/index.html](http://www.ibm.com/developerworks/ru/library/l-post_system/index.html)
+[http://gir.nongnu.org/people/daa/texts/linuxmail.html](http://gir.nongnu.org/people/daa/texts/linuxmail.html)
+[http://www.nongnu.org/gir/people/daa/texts/linuxmail.html](http://www.nongnu.org/gir/people/daa/texts/linuxmail.html)
+[http://www.avalon.ru/Courses/UNIX//Courses/About/Print/?CourseID=1048](http://www.avalon.ru/Courses/UNIX//Courses/About/Print/?CourseID=1048)
+[http://forum.ru-board.com/topic.cgi?forum=11&topic=4058](http://forum.ru-board.com/topic.cgi?forum=11&topic=4058)

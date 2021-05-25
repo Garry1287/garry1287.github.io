@@ -1,0 +1,516 @@
+---
+layout: post
+title:  "isdn"
+date:   2011-04-15 21:23:36 +0400
+categories: voip
+tags: voip
+---
+
+# isdn
+[http://ciao-cacao.blogspot.com/2011/11/g703-e1-pri-group-channel-group-ds0.html](http://ciao-cacao.blogspot.com/2011/11/g703-e1-pri-group-channel-group-ds0.html)
+
+[http://www.labnfun.ru/2016/07/ethernet-sdhpdh.html](http://www.labnfun.ru/2016/07/ethernet-sdhpdh.html)
+ISDN - уровень ethernet (цифровые каналы связи) через старую сеть (провода 2 жильные). Под старой сетью подрузомеваю аналог
+TDM - более низкий уровень, технология которая позовляет по 2 жильному проводу передавать 32 канала (E1)
+            TDM (Time Division Multiplexing)   Эта технология предусматривает объединение нескольких входных низкоскоростных каналов в один составной высокоскоростной канал.
+                мультиплексированием с временным разделением каналов
+                
+                TDM это чисто пихание  множества 64кбит/с каналов (телефонная линия обычная) и уплотнение (PDH и SDH - это как бы вид TDM)
+                    PDH мултиплексоры пихают e1 в e2, e2 в e3 и так далее
+32 канала DS0 пакуется в E1(2 с гаком Мбит/с)
+4 E1 в E2 (8 с гаком Мбит/с)
+4 E2 в E3 (34 с гаком Мбит/с)
+4 E3 в E4 (139 с гаком Мбит/с) 
+
+                SDH это развитая технология PDH
+                
+   Обычно SDH сеть представляет собой кольцо, соответственно строиться два канала по двум сторонам кольца. Один из них рабочий, другой запасной.             
+
+STM - это базовый модуль в SDH, он определяет сколько данных можно передать. STM так же имеют иерархическую структуру.
+STM-1 = ~155 Мбит/с
+STM-4 = ~622 Мбит/с
+STM-16 = ~2,5 Гбит/с
+STM-64 = ~10 Гбит/с
+STM-256 = ~40 Гбит/с
+
+------------------------------------------------------------------------------------------
+ISDN
+Кстати, в связи с данной темой хотел спросить: какая именно связь между TDM и ISDN? 
+Я знаю, что E1 зачастую используется для передачи ISDN PRI, но это лишь одно из многих возможных применений PDH.
+ Разве кроме ISDN нет других стандартов на цифровой голос? Ведь есть же «обычный» не-ISDN оцифрованный голос, 
+т.е. сигнал POTS, преобразованный в цифровой поток ИКМ (PCM) цифро-аналоговым преобразователем, 
+его не обязательно заворачивать в инфраструктуру ISDN. Или я что-то путаю?
+
+Транзистор это и есть полупроводниковый аналог лампы, это функционально идентичные устройства. 
+И я их изучал, я изучал всю теорию передачи информации, начиная от различных видов модуляции несущего сигнала, baseband- и passband-передачи,
+ line coding'а и заканчивая FDMA/TDMA/CDMA и прочими аспектами PHY-уровня сетей.
+ Мне это интересно, я не считаю, что это слишком глубоко. П
+о-моему, вполне справедливо ожидать от сетевика или телекомщика понимания физических основ передачи информации в тех сетях,
+ с которыми он работает. Я не представляю себе инженера-телефониста, не знающего, что такое ИКМ или теорема Котельникова, 
+или инженера сетей DOCSIS, не слышавшего про квадратурную амплитудную модуляцию, волновое сопротивление или импеданс среды передачи.
+
+
+ISDN -- не цифровой голос, а всего лишь сигнализация, "обсигналивающая" передаваемые по потоку E1 данные/голос.
+Не встроенная в поток типа CAS R2, а отдельная, самостоятельная, с блекдже... форматом пакетов и канальным уровнем.
+Вовсе не обязательно для голоса, хотя существует оптимизированный для голоса стандарт QSIG.
+(короче аля уровень ethernet, но не совсем, скорее физический уровень) Обеспечивает видеоконференцию и интернет, а не просто звонки - в этом её суть и прелесть. Объяснение внизу
+Вообщем позволяет объединять каналы (32 которых в e1), например 2 в 128 кбит/с канал данных, 4 в 256 кбит/с в видеоканал
+
+
+На циско есть возможность делать с CAS
+ISDN -  цифровая телефония
+POTS - аналоговая
+
+Позволю себе немного добавить в пользу WAN-интерфейсов. Интерфейсы PDH были (и остаются) хороши тем, что легко аггрегируются
+ в более широкий поток и выделяются из него без особых усилий со стороны железа.
+ Куча E1 от клиентских маршрутизаторов приходит к PDH-мультиплексору, вставляется в один E3 (или сразу в канал SDH),
+ на другом конце извлекается и отправляется к другому маршрутизатору.
+ Что очень удобно для построения private WAN, да и не только. К тому же, с гарантированным качеством обслуживания.
+ Еще и на достаточно большое расстояние по простому медному кабелю, куда длиннее, чем у ethernet.
+
+--------------------------------------------------------------------------------------------------
+
+PSTN (Public switched telephone network; ТФОП, телефонная сеть общего пользования) — всемирная телефонная сеть,
+ к которой подключены обычные телефоны, факсы, модемы, АТС и прочее телефонное оборудование.
+ Использует адресацию, описанную в стандарте E.164 (телефонные номера
+PSTN, which is also called POTS (Plain Old Telephone System), supplies a single phone line with a single phone number
+This service is ideal for smaller businesses that require only one or two lines.
+ It is also recommended for many services where a dedicated line is required, such as fax and EFTPOS machines, 
+back-to-base alarm systems, and ADSL connections.
+
+
+ISDN (Integrated Services Digital Network)
+
+The ISDN digital service provides multiple channels per line, and enables multiple concurrent phone calls. 
+Each digital line can carry both voice and data services. 
+These lines provide greater bandwidth than PSTN lines, 
+which makes them well suited for services including data transfer and video conferencing.
+This service is ideal for medium to large businesses, and is typically connected to office phones through a PBX system.
+For most businesses, only 30-40% of their phone lines are in use at any one time.
+ That means that in an office with 10 staff where everyone has their own phone, you would require either 10 PSTN lines or 4 ISDN lines. This helps to make ISDN cost effective, especially in larger offices.
+
+  ISDN 2
+ This is the starter level for ISDN, providing two channels on your ISDN line. 
+As your business grows, this service can be expanded to 4, 6, and then 8 channels.
+
+ISDN 10, 20, 30
+    Larger businesses can sign up for 10, 20 or 30 ISDN channels.
+ Services are easily upgraded from 10 to 20 to 30. If you require more than 30 channels, a second ISDN service can be installed.
+
+With ISDN, each phone within your business can have a unique phone number,
+ which people from outside the business can dial directly. (This is called a DID or Direct In-Dial number.)
+ You can typically purchase DID numbers in blocks of 100 from your telco. 
+When you purchase a block of numbers in this way, they remain yours,
+ and you can take them with you if you ever decide to change to a different carrier.
+
+ISDN
+цифровая сеть комплексного обслуживания
+
+Сокращение от integrated services digital network. Международный стандарт связи для передачи голоса, видео и данных
+по цифровым телефонным линиям или обычным телефонным проводам. ISDN поддерживает скорости передачи данных от 64 Kbps (64,000 бит в секунду). 
+Большинство линий ISDN, предоставляемых телефонными компаниями, являются на деле двумя линиями, объединенными в B-канал. 
+Одну линию можно использовать для голосовой связи, вторую -
+ для передачи данных; либо можно использовать обе линии для передачи данных, получив скорость передачи 128 Kbps, 
+втрое больщую, чем предоставляют сегодняшние самые быстрые модемы.
+
+
+
+
+
+
+TDM - технология (уровень ethernet) которая позволяет мультиплексировать нескольких входных низкоскоростных каналов в один составной высокоскоростной канал.
+С помощью этой технологии работает ISDN
+Для объединения в сети ISDN различных видов трафика используется технология TDM 
+
+[http://ru.wikipedia.org/wiki/PDH](http://ru.wikipedia.org/wiki/PDH)
+[http://www.cisco.com/en/US/products/hw/routers/ps274/products_tech_note09186a00800f9d37.shtml](http://www.cisco.com/en/US/products/hw/routers/ps274/products_tech_note09186a00800f9d37.shtml)
+[http://ru.wikipedia.org/wiki/ISDN](http://ru.wikipedia.org/wiki/ISDN)
+[http://habrahabr.ru/post/141709/](http://habrahabr.ru/post/141709/)
+
+
+Структура потока E1 (2048 кбит/с)
+Цикл потока Е1 состоит из 32 канальных интервалов, нумеруемых от 0 до 31. 
+Тридцать канальных интервалов (1—15 и 17—31) используются для передачи трафика (например голоса), а два — нулевой 
+и шестнадцатый — для передачи служебной информации, таких как синхронизации и сигнальные сообщения вызовов. 
+Аппаратура уплотнения, объединяющая 30 ОЦК и получающая на выходе первичный цифровой поток E1, называется ИКМ-30.
+
+
+
+
+Попробую изложить свою версию :)
+
+E1. Начинаем с физического. Это поток со скоростью 2048 кбитс. Важная составляющая это linecode ( HDB3 или AMI). 99.9% это HDB3.
+
+Далее идет канальный. Может быть неструктурированный поток Е1 ( просто тупо шлется 2048 кбитс без всякого деления на таймслоты), поток Е1 с цикловой структурой (идет разделения на ТС. ТС0 используется для передачи FAS, NFAS, CRC-4 битов, сигнализацию об ошибках) и наконец сверхцикловая структура MFAS( помимо ТС0 используется ТС16. В нем передается сигнальная информация для голосовых каналов + сигнал MFAS. Один МFAS состоит из 16 обычных циклов).
+
+Главное не перепутать ТС16 в MFAS и ISDN. Это совершенно разные вещи. В MFAS используется СAS (Channel Associated Signalling), а для ISDN Common Channel Signalling. В CAS используется MFAS и как говорилось выше 16 циклов. В каждом цикле есть в ТС16 имеем 8 бит. 4 первых бита используются для сигнализации 1го конретного голосового канала жестко к нему привязанного. Скорее всего я уже немного залез в сетевой уровень :)
+
+Чтобы окончательно запутать всех с циклами скажу, что встречал пример ОКС7 использующую MFAS :)
+
+
+Теперь поговорим о CRC-4. Образуется отдельный сверхцикл в 16 ТС для передачи проверочной суммы и сигнализации об ошибках CRC. 
+Всё передаётся в ТС0 и распределяется в 16 циклах. CRC-4 не является обязательной. Например ISDN может работать с/без CRC-4. Опять же CRC-4 и MFAS разные вещи.
+
+Далее переходим к сетевому уровню. Тут уже используется специальная сигнализация для передачи данных о неисправности.
+ Передается эта информация в ТС0 либо дополнительно в ТС16 в случае MFAS. Примеры AIS, RAI, LOF, LOS ....
+
+Все вышесказанное относится именно к Е1. Та же ISDN это другая песня. PRI использует например ТС16 для передачи информации. 
+Канальный уровень будет q921, сетевой q931. Так же есть различные типы ISDN. Связано с тем, что некоторые большие компании 
+(например British Telecom) сделали свои варианты до выхода в свет общего стандарта.
+
+И еще не сравнивайте Е1 и Т1. Есть достаточно много различий. 
+
+
+[http://ru.wikipedia.org/wiki/E1_%28ISDN%29](http://ru.wikipedia.org/wiki/E1_%28ISDN%29)
+[http://ru.wikipedia.org/wiki/ISDN](http://ru.wikipedia.org/wiki/ISDN)
+
+
+
+[http://inrion.ru/Documentation/3_marshrutiziruemye_seti/3_poisk_i_ustranenie_neispravnostej/ustranenie_oshibok_e1.pdf](http://inrion.ru/Documentation/3_marshrutiziruemye_seti/3_poisk_i_ustranenie_neispravnostej/ustranenie_oshibok_e1.pdf)
+
+[http://www.ccc.ru/magazine/depot/00_03/read.html?0302.htm](http://www.ccc.ru/magazine/depot/00_03/read.html?0302.htm)
+
+Структура потока Е1 определяется на канальном уровне. Как известно, этот поток формируется путем временного мультиплексирования 32 каналов 64 Кбит/с.
+ При этом так называемый цикл (frame) Е1 образуется из 32 восьмибитовых тайм-слотов, номеруемых от 0 до 31.
+ Нулевой тайм-слот применяется для служебных целей: передачи сигнала цикловой синхронизации (FAS — Frame Alignment Signal) 
+или сигнала NFAS (Not contain Frame Alignment Signal), сообщений об ошибках и аварийных сигналов (рис. 1). 
+Если при этом все остальные тайм-слоты отводятся под пользовательскую информацию, то такую структуру потока называют цикловой (FAS) или ИКМ-31.
+ Системы ИКМ-31 используются для передачи данных, а также в некоторых приложениях ISDN.
+
+
+
+
+
+Константина Белоусова по оборудованию TDM (SDH/PDH)
+Мултиплексор Lucent WaveStar AM 1 Plus
+RAD FCD-155
+RAD Op-34
+RAD OP-4e1L
+RAD Optimux-4e1
+SDH ECI BG20B
+SDH ECI BG-40
+
+[http://www.telecor.ru/energy/vendors/eci/st50-200/](http://www.telecor.ru/energy/vendors/eci/st50-200/)
+[http://www.muvicom.ru/catalog/eci/2772/1327](http://www.muvicom.ru/catalog/eci/2772/1327)
+[http://www.telecomnetworks.ru/vendors/eci/broadgate/bg20](http://www.telecomnetworks.ru/vendors/eci/broadgate/bg20)
+[http://www.telecor.ru/energy/vendors/eci/bg40/](http://www.telecor.ru/energy/vendors/eci/bg40/)
+
+Это приведет к временной неработоспособности магистральных каналов ЦТД-АТС45 (Ethernet и STM линки, E1 потоки местного стыка с ЦТК, E1 стыка Iskratel-Unit)
+STM1 используется у нас как транспорт - в него собираются e1 по нашей сети и из него достаются e1.
+
+
+
+
+
+
+Какое оборудование используется для STM?
+Optimux 109?
+Rici E1?
+
+Муфта, Кросс?
+
+Сети SDH относятся к классу сетей с коммутацией каналов на базе синхронного мультиплексирования с разделением по времени (Time Division Multiplexing, TDM),
+
+
+
+Сети SDH обладают многими достоинствами:
+широкий диапазон возможных скоростей — от 155,520 Мбит/с (STM-1) до 2,488 Гбит/с (STM-16) и выше
+
+
+
+
+
+
+
+Офигенное описание
+[http://ciscomaster.ru/content/digital-voice-ports-ili-rabota-s-isdn-e1-pri](http://ciscomaster.ru/content/digital-voice-ports-ili-rabota-s-isdn-e1-pri)
+Виды телефонной связи
+
+- Analog Voice Circuit Switched Network
+      Это обычная аналоговая телефония
+- Digital Voice Circuit Switched Network
+      Цифровая телефония
+  Существует три типа digital voice circuits:
+
+    T1: Использует Time-Division Multiplexing (TDM) с использованием сигнализации channel associated signaling (CAS). 24 канала.
+    E1: Использует TDM, сигнализацию CAS или common channel signaling (CCS). 30 голосовых каналов.
+    ISDN: Использует TDM, сигнализацию CCS, а также бывает следующих подтипов:
+    - BRI: 2 B (Bearer) channels and 1 D (Delta) channel
+    - T1 PRI: 23 B channels and 1 D channel
+    - E1 PRI: 30 B channels and 1 D channel
+
+- Voice over IP Packet Network
+    Это SIP, H323 и т д
+
+
+
+E1 на Cisco:
+1, 2 - прием
+4, 5 - передача
+Как со стороны АТС - читайте документацию на нее.
+
+
+1,2 <-> 4,5
+4,5 <-> 1,2
+
+
+[https://en.wikipedia.org/wiki/Registered_jack#RJ48](https://en.wikipedia.org/wiki/Registered_jack#RJ48)
+
+
+
+
+Разобраться как работает телефония на комбинате
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+WDM (DWDM,CWDM) - передача по оптике, разными длиннами волны данных
+Принцип ее действия очень прост: потоки данных от отдельных источников переносятся световыми волнами разной длины (каждому каналу принадлежит своя длина – т.е. частота, а значит и цвет) 
+и объединяются мультиплексором в единый многочастотный сигнал, который передается по оптическому волокну. На приемной стороне происходит обратное преобразование.
+
+Технология WDM соответствует физическому уровню сетевых взаимодействий и работает независимо от типа и формата передаваемых данных, то есть является протокольно независимой.
+ К WDM мультиплексору можно подключить практически любое оборудование: SONET/SDH, ATM, Ethernet.
+ Подобная гибкость в сочетании с огромной (по текущим меркам) пропускной способностью делает WDM идеальной технологией для магистральной сети.
+
+[http://nag.ru/articles/reviews/15443/metro-ethernet-arhitektura-i-tehnologii.html](http://nag.ru/articles/reviews/15443/metro-ethernet-arhitektura-i-tehnologii.html)
+
+В настоящее время отмечается подавляющее преобладание IP трафика в потребительских сетях. И вот уже для передачи TDM сигналов (например, для связи между цифровыми АТС) 
+разрабатывается протокол TDMoIP, эмулирующий TDM каналы, 
+прозрачные для всех протоколов и сигнализаций. Если раньше пакеты транспортировались в сетях с коммутированием каналов, то теперь все может быть наоборот.
+
+
+	  Физика wdm
+		/\
+	   SDH		Ethernet
+
+SDH - развитие технологии TDM (канальная технология),  в основе SDH мультиплексирование TDM. В нашей сети используется для телефонии. 
+Ethernet - пакетная технология. Для интернета
+
+
+
+
+
+
+Стек протоколов SDH состоит из четырех уровней:
+
+- Физический уровень, названный в стандарте фотонным (photonic), имеет дело с кодированием бит информации с помощью модуляции света.
+
+-Уровень секции (section) поддерживает физическую целостность сети. Под секцией в технологии SDH подразумевается каждый непрерывный отрезок волоконно-оптического кабеля, посредством которого пара устройств SONET/SDH соединяется между собой, например мультиплексор и регенератор, регенератор и регенератор. Ее часто называют регенераторной секцией, имея в виду, что от оконечных устройств не требуется выполнение функций этого уровня мультиплексора. Протокол регенераторной секции имеет дело с определенной частью заголовка кадра, называемой заголовком регенераторной секции (RSOH), и на основе служебной информации может проводить тестирование секции и поддерживать операции административного контроля.
+
+- Уровень линии (line) отвечает за передачу данных между двумя мультиплексорами сети. Протокол этого уровня работает с кадрами уровней STS-n для выполнения различных операций мультиплексирования и демультиплексирования, а также вставки и удаления пользовательских данных. Он осуществляет также проведение операций реконфигурирования линии в случае отказа какого-либо ее элемента - оптического волокна, порта или соседнего мультиплексора. Линию часто называют мультиплексной секцией.
+
+- Уровень тракта (path) контролирует доставку данных между двумя конечными пользователями сети. Тракт (путь) - это составное виртуальное соединение между пользователями. Протокол тракта должен принять поступающие в пользовательском формате данные, например формате E1, и преобразовать их в синхронные кадры STM-N. 
+
+
+
+Сети SDH заняли прочное положение в телекоммуникационном мире. Сегодня они составляют фундамент практически всех крупных сетей — региональных, национальных и международных.
+ Это положение еще более укрепилось в результате появления технологии спектрального мультиплексирования DWDM, поскольку сети SDH могут легко интегрироваться 
+с этим новым типом оптических магистралей с поддержкой очень высоких скоростей в сотни гигабит в секунду.
+ В магистральных сетях с ядром DWDM сети SDH будут играть роль сети доступа, т. е. выполнять те же функции, которые сети PDH играют по отношению к SDH.
+
+
+ 
+ 
+ --------------------------------------------------------------------------------------------------------------------------------------------------
+Настройка E1 Карт
+[http://www.cisco.com/cisco/web/support/RU/10/105/105437_products_sw_iosswrel_ps5014_products_feature_guide09186a00800880e9.html](http://www.cisco.com/cisco/web/support/RU/10/105/105437_products_sw_iosswrel_ps5014_products_feature_guide09186a00800880e9.html)
+[http://netconfigure.net/index.php/ru/forum/5-ip-telefoniya/138-nastrojka-telefonii-isdn-e1-pri-na-cisco-2911-s-modulyami-vwic3-4mft-t1-e1-i-pvdm3-dsp-asterisk-pbx](http://netconfigure.net/index.php/ru/forum/5-ip-telefoniya/138-nastrojka-telefonii-isdn-e1-pri-na-cisco-2911-s-modulyami-vwic3-4mft-t1-e1-i-pvdm3-dsp-asterisk-pbx)
+
+T1, E1 платы
+[http://www.cisco.com/en/US/docs/routers/access/1700/1721/software/feature/guide/t1e11721.html](http://www.cisco.com/en/US/docs/routers/access/1700/1721/software/feature/guide/t1e11721.html)
+[http://www.cisco.com/cisco/web/support/RU/9/97/97373_prod_sw_iosswrel_ps5207_prod_feature_guide09186a008042052c.html](http://www.cisco.com/cisco/web/support/RU/9/97/97373_prod_sw_iosswrel_ps5207_prod_feature_guide09186a008042052c.html)
+
+
+Serial Interface Cards
+[http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/ic/hardware/installation/guide/ser_hwic.html](http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/ic/hardware/installation/guide/ser_hwic.html)
+
+Serial Connectivity Network Modules
+[http://www.cisco.com/c/en/us/products/collateral/routers/3600-series-multiservice-platforms/product_data_sheet09186a0080091b8b.html](http://www.cisco.com/c/en/us/products/collateral/routers/3600-series-multiservice-platforms/product_data_sheet09186a0080091b8b.html)
+
+Serial Network Modules
+[http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/nm/hardware/installation/guide/ConntSer.html](http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/nm/hardware/installation/guide/ConntSer.html)
+
+Understanding 2-Port Serial WAN Interface Card (WIC-2T)
+[http://www.cisco.com/c/en/us/support/docs/routers/3600-series-multiservice-platforms/7261-wic-2t.html](http://www.cisco.com/c/en/us/support/docs/routers/3600-series-multiservice-platforms/7261-wic-2t.html)
+
+______________________________________________________________________
+Как настроить e1
+[http://sun29ny.narod.ru/net_q_e1.html](http://sun29ny.narod.ru/net_q_e1.html)
+ Как настроить интерфейс E1?
+
+
+Рассмотрим пример для Cisco 1841.
+
+1) Определяем тип контроллера.
+В нашем примере интерфейс E1 присутствует в виде карты расширения HWIC-1T1/E1. Поэтому, прежде всего, определяем тип контроллера:
+
+yourname(config)#card type e1 0 0
+
+в конфигурации появилась новая запись:
+
+controller E1 0/0/0
+
+
+2) Проверяем.
+Подключаем кабель и проверяем состояние. Если рядом есть еще одна железка с интерфейсом E1, можно соединить обе кроссоверным патчкордом.
+
+yourname#sh controllers e1
+E1 0/0/0 is up.
+  Applique type is Channelized E1 - balanced
+  No alarms detected.
+  alarm-trigger is not set
+  Version info Firmware: 20040802, FPGA: 13, spm_count = 0
+  Framing is CRC4, Line Code is HDB3, Clock Source is Line.
+  CRC Threshold is 320. Reported from firmware  is 320.
+  Data in current interval (159 seconds elapsed):
+     3986 Line Code Violations, 0 Path Code Violations
+     1 Slip Secs, 0 Fr Loss Secs, 0 Line Err Secs, 0 Degraded Mins
+     1 Errored Secs, 0 Bursty Err Secs, 0 Severely Err Secs, 139 Unavail Secs
+yourname#
+
+По результату выполнения команды ‘sh controllers e1' видно, что интерфейс поднялся.
+
+
+3) настраиваем контроллер
+
+yourname#сonf t
+yourname(config)#controller E1 0/0/0
+yourname(config-controller)#framing no-crc4
+yourname(config-controller)#channel-group 0 timeslots 1-31
+yourname(config-controller)#clock source internal
+! --  или  clock source line bits  , в зависимости от того, как Вы настраиваете синхронизацию -- 
+
+
+
+4) Настройка интерфейса E1 завершена.
+Теперь в конфигурации появился интерфейс новый интерфейс - Serial0
+
+interface Serial0/0/0:0
+
+
+В примере использовалось железо Cisco 1841 с Cisco IOS Software, 1841 Software (C1841-ADVSECURITYK9-M), Version 12.4(23), RELEASE SOFTWARE (fc1)
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Как сделать программный заворот интерфейса E1?
+
+
+Заворот может потребоваться при тестировании линии, когда нужно исключить из теста активное оборудование. В этом случае сигнал передается в линию 
+с одной стороны, доходит до активного железа, на котором установлен заворот, и с его входа отражается назад. Анализируя переданные и
+ принятые данные можно делать вывод о состоянии и качестве линии.
+Для включения заворота нужно выполнить команду 'loopback':
+
+yourname(config-controller)#loopback local line
+
+или
+
+yourname(config-controller)#loopback local payload
+
+Если не ошибаюсь, команды отличаются тем, что первом случае пакеты отражаются от входа интерфеса. Во втором случае пакеты обрабатываются интерфейсом и снова возвращаются в линию.
+
+Команды из примера проверялись на железе Cisco 1841 с Cisco IOS Software, 1841 Software (C1841-ADVSECURITYK9-M), Version 12.4(23), RELEASE SOFTWARE (fc1) 
+______________________________________________________________________________________
+
+Understanding the show controllers e1 Command
+[http://www.cisco.com/c/en/us/support/docs/wan/t1-e1-t3-e3/9160-show-ce1.html](http://www.cisco.com/c/en/us/support/docs/wan/t1-e1-t3-e3/9160-show-ce1.html)
+
+[http://forum.nag.ru/forum/index.php?showtopic=56724](http://forum.nag.ru/forum/index.php?showtopic=56724)
+
+
+
+
+
+
+Настройка E1 ISDN PR
+[http://snakeproject.ru/rubric/article.php?art=cisco_E1_ISDN](http://snakeproject.ru/rubric/article.php?art=cisco_E1_ISDN)
+
+Настройка E1 ISDN PRI
+
+Для настройки ISDN PRI на многоканальный контроллер E1, используйте следующие команды начинают в режиме глобальной конфигурации:
+
+Для начала надо выбрать тип карты:  Router(config)#  card type e1 0 - Выбор типа карты E1
+Далее:
+
+Шаг 1
+
+Router(config)# isdn switch-type switch-type
+Выбор коммутатора услуг типа, который вмещает PRI. 
+
+Шаг 2
+
+Router(config)# controller e1 slot/port
+
+или
+
+Router(config)# controller e1 number
+Определяет контроллер место в Cisco 7200 и Cisco 7500 серии маршрутизаторов на слот и порт.
+
+Определяет контроллер место в Cisco серии 4000 и Cisco AS5200 всеобщего доступа сервера, устройство number.1
+
+Шаг 3
+
+Router(config-controller)# framing crc4
+Определяет разработки характеристики, как проверка четности 4 (CRC4).
+
+Шаг 4
+
+Router(config-controller)# linecode hdb3
+Определяет линию код высокой плотности биполярный 3 (HDB3).
+
+Шаг 5
+
+Router(config-controller)# pri-group [timeslots range]
+Настройка ISDN PRI.
+
+Пример настройки:
+
+Тип карты:
+R(config)# card type e1 0 - Выбор типа карты E1 или T1
+
+R(config)# isdn switch-type primary-net5 – Выбор типа сигнализации ISDN
+
+R(config)# network-clock-participate wic 3 – Карта получает сихронизацию от централизованного источника.
+
+При настройке контроллера E1 на маршрутизаторе и PBX должны быть согласованы 3 параметра:
+
+Framing
+
+Linecoding
+
+Clock Source
+
+R(config)# controller e1 0/3/0
+
+R(config-controller)# framing NO-CRC4 – Для E1 можно настроить или запретить контроль четности.
+
+R(config-controller)# clock source line – источник синхронизации. По умолчанию, это линия. В данном случае источником на линии яляется PBX.
+
+R(config-controller)# pri-group timeslots 1-31 – Формируем ISDN PRI группу. Канал 0 используется для служебной информации.
+
+______________________________________________________________________________
+
+
+E1 troubleshooting
+[http://www.cisco.com/c/en/us/support/docs/wan/t1-e1-t3-e3/14167-E1-pri.html](http://www.cisco.com/c/en/us/support/docs/wan/t1-e1-t3-e3/14167-E1-pri.html)
+[https://www.cisco.com/c/en/us/support/docs/voice/h323/14081-voip-debugcalls.html#disconnect](https://www.cisco.com/c/en/us/support/docs/voice/h323/14081-voip-debugcalls.html#disconnect)
+[https://www.cisco.com/c/en/us/support/docs/dial-access/integrated-services-digital-networks-isdn-channel-associated-signaling-cas/8607-isdn-disc-code.html](https://www.cisco.com/c/en/us/support/docs/dial-access/integrated-services-digital-networks-isdn-channel-associated-signaling-cas/8607-isdn-disc-code.html)
+
+Телефония на Cisco (Call Manager Express) — Часть 2
+[http://habrahabr.ru/post/107903/](http://habrahabr.ru/post/107903/)
+[http://docs.tpu.ru/docs/cisco/ios120/12cgcr/dial_c/dcchant.htm](http://docs.tpu.ru/docs/cisco/ios120/12cgcr/dial_c/dcchant.htm)
+[http://tamkovich.com/2011/03/configuring-addpac-ap1100-for-asterisk/](http://tamkovich.com/2011/03/configuring-addpac-ap1100-for-asterisk/)
+
+[http://ciscomaster.ru/content/digital-voice-ports-ili-rabota-s-isdn-e1-pri](http://ciscomaster.ru/content/digital-voice-ports-ili-rabota-s-isdn-e1-pri)
+[http://ciscomaster.ru/content/09012013-](http://ciscomaster.ru/content/09012013-)дебаг-телефонии
+[https://netconfigure.net/index.php/ru/forum/5-ip-telefoniya/138-nastrojka-telefonii-isdn-e1-pri-na-cisco-2911-s-modulyami-vwic3-4mft-t1-e1-i-pvdm3-dsp-asterisk-pbx](https://netconfigure.net/index.php/ru/forum/5-ip-telefoniya/138-nastrojka-telefonii-isdn-e1-pri-na-cisco-2911-s-modulyami-vwic3-4mft-t1-e1-i-pvdm3-dsp-asterisk-pbx)
+
+DID
+[https://www.cisco.com/c/en/us/support/docs/voice/digital-ccs/14072-direct-inward-dial.html](https://www.cisco.com/c/en/us/support/docs/voice/digital-ccs/14072-direct-inward-dial.html)
+
+Читать
+[http://snakeproject.ru/rubric/files/doc/nastroyka_planov_nabora](http://snakeproject.ru/rubric/files/doc/nastroyka_planov_nabora),.pdf
+[https://www.cisco.com/c/en/us/support/docs/voice/call-routing-dial-plans/14074-in-dial-peer-match.html](https://www.cisco.com/c/en/us/support/docs/voice/call-routing-dial-plans/14074-in-dial-peer-match.html)

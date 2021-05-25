@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "pdf2fb2"
+date:   2012-01-24 12:32:19 +0400
+categories: pdf2fb2
+tags: pdf2fb2
+---
+
+# pdf2fb2
+Как насчёт pdftohtml (например, из poppler) и конвертации полученного html в fb2? 
+
+
+
+[http://read2go.ru/konverter_formatov/](http://read2go.ru/konverter_formatov/)
+[http://science.flibusta.net/node/55088](http://science.flibusta.net/node/55088)
+[http://rus-linux.net/nlib.php?name=/MyLDP/freesoft/FreeBooks/free20books.html](http://rus-linux.net/nlib.php?name=/MyLDP/freesoft/FreeBooks/free20books.html)
+[http://robinzoid.ru/pdf-v-fb2-nv-linukse/](http://robinzoid.ru/pdf-v-fb2-nv-linukse/)
+[http://convertfileonline.com/ru/](http://convertfileonline.com/ru/)
+[http://ebook.online-convert.com/convert-to-fb2](http://ebook.online-convert.com/convert-to-fb2)
+[http://www.soft-shara.ru/graphics/5604-kachestvennoe-konvertirovanie-pdf-i-djvu-v-fb2-ili-doc.html](http://www.soft-shara.ru/graphics/5604-kachestvennoe-konvertirovanie-pdf-i-djvu-v-fb2-ili-doc.html)
+[http://www.fb2-reader.ru/edit/fbtools](http://www.fb2-reader.ru/edit/fbtools)
+[http://4pda.ru/forum/index.php?showtopic=138358](http://4pda.ru/forum/index.php?showtopic=138358)
+

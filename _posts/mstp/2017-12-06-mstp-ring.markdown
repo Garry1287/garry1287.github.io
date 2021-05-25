@@ -1,0 +1,61 @@
+---
+layout: post
+title:  "mstp-ring"
+date:   2017-12-06 18:40:41 +0300
+categories: mstp
+tags: mstp
+---
+
+# mstp-ring
+1.Один регион
+2.Два инстанса на кольцо. Половина в одну сторону, половина в другую для балансировки
+3.Root на корневом коммутаторе, secondary root первый или последний коммутатор в цепочке
+4.
+
+cde-s0:
+
+spanning-tree vlan 2, 9, 10, 11, 16, 21, 22, 23, 24, 25, 54, 55, 57, 58, 68, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 113, 120, 151, 152, 153, 156, 165, 172, 202, 205, 260, 272, 276, 281, 284, 294, 303, 577, 628, 629, 648, 651, 671, 684, 691, 693, 694, 700, 773, 787, 816, 822, 833, 837, 846, 855, 894, 895, 899, 953, 954, 1011, 1012, 1014, 4001, 4007
+
+
+spanning-tree mode mst
+revision 10
+
+!
+spanning-tree mst configuration
+ name PSI
+ instance 1 vlan 9, 10, 110, 202, 205, 260, 272, 276, 281, 303, 628, 629, 648, 651, 684, 691, 693, 694, 700, 816, 822, 833, 837, 855, 895, 1014, 4007
+ instance 2 vlan 54, 55, 57, 58, 68, 172, 294, 577, 671, 773, 787, 846, 894, 1011, 1012, 4001
+ instance 3 vlan 2, 11, 16, 21, 22, 23, 24, 25, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 113, 120, 151, 152, 153, 156, 165, 284, 899, 953, 954
+!
+! Root for MSTI1
+!
+spanning-tree mst 0 priority 8192
+spanning-tree mst 1 priority 8192
+
+
+
+
+enable stp
+config stp version mstp
+config stp mst_config_id name PSI
+config stp mst_config_id revision_level 10
+
+
+create stp instance_id 1
+config stp instance_id 1 add_vlan 9, 10, 110, 202, 205, 260, 272, 276, 281, 303, 628, 629, 648, 651, 684, 691, 693, 694, 700, 816, 822, 833, 837, 855, 895, 1014, 4007
+create stp instance_id 2
+config stp instance_id 2 add_vlan 54, 55, 57, 58, 68, 172, 294, 577, 671, 773, 787, 846, 894, 1011, 1012, 4001
+create stp instance_id 3
+config stp instance_id 3 add_vlan 2, 11, 16, 21, 22, 23, 24, 25, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 113, 120, 151, 152, 153, 156, 165, 284, 899, 953, 954
+
+
+
+config stp priority 8192 instance_id 0
+config stp priority 8192 instance_id 1
+
+???????????
+config stp mst_ports 1 instance_id 2 priority 96
+config stp mst_ports 13 instance_id 3 priority 96
+config stp ports 3-12 edge true
+config stp ports 15-20 edge true
+

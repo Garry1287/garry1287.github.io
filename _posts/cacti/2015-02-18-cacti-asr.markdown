@@ -1,0 +1,141 @@
+---
+layout: post
+title:  "cacti-asr"
+date:   2015-02-18 01:28:00 +0300
+categories: cacti-asr
+tags: cacti
+---
+
+# cacti-asr
+show platform software status control-processor brief
+
+память
+1.3.6.1.4.1.9.9.109.1.1.1.1.13.2
+1.3.6.1.4.1.9.9.109.1.1.1.1.13.4
+1.3.6.1.4.1.9.9.109.1.1.1.1.13.2
+процы
+
+1.3.6.1.4.1.9.9.109.1.1.1.1.24.3
+1.3.6.1.4.1.9.9.109.1.1.1.1.24.4
+1.3.6.1.4.1.9.9.109.1.1.1.1.24.2 
+
+[https://forums.cacti.net/viewtopic.php?p=266403](https://forums.cacti.net/viewtopic.php?p=266403)
+[https://forums.cacti.net/viewtopic.php?f=12&t=54205](https://forums.cacti.net/viewtopic.php?f=12&t=54205)
+[https://forums.cacti.net/about5603.html](https://forums.cacti.net/about5603.html)
+[https://forums.cacti.net/viewtopic.php?p=256227](https://forums.cacti.net/viewtopic.php?p=256227)
+
+[http://forum.nag.ru/forum/index.php?showtopic=54670&st=105](http://forum.nag.ru/forum/index.php?showtopic=54670&st=105)
+
+
+
+
+1. Разобраться какое оборудование, что мониторить
+2. Через mib brouser опросить и сравнить с cisco mib
+[http://tools.cisco.com/ITDIT/MIBS/servlet/index](http://tools.cisco.com/ITDIT/MIBS/servlet/index)
+ftp://ftp.cisco.com/pub/mibs/supportlists/asr1000/asr1000-supportlist.html
+[http://www.cisco.com/c/en/us/support/docs/ip/simple-network-management-protocol-snmp/15215-collect-cpu-util-snmp.html#multiple](http://www.cisco.com/c/en/us/support/docs/ip/simple-network-management-protocol-snmp/15215-collect-cpu-util-snmp.html#multiple)
+[http://forum.nag.ru/forum/index.php?showtopic=92593](http://forum.nag.ru/forum/index.php?showtopic=92593)
+
+[http://www.cisco.com/c/ru_ru/support/docs/ip/simple-network-management-protocol-snmp/9226-mibs-9226.html](http://www.cisco.com/c/ru_ru/support/docs/ip/simple-network-management-protocol-snmp/9226-mibs-9226.html)
+[http://tools.cisco.com/ITDIT/MIBS/MainServlet?ReleaseSel=4563&PlatformSel=260&fsSel=290](http://tools.cisco.com/ITDIT/MIBS/MainServlet?ReleaseSel=4563&PlatformSel=260&fsSel=290)
+[http://docwiki.cisco.com/wiki/Cisco_ASR_1000_Series--Configuring_MIB_Support](http://docwiki.cisco.com/wiki/Cisco_ASR_1000_Series--Configuring_MIB_Support)
+
+Load Average
+ Slot  Status  1-Min  5-Min 15-Min
+  RP0 Healthy   0.32   0.19   0.18
+ ESP0 Healthy   0.07   0.14   0.08
+ SIP0 Healthy   0.00   0.00   0.00
+ SIP1 Healthy   0.27   0.07   0.02
+
+
+ ESP0
+.1.3.6.1.4.1.9.9.109.1.1.1.1.24.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.25.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.26.2
+ 
+RP
+.1.3.6.1.4.1.9.9.109.1.1.1.1.24.3   1
+.1.3.6.1.4.1.9.9.109.1.1.1.1.25.3   5
+.1.3.6.1.4.1.9.9.109.1.1.1.1.26.3   15
+
+
+SIP1
+.1.3.6.1.4.1.9.9.109.1.1.1.1.24.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.25.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.26.4
+
+
+SIP0
+.1.3.6.1.4.1.9.9.109.1.1.1.1.24.5
+.1.3.6.1.4.1.9.9.109.1.1.1.1.24.5
+.1.3.6.1.4.1.9.9.109.1.1.1.1.26.5
+
+
+
+
+
+Memory used ESP0
+
+CPU memory used
+.1.3.6.1.4.1.9.9.109.1.1.1.1.12.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.12.3
+.1.3.6.1.4.1.9.9.109.1.1.1.1.12.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.12.5
+
+
+CPU memory free
+.1.3.6.1.4.1.9.9.109.1.1.1.1.13.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.13.3
+.1.3.6.1.4.1.9.9.109.1.1.1.1.13.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.13.5
+
+committed memory
+    переданная память (виртуальная память, для которой зарезервировано место в файле подкачки)
+CPU memory Committed
+.1.3.6.1.4.1.9.9.109.1.1.1.1.27.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.27.3
+.1.3.6.1.4.1.9.9.109.1.1.1.1.27.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.27.5
+
+
+1000000000000
+
+
+
+CPU 5 sec
+.1.3.6.1.4.1.9.9.109.1.1.1.1.6.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.6.3
+.1.3.6.1.4.1.9.9.109.1.1.1.1.6.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.6.5
+
+CPU 1 min
+.1.3.6.1.4.1.9.9.109.1.1.1.1.7.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.7.3
+.1.3.6.1.4.1.9.9.109.1.1.1.1.7.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.7.5
+
+CPU 5 min
+.1.3.6.1.4.1.9.9.109.1.1.1.1.8.2
+.1.3.6.1.4.1.9.9.109.1.1.1.1.8.3
+.1.3.6.1.4.1.9.9.109.1.1.1.1.8.4
+.1.3.6.1.4.1.9.9.109.1.1.1.1.8.5
+
+
+
+
+
+
+
+-------------------------------
+ctd-c6
+
+ ESP0
+ 2
+ .1.3.6.1.4.1.9.9.109.1.1.1.1.26.2
+
+ 
+ RP
+ 3
+ 
+ SIP0
+ 4

@@ -1,0 +1,272 @@
+---
+layout: post
+title:  "работа с bgp"
+date:   2014-12-13 02:33:14 +0300
+categories: routing
+tags: routing
+---
+
+# работа с bgp
+  neighbor 87.229.223.117 activate
+  neighbor 87.229.223.117 send-community
+  neighbor 87.229.223.117 prefix-list deny_lesnets_from_uplinks in
+  neighbor 87.229.223.117 prefix-list adv-to-beeline out
+  neighbor 87.229.223.117 route-map setcommunity-bee750 out
+
+
+  neighbor 87.245.241.133 activate
+  neighbor 87.245.241.133 route-map rm-adv-to-retn out
+  neighbor 87.245.241.145 activate
+  neighbor 87.245.241.145 route-map rm-adv-to-retn out
+
+
+route-map setcommunity-bee750 permit 10
+ set community 3216:5000 3216:5010 3216:5020 3216:5040 3216:5054 3216:5064 3216:5074 3216:5090 3216:5100 3216:5110 
+3216:5120 3216:5130 3216:5140 3216:5204 3216:5210 3216:5220 3216:5234 3216:5244 3216:5254 3216:5264 3216:5270 
+3216:5280 3216:5290 3216:5304 3216:5310 3216:5330 3216:5340 3216:5354 3216:5400 3216:5410
+
+
+
+UUNET uplink не аннонсируем
+C&W uplink не аннонсируем
+Telecom Italia Sparkle uplink не аннонсируем
+Telia uplink не аннонсируем
+China Telecom Europe uplink не аннонсируем
+
+TATA uplink не аннонсируем
+CHINA uplink не аннонсируем
+
+M9-IX peer  - 4 префикса
+SPB peer - 4 префикса
+NSK-IX peer - 4 префикса
+
+DE-CIX peer не аннонсируем
+LINX peer не аннонсируем
+AMS-IX peer не аннонсируем
+Equinix Ashrburn peer не аннонсируем
+Netnod Stockholm  peer не аннонсируем
+
+Google private peer (Moscow and Frankfurt) 4 префикса
+Megafon private peer  не аннонсируем
+MTU private peer не аннонсируем
+Vkontakte private peer (SPB) 4 префикса
+Mail.ru private peer..	4 префикса
+Yandex private peer. 4 префикса
+Corbina private peer 4 префикса
+Comcor private peer  не аннонсируем
+Netbynet private peer не аннонсируем
+Rostelecom private peer 4 префикса
+Vkontakte private peer 4 префикса
+DTAG private peer не аннонсируем
+Level3 private peer не аннонсируем
+RetnNet private peer не аннонсируем
+Netbynet private peer (SPB)... 4 префикса
+
+
+
+   Communities for prefix control                |
+remarks:        +--------------------------------------------------------------+
+remarks:        |                       !!!ATTENTION!!!                        |
+remarks:        | Using this communities may cause connectivity                |
+remarks:        | problems and you must clearly understand what are you        |
+remarks:        | doing. StartTelecom does not bear any responsibility         |
+remarks:        | if there will be such troubles.                              |
+remarks:        +--------------------------------------------------------------+
+remarks:        |                                                              |
+remarks:        |   - To prepend or deny prefix use 8744:5DNNA, where:         |
+remarks:        |                                                              |
+remarks:        |       D - destination of the prepend or deny action:         |
+remarks:        |                                                              |
+remarks:        |               2 - Upstreams                                  |
+remarks:        |               3 - Russian peers                              |
+remarks:        |               4 - Foreign peers                              |
+remarks:        |               9 - Upstreams and Peers                        |
+remarks:        |                                                              |
+remarks:        |       NN - Upstream or peer number:                          |
+remarks:        |                                                              |
+remarks:        |           Upstreams:                                         |
+remarks:        |                                                              |
+remarks:        |               02 - TELIA             (AS1299)                |
+remarks:        |               04 - TTK               (AS20485)               |
+remarks:        |               06 - MTS               (AS8359)                |
+remarks:        |               08 - ROSTELECOM        (AS12389)               |
+remarks:        |               99 - All Upstreams                             |
+remarks:        |                                                              |
+remarks:        |           Russian peers:                                     |
+remarks:        |                                                              |
+remarks:        |               01 - MSK-IX            (AS8631)                |
+remarks:        |               04 - VKONTAKTE         (AS47541)               |
+remarks:        |               12 - GOOGLE            (AS15169)               |
+remarks:        |               13 - MAIL.RU           (AS47764)               |
+remarks:        |               99 - All Russian Peers                         |
+remarks:        |                                                              |
+remarks:        |           Foreign peers:                                     |
+remarks:        |                                                              |
+remarks:        |               01 - DE-CIX            (AS6695)                |
+remarks:        |               06 - AMS-IX            (AS6777)                |
+remarks:        |               99 - All Foreign Peers                         |
+remarks:        |                                                              |
+remarks:        |       A - action:                                            |
+remarks:        |                                                              |
+remarks:        |               0 - don't announce prefix                      |
+remarks:        |               1 - announce with one prepend                  |
+remarks:        |               2 - announce with two times prepend            |
+remarks:        |               4 - announce with four times prepend           |
+remarks:        |                                                              |
+remarks:        |   - To set local preference to 20 use 8744:51010             |
+remarks:        |                                                            
+
+
+
+
+
+
+
+
+3216:500x When advertising to UUNET uplink...
+remarks:        3216:501x When advertising to C&W uplink...
+remarks:        3216:502x When advertising to Telecom Italia Sparkle uplink...
+remarks:        3216:504x When advertising to Telia uplink...
+remarks:        3216:509x When advertising to China Telecom Europe uplink...
+remarks:
+remarks:        3216:540x When advertising to TATA uplink...
+remarks:        3216:541x When advertising to CHINA uplink...
+remarks:
+remarks:        3216:505x When advertising to any M9-IX peer...
+remarks:        3216:506x When advertising to any SPB peer...
+remarks:        3216:507x When advertising to any NSK-IX peer...
+remarks:
+remarks:        3216:510x When advertising to any DE-CIX peer...
+remarks:        3216:511x When advertising to any LINX peer...
+remarks:        3216:512x When advertising to any AMS-IX peer...
+remarks:        3216:513x When advertising to any Equinix Ashrburn peer...
+remarks:        3216:514x When advertising to any Netnod Stockholm  peer...
+remarks:
+remarks:        3216:520x When advertising to Google private peer (Moscow and Frankfurt)...
+remarks:        3216:521x When advertising to Megafon private peer...
+remarks:        3216:522x When advertising to MTU private peer...
+remarks:        3216:523x When advertising to Vkontakte private peer (SPB)...
+remarks:        3216:524x When advertising to Mail.ru private peer...
+remarks:        3216:525x When advertising to Yandex private peer...
+remarks:        3216:526x When advertising to Corbina private peer...
+remarks:        3216:527x When advertising to Comcor private peer...
+remarks:        3216:528x When advertising to Netbynet private peer...
+remarks:        3216:529x When advertising to Rostelecom private peer...
+remarks:        3216:530x When advertising to Vkontakte private peer...
+remarks:        3216:531x When advertising to DTAG private peer...
+remarks:        3216:533x When advertising to Level3 private peer...
+remarks:        3216:534x When advertising to RetnNet private peer...
+remarks:        3216:535x When advertising to Netbynet private peer (SPB)...
+remarks:
+remarks:        3216:590x When advertising to any INTERNATIONAL peer or uplink...
+remarks:
+remarks:
+remarks:        ...x=0 - do not advertise
+remarks:        ...x=1,2,4 or 6 - prepend 3216 1,2,4 or 6 times
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ neighbor 81.16.117.9 remote-as 8744neighbor 81.16.117.9 prefix-list adv-to-stk out
+ neighbor 81.16.117.9 update-source GigabitEthernet0/1
+
+
+  neighbor 81.16.117.9 activate
+  neighbor 81.16.117.9 send-community both
+  neighbor 81.16.117.9 weight 700
+  neighbor 81.16.117.9 prefix-list deny_lesnets_from_uplinks in
+  neighbor 81.16.117.9 prefix-list adv-to-stk out
+  neighbor 81.16.117.9 route-map prep-out-start out
+
+
+
+ip prefix-list adv-to-stk seq 1 permit 109.95.230.0/23 le 32
+ip prefix-list adv-to-stk seq 2 permit 46.72.128.0/19 le 32
+ip prefix-list adv-to-stk seq 3 permit 46.72.160.0/20 le 32
+ip prefix-list adv-to-stk seq 5 permit 81.20.192.0/20 le 24
+ip prefix-list adv-to-stk seq 7 deny 94.232.14.0/23 le 32
+ip prefix-list adv-to-stk seq 8 permit 193.104.11.0/24 le 32
+ip prefix-list adv-to-stk seq 9 permit 195.191.182.0/23 le 32
+ip prefix-list adv-to-stk seq 15 deny 0.0.0.0/0 le 32
+
+
+ip prefix-list deny_lesnets_from_uplinks seq 10 deny 195.34.224.0/19 ge 20
+ip prefix-list deny_lesnets_from_uplinks seq 12 deny 95.179.0.0/17 le 21
+ip prefix-list deny_lesnets_from_uplinks seq 13 deny 178.234.0.0/16 le 21
+ip prefix-list deny_lesnets_from_uplinks seq 50 permit 0.0.0.0/0 le 32
+
+
+
+route-map prep-out-start permit 10
+ set as-path prepend 20866 20866 20866 20866 20866 20866 20866
+
+
+
+
+
+
+8744:5DNNA
+Всем русским анонсировать с 4 препендами
+8744:53994
+
+Иностранным пирам не аннонсировать
+8744:54990
+
+Всем апстримам с 4 препендами
+8744:52994
+
+Запрет вконтакте
+8744:53040
+
+Запрет гугля
+8744:53120
+
+
+            04 - VKONTAKTE        (AS47541)              |
+remarks:        |              12 - GOOGLE            (AS15169)
+
+
+router bgp 20866
+ address-family ipv4
+neighbor 81.16.117.9 route-map prep-out-start out
+
+
+
+
+
+
+route-map setcommunity-start-first
+set community 8744:53994 8744:54990 8744:52994 8744:53120 8744:53040
+
+
+router bgp 20866
+ address-family ipv4
+no neighbor 81.16.117.9 route-map setcommunity-start-first out

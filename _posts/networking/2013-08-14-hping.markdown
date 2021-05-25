@@ -1,0 +1,251 @@
+---
+layout: post
+title:  "hping"
+date:   2013-08-14 14:33:02 +0400
+categories: Networking
+tags: Networking
+---
+
+# hping
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u500 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u50 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u50 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u50 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u50 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u30 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u20 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u25 --tos a0 10.192.10.86
+ hping3 -q --udp -p 64000 -c 100000 -d 1000 -i u30 --tos a0 10.192.10.86
+ hping -q -udp -p 10500 -c 1000 -i u100 --tos a0 10.192.10.186
+ hping -q --udp -p 10500 -c 1000 -d 1000 -i u100 --tos a0 10.192.10.186
+ hping -q --udp -p 10500 -c 1000 -d 1000 -i u200 --tos a0 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u200 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u100 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u100 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u100 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u100 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u100 --tos a0 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u100 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u50 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u50 10.192.10.186
+ hping3 -q --udp -c 10000 -d 1000 -i u50 --tos a0 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u50 --tos a0 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u50 --tos a0 10.192.10.86
+ hping3 -q --udp -c 100000 -d 1000 -i u50 --tos a0 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u40 --tos a0 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u30 --tos a0 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u30 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u30 10.192.10.186
+ hping3 -q --udp -c 100000 -d 1000 -i u30 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 1000 -i u30 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u30 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u30 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u50 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u150 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u120 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u120 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 100 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u50 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u50 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u75 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u75 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u75 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u5 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u85 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u85 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u85 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.86
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 100 -d 400 -i u100 --tos a0 10.192.10.186
+ hping3 -q -1 -c 1000000 -d 400 -i u100 10.192.10.186
+ hping3 -q -1 -c 1000000 -d 400 -i u300 10.192.10.186
+ hping3 -q -1 -c 50000 -d 400 -i u300 --tos a0 10.192.10.186
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u10 --tos a0
+ hping -q --udp -p 10500 -c 100000 -d 800 -i u10 --tos a0
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u10 --tos a0
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u10 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u100 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u200 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u10 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u100 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u200 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u250 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u100 --tos a0 10.192.10.6
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u100 --tos a0 10.192.10.14
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u200 --tos a0 10.192.10.14
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u200 --tos a0 10.192.10.6
+ hping3 -q --udp -c 10000 -d 1000 10.192.11.61
+ hping3 -q --udp -c 10000 -d 1000 -i u200 10.192.11.61
+ hping3 -q --udp -c 1000000 -d 1000 -i u200 10.192.11.61
+ hping3 -q --udp -c 500000 -d 1000 -i u200 --tos a0 10.192.11.61
+ hping3 -q --udp -c 1000000 -d 1000 -i u100 10.192.11.61
+ hping3 -q --udp -c 500000 -d 1000 -i u100 --tos a0 10.192.11.61
+ hping3 -q --udp -p 10500 -c 500000 -d 1000 -i u100 --tos a0 10.192.11.61
+ hping3 -q --udp -p 10500 -c 500000 -d 500 -i u100 --tos a0 10.192.11.61
+ 
+ 
+ 
+ hping c emerald
+hping3 -q -I vlan11 -1 -p 10500 -c 1000 -d 800 -i u1000 --tos a0 192.168.1.11
+hping3 -q -I vlan3 --udp -p 10500 -c 1000 -d 800 -i u1000 --tos a0 192.168.222.2
+ 
+ 
+ 
+hping с sapphire
+hping3 -q -I vlan10 -1 -p 10500 -c 1000 -d 800 -i u1000  --tos a0 81.20.192.11
+hping3 -q -I vlan10 --udp -p 10500 -c 50000 -d 800 -i u1200  --tos a0 81.20.192.11
+
+
+
+Здравствуйте,
+
+На ruby делаем правило в firewall
+iptables -A INPUT -s 10.192.11.22/32 -p udp -m udp --dport 10500 -j ACCEPT
+10.192.11.22 - это Zabbix
+
+Смотреть статистику iptables -L -v
+
+С zabbix пускаем hping3
+hping3 --udp -p 10500 -c 100 10.192.11.53
+
+
+
+Смотрим статистику
+Chain INPUT (policy ACCEPT 921 packets, 99507 bytes)
+ pkts bytes target     prot opt in     out     source               destination        
+  100  2800 LOG        udp  --  any    any     10.192.11.22         anywhere             udp dpt:hip-nat-t LOG level warning prefix "From Zabbix hping3"
+  100  2800 ACCEPT     udp  --  any    any     10.192.11.22         anywhere             udp dpt:hip-nat-t
+  
+  
+  
+  Методика тестирования.
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u200 --tos a0 10.192.10.14
+ hping3 -q --udp -p 10500 -c 100000 -d 800 -i u200 --tos a0 10.192.10.6
+ 
+  1.С сервера запускаем hping на какой-либо узел сети. 
+  Чтобы зафлудить канал необходимо указывать как можно меньше интервал -i u100 (пинг каждый 100 милисекунд) и количество пакетов -с 10000, размер тоже влияет -d 800
+  
+  2.На роутере делаем access-list, который будет ловить hping
+  
+ip access-list extended catch-udp
+ permit udp host 10.192.11.22 host 10.192.10.6
+ permit udp host 10.192.11.45 host 10.192.10.6
+ permit icmp any any
+ permit udp any any
+ip access-list extended catch-udp-186
+ permit udp host 10.192.11.22 host 10.192.10.186
+ permit udp host 10.192.11.45 host 10.192.10.186
+ permit icmp any any
+ permit ip any any
+ip access-list extended catch-udp-crystall-bee
+ permit udp host 10.192.11.45 host 10.192.10.45
+ permit udp host 10.192.11.45 host 10.192.10.46
+ permit udp host 10.192.11.45 host 10.192.10.5
+ permit udp host 10.192.11.45 host 10.192.10.6
+ permit icmp any any
+ permit udp any any
+ip access-list extended catch-udp-emerald-zab
+ permit udp host 10.192.11.61 host 10.192.11.22 precedence critical
+ permit udp host 10.192.11.61 host 10.192.11.22
+ permit icmp any any
+ permit udp any any
+ permit ip any any
+ip access-list extended catch-udp-ruby-zab
+ permit udp host 10.192.11.53 host 10.192.11.22 precedence critical
+ permit udp host 10.192.11.53 host 10.192.11.22
+ permit icmp any any
+ permit udp any any
+ permit ip any any
+ip access-list extended catch-udp-zab-emerald
+ permit udp host 10.192.11.22 host 10.192.11.61 precedence critical
+ permit udp host 10.192.11.22 host 10.192.11.61
+ permit icmp any any
+ permit udp any any
+ permit ip any any
+ip access-list extended catch-udp-zab-ruby
+ permit udp host 10.192.11.22 host 10.192.10.190
+ permit udp host 10.192.11.22 host 10.192.11.53
+ permit icmp any any
+ permit udp any any
+
+ 
+ На интерфейсе
+ interface GigabitEthernet0/0.200
+ description #IPVPN NLMK-CE0 newport
+ bandwidth 204800
+ encapsulation dot1Q 200
+ ip vrf forwarding nlmk-vpn
+ ip address 10.192.10.185 255.255.255.252
+ ip access-group catch-udp-186 out
+ ip flow egress
+ no cdp enable
+ service-policy output PLATINUM-ETH-200MB
+
+ 
+ 3.Смотрим на потери в counts access list
+    смотрим на загрузку канала. При правильно подобранных параметрах в пункте 1 должен быть 100% загружен или близко к этому. Необходимо экспериментально пробывать
+    с tos и без tos
+    
+    Эта методика дает понимания о потерях на канале
+    
+    
+---------------------------------
+
+На ruby делаем правило в firewall
+iptables -A INPUT -s 10.192.11.22/32 -p udp -m udp --dport 10500 -j ACCEPT
+10.192.11.22 - это Zabbix
+
+Смотреть статистику iptables -L -v
+
+С zabbix пускаем hping3
+hping3 --udp -p 10500 -c 100 10.192.11.53
+
+
+
+Смотрим статистику
+Chain INPUT (policy ACCEPT 921 packets, 99507 bytes)
+ pkts bytes target     prot opt in     out     source               destination        
+  100  2800 LOG        udp  --  any    any     10.192.11.22         anywhere             udp dpt:hip-nat-t LOG level warning prefix "From Zabbix hping3"
+  100  2800 ACCEPT     udp  --  any    any     10.192.11.22         anywhere             udp dpt:hip-nat-t
+  
+
+  
+  
+  ---------------------------------------------------------
+  Надо нагружать канал hping'ом и пинговать в этот момент с tos
+  
+  

@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "DWDM"
+date:   2010-01-16 13:02:17 +0300
+categories: optica
+tags: optica
+---
+
+# DWDM
+Методы мониторинга в системах DWDM (Часть 1)
+[http://habrahabr.ru/post/246095/](http://habrahabr.ru/post/246095/)

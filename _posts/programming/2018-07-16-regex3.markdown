@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "regex3"
+date:   2018-07-16 09:14:42 +0300
+categories: programming
+tags: programming
+---
+
+# regex3
+[http://regexr.com/](http://regexr.com/)
+[http://txt2re.com/index-php.php3?s=](http://txt2re.com/index-php.php3?s=)\%3C\/index%3E%3C\/div%3E&5
+[https://regex101.com/#javascript](https://regex101.com/#javascript)
+[http://regexpres.narod.ru/calculator.html](http://regexpres.narod.ru/calculator.html)
+
+[http://www.opennet.ru/base/dev/php_regular.txt.html](http://www.opennet.ru/base/dev/php_regular.txt.html)
+[http://project.net.ru/web-master/php/article1/08_2.html](http://project.net.ru/web-master/php/article1/08_2.html)
+[http://kyleyu.com/files/regular-expressions-cheat-sheet-v2.png](http://kyleyu.com/files/regular-expressions-cheat-sheet-v2.png)

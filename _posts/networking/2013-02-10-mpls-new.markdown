@@ -1,0 +1,27 @@
+---
+layout: post
+title:  "mpls-new"
+date:   2013-02-10 19:37:49 +0400
+categories: Networking
+tags: Networking
+---
+
+# mpls-new
+[http://www.cisco.com/cisco/web/support/RU/9/92/92054_mpls_vpn_basic.html](http://www.cisco.com/cisco/web/support/RU/9/92/92054_mpls_vpn_basic.html)
+[http://habrahabr.ru/post/226807/](http://habrahabr.ru/post/226807/)
+[http://izlov.ru/docs/100/index-12084.html](http://izlov.ru/docs/100/index-12084.html)
+[http://www.go-to-easyit.com/2011/06/ospf-cisco-2.html](http://www.go-to-easyit.com/2011/06/ospf-cisco-2.html)
+[https://sites.google.com/site/amitsciscozone/home/important-tips/mpls-wiki/ldp-igp-synchronization](https://sites.google.com/site/amitsciscozone/home/important-tips/mpls-wiki/ldp-igp-synchronization)
+[https://www.scribd.com/doc/189528802/%D0%A2%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F-%D0%B8-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%8B-MPLS](https://www.scribd.com/doc/189528802/%D0%A2%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F-%D0%B8-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%8B-MPLS)
+wiki.kemot-net.com/mpls-ldp-igp-synchronization
+[http://www.opennet.ru/docs/RUS/mpls/testbed1.html](http://www.opennet.ru/docs/RUS/mpls/testbed1.html)
+[http://www.rogerperkin.co.uk/ccie/mpls/mpls-ldp-router-id-loopback0-force/](http://www.rogerperkin.co.uk/ccie/mpls/mpls-ldp-router-id-loopback0-force/)
+[http://www.opennet.ru/docs/RUS/mpls/ldpdescription.html](http://www.opennet.ru/docs/RUS/mpls/ldpdescription.html)
+[http://www.opennet.ru/docs/RUS/mpls/mplsarchitecture.html](http://www.opennet.ru/docs/RUS/mpls/mplsarchitecture.html)
+[http://admindoc.ru/1426/mpls-arch/](http://admindoc.ru/1426/mpls-arch/)
+[http://www.anticisco.ru/forum/viewtopic.php?p=27593](http://www.anticisco.ru/forum/viewtopic.php?p=27593)
+
+
+ MPLS LDP+IGP MTU
+
+[http://mcp1971.livejournal.com/7357.html](http://mcp1971.livejournal.com/7357.html)

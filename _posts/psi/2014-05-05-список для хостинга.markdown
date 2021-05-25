@@ -1,0 +1,88 @@
+---
+layout: post
+title:  "список для хостинга"
+date:   2014-05-05 06:15:52 +0400
+categories: PSI
+tags: PSI
+---
+
+# список для хостинга
+
+drwxr-xr-x  8 Qtech          users          4096 Mar 30  2012 Qtech
+drwxr-xr-x  3 root           root             24 Oct 16  2009 _exim
+drwxr-xr-x  3 root           root             24 Dec 25  2010 a_wolf
+drwxr-xr-x  8 alexey.sc.ru   users          4096 Oct 16  2009 alexey.sc.ru
+drwxr-xr-x  3 apollon        apollon          24 Dec 25  2010 apollon
+drwxr-xr-x  9 audit2015psi   users          4096 Nov 11 08:41 audit2015psi
+drwxr-xr-x 11 backup         users          4096 Jun  1  2012 backup
+drwxr-xr-x  8 boogie         users          4096 Dec 13  2011 boogie
+drwxr-xr-x  9 buggie         users          4096 Feb 13  2012 buggie
+drwxr-xr-x  3 root           root             33 Oct 16  2009 cs
+drwxr-xr-x  8 root           root           4096 Oct 16  2009 cyradmin
+drwxr-xr-x  3 daylady        daylady          38 Oct 16  2009 daylady
+drwxr-xr-x  8 dokuwiki       dokuwiki       4096 Apr 10  2012 dokuwiki
+drwxr-xr-x  2 root           root             60 Oct 16  2009 ex00
+drwxr-xr-x  3 root           root             38 Oct 16  2009 fortftp
+drwxr-xr-x 25 garry          users          8192 Dec 14 09:28 garry
+drwxr-xr-x  6           1040 users          4096 May 15  2015 gold_555
+drwxr-xr-x  3 gortrans       gortrans         39 Nov 29  2014 gortrans
+drwxr-xr-x  4 infodom48      infodom48        89 Oct 31  2013 infodom48
+drwxr-xr-x  3 intelecom      intelecom        40 Oct 16  2009 intelecom
+drwxr-xr-x  3 root           root             37 Oct 16  2009 ipstat
+drwxr-xr-x  8           1052 users          4096 Jan 23  2012 kaktus
+drwxr-xr-x  4 kratos         kratos           52 Jan 20  2010 kratos
+drwxr-xr-x  8 root           root           4096 Mar 13  2012 lipbalcon
+drwxr-x---  8 lipbalkon      lipbalkon      4096 Mar 16  2012 lipbalkon
+drwxr-xr-x  8 lipetsklife    lipetsklife    4096 Apr 29  2011 lipetsklife
+drwxr-xr-x  3 lsz            lsz              68 Jun 15  2011 lsz
+drwxr-xr-x  9 lzsk           lzsk           4096 Apr 29  2011 lzsk
+drwxr-xr-x  8 marrypoppins   marrypoppins   4096 Apr 29  2011 marrypoppins
+drwxr-xr-x  3 metallurg      metallurg        40 Oct 16  2009 metallurg
+drwxr-xr-x  3 monsvyaz       monsvyaz         24 Oct 14  2010 monsvyaz
+drwxr-xr-x  4 mttuser        users            40 Nov 29  2011 mttuser
+drwxr-xr-x  2 obsled         users             6 Nov 18  2010 obsled
+drwxr-xr-x  4 root           root             47 Jul 27  2010 pheo
+drwxr-xr-x  3 promsvyaz      promsvyaz        46 Feb 12  2013 promsvyaz
+drwxr-xr-x  8 login222       users          4096 Aug  4  2010 pvs
+drwxr-xr-x  3 quality        quality          24 Apr 14  2010 quality
+drwxr-xr-x  3 rk-slavyanskii rk-slavyanskii   38 Oct 16  2009 rk-slavyanskii
+drwxr-xr-x  3 russtillipetsk russtillipetsk   35 Oct 16  2009 russtillipetsk
+drwxr-xr-x  3 sc             users            24 May 15  2013 sc
+drwxr-xr-x 10 smithy         users          4096 Sep 14  2012 smithy
+drwxr-xr-x  3 srlip          srlip            36 Oct 16  2009 srlip
+drwxr-xr-x  8 start          users          4096 Mar 19  2013 start
+drwxr-xr-x  8 stroyuser      stroyuser      4096 Aug 24  2012 stroyuser
+drwxr-xr-x  4 sucden         sucden           55 Nov  9  2009 sucden
+drwxr-xr-x  3 unisprint      unisprint        40 Oct 16  2009 unisprint
+drwxr-xr-x  3 uprav          uprav            44 Nov  9  2009 uprav
+drwxr-xr-x  3 usmfed         usmfed           24 Jun 19  2014 usmfed
+drwxr-xr-x  3 usmgarant      usmgarant        24 Mar 15  2013 usmgarant
+drwxr-xr-x  3 root           root             24 Oct 16  2009 vdo48
+drwxr-xr-x  8 vtormet        users          4096 Dec 17  2009 vtormet
+drwxr-xr-x  8 yk             users          4096 Dec 27  2010 yk
+
+
+/etc
+
+
+/home/yk
+/home/vtormet
+/home/usmgarant
+usmfed
+unisprint
+sucden
+smithy
+sc
+russtillipetsk
+quality
+pvs
+promsvyaz
+mttuser
+metallurg
+lsz
+infodom48
+gortrans
+dokuwiki
+cyradmin
+audit2015psi
+Qtech

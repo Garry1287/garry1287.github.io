@@ -1,0 +1,49 @@
+---
+layout: post
+title:  "SASL"
+date:   2017-06-19 04:54:14 +0300
+categories: mail
+tags: mail
+---
+
+# SASL
+SASL - это абстракция (программа) обеспечивающий аутентификацию через различные механизмы (pam, обычный пароль, сертификаты) и тд, работает с разными протоколами, например imap, ldap, pop3
+
+Концептуально SASL представляет собой схему, обеспечивающую уровень абстракции между протоколами и механизмами
+
+    SMTP    LDAP    XMPP   Other protocols ...
+       \       |    |      /
+        \      |    |     /
+       SASL abstraction layer
+        /      |    |     \
+       /       |    |      \
+EXTERNAL   GSSAPI  PLAIN   Other mechanisms ...
+
+
+[http://www.bog.pp.ru/work/SASL.html](http://www.bog.pp.ru/work/SASL.html)
+[http://rfc2.ru/4422.rfc/2](http://rfc2.ru/4422.rfc/2)
+tools.ietf.org/html/rfc4422
+
+
+sasldblistusers2(8)
+saslpasswd2
+
+в свете применения с cyrus - sasl (saslauthd - демон) обеспечивает аутентификацию пользователей. 
+Может хранить пароли в своей базе (saslpasswd2, sasldblistusers2), у нас используется стороняя MYSQL
+
+
+
+Saslauthd - это один из компонентов библиотеки Cyrus SASL. Пока он распространен не так как PAM, 
+но его проще настраивать. IMAP-сервер просто посылает идентификатор пользователя и соответствующий пароль по пайпу
+ (Unix domain pipe). Затем, saslauthd берет этот идентификатор с паролем и пытается его  уатентифицировать 
+-- с помощью аутентификации, которую вы используете -- а потом просто возвращает "yes" или "no", т.е. правильный пароль или нет. 
+
+[http://www.opennet.ru/docs/RUS/Cyrus_imap/install-auth.html](http://www.opennet.ru/docs/RUS/Cyrus_imap/install-auth.html)
+
+
+
+
+Интерфейс аутентификации (SMTP диалог, т.е через SMTP демон)
+Механизм (EXTERNAL   GSSAPI  PLAIN). 
+Методы аутентификации (службы проверки паролей) saslauthd, auxprop, которое обеспечивает взаимодействие мжеду итерфесом аутентификации, и хранилищем верительных данных.
+

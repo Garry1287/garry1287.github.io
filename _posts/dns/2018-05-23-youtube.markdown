@@ -1,0 +1,57 @@
+---
+layout: post
+title:  "youtube"
+date:   2018-05-23 20:52:30 +0300
+categories: dns
+tags: dns
+---
+
+# youtube
+Помимо master и slave зон в named можно указать forward зону, к примеру forward зона для домена hilik.org.ua, будет иметь такой вид:
+
+zone "hilik.org.ua" {
+        type forward;
+        forward first;
+        forwarders {
+                89.252.34.107;
+                195.149.112.1;
+           };
+};
+
+В описании зоны указываются ip адреса DNS серверов на которых хранится сама зона, 
+то есть попросту master и slave сервера. А смысл использования подобного типа зон заключается в том,
+ что если вы интенсивно меняете записи в зоне, и не обращаетесь напрямую к нему, но хотите быстро получать обновления на своем локальном ДНС, 
+то вам стоит описать такую зону как forward зону, она перестанет кешироваться
+ у вас на сервере и все обновления будут сразу доступны на вашем ДНС сервере.
+
+
+
+zone "." IN {
+        type forward;
+        forward only;
+        forwarders {8.8.8.8; 8.8.4.4};
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+zone "youtube.ru" IN {
+        type forward;
+        forward only;
+        forwarders {8.8.8.8; 8.8.4.4;};
+};
+
+zone "youtube.com" IN {
+        type forward;
+        forward only;
+        forwarders {8.8.8.8; 8.8.4.4;};
+};

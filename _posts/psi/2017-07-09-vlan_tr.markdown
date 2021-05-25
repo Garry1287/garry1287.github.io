@@ -1,0 +1,284 @@
+---
+layout: post
+title:  "vlan_tr"
+date:   2017-07-09 04:12:40 +0300
+categories: PSI
+tags: PSI
+---
+
+# vlan_tr
+telnet 192.168.121.31
+conf t
+interface Gi0/0/2.1950100
+ description kv.41,N.G.Konopkina
+ encapsulation dot1Q 1950 second-dot1q 100
+ ip unnumbered Loopback2
+ ip accesss-group BLOCK in
+ service-policy type control ISG-CUSTOMERS-POLICY
+  ip subscriber l2-connected
+  initiator dhcp class-aware
+end
+exit
+
+Для включенных 
+ip unnumbered Loopback1
+ip accesss-group PRIVATE in
+
+
+Для белых адресов
+ ip unnumbered Loopback3
+ ip accesss-group PUBLIC in
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.45 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.46 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.4.100 x 8000000000000000 IF-MIB::ifAlias.1 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+
+telnet 192.168.120.46
+config dhcp_local_relay vlan vlanid 100 state enable
+save
+logout
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.47 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.48 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+
+telnet 192.168.120.32
+create vlan_translation ports 5 cvid 100 add 1950
+create vlan_translation ports 6 cvid 100 add 1950
+exit
+
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 0C00000000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.18.4.0 i 2
+
+INSERT INTO radcheck (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Cleartext-Password',':=','ISG');
+INSERT INTO radreply (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Cisco-AVPair','=','subscriber:accounting-list=ISG-AUTH-1');
+INSERT INTO radreply (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Cisco-Account-Info','+=','A10240');
+INSERT INTO radreply (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Service-Type','=','Framed-User');
+INSERT INTO radusergroup (USERNAME,GROUPNAME) VALUES ('000400640001:0006f07d682c9300','phys2');
+COMMIT;
+
+
+delete vlan vlanid 2000
+delete vlan vlanid 2001
+
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 0C00000000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 0C00000000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 0C00000000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4
+
+
+Cisco-AVPair
++=
+lcp:interface-config=description # Buslaev D.I. ul Komunalnya 12-39
+
+!/bin/sh
+#bash script for save config 
+export PATH=$PATH:/bin:/usr/bin
+
+pswd=private
+USR=bill
+
+
+#Opitnaya
+( echo open 192.168.118.100
+ sleep 3
+   echo ${USR}
+        sleep 1
+        echo ${pswd}
+        sleep 1
+            echo 'save'
+            sleep 7
+               echo 'logout'
+               sleep 1) | telnet
+
+
+#Core-ISG
+( echo open 192.168.121.31
+ sleep 3
+   echo ${USR}
+        sleep 1
+        echo ${pswd}
+        sleep 1
+            echo 'wr'
+            sleep 7
+               echo 'exit'
+               sleep 1) | telnet
+
+
+#Sokol
+( echo open 192.168.120.32
+ sleep 3
+   echo ${USR}
+        sleep 1
+        echo ${pswd}
+        sleep 1
+            echo 'save'
+            sleep 7
+               echo 'logout'
+               sleep 1) | telnet
+
+
+
+#Manej
+( echo open 192.168.120.103
+ sleep 3
+   echo ${USR}
+        sleep 1
+        echo ${pswd}
+        sleep 1
+            echo 'save'
+            sleep 5
+               echo 'logout'
+               sleep 1) | telnet
+
+
+
+
+
+
+
+
+
+telnet 192.168.121.31
+conf t
+interface Gi0/0/2.1950100
+ description kv.41,N.G.Konopkina
+ encapsulation dot1Q 1950 second-dot1q 100
+ ip unnumbered Loopback2
+ ip access-group BLOCK in
+ service-policy type control ISG-CUSTOMERS-POLICY
+  ip subscriber l2-connected
+  initiator dhcp class-aware
+end
+exit
+
+Для включенных 
+ip unnumbered Loopback1
+ip accesss-group PRIVATE in
+
+
+Для белых адресов
+ ip unnumbered Loopback3
+ ip accesss-group PUBLIC in
+
+
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.45 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+/usr/bin/snmpset -c private -v 2c 192.168.120.46 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.4.100 x 8000000000000000 IF-MIB::ifAlias.1 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+
+telnet 192.168.120.46
+config dhcp_local_relay vlan vlanid 100 state enable
+save
+logout
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.47 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+/usr/bin/snmpset -c private -v 2c 192.168.120.48 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 000000F000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+
+telnet 192.168.120.32
+create vlan_translation ports 5 cvid 100 add 1950
+create vlan_translation ports 6 cvid 100 add 1950
+save
+logout
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.100 s kv.41,N.G.Konopkina 1.3.6.1.2.1.17.7.1.4.3.1.2.100 x 0C00000000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.100 i 4
+/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.4.1.171.12.1.2.18.4.0 i 2
+
+
+INSERT INTO radcheck (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Cleartext-Password',':=','ISG');
+INSERT INTO radreply (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Cisco-AVPair','=','subscriber:accounting-list=ISG-AUTH-1');
+INSERT INTO radreply (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Cisco-Account-Info','+=','A10240');
+INSERT INTO radreply (USERNAME,ATTRIBUTE,OP,VALUE) VALUES ('000400640001:0006f07d682c9300','Service-Type','=','Framed-User');
+INSERT INTO radusergroup (USERNAME,GROUPNAME) VALUES ('000400640001:0006f07d682c9300','phys2');
+COMMIT;
+
+
+conf t
+interface Gi0/0/2.1950101
+ description kv.13,S.A.Butrin
+ encapsulation dot1Q 1950 second-dot1q 101
+ ip unnumbered Loopback2 
+ ip access-group BLOCK in
+ service-policy type control ISG-CUSTOMERS-POLICY
+ ip subscriber l2-connected
+ initiator dhcp class-aware
+end
+exit
+
+
+/usr/bin/snmpset -c private -v 2c 192.168.120.32 1.3.6.1.2.1.17.7.1.4.3.1.1.55 s kv.13,S.A.Butrin 1.3.6.1.2.1.17.7.1.4.3.1.2.55 x 0000030000000000 1.3.6.1.2.1.17.7.1.4.3.1.5.55 i 4 1.3.6.1.4.1.171.12.1.2.6.0 i 2 
+
+
+
+
+
+enable snmp
+create vlan v100 tag 100
+config vlan v100 add tagged 1,12
+enable qinq
+config qinq ports 1 role uni
+
+
+VLAN Translation
+Index : 1
+CVID : 5 add SVID : 100, priority not set
+Index : 2
+CVID : 12 replace SVID : 100, priority : 6
+
+Цитата:
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 1 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+snmpset -v2c -c private 10.90.90.90 1.3.6.1.4.1.171.12.57.3.3.1.3.2.12 i 100 1.3.6.1.4.1.171.12.57.3.3.1.4.2.12 i 2  1.3.6.1.4.1.171.12.57.3.3.1.6.2.12 i 4
+
+
+
+sed s/pattern1/pattern2/ filename
+
+sed s/config snmp system_name 50let19-s1.sc.int^M/config snmp system_name 50let20-s1.sc.int^M/ createconfig-isg.sh
+
+
+config snmp system_name 50let19-s1.sc.int
+config snmp system_location 50let19
+^Mconfig ports 25 speed auto flow_control disable state enable description "50let23"
+^Mconfig ports 26 speed auto flow_control disable state enable description "k9"^M
+
+
+
+sed -e 's/50let20/angarskaya23a/g;s/50let23/usel/g' ./192.168.120.106.sh > angarskaya23a.conf
+
+
+
+
+
+enable snmp
+create vlan v100 tag 100
+config vlan v100 add tagged 1,12
+enable qinq
+config qinq ports 1 role uni
+
+
+VLAN Translation
+Index : 1
+CVID : 5 add SVID : 100, priority not set
+Index : 2
+CVID : 12 replace SVID : 100, priority : 6
+
+Цитата:
+snmpset -v2c -c private 10.90.90.90 1.3.6.1.4.1.171.12.57.3.3.1.3.1.5 i 100 1.3.6.1.4.1.171.12.57.3.3.1.4.1.5 i 1 1.3.6.1.4.1.171.12.57.3.3.1.6.1.5 i 4
+snmpset -v2c -c private 10.90.90.90 1.3.6.1.4.1.171.12.57.3.3.1.3.2.12 i 100 1.3.6.1.4.1.171.12.57.3.3.1.4.2.12 i 2 1.3.6.1.4.1.171.12.57.3.3.1.5.2.12 i 6 1.3.6.1.4.1.171.12.57.3.3.1.6.2.12 i 4
+
+Port    CVID       SPVID      Action    Priority
+-----   --------   --------   -------   ---------
+1       5          100        Add       -
+
+
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 5 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+								cvid		svid				       port                             replace             
+
+snmpset -v 2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 5 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 1 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 1 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 5
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 5 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 1 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+
+
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.1.100 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.1.100 i 5 1.3.6.1.4.1.171.12.57.3.3.1.6.1.100 i 4
+snmpset -v2c -c private 192.168.120.32 1.3.6.1.4.1.171.12.57.3.3.1.3.2.101 i 1950 1.3.6.1.4.1.171.12.57.3.3.1.4.2.101 i 5 1.3.6.1.4.1.171.12.57.3.3.1.6.2.101 i 4

@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "nginx"
+date:   2009-06-23 02:23:33 +0400
+categories: linux
+tags: linux
+---
+
+# nginx
+
+[http://kaba.org.ua/articles/directadmin-sborka-apache-s-mpm-itk/](http://kaba.org.ua/articles/directadmin-sborka-apache-s-mpm-itk/)
+[http://www.kharkovforum.com/showthread.php?t=2420173](http://www.kharkovforum.com/showthread.php?t=2420173)
+[http://www.brancaleoni.com/blog/?page_id=17](http://www.brancaleoni.com/blog/?page_id=17)
+[http://wiki.diphost.ru/Recipe_nginx_Joomla](http://wiki.diphost.ru/Recipe_nginx_Joomla)
+[http://habrahabr.ru/post/56497/](http://habrahabr.ru/post/56497/)
+[http://forum.searchengines.ru/showthread.php?t=817845](http://forum.searchengines.ru/showthread.php?t=817845)
+[http://mailman.nginx.org/pipermail/nginx-ru/2011-February/039590.html](http://mailman.nginx.org/pipermail/nginx-ru/2011-February/039590.html)

@@ -1,0 +1,24 @@
+---
+layout: post
+title:  "rdesktop"
+date:   2009-03-30 05:32:54 +0400
+categories: Win
+tags: Win
+---
+
+# rdesktop
+rdesktop -u garry -g 1280x960 -k en_us 192.168.1.136
+
+rdesktop -u garry -g 1280x960 -k en_us 192.168.253.50
+
+
+
+rdesktop -u garry -g 1280x960 -k en_us 192.168.253.50
+
+
+
+
+
+
+
+

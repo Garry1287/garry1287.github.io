@@ -1,0 +1,102 @@
+---
+layout: post
+title:  "ovs-vsctl"
+date:   2012-11-23 20:56:11 +0400
+categories: linux
+tags: linux
+---
+
+# ovs-vsctl
+  644  vi ovs-network.xml 
+  645  virsh
+  646  ls
+  647  cp ovs-network.xml /home/garry
+  648  virsh net-define ovs-network.xml
+  649  virsh net-list
+  650  ovs-vsctl show
+  651  ip a
+  652  ovs-vsctl show
+  653  ovs-vsctl add-port ovs-br0 vnet2 trunks 905 
+  654  ovs-vsctl add ovs-br0 vnet2 trunks 905 
+  655  ovs-vsctl add vnet2 trunks 905 
+  656  ovs-vsctl --help
+  657  history | grep ovs-vsctl
+  658  ovs-vsctl ovs-br0 port vnet2 trunks 905 
+  659  ovs-vsctl ovs-br0 port vnet2 add trunks 905 
+  660  ovs-vsctl show
+  661  ovs-vsctl add  port vnet2 trunks 905 
+  662  ovs-vsctl show
+  663  ovs-vsctl add  port enp4s0f0 trunks 905 
+  664  ovs-vsctl show
+  665  ip link show
+
+
+Добавить влан на порт
+ovs-vsctl add  port enp4s0f0 trunks 13
+
+
+
+  587  virsh net-dumpxml ovs-network > /tmp/ovs-network.xml
+  588  vim /tmp/ovs-network.xml
+  589  virsh net-dumpxml ovs-network > /tmp/ovs-network-ori.xml
+  590  vim /tmp/ovs-network.xml
+  591  cat /tmp/ovs-network.xml
+  592  virsh help
+  593  virsh help | grep net
+  594  virsh net-undefine ovs-network
+  595  virsh net-destroy ovs-network
+  596  virsh net-define /tmp/ovs-network.xml
+  597  cp /tmp/ovs-network-ori.xml /tmp/ovs-network.xml
+  598  virsh net-define /tmp/ovs-network.xml
+  599  virsh net-autostart /tmp/ovs-network.xml
+  600  virsh net-autostart ovs-network
+  601  virsh net-start ovs-network
+  602  virsh help | less
+  603  virsh shutdown vm_mngt
+  604  virsh start vm_mngt
+
+  
+  Делаем порт untagged
+ovs-vsctl set port vnet2 tag=11
+ovs-vsctl set port vnet2 tag=27
+  
+  Порт tagged
+  ovs-vsctl set port eth0 trunks=7,10,20,1010,1020,30,1030
+  
+  По умолчанию порт tagged
+  
+  ovs-vsctl set port vlan27 tag=27 -- set interface vlan27 type=internal
+  ovs-vsctl add-port ovs-br0 vlan36 -- set port vlan36 tag=36 -- set interface vlan36 type=internal
+  
+  
+  
+  Пример из статьи
+  40952e4d-81ad-433b-b08b-f88ccd55f26a
+    Bridge "ovs-br0"
+        Port "vnet0"
+            tag: 10
+            Interface "vnet0"
+        Port "ovs-br0"
+            tag: 7
+            Interface "ovs-br0"
+                type: internal
+        Port "eth0"
+            trunks: [7, 10, 20, 1010, 1020, 30, 1030]
+            Interface "eth0"
+        Port "vnet1"
+            tag: 20
+            Interface "vnet1"
+    ovs_version: "2.0.2"
+    
+    
+    [http://www.openvswitch.org//ovs-vswitchd.conf.db.5.pdf](http://www.openvswitch.org//ovs-vswitchd.conf.db.5.pdf)
+
+    
+    Посмотреть таблицу mac адресов.
+     ovs-appctl fdb/show ovs-br0
+
+     
+     
+     [https://vidikon.info/openvswitch/](https://vidikon.info/openvswitch/)
+     [http://vladimir-stupin.blogspot.com/2016/06/open-vswitch-debian.html](http://vladimir-stupin.blogspot.com/2016/06/open-vswitch-debian.html)
+     [https://habr.com/post/242741/](https://habr.com/post/242741/)

@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "ethurium"
+date:   2009-12-26 06:37:16 +0300
+categories: mining
+tags: mining
+---
+
+# ethurium
+[https://exmo.me/?ref=201962](https://exmo.me/?ref=201962)
+[http://happycoin.club/new-investoru/kakie-byivayut-birzhi-kriptovalyut-i-kak-na-nih-torgovat/](http://happycoin.club/new-investoru/kakie-byivayut-birzhi-kriptovalyut-i-kak-na-nih-torgovat/)
+[https://github.com/ethereum/mist/releases](https://github.com/ethereum/mist/releases)
+[https://www.ethereum.org/](https://www.ethereum.org/)
+[http://rubitco.ru/kak-sozdat-ethereum-koshelek.html](http://rubitco.ru/kak-sozdat-ethereum-koshelek.html)
+
+
+Биржа Poloniex забирает на себя около 50% всего объема торгов в ethereum, остальные 50% распределяются между Gatecoin и Kraken.

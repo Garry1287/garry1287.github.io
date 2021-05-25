@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "Блокировка_сайтов"
+date:   2017-07-17 06:54:50 +0300
+categories: PSI
+tags: PSI
+---
+
+# Блокировка_сайтов
+Здравствуйте, интересует продукт Reductor. Вы не могли бы оценить затраты компании на внедрение (сервер) + ПО под трафик 4Гига входящего, 1Гиг исходящего
+15:12
+Здравствуйте! Сервер можно подобрать по нашим системным требованиям docs.carbonsoft.ru/pages/viewpage.action?pageId=51380324 ознакомьтесь. По поводу стоимости лицензии, я правильно Вас понимаю, общая ширина канала примерно 5 Гбит/с ?
+15:14
+Да, всё верно
+15:15
+Тарифный план SLA 1 - стоимость 4 200 р/ежемесячно, выгрузка списка Роскомнадзора ; тарифный план SLA 2 - 5 500 р./ежемесячно, выгрузка списка Роскомнадзора и Минюста ; Тарифный план SLA 3 - 9000 р./ежемесячно, выгрузка списка Роскомнадзора и Минюста + страховка от штрафов Роскомнадзора, аутсорсинг сервера. 
+
+
+
+Процессор: один из последних Xeon, подбирается индивидуально
+
+Сетевые карты: зависит от канала, либо гигабитные, либо 10гбитные intel.
+
+Жёсткий диск: не менее 40гб.
+
+Оперативная память: не менее 16гб.
+
+Хватит 8 ядер.
+
+100 000 сервер
+[http://www.nix.ru/price/price_list.html?section=computers_nix_all](http://www.nix.ru/price/price_list.html?section=computers_nix_all)
+
+
+
+
+[http://ruspromsoft.ru/solutions/telecom-operators/139-fz](http://ruspromsoft.ru/solutions/telecom-operators/139-fz)
+[http://www.carbonsoft.ru/products/carbon-reductor-5/carbon-reductor-5-land/#chat](http://www.carbonsoft.ru/products/carbon-reductor-5/carbon-reductor-5-land/#chat)
+[http://docs.carbonsoft.ru/pages/viewpage.action?pageId=51380324](http://docs.carbonsoft.ru/pages/viewpage.action?pageId=51380324)
+[https://www.skydns.ru/isp](https://www.skydns.ru/isp)

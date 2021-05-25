@@ -1,0 +1,110 @@
+---
+layout: post
+title:  "Мытищи"
+date:   2012-06-03 10:11:15 +0400
+categories: zavod
+tags: zavod
+---
+
+# Мытищи
+ООО "Вторчермет НЛМК Центр"	
+"Алиев Андрей Вахидович
+Башмаков Александр Владимирович"	"
+
+89057295330
+89167020070"
+
+ip vrf forwarding nlmk-vpn
+
+interface GigabitEthernet0/0.988
+ description #Kanal to VCHM Mitischi via Rostel #garry
+ bandwidth 4096
+ encapsulation dot1Q 988
+ ip address 10.192.11.229 255.255.255.252
+ service-policy output PLATINUM-ETH-4MB
+ no cdp enable
+end
+
+router bgp 20866
+ address-family ipv4 vrf nlmk-vpn
+  
+  neighbor 10.192.11.230 remote-as 65041
+  neighbor 10.192.11.230 activate
+
+
+
+
+
+
+
+policy-map PLATINUM-ETH-4MB
+ class class-default
+    shape average 4096000
+  service-policy PLATINUM
+
+
+
+  neighbor 10.192.10.9 remote-as 31133
+  neighbor 10.192.10.9 activate
+  neighbor 10.192.10.9 prefix-list no-KALUGALOCPREF in
+  neighbor 10.192.10.9 route-map KALUGALOCPREF in
+
+
+
+route-map KALUGALOCPREF permit 10
+ match as-path 7
+ set local-preference 200
+!
+route-map KALUGALOCPREF permit 20
+
+ip as-path access-list 7 permit ^31133 65094 65047$
+
+
+
+ip prefix-list no-KALUGALOCPREF seq 10 deny 10.60.0.0/16 le 32
+ip prefix-list no-KALUGALOCPREF seq 20 deny 10.192.11.228/30 le 32
+ip prefix-list no-KALUGALOCPREF seq 90 permit 0.0.0.0/0 le 32
+
+
+
+
+
+
+
+
+Переключаем в мытищах
+Проверяем пингами
+Добавить префикс лист на k9-c0
+ip prefix-list no-KALUGALOCPREF seq 20 deny 10.192.11.228/30 le 32
+
+добавляем на cde-c3 IP уже в VRF
+interface GigabitEthernet0/0.987
+  no ip address 10.192.11.229 255.255.255.252
+  ip vrf forwarding nlmk-vpn
+  ip address 10.192.11.229 255.255.255.252
+
+
+router bgp 20866
+ address-family ipv4 vrf nlmk-vpn
+  
+  neighbor 10.192.11.230 remote-as 65041
+  neighbor 10.192.11.230 activate
+
+
+
+
+Поднимаем BGP
+
+router bgp 65041
+ no neighbor 10.192.11.229 remote-as 25159
+ neighbor 10.192.11.229 remote-as 20866
+
+
+
+
+
+
+
+
+ip prefix-list FILTER-Mitischi seq 10 deny 10.192.11.228/30 le 32
+ip prefix-list FILTER-Mitischi seq 90 permit 0.0.0.0/0 le 32

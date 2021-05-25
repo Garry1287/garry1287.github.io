@@ -1,0 +1,351 @@
+---
+layout: post
+title:  "kvm-disk"
+date:   2012-02-12 16:43:10 +0400
+categories: kvm
+tags: kvm
+---
+
+# kvm-disk
+
+[http://itman.in/virsh-commands/](http://itman.in/virsh-commands/)
+VIRSH команды
+
+
+Паравиртуализация (англ. Paravirtualization) — техника виртуализации, при которой 
+гостевые операционные системы подготавливаются для исполнения в виртуализированной среде, для чего их ядро незначительно модифицируется.
+
+
+
+Обратите внимание на то, что размер образа 4 ГБ, но при использовании copy-on-write формата QEMU (qcow), файл будет увеличиваться настолько, 
+насколько необходимо, вместо того чтобы занимать все 4 ГБ.
+
+$ qemu-img create —f qcow vm-disk.img 4G             
+
+При необходимости расширения размера виртуального диска в формате qcow2,
+используемом в системах виртуализации  KVM и QEMU, можно обойтись без
+клонирования и создания нового образа.
+
+
+Для установки потребуется инсталляционный образ. Также стоит заранее подумать как будут расположены диски виртуальной машины —
+либо в файлах, либо это будут настоящие разделы диска, либо же это будут логические тома LVM-а. 
+Я предпочел LVM, поскольку с его помощью можно легко сделать снапшот диска, увеличить либо уменьшить его
+
+
+Бридж - как работает технология
+[http://www.deltann.ru/10/d-022009/p-129](http://www.deltann.ru/10/d-022009/p-129)
+[http://www.opennet.ru/base/sys/virtualbox_net_setup.txt.html](http://www.opennet.ru/base/sys/virtualbox_net_setup.txt.html)
+
+Бридж - по сути простой свитч, объединяем 2 интерфейса linux в один свитч (хаб). Ему можно назначить ip
+Для виртуальных машин получается, что через созданный бридж (на одном физическом интефейсе) могут ходить
+пакеты во вне от виртуальной машины, то есть фактически она находится в нашей локальной сети (или глобальной)
+[http://rus-linux.net/MyLDP/vm/VirtualBox-networking.html](http://rus-linux.net/MyLDP/vm/VirtualBox-networking.html)
+
+
+
+
+О kvm
+[http://xgu.ru/wiki/man:qemu](http://xgu.ru/wiki/man:qemu)
+[http://www.alsigned.ru/?p=2027](http://www.alsigned.ru/?p=2027)
+[http://ito-info.blogspot.ru/2010/01/qemukvm.html](http://ito-info.blogspot.ru/2010/01/qemukvm.html)
+[http://blog.102web.ru/howto/kvm-debian-howto/](http://blog.102web.ru/howto/kvm-debian-howto/)
+[http://andrey.org/kvm-on-centos/](http://andrey.org/kvm-on-centos/)
+[http://habrahabr.ru/post/71709/](http://habrahabr.ru/post/71709/)
+[http://www.altlinux.org/KVM](http://www.altlinux.org/KVM)
+[http://mldav.blogspot.ru/2012/02/kvm-lvm-virtio.html](http://mldav.blogspot.ru/2012/02/kvm-lvm-virtio.html)
+[http://www.blogitcompany.ru/administrirovanie/ustanovka-i-nastrojka-virtualizacii-kvm-na-primere-linux-ubuntu-server-lts-10-04-12-04.html](http://www.blogitcompany.ru/administrirovanie/ustanovka-i-nastrojka-virtualizacii-kvm-na-primere-linux-ubuntu-server-lts-10-04-12-04.html)
+[http://www.ossportal.ru/technologies/kvm/blogs/122](http://www.ossportal.ru/technologies/kvm/blogs/122)
+[http://pic.dhe.ibm.com/infocenter/lnxinfo/v3r0m0/topic/liaat/liaatkvm.htm](http://pic.dhe.ibm.com/infocenter/lnxinfo/v3r0m0/topic/liaat/liaatkvm.htm)
+[http://docs.fedoraproject.org/ru-RU/Fedora/12/html/Virtualization_Guide/sect-Virtualization_Guide-Tips_and_tricks-Using_qemu_img.html](http://docs.fedoraproject.org/ru-RU/Fedora/12/html/Virtualization_Guide/sect-Virtualization_Guide-Tips_and_tricks-Using_qemu_img.html)
+
+
+Увеличение диска в файле виртуальной машине на KVM с ext4
+[http://www.stableit.ru/2012/06/kvm-ext4.html](http://www.stableit.ru/2012/06/kvm-ext4.html)
+
+LVM+KVM+EXT4, изменение размера виртуального диска с собственной таблицей разделов 
+[http://wilful.su/blog/linux/3.html](http://wilful.su/blog/linux/3.html)
+
+
+
+Доступ к дискам(разделам) виртуальных машин (lvm in lvm)
+[http://andrey.org/virtual-images-lvm/](http://andrey.org/virtual-images-lvm/)
+
+
+
+
+Как хочу я
+[https://debian.pro/344](https://debian.pro/344)
+
+
+
+
+О создании гостевой машины
+
+Где и как хранить
+
+файл (файл образа) - это форматы данного файла
+    raw - самый простой формат, прямая копия данных с диска.  формат данных, содержащий необработанные (или обработанные в минимальной степени) данные,
+	  что позволяет избежать потерь информации, и не имеющий чёткой спецификации. 
+	  В таких файлах содержится полная информация о хранимом сигнале. Данные в RAW-файлах могут быть несжатыми, сжатыми без потерь или сжатыми с потерями.
+    qcow2 - основной формат qemu. Обладает большим спектром возможностей
+    vdi - формат, используемый VirtualBox'ом
+    vmdk - VMware формат
+    cow, qcow - каменный век
+
+<disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='writeback'/>
+      <source file='/vmware/win2003/image.qcow2'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+
+
+
+блок (блоковое устройство)
+    раздел диска
+	в формате raw или host_device (хз but this will fail for block devices - you need to use "-O host_device". Sadly that wasn't documented so we've submitted a patch to fix that
+					[http://bitcube.co.uk/content/converting-kvm-images-logical-volumes](http://bitcube.co.uk/content/converting-kvm-images-logical-volumes)   Converting files using "qemu-img convert" onto logical volumes (or any
+					block device) you need to use the currently undocumented "host_device"
+					  format.  This patch adds the required documentation to the manpage.)
+    LVM устройство (бинго)
+	в формате raw или host_device
+
+    <disk type='block' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source dev='/dev/vg_kvmhost1/lv_host_centos'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+
+
+[http://bitcube.co.uk/content/converting-kvm-images-logical-volumes](http://bitcube.co.uk/content/converting-kvm-images-logical-volumes)
+
+
+
+man qemu-img
+
+raw
+Raw disk image format (default). This format has the advantage of being simple and easily exportable to all other emulators.
+ If your file system supports holes (for example in ext2 or ext3 on Linux or NTFS on Windows), 
+then only the written sectors will reserve space. Use "qemu-img info" to know the real size used by the image or "ls -ls" on Unix/Linux.
+
+host_device
+    Host device format. This format should be used instead of raw when converting to block devices or other devices where "holes" are not supported. 
+
+То есть ФС, вместо того чтобы хранить какие-либо набивочные символы для заполнения пустого пространства,
+ хранит только данные о том, что с такого-то по такой-то адрес в файле дыра. Поэтому и места занято меньше
+[http://zool.in.ua/portfolio/progs/illustration/file_holes/doc.html](http://zool.in.ua/portfolio/progs/illustration/file_holes/doc.html)
+
+Дыра (англ. hole) — последовательность нулевых байт внутри файла, не записанная на диск. 
+Информация о дырах (смещение от начала файла в байтах и количество байт) хранится в метаданных ФС.
+
+
+Получается, что если файловая система поддерживает дыры, то лучше использовать raw, а если не поддерживает то только host_device
+
+Разрежённый файл (англ. sparse file) — файл, в котором последовательности нулевых байтов[1] заменены на информацию об этих последовательностях (список дыр).
+
+
+
+
+Клонирование виртуальной машины
+
+
+Если необходимо, чтобы гостевая ОС работала в отдельном разделе диска, то
+файловый образ нужно сконвертировать:
+
+   sudo qemu-img convert root.qcow2 -O raw /dev/sdb
+
+qemu-img convert image.qcow2 -O raw /dev/vg_kvmhost1/lv_win2003
+
+Клонирование ранее созданного гостевой системы:
+   virt-clone --connect=qemu:///system -o srchost -n newhost -f /path/to/newhost.qcow2
+
+
+
+
+
+
+
+
+Клонирование виртуальной машины
+
+Вы можете клонировать существующую виртуальную машину используя утилиту virt-clone. Она копирует образ диска и устанавливает конфигурацию виртуального домена машины.
+
+Если вы желаете склонировать виртуальную машину с именем srchost в новую машину newhost, убедитесь, что машина srchost не запущена и выполните следующую команду.
+
+$ virt-clone --connect=qemu:///system -o srchost -n newhost -f /path/to/newhost.qcow2
+
+
+[http://gorbach.me/2011/ubuntu-10-04-lts-kvm-creating-guest/](http://gorbach.me/2011/ubuntu-10-04-lts-kvm-creating-guest/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+сравнение не совсем корректное, потому что сравниваются две абсолютно разные технологии.
+
+qcow2 это формат образа
+lvm это метод организации (ну или абстракция над) блочных устройств.
+
+так что сравнивать надо lvm vs filesystem+files
+и/или qcow2 vs raw (как два штатных формата)
+
+далее, и то и другое можно комбинировать - вполне реально использовать LV как имидж в формате qcow2 или raw, или положит на FS, qcow2/raw образ. 
+
+ я же говорю - можно комбинировать, эти вещи настолько разные что друг другу не мешают
+
+я например постоянно использую qcow2 на lvm, если нужны растущие образы (lvextend по мере надобности на автомате выставлен)
+
+Now we need to convert the QCOW to a raw image (-p shows the progress)
+lvcreate -L 21G -n lv_myvol lg_mygroup
+qemu-img convert -p vm.qcow.img -O raw vm.raw.img
+
+    Now we need to transfer the contents of the IMG file into the logical volume.
+
+ dd if=if.raw.img of=/dev/lg_mygroup/lv_myvol 
+    --host-device=HOSTDEVS
+                        Настроить физические
+                        устройства основного узла,
+                        присоединённые к гостевой
+                        системе
+
+
+qemu-img convert disk0.qcow2 -O host_device /dev/vg01/mybox
+
+
+
+
+raw 	raw
+qcow2 	qcow2
+VDI (VirtualBox) 	vdi
+VMDK (VMware) 	vmdk
+VHD (Hyper-V) 	vpc
+
+    raw. An unstructured disk image format; if you have a file without an extension it is possibly a raw format
+
+    vhd. The VHD disk format, a common disk format used by virtual machine monitors from VMware, Xen, Microsoft, VirtualBox, and others
+
+    vmdk. Common disk format supported by many common virtual machine monitors
+
+    vdi. Supported by VirtualBox virtual machine monitor and the QEMU emulator
+
+    iso. An archive format for the data contents of an optical disc, such as CD-ROM.
+
+    qcow2. Supported by the QEMU emulator that can expand dynamically and supports Copy on Write
+
+    aki. An Amazon kernel image.
+
+    ari. An Amazon ramdisk image.
+
+    ami. An Amazon machine image.
+
+
+Хранить гостевую машину можно либо в виде файла, в форматах описанных выше, либо в виде диска, раздела диска, lvm раздела
+
+
+'qcow2' is quite stable, but it is a complex format so there is an additional software layer involved (which may have some errors).
+
+'raw' is no format at all (direct pass through to the file), so there is no additional software between.
+
+
+Создание образа на разделе/LVM принципиально не отличается от файла на FS, нужно только указывать qemu-img format не raw а host_device:
+Без подсветки синтаксиса
+
+# qemu-img create -f host_device /dev/vm_images/img1 10G
+
+/dev/vm_images/img1 - это логический раздел img1 в группе разделов vm_images (LVM). После этого можно передать его в libvirt:
+
+
+
+
+использовать virtio 
+
+
+
+[http://koder-ua.blogspot.ru/2012/01/libvirt-co-3.html](http://koder-ua.blogspot.ru/2012/01/libvirt-co-3.html)
+[http://rus-linux.net/MyLDP/BOOKS/sag-062/x1038.htm](http://rus-linux.net/MyLDP/BOOKS/sag-062/x1038.htm)
+
+
+
+
+
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+
+
+
+
+      <target dev='vda' bus='virtio'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+
+
+(hd0)   /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001
+
+
+
+
+
+Исправление в конфиге
+edit suse_monit
+create /etc/libvirt/qemu/suse_monit.xml
+
+CD-ROM
+attach-disk win2003 /var/lib/libvirt/images/SS2005_CD1.iso hdc --type cdrom --mode readonly
+attach-disk win2003 '' hdc --type cdrom --mode readonly
+
+Подключение диска
+attach-disk suse_monit /dev/mapper/vg_kvmhost1-lv_win2003_copy vdb --sourcetype block --persistent
+В гостевой системе
+ echo 1 > /sys/bus/pci/rescan
+detach-disk suse_monit /dev/mapper/vg_kvmhost1-lv_win2003_copy vdb --sourcetype block --persistent
+
+
+
+attach-disk suse_monit /dev/mapper/vg_kvmhost1-lv_suse_monit vdb --sourcetype block --persistent
+
+
+
+
+Что выбрать
+[http://www.opennet.ru/openforum/vsluhforumID1/91666.html](http://www.opennet.ru/openforum/vsluhforumID1/91666.html)
+
+
+
+
+
+
+
+
+Booting from a cdrom in a kvm guest using libvirt
+[http://mycfg.net/articles/booting-from-a-cdrom-in-a-kvm-guest-with-libvirt.html](http://mycfg.net/articles/booting-from-a-cdrom-in-a-kvm-guest-with-libvirt.html)
+
+
+<os>
+  <type arch='x86_64' machine='pc-0.12'>hvm</type>
+  <boot dev='cdrom'/>
+  <boot dev='hd'/>
+</os>
+
+
+
+
+Конвертация из lvm в qcow2
+qemu-img convert -O qcow2 /dev/vg_kvmhost1/lv_suse_monit-copy /home/garry/suse_monit.qcow2
+
+[http://project.eraps.ru/knowledgebase/articles/28](http://project.eraps.ru/knowledgebase/articles/28)
+
+
+
+
+Raw формат
+qemu-img create -f raw example-vm-swap.img 1G

@@ -1,0 +1,88 @@
+---
+layout: post
+title:  "sed"
+date:   2011-02-24 18:51:02 +0300
+categories: sed
+tags: sed
+---
+
+# sed
+
+
+ls |  while read line; do                    
+   mv $line `echo $line | sed  's/_20170814040101.conf/.conf/g'`
+done 
+
+
+
+sed  's/^username*//g'
+sed  's/^logging*//g'
+sed  's/^access-list*//g'
+sed  's/^snmp-server*//g'
+sed  's/^radius-server*//g'
+sed  's/^ntp*//g'
+sed  's/^access-class*//g'
+
+username hcetpi secret 5 $1$BzoK$uI8hbqzUR/T660N4uGOT01
+
+
+logging history size 0
+logging trap notifications
+logging origin-id hostname
+logging facility local2
+logging 10.192.10.190
+logging 10.192.10.253
+access-list 11 permit 10.192.10.194
+access-list 11 permit 10.192.10.190
+access-list 11 permit 10.192.10.66
+access-list 11 permit 10.192.10.18
+access-list 11 permit 10.192.10.34
+access-list 11 deny   any
+access-list 23 permit 10.10.10.0 0.0.0.7
+access-list 23 permit 10.90.19.0 0.0.0.255
+access-list 23 permit 10.192.10.0 0.0.0.255
+access-list 55 permit 10.192.10.252
+access-list 55 permit 10.192.10.253
+access-list 55 deny   any
+access-list 56 permit 10.192.10.190
+access-list 56 permit 172.19.4.0 0.0.3.255
+access-list 56 deny   any
+access-list 57 permit 10.192.10.252
+access-list 57 permit 10.192.10.253
+access-list 57 permit 10.192.10.190
+access-list 57 deny   any
+access-list 61 remark NTP: access-group peer
+access-list 61 permit 10.192.10.252
+access-list 61 permit 10.192.10.253
+access-list 61 deny   any
+access-list 62 remark NTP: access-group serve-only
+access-list 62 permit 10.0.0.0 0.255.255.255
+access-list 62 deny   any
+snmp-server community Sh73ah91Kld RW 57
+snmp-server community Fv8Ya64PQ RO 56
+snmp-server ifindex persist
+snmp-server location VIS_Steel-CE0
+snmp-server contact iptech@sc.ru
+snmp-server file-transfer access-group 57 protocol tftp
+
+radius-server host 10.192.10.190 auth-port 2012 acct-port 2013 key 7 061038117D6D19372001231306060D0E351B102D36
+
+line vty 0 4
+ access-class 23 in
+ exec-timeout 480 0
+ transport input ssh
+line vty 5 15
+ access-class 23 in
+ exec-timeout 480 0
+ transport input ssh
+!
+scheduler allocate 20000 1000
+ntp logging
+ntp clock-period 17179771
+ntp access-group peer 61
+ntp access-group serve-only 62
+ntp update-calendar
+ntp server 10.192.10.190 prefer
+ntp server 10.192.10.252 prefer
+ntp server 10.192.10.253
+

@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "samba"
+date:   2011-05-24 12:54:55 +0400
+categories: linux
+tags: linux
+---
+
+# samba
+[http://smb-conf.ru/montirovanie-obshhix-resursov-v-windows-i-linux-klientax.html](http://smb-conf.ru/montirovanie-obshhix-resursov-v-windows-i-linux-klientax.html)
+
+
+
+
+
+[http://habrahabr.ru/post/47163/](http://habrahabr.ru/post/47163/)
+[http://linux.yaroslavl.ru/docs/conf/gnu-util/bash/bash_ug.html](http://linux.yaroslavl.ru/docs/conf/gnu-util/bash/bash_ug.html)

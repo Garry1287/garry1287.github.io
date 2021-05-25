@@ -1,0 +1,295 @@
+---
+layout: post
+title:  "netflow"
+date:   2009-10-18 07:13:55 +0400
+categories: Networking
+tags: Networking
+---
+
+# netflow
+ip flow-export source FastEthernet0/0
+ip flow-export version 5 origin-as
+ip flow-aggregation cache prefix
+ cache entries 16384
+ export destination 81.20.192.21 8014
+ mask destination minimum 20
+ enabled
+!
+ip flow-aggregation cache as-tos
+ cache entries 16384
+ export destination 81.20.192.21 8015
+ enabled
+
+
+
+interface FastEthernet0/0
+ description # Uplink to CDE-C2 via VERBILOVO-SPR0
+ no ip address
+ ip virtual-reassembly
+ ip route-cache flow
+ load-interval 30
+ duplex auto
+ speed auto
+ mpls ip
+end
+
+
+Существует несколько версий протокола, наиболее распространёнными из которых на 2011 год являются версии 5 и 9. 
+На основе версии 9 также был разработан открытый стандарт под названием IPFIX 
+(Internet Protocol Flow Information eXport, экспорт информации о потоках IP).[1][2]
+
+
+
+[http://xgu.ru/wiki/NetFlow](http://xgu.ru/wiki/NetFlow)
+
+
+
+
+Проверить работает ли NetFlow на устройстве можно так:
+
+show ip flow export
+show ip cache flow
+
+
+
+
+
+
+
+
+[http://subnets.ru/blog/?tag=netflow](http://subnets.ru/blog/?tag=netflow)
+Пример
+conf t
+ip flow-export destination 10.1.11.111 9991
+ip flow-export version 9
+ip flow-export source loopback1
+ip flow-cache timeout active 1
+ip flow-cache timeout inactive 15
+
+interface G0/0
+ip flow ingress
+ip flow egress
+exit
+
+Это для сабинтерфейсов
+ip flow ingress
+ip flow egress
+
+Это для интерфеса
+ip route-cache flow
+
+Указываем, какой трафик будет учитываться, входящий в интерфейс или исходящий из него? 
+Если исходящий, то ip flow egress, если входящий, то ip flow ingress
+
+[http://habrahabr.ru/post/175359/](http://habrahabr.ru/post/175359/)
+[http://redhat-club.org/2011/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D0%BF%D0%BE%D0%B4%D1%81%D1%87%D0%B5%D1%82%D0%B0-%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0-ipcad-flow-tools](http://redhat-club.org/2011/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D0%BF%D0%BE%D0%B4%D1%81%D1%87%D0%B5%D1%82%D0%B0-%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0-ipcad-flow-tools)
+
+Параметры для просмотра flow-capture
+[http://www.hilik.org.ua/flow-tools/](http://www.hilik.org.ua/flow-tools/)
+[http://www.netflowfaq.ru/publ/3-1-0-9](http://www.netflowfaq.ru/publ/3-1-0-9)
+[http://nag.ru/articles/reviews/15564/analiz-setevogo-trafika-s-pomoschyu-netflow.html](http://nag.ru/articles/reviews/15564/analiz-setevogo-trafika-s-pomoschyu-netflow.html)
+
+Для полноты картины раскрасим это примерами. Мы будем брать данные из папки /var/db/flows/2013/2013-01/ и класть в папку /usr/home/netflow/
+
+1) Запишем в файл 'temp' кто и что качал 23.01.2013:
+# flow-cat /var/db/flows/2013/2013-01/ft-v05.2013-01-23.*  flow-print > temp
+2) Запишем в файл 'report' отчет за 23.01.2013 о том, кто сколько скачал:
+# flow-cat /var/db/flows/2013/2013-01/ft-v05.2013-01-23.* | flow-stat -f10 -p -S3 > report
+3) Отследим нехорошего (а может он не такой и плохой) дядьку с полной детализацией за сутки:
+# echo ip access-list standard very_bad_boy permit host xxx.xxx.xxx.xxx > flow.acl
+# flow-cat /var/db/flows/2013/2013-01/ft-v05.2013-01-23.* | flow-filter -S very_bad_boy | flow-stat -f10 -p -S3 > report
+# flow-cat /var/db/flows/2013/2013-01/ft-v05.2013-01-23.* | flow-filter -S very_bad_boy | flow-print -f5 >> report
+
+
+
+Просмотр информации до указанного времени:
+
+UNIX # flow-cat -t "15:00" /netflow/2005/2005-02/2005-02-18/ | flow-print | less
+UNIX # flow-cat -t "2005-02-18 15:00" /netflow/2005/2005-02/2005-02-18/ | flow-print | less
+
+Просмотр информации после указанного времени:
+
+UNIX # flow-cat -T "15:00" /netflow/2005/2005-02/2005-02-18/ | flow-print | less
+UNIX # flow-cat -T "2005-02-18 15:00" /netflow/2005/2005-02/2005-02-18/ | flow-print | less
+
+
+Анализ данных некоторого временного интервала:
+
+UNIX # flow-cat -t "14:00" -T "15:00" /netflow/2005/2005-02/2005-02-18/ | flow-print | less
+UNIX # flow-cat -t "03/23/05 9:00" -T "03/23/05 8:00" /netflow
+
+
+
+
+
+
+
+Некоторую статистику можно получить, используя flow-stat. Утилита позволяет форматировать данные по IP адресам (-f FORMAT) и сортировать (-s, -S).
+
+Пример построения суммарного отчета:
+
+UNIX # cat /netflow/2005/2005-02/2005-02-18/ft-v05.2005-02-18.124221+0500 | flow-stat -f 0 | less
+
+
+
+
+
+ Выявление активных генераторов трафика:
+
+UNIX # сat /netflow/2005/2005-02/2005-02-18/ft-v05.2005-02-18.124221+0500 | flow-stat -f 9 -S 2 | less
+
+
+Выявление активных потоков:
+
+UNIX # cat /netflow/2005/2005-02/2005-02-18/ft-v05.2005-02-18.124221+0500 | flow-stat -f 10 -S 3 | less
+
+
+Для гибкой фильтрации можно использовать утилиты flow-filter и flow-nfilter. Последняя является более продвинутой и обеспечивает расширенные возможности.
+
+Для использования flow-nfilter необходимо создать конфигурационный файл с описанием фильтров - filter.acl:
+
+filter-primitive client-ip
+type ip-address
+permit 195.12.69.199
+default deny
+
+filter-primitive www
+type ip-port
+permit 80
+default deny
+
+filter-definition all-from-client
+match ip-source-address client-ip
+
+filter-definition all-to-client
+match ip-destination-address client-ip
+
+filter-definition www-to-client
+match ip-destination-address client-ip
+match ip-source-port www
+
+Далее можно использовать фильтрацию. Например, для анализа всего трафика к клиенту:
+
+UNIX # flow-cat -t "9:00" -T "12:00" /netflow/2006/2006-01/2006-01-06/ | flow-nfilter -f filter.acl -F all-to-client | flow-print | less
+
+
+
+
+
+Или для анализа только www трафика клиента.
+
+UNIX # flow-cat -t "9:00" -T "12:00" /netflow/2006/2006-01/2006-01-06/ | flow-nfilter -f filter.acl -F www-to-client | flow-print | less
+
+
+
+
+
+Визуализация 
+[http://nix.zeya.org/wiki/%D0%A1%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0_%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8_%D0%B8_%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0_%D1%81%D0%B5%D1%82%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE_%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0_%D0%B2_Unix_%D0%B8_Linux](http://nix.zeya.org/wiki/%D0%A1%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B2%D0%B0_%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8_%D0%B8_%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0_%D1%81%D0%B5%D1%82%D0%B5%D0%B2%D0%BE%D0%B3%D0%BE_%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0_%D0%B2_Unix_%D0%B8_Linux)
+ntop
+
+Платный
+[http://www.manageengine.com/products/netflow/](http://www.manageengine.com/products/netflow/)
+
+
+
+[http://www.cisco.com/en/US/docs/ios-xml/ios/netflow/configuration/12-4/nf-12-4-book.html](http://www.cisco.com/en/US/docs/ios-xml/ios/netflow/configuration/12-4/nf-12-4-book.html)
+
+
+
+
+
+
+1) «ip route-cache flow» делать не стоит. Это — отдельный механизм форвардинга, CEF его на данном этапе полностью заменяет.
+ Да, в современных IOSах есть защита от дурака, ничего не сломается, но все равно лучше сказать «ip flow ingress/egress».
+ip route-cache flow — устаревшая команда, которая осталась для совместимости. Была заменена на ip flow ingress
+
+
+
+
+
+May  8 16:32:19: %IP-4-DUPADDR: Duplicate address 172.26.201.57 on GigabitEthernet0/0.698, sourced by 001e.bee1.8a40
+
+
+
+
+
+NetFlow statistics consist of 
+IP packet size distribution data, 
+IP flow switching cache information, and 
+flow information
+
+
+
+Configure the router for IP routing.
+Ensure that one of the following is enabled on your router, and on the interfaces that you want to configure NetFlow on: Cisco Express Forwarding (CEF), distributed CEF, or fast switching.
+Understand the resources required on your router because NetFlow consumes additional memory and CPU resources.
+
+Установить cache size для того, чтобы не потреблял всё возможное пространство
+До  12.2(14)S, 12.0(22)S, or 12.2(15)T, на интерфейсе надо включить ip route-cache flow
+12.2(14)S, 12.0(22)S, 12.2(15)T и более поздние  - ip flow ingress
+
+
+Локальный траффик не считается как Egress NetFlow
+The Egress NetFlow Accounting feature counts CEF-switched packets only. Process-switched transit packets are not counted.
+
+
+Проверка работы netflow
+1.    show ip flow interface
+
+2.    show ip cache flow
+
+3.    show ip cache verbose flow 
+
+[http://www.cisco.com/en/US/docs/ios-xml/ios/netflow/configuration/12-4/get-start-cfg-nflow.html](http://www.cisco.com/en/US/docs/ios-xml/ios/netflow/configuration/12-4/get-start-cfg-nflow.html)
+
+
+
+
+/usr/bin/flow-capture -R /var/u01/.netflow.cap/test/rp.sh -e 0 -E 0 -n 288 -w /var/u01/.netflow.cap/elc0prefix -z 9 -V 8.5 -N 3 0/0/9023
+
+
+/usr/bin/flow-capture -e 0 -E 0 -n 288 -w /home/garry/test-flow -z 9 -V 8.5 -N 3 0/0/9023
+
+#!/bin/sh
+
+CURDIR=`/bin/pwd`
+FILENAME="`/bin/pwd | /bin/sed -e 's/^\/var\/u01\/\.netflow.cap\///g'`"/"$1"
+echo $FILENAME >> /var/u01/.netflow.cap/test/log.file
+
+cd /var/u01/.netflow.cap
+#/bin/cp --parents -pfR $FILENAME -t /var/u01/.netflow.cache
+#XX#
+#/usr/bin/bzip2 -9 /var/u01/.netflow.cap/$FILENAME
+#XX#/usr/bin/bzip2 -9 /var/u01/.netflow.cap/test/q/$FILENAME
+
+
+[http://evgslb.blogspot.ru/2009/06/cisco-netflow-catalyst-6500.html](http://evgslb.blogspot.ru/2009/06/cisco-netflow-catalyst-6500.html)
+[http://www.cisco.com/en/US/docs/ios/netflow/command/reference/nf_book.html](http://www.cisco.com/en/US/docs/ios/netflow/command/reference/nf_book.html)
+[http://www.cisco.com/en/US/docs/ios/solutions_docs/netflow/nfwhite.html](http://www.cisco.com/en/US/docs/ios/solutions_docs/netflow/nfwhite.html)
+[http://www.cisco.com/en/US/products/hw/switches/ps708/products_configuration_example09186a0080721701.shtml](http://www.cisco.com/en/US/products/hw/switches/ps708/products_configuration_example09186a0080721701.shtml)
+[http://forum.ixbt.com/topic.cgi?id=14:47772](http://forum.ixbt.com/topic.cgi?id=14:47772)
+[http://forums.manageengine.com/topic/netflow-v-9-on-catalyst-6500](http://forums.manageengine.com/topic/netflow-v-9-on-catalyst-6500)
+[http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/dtnfltos.html#wp1022471](http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/dtnfltos.html#wp1022471)
+[http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/dtnfltos.html#wp1015363](http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/dtnfltos.html#wp1015363)
+[http://forum.nag.ru/forum/index.php?showtopic=57395](http://forum.nag.ru/forum/index.php?showtopic=57395)
+[http://etutorials.org/Networking/network+management/Part+II+Implementations+on+the+Cisco+Devices/Chapter+7.+NetFlow/Fundamentals+of+NetFlow/](http://etutorials.org/Networking/network+management/Part+II+Implementations+on+the+Cisco+Devices/Chapter+7.+NetFlow/Fundamentals+of+NetFlow/)
+[http://www.netflowfaq.ru/index/0-12](http://www.netflowfaq.ru/index/0-12)
+[http://rfc2.ru/3954.rfc](http://rfc2.ru/3954.rfc)
+[http://www.cisco.com/en/US/docs/ios/netflow/command/reference/nf_01.html](http://www.cisco.com/en/US/docs/ios/netflow/command/reference/nf_01.html)
+[http://www.problem-info.ru/2012-1/4.pdf](http://www.problem-info.ru/2012-1/4.pdf)
+[http://www.cisco.com/web/UA/expoukraine2012/pdf/2.3.4_cisco_expo_2012.pdf](http://www.cisco.com/web/UA/expoukraine2012/pdf/2.3.4_cisco_expo_2012.pdf)
+[http://www.cisco.com/en/US/docs/ios/12_2/switch/configuration/guide/xcfnfov.html](http://www.cisco.com/en/US/docs/ios/12_2/switch/configuration/guide/xcfnfov.html)
+[http://www.opennet.ru/base/cisco/netflow_nat.txt.html](http://www.opennet.ru/base/cisco/netflow_nat.txt.html)
+[http://forum.nag.ru/forum/index.php?showtopic=61961](http://forum.nag.ru/forum/index.php?showtopic=61961)
+[http://www.softpiua.com/ru/what-is-netflow.html](http://www.softpiua.com/ru/what-is-netflow.html)
+[http://2net.su/blog/provajding/shape-nat-netflow-na-bolshix-setyax-chast-1/](http://2net.su/blog/provajding/shape-nat-netflow-na-bolshix-setyax-chast-1/)
+
+
+
+
+Разница 5 и 9
+
+[http://www.lancope.com/blog/netflow-v5-vs-netflow-v9/](http://www.lancope.com/blog/netflow-v5-vs-netflow-v9/)
+www.plixer.com/blog/netflow/netflow-v9-vs-netflow-v5/
+[http://habrahabr.ru/post/187820/](http://habrahabr.ru/post/187820/)

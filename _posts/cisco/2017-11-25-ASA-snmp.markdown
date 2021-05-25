@@ -1,0 +1,26 @@
+---
+layout: post
+title:  "ASA-snmp"
+date:   2017-11-25 03:49:56 +0300
+categories: ASA-snmp
+tags: cisco
+---
+
+# ASA-snmp
+snmp-server community 
+snmp-server host inside ip.snmp1.server community password
+
+snmp-server host vpn 10.192.10.190 community Udgl48dS
+snmp-server enable
+snmp-server location SGOK
+snmp-server contact iptech@sc.ru
+
+
+poll добавить
+
+
+
+snmp-server host outside 10.192.10.190 community Udgl48dS
+snmp-server enable
+snmp-server location SGOK
+snmp-server contact iptech@sc.ru

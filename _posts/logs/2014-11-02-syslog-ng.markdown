@@ -1,0 +1,82 @@
+---
+layout: post
+title:  "syslog-ng"
+date:   2014-11-02 06:32:42 +0300
+categories: logs
+tags: logs
+---
+
+# syslog-ng
+Прописать  в /etc/sysconfig/syslog
+SYSLOG_DAEMON="syslog-ng" и перезагрузить
+
+By Aemon, 09.08.2010 @ 15:44
+
+можно добавить логгирование в БД mysql.
+
+destination d_mysql {
+program(«/usr/bin/mysql –user=syslogger –password=password syslog»
+template(«INSERT INTO logs (host, facility, priority, level, tag, datetime, program, msg)
+VALUES ( ‘$HOST’, ‘$FACILITY’, ‘$PRIORITY’, ‘$LEVEL’, ‘$TAG’, ‘$YEAR-$MONTH-$DAY $HOUR:$MIN:$SEC’, ‘$PROGRAM’, ‘$MSG’ );\n»)
+template-escape(yes));
+};
+
+где в атрибутах доступа указать логин и пароль владельца базы куда будет все писаться.
+
+За статью спасибо.
+
+
+1. Передать лог с топаза на саппфир
+2. Передать лог с k9-s4
+3. Передать лог с ctd-s1
+4. Logrotate
+4. Web-interface
+5.
+
+
+На источнике 192.168.2.0/24 
+# Описываем новое хранилище логов.
+destination df_remote {
+udp("192.168.2.1");
+};
+
+filter f_remote {
+level(info,notice,warn);
+};
+
+log {
+source(s_all);
+filter(f_remote);
+destination(df_remote);
+};
+
+
+На приёмнике 192.168.2.1
+source s_udp {
+udp();
+};
+
+filter f_remote {
+host("192.168.2.*");
+};
+
+destination df_remote {
+file("/var/log/remote/$HOST-$LEVEL.log");
+};
+
+log {
+source(s_udp);
+filter(f_remote);
+destination(df_remote);
+};
+
+
+
+sto-ds-c0-s0-0-0-0-
+
+[http://www.opennet.ru:8101/base/sec/secure_syslog.txt.html](http://www.opennet.ru:8101/base/sec/secure_syslog.txt.html)
+[http://loganalyzer.adiscon.com/](http://loganalyzer.adiscon.com/)
+phplogging
+[http://czanik.blogs.balabit.com/2011/02/loganalyzer/](http://czanik.blogs.balabit.com/2011/02/loganalyzer/)
+
+[http://nms.gdd.net/index.php/Install_Guide_for_LogZilla_v3.2](http://nms.gdd.net/index.php/Install_Guide_for_LogZilla_v3.2)

@@ -1,0 +1,463 @@
+---
+layout: post
+title:  "mbr-grub"
+date:   2015-12-24 02:10:15 +0300
+categories: mbr-grub
+tags: disk
+---
+
+# mbr-grub
+Первое понятие - собственно Master Boot Record. Это запись (программный код и данные), которая загружается в память с винчестера и обеспечивает опознание логических разделов на нем,
+ определяет активный раздел и загружает из него загрузочную запись (Boot Record - BR), которая продолжит запуск операционной системы (ОС). 
+
+И второе понятие - Загрузочный Сектор, Master Boot Sector (MBS) - это сектор, располагающийся на цилиндре 0, плоскости (головка) 0 и имеющий номер 1.
+
+
+Функция MBR — «переход» в тот раздел жёсткого диска, с которого следует исполнять «дальнейший код» (обычно — загружать ОС). 
+На «стадии MBR» происходит выбор раздела диска, загрузка кода ОС происходит на более поздних этапах алгоритма.
+
+В процессе запуска компьютера, после окончания начального теста (Power-on self-test — POST), Базовая система ввода-вывода (BIOS) загружает «код MBR» в оперативную память 
+(в IBM PC обычно с адреса 0000:7c00) и передаёт управление находящемуся в MBR загрузочному коду.
+
+
+
+
+
+
+
+
+[http://www.suseblog.org.ua/kmb/on-skazal-poexali](http://www.suseblog.org.ua/kmb/on-skazal-poexali)
+
+У вас установка до конца не выполнилась, поэтому и не работает. Повторите установку, только grub ставьте в MBR
+
+Если есть загрузочный windows xp, то при загрузке выбрать консоль восстановления (нажать F2, если не ошибаюсь) 
+и там выполнить команды fixmbr, затем fixboot. 
+Под семёркой затрудняюсь точно сказать, но там практически аналогично, только выбрать пунк не Установка, а Восстановление 
+
+[http://www.bog.pp.ru/work/grub.html](http://www.bog.pp.ru/work/grub.html)
+[http://habrahabr.ru/post/113350/](http://habrahabr.ru/post/113350/)
+
+
+I'll just explain what they mean and you can judge when each is appropriate.
+
+Install in MBR means you are taking control of the boot first thing. So this GRUB can boot openSUSE, and other OSes. 
+If you already have Windows, this overwrites the Windows MBR.
+Install in root partition expects the first bootloader to chain to it. The first bootloader could be GRUB or Windows.
+None means you have to arrange for some other bootloader to load openSUSE. 
+For instance you already have GRUB from Ubuntu in the MBR and you just add an entry for openSUSE. 
+
+Получается если я ставлю в MBR, то сразу грузиться GRUB от Opensuse, а если я ставлю в root партишен, то сначала
+может загрузиться другой загрузчик, который стоит в mbr
+
+
+Если вы решили установить загрузчик (GRUB или LILO), вы должны определить где он будет установлен. Вы можете установить загрузчик в одно из двух размещений:
+
+Главная загрузочная запись (The master boot record (MBR))
+
+    Это рекомендуемое размещение для загрузчика, если только в MBR уже не установлен другой загрузчик операционных систем, например System Commander или OS/2's Boot Manager.
+ MBR - специальная область на диске, которую автоматически загружает BIOS вашего компьютера, и в первую очередь передает ей управление процессом загрузки. 
+При установке загрузчика в MBR, сразу после включении компьютера, GRUB (или LILO) предложит выполнить загрузку. 
+Затем вы можете загрузить Red Hat Enterprise Linux AS или любую другую операционную систему, настроенную в загрузчике. 
+Первый сектор вашего корневого раздела (root)
+
+    Рекомендуется, если вы уже используете другой загрузчик операционной системы (например, OS/2's Boot Manager). 
+В этом случае, сначала этот загрузчик получит управление. Затем вы можете настроить ваш загрузчик для запуска GRUB (или LILO), который в свою очередь загрузит Red Hat Enterprise Linux AS. 
+ 	
+
+Если вы используете RAID-адаптер, учтите, что не все BIOS поддерживают загрузку с дисков RAID-адаптера. 
+В таких случаях, не следует устанавливать загрузчик в MBR RAID-массива. В таких случаях загрузчик должен быть установлен в MBR на том диске, где располагается раздел /boot.
+
+
+
+
+
+
+
+
+Not to mention that you can also install Grub in both locations.
+For dual or multibooting, it usually makes sense to have Grub in MBR. 
+
+
+SUSE needs to know which partition to boot from. For this reason, SUSE uses the GRUB boot loader. Unlike the Windows boot loader, 
+which always installs into the Master Boot Record (MBR), the 1st sector on the hard drive, GRUB can be installed on any partition.
+
+
+bootstrap
+[http://www.ibm.com/developerworks/ru/library/l-linuxboot/](http://www.ibm.com/developerworks/ru/library/l-linuxboot/)
+[http://rus-linux.net/lib.php?name=/MyLDP/boot/rh-boot/rh-boot.html](http://rus-linux.net/lib.php?name=/MyLDP/boot/rh-boot/rh-boot.html)
+
+MBR
+[http://www.insidepro.com/kk/065/065r.shtml](http://www.insidepro.com/kk/065/065r.shtml)
+[http://greenflash.su/publ/13-1-0-57](http://greenflash.su/publ/13-1-0-57)
+[http://dsme.narod.ru/mbrfaq.xhtml](http://dsme.narod.ru/mbrfaq.xhtml)
+[http://ivt.istu.ru/index.php?project=asm&page=_theory_pacm_zagruzchik_](http://ivt.istu.ru/index.php?project=asm&page=_theory_pacm_zagruzchik_)
+[http://rus-linux.net/lib.php?name=MyLDP/boot/suprunov/boot.html](http://rus-linux.net/lib.php?name=MyLDP/boot/suprunov/boot.html)
+[http://www.masters.donntu.edu.ua/2008/fvti/chernoriz/library/mbr_art.htm](http://www.masters.donntu.edu.ua/2008/fvti/chernoriz/library/mbr_art.htm)
+
+Архитектура ПК
+[http://www.intuit.ru/department/os/bmos/4/3.html](http://www.intuit.ru/department/os/bmos/4/3.html)
+
+
+[https://skydrive.live.com/?cid=2f9268d68cb0ed12&id=2F9268D68CB0ED12](https://skydrive.live.com/?cid=2f9268d68cb0ed12&id=2F9268D68CB0ED12)!185
+[http://doc.opensuse.org/documentation/html/openSUSE/opensuse-reference/grub2.html](http://doc.opensuse.org/documentation/html/openSUSE/opensuse-reference/grub2.html)
+[http://www.suseblog.org.ua/wp-content/uploads/2010/05/install-opensuse-14.jpeg](http://www.suseblog.org.ua/wp-content/uploads/2010/05/install-opensuse-14.jpeg)
+
+
+
+GRUB2
+[http://ru.wikibooks.org/wiki/Grub_2](http://ru.wikibooks.org/wiki/Grub_2)
+[http://ru.wikipedia.org/wiki/GRUB](http://ru.wikipedia.org/wiki/GRUB)
+[http://www.linuxnow.ru/view.php?id=95](http://www.linuxnow.ru/view.php?id=95)
+[http://forum.ubuntu.ru/index.php?topic=74165.0](http://forum.ubuntu.ru/index.php?topic=74165.0)
+[http://www.ubuntologia.ru/grub2-recovery](http://www.ubuntologia.ru/grub2-recovery)
+
+
+
+
+GPT
+[http://ru.osdev.wikia.com/wiki/GUID-%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0_%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%BE%D0%B2_%28GPT%29](http://ru.osdev.wikia.com/wiki/GUID-%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0_%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%BE%D0%B2_%28GPT%29)
+[http://www.ibm.com/developerworks/ru/library/l-gpt/](http://www.ibm.com/developerworks/ru/library/l-gpt/)
+[http://ru.wikipedia.org/wiki/%D2%E0%E1%EB%E8%F6%E0_%F0%E0%E7%E4%E5%EB%EE%E2_GUID](http://ru.wikipedia.org/wiki/%D2%E0%E1%EB%E8%F6%E0_%F0%E0%E7%E4%E5%EB%EE%E2_GUID)
+
+Восстановление загрузчика
+По восстановлению загрузчика.
+Сейчас сам делаю так:
+- загружаемся с LiveCD (у меня OpenSuse 11.3)
+- идем в yast - partitioner (я тут по размеру и файловой понимаю на каком разделе корень файловой. в моем случае sda5 )
+- запускаем терминал и переходим под рута
+su
+- монтируем файловую систему которую восстанавливаем
+mount /dev/sda5 /mnt
+mount --bind /dev/ /mnt/dev
+mount --bind /proc/ /mnt/proc
+- переходим в смонтированную систему
+chroot /mnt
+- запускаем восстановление гагрузчика из яста
+yast2 bootloader
+(тут можно посмотреть меню загрузки, и поправить если что надо. подробности в статье, которую вам еже присылали. Восстановить загрузчик отсюда у меня не разу не вышло, но говорят что можно)
+- закрываем его, и устанавливаем grub из терминала
+grub-install.unsupported --recheck /dev/sda
+- выходим, отмонтируем, перезагружемся
+exit
+umount /mnt/dev
+umount /mnt/proc
+umount /mnt
+init 6
+
+Я использую этот алгоритм, при переносе системы с компа на комп, при установке Суси рядом с виндой.
+К сожалению, у меня в 2-х из 5-ти случаев, зависает команда grub-install.unsupported --recheck /dev/sda, но в вашем случае, такого быть не должно. (у меня на машинах железо разное.)
+Так вот вопрос еще и от меня - кто знает почему загрузчик может не ставится? Перед описанным выше алгоритмом делаю копии разделов командой dd. Еще раз - в 3-х из 5-ти случаев, все работает нормально, в 2-х зависает. Как исправить проблему? Если это из=за драйверов, как добавить нужные дрова? 
+
+
+
+
+
+
+
+
+
+ Boot loader
+SUSE needs to know which partition to boot from. For this reason, SUSE uses the GRUB boot loader. Unlike the Windows boot loader, which always installs into the Master Boot Record (MBR), the 1st sector on the hard drive, GRUB can be installed on any partition.
+
+SUSE installer is smart and will make the right choice of the hard drive where to install the boot loader. I strongly suggest people with little Linux experience to refrain from using the Expert Options, because they might inadvertently mess things up.
+
+Nevertheless, here are some basic concepts that you should be aware of:
+
+Some older BIOSes are limited to reading only the first 1024 sectors of a hard disk. In this case, if you install the boot loader above the 1024th sector (on one of the partitions), you will not be able to boot your Linux. This means that you might have to consider on which partition to place the boot loader (< 1024th sector). Or alternatively, create a small separate boot partition.
+
+Without going into too many technical details, the GRUB boot loader consists of stages. Stage 1 is written to the MBR, appended to the existing information contained there. Stage 2 usually resides on the root partition of the Linux distribution.
+
+This means that the boot loader might be overwritten any time you write new information to the Master Boot Record. If you're using only SUSE on your machine, this will not bother you. However, if you intend to run SUSE in, let's say, a dual-boot configuration with Windows, this might have implications:
+
+    If you use Windows Recovery Console to fix the Master Boot Record for some reason or reinstall Windows, you will destroy the GRUB boot loader.
+    If you use imaging backup software capable of reading and writing MBR, when restoring a partition, you might destroy the GRUB boot loader.
+
+Your best choice is to let the installer figure it out. You will be able to move it to another partition later on, once SUSE is installed (inside SUSE control center called YaST). For more information about GRUB, please visit GNU GRUB site and refer to the GNU GRUB Manual 0.97.
+
+
+
+
+
+
+
+[http://linuxguru.ru/how-it-works/fajlovye-sistemy2/](http://linuxguru.ru/how-it-works/fajlovye-sistemy2/)
+Загрузчики операционных систем Linux например grub обычно состоят из двух частей:
+
+1 загрузчик первого этапа или первичного загрузчика, который имеет достаточно малый размер чтобы разместиться в MBR.
+2 большего по объему вторичного загрузчика, который может храниться уже где угодно, обычно в разделе содержащем корневую файловую систему (/) или (/boot).
+
+Загрузчик первого этапа может быть размещен как в главном загрузочном секторе диска MBR, так и в загрузочном секторе активного раздела 
+Boot Record. У вас есть выбор при установке ОС.
+
+
+
+Суперблок это первый блок каждого из разделов он имеет размер 1024 байт который находится в 1024 байтах от начала раздела ext2 ext3 ext4 и 
+является начальной точкой файловой системы. При загрузке ОС он считывается в озу и все изменения файловой системы происходят
+ в его копии которая находится в озу а на диск происходит запись только периодически. 
+Это повышает производительность системы, что бы каждый раз не дергать диск.
+
+В суперблоке определяется размер файловой системы, тип файловой системы, 
+UUID файловой системы, размер массива индексных дескрипторовколичество свободных блоков, 
+количество свободных индексных дескрипторов, флаги, размер логического блока файловой системы, 
+список номеров свободных индексных дескрипторов список адресов свободных блоков, etc.
+
+Остальные сектора раздела объединены в логические блоки (disk allocation blocks) фиксированного размера,
+ кратные размеру сектора обычно 1, 2, 4, 8Кб. Размер блока задается только при создании файловой системы на разделе диска.
+ Меньший размер блока позволяет сэкономить место на жёстком диске, но также ограничивает максимальный размер файловой системы.
+ Все блоки имеют порядковые номера с целью уменьшения фрагментации и количества перемещений головок жёсткого диска при чтении
+ больших массивов данных.
+
+
+
+
+
+
+
+[http://mydirectx.ru/administr/superblok.htm](http://mydirectx.ru/administr/superblok.htm)
+Информация, хранимая в суперблоке, используется для организации доступа к остальным данным на диске.
+ В суперблоке определяется размер файловой системы, максимальное число файлов в разделе, объем свободного пространства и содержится информация о том, где искать незанятые участки.
+ При запуске ОС суперблок считывается в память и все изменения файловой системы вначале находят отображение в копии суперблока, находящейся в оперативной памяти, и записываются на диск только периодически.
+ Это позволяет повысить производительность системы, так как многие пользователи и процессы постоянно обновляют файлы. 
+При выключении системы суперблок обязательно должен быть записан на диск, что не позволяет выключать компьютер простым выключением питания
+
+
+
+
+
+
+
+Install in MBR means you are taking control of the boot first thing. So this GRUB can boot openSUSE, and other OSes.
+ If you already have Windows, this overwrites the Windows MBR.
+Install in root partition expects the first bootloader to chain to it. The first bootloader could be GRUB or Windows.
+
+None means you have to arrange for some other bootloader to load openSUSE. 
+For instance you already have GRUB from Ubuntu in the MBR and you just add an entry for openSUSE. 
+
+
+загрузочные записи разделов(PBR
+
+Тем не менее, общий загрузочный код в MBR обычно загружает
+раздел, который помечен как загрузочный, который должен быть раздел, который содержит
+GRUB внутри.
+[http://wiki.linuxformat.ru/index.php/LXF100-101:%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%B8%D1%82%D1%8C_%D0%BD%D0%B5%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B6%D0%B0%D0%B5%D0%BC%D0%BE%D0%B5#.D0.92.D1.8B.D0.BA.D1.80.D1.83.D1.82.D0.B0.D1.81.D1.8B_Fedora](http://wiki.linuxformat.ru/index.php/LXF100-101:%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%B8%D1%82%D1%8C_%D0%BD%D0%B5%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B6%D0%B0%D0%B5%D0%BC%D0%BE%D0%B5#.D0.92.D1.8B.D0.BA.D1.80.D1.83.D1.82.D0.B0.D1.81.D1.8B_Fedora)
+
+Получается что в MBR есть ссылка на Загрузочный сектор активного раздела (это /boot или / например). - PBR
+Первые 512 байт /boot или / выделены под 1 стадию.
+Вторые 512 байт под вторую стадию
+Либо первая стадия размещается в MBR напрямую
+В любом случае в MBR 
+
+
+Простыми словами — MBR загружает и выполняет загрузчик GRUB. Она содержит информацию о GRUB'е (или LILO)
+
+Получаетя, что стадия 1 находится в MBR которая ссылается на промежуточную фазу 1,5, которая находится в загрузочном разделе (например / или /boot) 
+Если загрузчик ставиться не в MBR, а если загрузчик ставится в MBR, то стадия 1,5 находится в MBR
+
+stage 1 в MBR на (hd0) и скопировать исходный (SUSE) stage 1.5 в сектора,
+ следующие за ним (для более детального описания этого смотрите команды install и embed в руководстве GNU 
+
+Загрузчик 1-й фазы считывается BIOS из MBR (главной загрузочной записи).[4]
+Он загружает оставшуюся часть загрузчика (2-ю фазу). Если вторая фаза находится на большом диске, иногда загружается промежуточная фаза 1,5, 
+которая содержит дополнительный код, позволяющий считывать цилиндры с номерами более 1024 (диски LBA). 
+Загрузчик фазы 1,5 хранится (если это необходимо) в MBR или в загрузочном разделе.[4]
+Выполняется вторая фаза загрузчика и отображает меню запуска GRUB. Оно также позволяет выбрать среду выполнения и просмотреть параметры системы.
+
+
+На компьютерах архитектуры IBM PC запуск загрузчика осуществляется программным обеспечением BIOS, записанной в ПЗУ компьютера,
+ после успешного окончания процедуры POST. 
+Опишем процедуру, с помощью которой происходит загрузка с НЖМД IBM PC: 
+BIOS производит чтение 512 байт первого сектора НЖМД (MBR) в ОЗУ по адресу 0x00007C00 (0x07C0:0x0000 в формате реального режима),
+ затем прочитанному коду передаётся управление. Этот код читает и анализирует таблицу разделов жёсткого диска, 
+а затем, в зависимости от вида загрузчика, либо передаёт управление загрузочному коду активного раздела жёсткого диска, 
+либо самостоятельно загружает ядро с диска в оперативную память и передаёт ему управление
+
+
+Загрузочный сектор, иногда называемый stage1, то есть первым этапом загрузки операционной системы, 
+загружает программу второго этапа загрузки операционной системы stage2 
+(вторичный загрузчик, иногда в качестве stage2 загружается boot manager или программа авторизации и защиты доступа).
+ В некоторых ОС роль stage1 выполняет MBR, и при загрузке ОС с жесткого диска загрузочный сектор не используется. 
+На незагружаемых разделах жесткого диска загрузочные секторы также могут не содержать программу загрузки.
+
+
+
+
+После включения персонального компьютера его процессор начинает работу. Первая выполняемая команда расположена по адресу FFFF0h
+ и принадлежит пространству адресов BIOS. Как правило, данная команда просто передает управление программе инициализации BIOS.
+
+Программа инициализации BIOS с помощью программы POST проверяет, что устройства компьютера работают корректно и инициализирует их.
+Затем BIOS опрашивает устройства, перечисляемые в заранее созданном списке, пока не найдёт загрузочное устройство. 
+Если такое устройство найдено не будет, будет выведено сообщение об ошибке, а процесс загрузки будет остановлен. 
+Если BIOS обнаружит загрузочное устройство, он считает с него начальный загрузчик и передаст ему управление.
+
+В случае жесткого диска, начальный загрузчик называется главной загрузочной записью (MBR) и часто не зависит от операционной системы.
+ Обычно он ищет активный раздел жесткого диска, загружает загрузочный сектор данного раздела и передает ему управление. 
+Этот загрузочный сектор, как правило, зависит от операционной системы. 
+Он должен загрузить в память ядро операционной системы и передать ему управление. 
+Если активного раздела не существует, или загрузочный сектор активного раздела некорректен,
+ MBR может загрузить резервный начальный загрузчик и передать управление ему. 
+Резервный начальный загрузчик должен выбрать раздел (зачастую с помощью пользователя), загрузить его загрузочный сектор и передать ему управление.
+
+
+
+
+Установка vista и linux
+[http://www.thevista.ru/page8119-windows_vista_i_linux_na_odnom_kompyutere_linux_ustanovlen_pervym](http://www.thevista.ru/page8119-windows_vista_i_linux_na_odnom_kompyutere_linux_ustanovlen_pervym)
+Теперь напечатайте "setup (hd0,0)" - это повторно установит загрузчик GRUB на disk 0, partition 0. Если вы напечатаете "setup (hd0)",
+ то GRUB переустановится в MBR и запишется поверх загрузчика Windows Vista.
+
+
+
+
+
+
+
+
+Для некоторых случаев потребуется установка загрузчика GRUB из-под chroot окружения, например для установки загрузчика на RAID-тома, 
+или в случае, когда загрузчик вышел из строя, и Вы не можете загрузить Вашу операционную систему.
+ Для этого вам необходимо выполнить Change Root из-под LiveCD, или другой инсталляции Linux. 
+
+
+
+
+Хорошо написано про grub
+[https://wiki.archlinux.org/index.php/GRUB_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29](https://wiki.archlinux.org/index.php/GRUB_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29)
+
+
+
+
+
+
+
+Для того чтобы компьютер загружался при отсутствии любого диска нужно обратить внимание на расположение загрузчика. 
+Он должен быть не в MBR, а на «/dev/md1 («/»)».
+По умолчанию из /
+
+
+Если вы используете RAID-адаптер, учтите, что не все BIOS поддерживают загрузку с дисков RAID-адаптера.
+ В таких случаях, не следует устанавливать загрузчик в MBR RAID-массива.
+ В таких случаях загрузчик должен быть установлен в MBR на том диске, где располагается раздел /boot.
+
+
+На ast сделано по другому - то есть там загрузчик в mbr и отдельно сделан раздел root в виде массива raid1, на котором не поднят lvm
+[x] Boot from Master Boot Record 
+[x] Enable Redundancy for MD Array
+
+Enable Redundancy for MD Array
+
+
+
+quartz - тут не программный рейд /dev/md126. Он поделён на 2 части md126p1 - это /boot, а md126p2 - это под lvm
+/dev/md126p1
+Boot from Boot Partition
+/dev/md126p1                   152M   50M   94M  35% /boot 
+
+[ ] Boot from Master Boot Record    
+[ ] Boot from Root Partition 
+[x] Boot from Boot Partition     Это означает, что надо делать загрузку из /boot раздела
+
+
+	
+
+Если вы используете RAID-адаптер, учтите, что не все BIOS поддерживают загрузку с дисков RAID-адаптера.
+ В таких случаях, не следует устанавливать загрузчик в MBR RAID-массива.
+ В таких случаях загрузчик должен быть установлен в MBR на том диске, где располагается раздел /boot.
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ Раздел /boot
+
+Разбивка жесткого диска linux начинается с создания этого раздела. Здесь все очень просто. На этом разделе размещаются файлы настройки и модули загрузчика, которые считываются при старте Grub, а также ядро и initrd образ. Эти файлы занимают не так много пространства, около 100 Мегабайт, но в некоторых дистрибутивах здесь могут размещаться еще и темы Grub, а также со временем будут накапливаться старые версии ядер, так что лучше запастись местом и выделить 300 Мегабайт. Этого будет вполне достаточно. (место хранения grub)
+ 
+ bios_boot — метка, которая указывает на то, что это загрузочный раздел;
+bios_grub — тип самого раздела.
+ 
+ BIOS boot partition
+ Что такое загрузочный раздел BIOS?
+Загрузочный раздел BIOS очень маленький (1-2 Мб), в него загрузчики, такие как GRUB2, могут поместить дополнительные данные, которые не помещаются в выделенное хранилище (несколько сотен байтов в случае MBR) и не могут быть помещены в другое место.
+
+Такие разделы не всегда необходимы, но, учитывая небольшой размер занимаемого пространства и трудностей с документированием большого количества разделов, рекомендуется создать его в любом случае.
+Для полноты картины загрузочный раздел BIOS необходим, когда GPT разметка разделов используется совместно с GRUB2, или когда MBR разметка разделов используется совместно с GRUB2 когда начало первого раздела находится ранее 1Мб на диске. 
+ [https://en.wikipedia.org/wiki/BIOS_boot_partition](https://en.wikipedia.org/wiki/BIOS_boot_partition)
+ Вообщем необходим дополнительный раздел чтобы вторая(полуторная стадия grub грузилась), если диск разбит как gpt, а система  хочет грузиться с MBR(только так и умеет). Фича позволяет с gpt диска грузиться и по старому и по новому
+ 
+ Раздел 	Описание
+/dev/sda1 	BIOS boot раздел
+/dev/sda2 	Boot раздел
+/dev/sda3 	Swap раздел
+/dev/sda4 	Root раздел 
+ [https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Disks/ru#.D0.A7.D1.82.D0.BE_.D1.82.D0.B0.D0.BA.D0.BE.D0.B5_.D0.B7.D0.B0.D0.B3.D1.80.D1.83.D0.B7.D0.BE.D1.87.D0.BD.D1.8B.D0.B9_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB_BIOS.3F](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Disks/ru#.D0.A7.D1.82.D0.BE_.D1.82.D0.B0.D0.BA.D0.BE.D0.B5_.D0.B7.D0.B0.D0.B3.D1.80.D1.83.D0.B7.D0.BE.D1.87.D0.BD.D1.8B.D0.B9_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB_BIOS.3F)
+ 
+ 
+ (по сути grub2 - это mbr-ный загрузчик)
+ [http://rus-linux.net/MyLDP/boot/linuxuefi.html](http://rus-linux.net/MyLDP/boot/linuxuefi.html)
+ 
+ UEFI GPT
+ 
+  Legacy BIOS  (режим BIOS у UEFI)
+ UEFI может выступать как BIOS
+ 
+ Преобразование MBR в GPT ([http://viberua.blogspot.com/2015/05/mbr-gpt.html](http://viberua.blogspot.com/2015/05/mbr-gpt.html), [https://ocomp.info/preobrazovanie-mbr-gpt.html](https://ocomp.info/preobrazovanie-mbr-gpt.html)
+ Нужен дополнительный раздел ESP ( Кроме указанного размера, раздел должен быть отформатирован в файловой системе FAT326) и быть загрузочным.) - boot раздел
+                    Этот загрузочный раздел efi раньше был boot.   Поэтому если вас попросят установить точку монтирования для раздела ESP, назовите ее, например, /boot/efi.
+                    
+          Если я ставил систему на LVM, то для boot делал отдельный раздел на 512 Мб           
+    Это связано с тем, что загрузчики не могли читать файлы из LVM. Таким образом, вы никогда не могли загрузиться в вашу систему на LVM, если у него не было отдельного раздела /boot (см. Это и это для деталей).          
+            
+    Чтобы при установки mint что-то изменить в lvm разделах, необходимо руками  менять lvm.
+                    
+                    
+                    
+  bootmgr - это пользовательское приложение для редактирования Intel Extensible Firmware Interface (EFI) Boot Manager. Оно позволяет добавлять, изменять и удалять опции загрузки.
+После установки открываем терминал и вбиваем туда:
+
+
+ФС должна быть fat32, желательно раздел должен иметь метку «EFI». Загрузиться нужно через UEFI, иначе не будет доступа для записи в efivars и придётся грузить efi файл ручками. В случае с grub для установки хватает grub-install /dev/sda. В особо упоротых случаях нужно дописать "--efi-directory" и соответственно путь (смотри справку). Иногда жалуется что не хватает места для записи, такое часто бывает у HP с insydeH20. Тогда надо ручками ковыряться в efivars. Опасно, но потом начинает работать. И рекомендую переименовать папку с виндовым EFI файлом. Многие биосы несмотря на настройки находя по дефолтному пути винду грузят её, хоть усрись.
+
+ sudo efibootmgr
+ 
+ Вы должны убедиться в том, что загрузились в режиме EFI - для этого перейдите в командную оболочку Linux и наберите команду ls /sys/firmware/efi. Если вы увидите список файлов и каталогов, то вы загрузились в режиме EFI и вы можете проигнорировать следующие дополнительные советы; а если нет, то вы, вероятно, загрузились в режиме BIOS, и вам следует просмотреть параметры ваших настроек. 
+ 
+ 
+ 
+ [https://itgost.ru/linux-mint-ustanovka-uefi/](https://itgost.ru/linux-mint-ustanovka-uefi/)
+ 
+ 
+ 
+ Для того чтобы ваша система смогла загрузиться с только что записанной флешки нужно отключить UEFI Secure Boot. Этот режим позволяет загружаться только подписанным операционным системам, а подписанными являются только ОС от Microsoft. Поэтому для Linux этот режим надо отключать. У меня эта настройка тоже есть на вкладке Boot:
+ 
+ Создание efi раздела
+ В качестве файловой системы для раздела надо выбрать FAT32, размер - 100 мегабайт. Далее нажмите кнопку "Apply" для применения изменений.
+
+Затем нажмите "Manage Flags" и установите галочки напротив флагов "boot" и "efi".
+
+Хорошая статья
+[https://losst.ru/ustanovka-linux-na-uefi](https://losst.ru/ustanovka-linux-na-uefi)
+[https://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_desktop_14_04/%D0%BE%D1%81%D0%BE%D0%B1%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8_%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B8_%D0%BD%D0%B0_%D0%BF%D0%BB%D0%B0%D1%82%D1%8B_%D1%81_uefi](https://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_desktop_14_04/%D0%BE%D1%81%D0%BE%D0%B1%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8_%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B8_%D0%BD%D0%B0_%D0%BF%D0%BB%D0%B0%D1%82%D1%8B_%D1%81_uefi)
+
+mint
+[https://linuxmint.com.ru/viewtopic.php?t=1651](https://linuxmint.com.ru/viewtopic.php?t=1651)
+[https://forums.linuxmint.com/viewtopic.php?f=46&t=107620#p608123](https://forums.linuxmint.com/viewtopic.php?f=46&t=107620#p608123)
+[https://forums.linuxmint.com/viewtopic.php?f=197&t=71159](https://forums.linuxmint.com/viewtopic.php?f=197&t=71159)
+
+
+
+
+
+
+
+ Что я знаю или узнал:
+
+    Для загрузки UEFI вам нужен раздел FAT32 EFI, по одному на каждый диск достаточно и может обрабатывать несколько операционных систем (это зависит в основном от прошивки UEFI).
+    Для загрузки Linux в устаревшем режиме на GPT-диске вам понадобится раздел BIOS-GRUB-раздела без любой файловой системы и помеченный как BIOS_GRUB.
+    Для загрузки другой устаревшей операционной системы из таблицы разделов GPT общий совет заключается в том, что вам нужен отдельный раздел BIOS-BOOT. По моему опыту и, насколько я помню, только установка Windows 7/8 в унаследованном режиме создаст необходимые разделы (IIRC MSR, BOOT и ОС).
+    /boot -разделение, которое иногда предлагается для расширенных настроек (RAID, Full Disk Enrcyption и т. д.), действительно предназначено только для продвинутых систем. С UEFI загрузочный раздел для Linux также не нужен для расширенных настроек, так как раздел EFI может быть сконфигурирован для хранения изображений ядра и initrd. Разработчики gummiboot опубликовали спецификацию , как им нравится видеть, как она реализована и опубликована новая версия всего несколько дней назад который объединил бы все необходимые файлы и конфигурацию в один файл.
+
+Таким образом, для загрузки UEFI и MBR вам, по крайней мере, нужен раздел EFI (все загрузочные ОС EFI) и раздел BIOS_GRUB (GRUB PC управляет всеми устаревшими ОС). Не удаляйте и не используйте повторно существующий раздел MSR. Вы можете попытаться установить загрузчик EFI Windows 7 в раздел EFI с bcdboot , в версии Windows 8 есть еще несколько улучшений, таких как опция /f uefi .
+
+Загрузка компоновки / , /boot , swap и /home 4 из GPT в BIOS, а также в режим UEFI невозможна, вам нужен раздел для каждого режима. Однако с GPT нет никаких реальных ограничений. 

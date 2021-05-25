@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "tar"
+date:   2014-09-13 17:49:37 +0400
+categories: linux
+tags: linux
+---
+
+# tar
+[http://debianforum.ru/index.php?topic=8069.0](http://debianforum.ru/index.php?topic=8069.0)
+[http://www.computerhope.com/unix/utar.htm](http://www.computerhope.com/unix/utar.htm)
+[http://myvista.ru/tar](http://myvista.ru/tar)	
+forum.farmanager.com/viewtopic.php?t=4372
+[http://forum.farmanager.com/viewtopic.php?t=4372](http://forum.farmanager.com/viewtopic.php?t=4372)
+[http://younglinux.info/linuxtar](http://younglinux.info/linuxtar)
+[http://www.lissyara.su/doc/man/tar/](http://www.lissyara.su/doc/man/tar/)

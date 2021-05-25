@@ -1,0 +1,468 @@
+---
+layout: post
+title:  "bgp-ctd-c7"
+date:   2017-05-04 00:39:25 +0300
+categories: routing
+tags: routing
+---
+
+# bgp-ctd-c7
+Fa0/0.5
+Fa0/0.200                      up             up       ### IPVPN NLMK NLMK-CE0 # Paul # 2006.02.01
+Fa0/0.201                      up             up       # NLMK IPVPN mgmt intf
+Fa0/0.204                      up             up       ### NLMK IPVPN share network at UZEL CTD # Paul 09.12.2005
+Fa0/0.206                      up             up       #dom-Inozemzev-NLMK #pheonix 20.05.2010
+Fa0/0.207                      up             up       #LGEK-NLMK-VPN #pheonix 26.05.2010 
+Fa0/0.208                      up             up       ### IP VPN NLMK-Equant Port
+Fa0/0.350                      up             up       #TTK eth kanal for NLMK
+Fa0/0.2010                     up             down     #STAGDOK VPN RadioAccess #pheonix 24.04.2012
+Fa0/0.3057                     up             up       #NLMK-VPN GK-Metallurg #14.03.2011
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10 коммутаторов 3200-28   80000 рублей
+
+
+Fa0/0.535                      up             up       # Customs @ Raskovoy
+Fa0/0.99                       up             up       #Mngt for ATS
+Fa0/0.12                       up             up       # Management of Victoria switches via MPLS\IP
+Fa0/0.545                      up             up       # LCB NLMK IPVPN LM via ADSL 
+Fa0/0.548                      up             up       # Impex-Bank IPVPN Indesit Link
+Fa0/0.550                      up             up       # KMB-IPVPN
+Fa0/0.605                      up             up       # Crystall IPVPN # Woland 19.09.2007
+Fa0/0.611                      up             up       # Chkicken Kingdom Rossia
+Fa0/0.619                      up             up       #NLMK- Borino IPVPN
+Fa0/0.620                      up             up       # Gipromez - NLMK IPVPN
+Fa0/0.621                      up             up       # Gipromez - NLMK IPVPN (GVC)
+Fa0/0.623                      up             up       # LGEK-TEK IPVPN @ PSI
+Fa0/0.624                      up             up       # LGEK-TEK IPVPN @ P4
+Fa0/0.702                      up             up       ### Indesit-WHS Customs IPVPN 128K # Paul # 03.10.2005
+Fa0/0.703                      up             up       # Indesit-Sklad 2Point VPN 512K # Paul 19.09.2005
+Fa0/0.708                      up             up       # INDESIT IPVPN Rest base # STIPOP # Woland 31.07.2006
+Fa0/0.2004                     up             up       #AB Rossia #Gazenergobank
+Fa0/0.2005                     up             up       #IPVPN Client-side Euroset-PL.Mira4  #garry 5.04.2012
+Fa0/0.2024                     up             up       # City Bank PSI #pheonix 17.08.2011
+Fa0/0.2025                     up             up       #LCB International'naya (HQ) IPVPN port (backup)
+Fa0/0.2026                     up             up       #Customs Stinol-WHS 2point VPN 128K  #garry 27.06.2012
+Fa0/0.2501                     up             up       #VPN-rtcomm-BKS client-side #garry 10.05.2011
+Fa0/0.2504                     up             up       # LKB VPN - Kalinina 1 #gold_555 08.11.2012
+Fa0/0.3007                     up             up       #MDM-Litavrina-GLD #pheonix 11.06.2010
+Fa0/0.3027                     up             up       #RosGosStah-Sovintel #pheonix 8.09.2010
+Fa0/0.3030                     up             up       #VSK-RTComm-Client #pheonix 13.09.2010
+Fa0/0.3064                     up             up       # LKB VPN - Internacionalinaya 8  #pheonix 12.04.2011
+Fa0/0.3127                     up             up       # LKB VPN - Sovetskaya 10 #kaktus 23.12.11
+Fa0/0.3997                     up             up       #PPPoE termination endpoint for xDSL jur client
+
+
+no radius-server retransmit 10
+no radius-server timeout 10
+no radius-server key 7 111D1C16031B050B557878
+no radius-server vsa send accounting
+no radius-server vsa send authentication
+
+
+
+
+
+router bgp 20866
+ neighbor 81.20.192.70 remote-as 20866
+ neighbor 81.20.192.70 update-source Loopback0
+
+
+ address-family vpnv4
+  neighbor 81.20.192.70 activate
+  neighbor 81.20.192.70 send-community extended
+  
+
+
+
+
+
+Нах не нужны
+ neighbor 81.20.193.248 remote-as 20866
+ neighbor 81.20.193.248 update-source Loopback0
+ neighbor 81.20.196.120 remote-as 20866
+ neighbor 81.20.196.120 update-source Loopback0
+ neighbor 81.20.201.246 remote-as 20866
+ neighbor 81.20.201.246 update-source Loopback0
+
+
+
+
+
+router bgp 20866
+ no bgp default ipv4-unicast
+ no bgp default route-target filter
+ bgp log-neighbor-changes
+ neighbor 81.20.192.71 remote-as 20866
+ neighbor 81.20.192.71 update-source Loopback
+ neighbor 81.20.192.72 remote-as 20866
+ neighbor 81.20.192.72 update-source Loopback0
+ neighbor 81.20.192.73 remote-as 20866
+ neighbor 81.20.192.73 update-source Loopback0
+ neighbor 81.20.192.74 remote-as 20866
+ neighbor 81.20.192.74 update-source Loopback0
+ neighbor 81.20.192.76 remote-as 20866
+ neighbor 81.20.192.77 remote-as 20866
+ neighbor 81.20.192.77 update-source Loopback0
+ neighbor 81.20.192.78 remote-as 20866
+ neighbor 81.20.192.78 update-source Loopback0
+ neighbor 81.20.192.78 timers 15 45
+ maximum-paths 2
+ maximum-paths ibgp 2
+ !
+ address-family ipv4
+ redistribute connected
+ no auto-summary
+ maximum-paths 2
+ maximum-paths ibgp 2
+ no synchronization
+ exit-address-family
+ !        
+ address-family vpnv4
+ neighbor 81.20.192.71 activate
+ neighbor 81.20.192.71 send-community extended
+ neighbor 81.20.192.71 weight 100
+ neighbor 81.20.192.72 activate
+ neighbor 81.20.192.72 send-community extended
+ neighbor 81.20.192.72 weight 100
+ neighbor 81.20.192.73 activate
+ neighbor 81.20.192.73 send-community extended
+ neighbor 81.20.192.74 activate
+ neighbor 81.20.192.74 send-community extended
+ neighbor 81.20.192.74 weight 100
+ neighbor 81.20.192.77 activate
+ neighbor 81.20.192.77 send-community extended
+ neighbor 81.20.192.78 activate
+ neighbor 81.20.192.78 send-community extended
+ neighbor 81.20.192.78 weight 100
+ exit-address-family
+ !        
+ address-family ipv4 vrf equant-test
+ redistribute connected
+ redistribute static
+ neighbor 10.192.10.1 remote-as 2854
+ neighbor 10.192.10.1 activate
+ neighbor 10.192.10.1 weight 50
+ neighbor 10.192.10.42 remote-as 65066
+ neighbor 10.192.10.42 activate
+ neighbor 10.192.10.58 remote-as 20866
+ neighbor 10.192.10.58 activate
+ neighbor 10.192.10.70 remote-as 20485
+ neighbor 10.192.10.70 activate
+ neighbor 10.192.10.70 weight 200
+ neighbor 10.192.10.70 prefix-list TTk-2 out
+ neighbor 10.192.10.110 remote-as 65024
+ neighbor 10.192.10.110 activate
+ neighbor 10.192.10.141 remote-as 20485
+ neighbor 10.192.10.141 activate
+ neighbor 10.192.10.141 weight 200
+ neighbor 10.192.10.141 prefix-list TTk-4 out
+ neighbor 10.192.10.186 remote-as 65011
+ neighbor 10.192.10.186 activate
+ neighbor 10.192.10.186 weight 150
+ neighbor 10.192.10.190 remote-as 65065
+ neighbor 10.192.10.190 activate
+ neighbor 10.192.10.198 remote-as 65015
+ neighbor 10.192.10.198 activate
+ maximum-paths eibgp 2
+ no auto-summary
+ no synchronization
+ exit-address-family
+
+
+
+
+router bgp 20866
+ no synchronization
+ bgp log-neighbor-changes
+ network 192.168.12.0
+ neighbor 10.192.10.78 remote-as 3216
+ neighbor 10.192.10.78 maximum-prefix 500
+ neighbor 81.20.192.71 remote-as 20866
+ neighbor 81.20.192.71 update-source Loopback0
+ neighbor 81.20.192.72 remote-as 20866
+ neighbor 81.20.192.72 update-source Loopback0
+ neighbor 81.20.192.76 remote-as 20866
+ neighbor 81.20.192.76 update-source Loopback0
+ neighbor 81.20.192.77 remote-as 20866
+ neighbor 81.20.192.77 update-source Loopback0
+ neighbor 81.20.192.78 remote-as 20866
+ neighbor 81.20.192.78 update-source Loopback0
+ neighbor 81.20.193.122 remote-as 20866
+ neighbor 81.20.193.122 update-source Loopback0
+ neighbor 192.168.90.1 remote-as 20866
+ neighbor 192.168.90.1 update-source GigabitEthernet0/0.457
+ neighbor 192.168.91.3 remote-as 20866
+ neighbor 192.168.91.3 update-source Loopback2
+ no auto-summary
+ !                                                                                                                                                           
+ address-family vpnv4                                                                                                                                        
+ neighbor 81.20.192.71 activate                                                                                                                              
+ neighbor 81.20.192.71 send-community extended                                                                                                               
+ neighbor 81.20.192.72 activate                                                                                                                              
+ neighbor 81.20.192.72 send-community extended                                                                                                               
+ neighbor 81.20.192.76 activate                                                                                                                              
+ neighbor 81.20.192.76 send-community extended                                                                                                               
+ neighbor 81.20.192.77 activate                                                                                                                              
+ neighbor 81.20.192.77 send-community extended                                                                                                               
+ neighbor 81.20.192.78 activate                                                                                                                              
+ neighbor 81.20.192.78 send-community extended                                                                                                               
+ neighbor 81.20.193.122 activate                                                                                                                             
+ neighbor 81.20.193.122 send-community extended                                                                                                              
+ neighbor 192.168.90.1 activate                                                                                                                              
+ neighbor 192.168.90.1 send-community both                                                                                                                   
+ neighbor 192.168.90.1 route-reflector-client                                                                                                                
+ neighbor 192.168.91.3 activate                                                                                                                              
+ neighbor 192.168.91.3 send-community both                                                                                                                   
+ exit-address-family   
+
+
+
+
+
+
+
+
+
+
+
+
+
+k9-c0
+router bgp 20866
+ no synchronization
+ bgp log-neighbor-changes
+ neighbor 81.20.192.75 remote-as 20866
+ neighbor 81.20.192.75 update-source Loopback0
+ neighbor 81.20.192.75 prefix-list ibgp-neigb-in in
+ neighbor 81.20.192.75 prefix-list ibgp-neigb-out out
+ neighbor 81.20.192.78 remote-as 20866
+ neighbor 81.20.192.78 update-source Loopback0
+ neighbor 81.20.192.78 prefix-list ibgp-neigb-in in
+ neighbor 81.20.192.78 prefix-list ibgp-neigb-out out
+ neighbor 81.20.192.130 remote-as 60833
+ neighbor 81.20.192.130 default-originate
+ neighbor 81.20.192.130 prefix-list nlmk-194-in in
+ neighbor 81.20.192.130 prefix-list default out
+ no auto-summary
+
+
+
+
+
+
+
+
+
+router bgp 20866
+ no bgp default ipv4-unicast
+ bgp log-neighbor-changes
+ neighbor 81.20.192.74 remote-as 20866
+ neighbor 81.20.192.74 update-source Loopback0
+ neighbor 81.20.192.78 remote-as 20866
+ neighbor 81.20.192.78 update-source Loopback0
+ neighbor 81.20.201.246 remote-as 20866
+ neighbor 81.20.201.246 update-source Loopback0
+ !
+ address-family vpnv4
+ neighbor 81.20.192.74 activate
+ neighbor 81.20.192.74 send-community extended
+ neighbor 81.20.192.78 activate
+ neighbor 81.20.192.78 send-community extended
+ neighbor 81.20.201.246 activate
+ neighbor 81.20.201.246 send-community extended
+ exit-address-family
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+no ip route 10.0.145.14 255.255.255.255 10.192.12.2
+no ip route 10.192.1.1 255.255.255.255 10.192.10.186
+no ip route 81.20.192.193 255.255.255.255 81.20.195.166
+no ip route 81.20.192.208 255.255.255.255 81.20.195.202
+no ip route 81.20.192.209 255.255.255.255 81.20.195.202
+no ip route 81.20.192.210 255.255.255.255 81.20.197.218
+no ip route 81.20.192.211 255.255.255.255 81.20.197.218
+no ip route 81.20.192.252 255.255.255.252 81.20.192.226
+no ip route 81.20.195.40 255.255.255.252 81.20.195.54
+no ip route 81.20.196.45 255.255.255.255 81.20.193.82
+no ip route 81.20.196.53 255.255.255.255 81.20.202.90
+no ip route 81.20.196.118 255.255.255.255 81.20.201.66
+no ip route 81.20.196.125 255.255.255.255 81.20.192.174
+no ip route 81.20.196.224 255.255.255.248 81.20.196.6
+no ip route 81.20.198.5 255.255.255.255 81.20.193.234
+no ip route 81.20.198.6 255.255.255.255 81.20.193.234
+no ip route 81.20.201.48 255.255.255.248 81.20.201.34
+no ip route 81.20.201.104 255.255.255.248 81.20.201.86
+no ip route 81.20.202.253 255.255.255.255 81.20.201.78
+no ip route 172.20.2.240 255.255.255.255 172.20.2.2
+no ip route 172.20.128.64 255.255.255.224 81.20.192.5
+no ip route 172.20.129.0 255.255.255.224 81.20.192.5
+no ip route 172.20.129.32 255.255.255.224 81.20.192.5
+no ip route 172.20.129.64 255.255.255.224 81.20.192.5
+no ip route 172.20.129.192 255.255.255.224 81.20.192.4
+no ip route 172.20.129.224 255.255.255.224 81.20.192.4
+no ip route 172.20.130.0 255.255.255.224 81.20.192.5
+no ip route 172.20.130.32 255.255.255.224 81.20.192.4
+no ip route 172.20.131.32 255.255.255.224 81.20.192.13
+no ip route 192.168.111.1 255.255.255.255 81.20.192.19
+no ip route 192.168.114.0 255.255.255.248 81.20.192.98
+no ip route 192.168.114.1 255.255.255.255 81.20.192.19
+no ip route 192.168.130.250 255.255.255.255 81.20.197.222
+no ip route 192.168.130.251 255.255.255.255 81.20.197.162
+no ip route 192.168.130.252 255.255.255.255 81.20.201.242
+no ip route 192.168.130.253 255.255.255.255 81.20.192.154
+no ip route 192.168.130.254 255.255.255.255 81.20.197.70
+
+
+
+
+
+
+
+no ip route vrf equant-test 10.0.129.127 255.255.255.255 172.31.2.17
+no ip route vrf equant-test 10.0.129.128 255.255.255.255 172.31.2.17
+no ip route vrf equant-test 10.0.129.129 255.255.255.255 172.31.2.17
+no ip route vrf equant-test 10.0.129.130 255.255.255.255 172.31.2.17
+no ip route vrf equant-test 10.9.0.0 255.255.0.0 10.192.10.134
+no ip route vrf equant-test 10.10.0.0 255.255.255.0 172.31.2.17
+no ip route vrf equant-test 10.192.10.254 255.255.255.255 10.192.10.42
+no ip route vrf equant-test 10.214.0.0 255.255.255.0 10.192.10.214
+no ip route vrf equant-test 172.23.77.2 255.255.255.255 172.16.48.2
+no ip route vrf equant-test 192.168.2.0 255.255.255.252 172.16.48.2
+
+ip route vrf equant-test 10.0.129.127 255.255.255.255 172.31.2.17
+ip route vrf equant-test 10.0.129.128 255.255.255.255 172.31.2.17
+ip route vrf equant-test 10.0.129.129 255.255.255.255 172.31.2.17
+ip route vrf equant-test 10.0.129.130 255.255.255.255 172.31.2.17
+ip route vrf equant-test 10.9.0.0 255.255.0.0 10.192.10.134
+ip route vrf equant-test 10.10.0.0 255.255.255.0 172.31.2.17
+ip route vrf equant-test 10.192.10.254 255.255.255.255 10.192.10.42
+ip route vrf equant-test 10.214.0.0 255.255.255.0 10.192.10.214
+ip route vrf equant-test 172.23.77.2 255.255.255.255 172.16.48.2
+ip route vrf equant-test 192.168.2.0 255.255.255.252 172.16.48.2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+no map-class frame-relay EQUANT-FR
+ frame-relay cir 1920000
+ frame-relay mincir 1920000
+ service-policy output PLATINUM
+!
+no map-class frame-relay EQUANT_VOIP
+ frame-relay cir 256000
+ frame-relay mincir 256000
+!
+no map-class frame-relay EQUANT-RGS
+ frame-relay cir 256000
+ frame-relay mincir 256000
+ frame-relay fragment 320
+ frame-relay fair-queue
+!
+no map-class frame-relay PLATINUM512K
+ frame-relay cir 512000
+ frame-relay mincir 512000
+ service-policy output PLATINUM
+!
+no map-class frame-relay policy768K
+ frame-relay cir 768000
+ frame-relay mincir 768000
+!
+no map-class frame-relay policy64K
+ frame-relay cir 64000
+ frame-relay mincir 64000
+!
+no map-class frame-relay IPDNLOSK
+ frame-relay cir 1984000
+ frame-relay mincir 1920000
+!
+no map-class frame-relay policy512K
+ frame-relay cir 512000
+ frame-relay mincir 512000
+!
+no map-class frame-relay E-RGS
+ frame-relay cir 256000
+ frame-relay mincir 256000
+ frame-relay fragment 320
+ service-policy output E-RGS
+!
+no map-class frame-relay policy256K
+ frame-relay cir 256000
+ frame-relay mincir 256000
+!
+no map-class frame-relay PLATINUM256K
+ frame-relay cir 256000
+ frame-relay mincir 256000
+ service-policy output PLATINUM
+
+
+
+Старый Оскол, Стойленский ГОК резервный канал
+Заринск, «Алтай-Кокс» основной канал
+Екатеринбург, «ВИЗ-Сталь» резервный канал
+Свердловская область, «Макси-Групп» Ревда основной канал
+Представительство НЛМК г.Сыктывкар
+Липецк, СТАГДОК резервный канал
+Гостиница «Металлург»
+Липецк. ЛГЭК пл. Петра I 4
+Липецк, ОАО «НЛМК» - CE0 10.192.10.186
+Москва, Управляющая компания (Бахрушино) основной канал
+
+
+
+
+
+
+40-4A-03-C7-3F-B1
+
+
+systemd-tmpfiles
+
+
+
+
+interface FastEthernet0/0
+ description # 802.1q multiplexed interface (CTD-S1.sc.ru)
+ no ip address
+ ip route-cache policy
+ ip route-cache flow
+ load-interval 30
+ tx-ring-limit 200
+ tx-queue-limit 200
+ speed 100
+ full-duplex
+ no cdp enable

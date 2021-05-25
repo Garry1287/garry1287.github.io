@@ -1,0 +1,67 @@
+---
+layout: post
+title:  "jobs"
+date:   2015-09-04 13:53:26 +0300
+categories: jobs
+---
+
+# jobs
+Location: Geneva, Zurich
+Type: Full Time.
+Experience: Expert
+
+Description:
+
+We operate our own cloud infrastructure distributed across multi-tenant datacenters throughout Switzerland, with over 1 Petabyte of storage. This infrastructure is connected through a redundant network with a 24/7 NOC in Switzerland. This is a senior level position, as you will be head of all network and datacenter operations.
+
+You will be responsible ensuring our infrastructure remains reliable and can scale quickly enough to match our growth. You will be working both internally with the ProtonMail engineering team, and also with an external ISP that we have partnered with. As you will be working in an international environment, English fluency is mandatory.
+Experience with the following are required: Networking:
+
+    BGP (IPv4/IPv6)
+    MPLS
+    Proven track record of success in an ISP environment
+    NOC experience
+    LIR experience
+    Cisco routers/switches
+    Netflow analysis
+    Network design (Transport and Internet layer)
+    Fine level knowledge of UDP/TCP
+    Extensive experience with network troubleshooting
+
+Sysadmin:
+
+    RedHat derivatives (CentOS, RHEL, Scientific Linux, etc)
+    Linux networking (bridges, bonding, STP, etc)
+    Nagios, Ansible, ELK
+    CEPH, MySQL, OpenStack
+    Expert at debugging/customizing Linux system (building custom packages, kernel level tuning, recovery/rollbacks/upgrades, etc)
+    Fluent in Python/Bash/C/SQL
+
+Bonus points for:
+
+    Extensive software engineering experience (could also work as a software engineer)
+    Well versed in security and with a good understanding of security best practices from both a network and systems point of view
+    OpenVPN/IPsec
+    Ability to keep up in an extremely fast-paced environment
+    Fluent in French
+    Masters degree in a relevant field of study and/or scientific background
+
+What you will be doing:
+
+    Building scalable, reliable, and highly redundant networks.
+    Building petabyte scale storage solutions
+    Server and network security
+    Architecting and building monitoring and auto-failover solutions for both networks and servers
+    Designing backup strategies and implementing them
+    Writing software to improve site reliability
+
+Why work at ProtonMail:
+
+    You will learn many things you can't learn anywhere else
+    Flexible and casual working environment
+    Startup environment where everyone matters and can make a big impact
+    Work in an ultra high grow environment solving interesting problems, there is never a boring moment
+    Fast growth also means there are many opportunities for rapid advancement
+    Do something meaningful. ProtonMail protects dissidents, journalists, and activists. Our work saves lives.
+    High potential upside. In addition to highly competitive salaries, key employees can receive valuable early employee stock options.
+    Be part of something bigger. Millions of people and businesses around the world have embraced our idea of an Internet where privacy and security are the default, and not merely an afterthought. Be part of this revolution that is changing the world.

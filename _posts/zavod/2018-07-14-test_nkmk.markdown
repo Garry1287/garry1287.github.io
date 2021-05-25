@@ -1,0 +1,132 @@
+---
+layout: post
+title:  "test_nkmk"
+date:   2018-07-14 08:12:41 +0300
+categories: zavod
+tags: zavod
+---
+
+# test_nkmk
+На nlmk ip access-group catch-tos out
+На ордынке ip access-group catch-tos in
+
+
+
+
+       -Q NUM
+
+       --tos NUM
+              Specifies value for type of service field in IP header. Should be within range 0 - 255.
+
+--tos 160
+
+
+
+mtr --tos 160 192.168.1.141
+ 
+ ping -Q 0xA0
+
+ 
+ ^C
+--- 10.29.19.13 ping statistics ---
+2676 packets transmitted, 2676 received, 0% packet loss, time 2674972ms
+rtt min/avg/max/mdev = 10.433/11.465/27.046/0.706 ms
+^C
+--- 10.186.0.81 ping statistics ---
+2666 packets transmitted, 2666 received, 0% packet loss, time 2664398ms
+rtt min/avg/max/mdev = 1.129/2.152/4.501/0.565 ms
+
+--- 10.186.0.20 ping statistics ---
+2666 packets transmitted, 2665 received, 0% packet loss, time 2664846ms
+rtt min/avg/max/mdev = 1.096/1.902/7.020/0.326 ms
+
+ 
+
+08:46:49.837817 IP (tos 0x3,CE, ttl 246, id 4925, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 27, seq 0, length 80
+
+08:46:49.850467 IP (tos 0x3,CE, ttl 246, id 4926, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 27, seq 1, length 80
+
+08:46:49.874308 IP (tos 0x3,CE, ttl 246, id 4928, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 27, seq 3, length 80
+
+08:46:49.886303 IP (tos 0x3,CE, ttl 246, id 4929, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 27, seq 4, length 80
+
+
+
+
+08:52:32.111642 IP (tos 0x3,CE, ttl 246, id 4935, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 29, seq 0, length 80
+08:52:32.123753 IP (tos 0x3,CE, ttl 246, id 4936, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 29, seq 1, length 80
+08:52:32.135620 IP (tos 0x3,CE, ttl 246, id 4937, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 29, seq 2, length 80
+08:52:32.147537 IP (tos 0x3,CE, ttl 246, id 4938, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 29, seq 3, length 80
+08:52:32.160066 IP (tos 0x3,CE, ttl 246, id 4939, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 29, seq 4, length 80
+
+
+
+08:54:03.926479 IP (tos 0x1,ECT(1), ttl 246, id 4940, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 30, seq 0, length 80
+08:54:03.938501 IP (tos 0x1,ECT(1), ttl 246, id 4941, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 30, seq 1, length 80
+08:54:03.950589 IP (tos 0x1,ECT(1), ttl 246, id 4942, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 30, seq 2, length 80
+08:54:03.962823 IP (tos 0x1,ECT(1), ttl 246, id 4943, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 30, seq 3, length 80
+08:54:03.975659 IP (tos 0x1,ECT(1), ttl 246, id 4944, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.6 > sapphire: ICMP echo request, id 30, seq 4, length 80
+
+
+
+
+
+
+08:55:56.120571 IP (tos 0x3,CE, ttl 253, id 8020, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.14 > sapphire: ICMP echo request, id 12, seq 0, length 80
+08:55:56.130749 IP (tos 0x3,CE, ttl 253, id 8021, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.14 > sapphire: ICMP echo request, id 12, seq 1, length 80
+08:55:56.140645 IP (tos 0x3,CE, ttl 253, id 8022, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.14 > sapphire: ICMP echo request, id 12, seq 2, length 80
+08:55:56.150565 IP (tos 0x3,CE, ttl 253, id 8023, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.14 > sapphire: ICMP echo request, id 12, seq 3, length 80
+08:55:56.160527 IP (tos 0x3,CE, ttl 253, id 8024, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.14 > sapphire: ICMP echo request, id 12, seq 4, length 80
+
+
+
+
+
+Мегафон - не работает
+
+14:55:25.372869 IP (tos 0x0, ttl 245, id 54678, offset 0, flags [none], proto TCP (6), length 197)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x25ec (correct), seq 559:716, ack 77, win 3897, length 157
+14:55:25.372887 IP (tos 0x0, ttl 245, id 54679, offset 0, flags [none], proto TCP (6), length 42)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x51ed (correct), seq 716:718, ack 77, win 3897, length 2
+14:55:25.373485 IP (tos 0x0, ttl 245, id 5, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.202 > sapphire: ICMP echo request, id 1, seq 0, length 80
+14:55:25.411760 IP (tos 0x0, ttl 245, id 54680, offset 0, flags [none], proto TCP (6), length 41)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x3df6 (correct), seq 718:719, ack 77, win 3897, length 1
+14:55:25.412100 IP (tos 0x0, ttl 245, id 6, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.202 > sapphire: ICMP echo request, id 1, seq 1, length 80
+14:55:25.450106 IP (tos 0x0, ttl 245, id 54681, offset 0, flags [none], proto TCP (6), length 41)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x3df5 (correct), seq 719:720, ack 77, win 3897, length 1
+14:55:25.450688 IP (tos 0x0, ttl 245, id 7, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.202 > sapphire: ICMP echo request, id 1, seq 2, length 80
+14:55:25.488678 IP (tos 0x0, ttl 245, id 54682, offset 0, flags [none], proto TCP (6), length 41)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x3df4 (correct), seq 720:721, ack 77, win 3897, length 1
+14:55:25.489147 IP (tos 0x0, ttl 245, id 8, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.202 > sapphire: ICMP echo request, id 1, seq 3, length 80
+14:55:25.527249 IP (tos 0x0, ttl 245, id 54683, offset 0, flags [none], proto TCP (6), length 41)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x3df3 (correct), seq 721:722, ack 77, win 3897, length 1
+14:55:25.527457 IP (tos 0x0, ttl 245, id 9, offset 0, flags [none], proto ICMP (1), length 100)
+    10.192.10.202 > sapphire: ICMP echo request, id 1, seq 4, length 80
+14:55:25.565676 IP (tos 0x0, ttl 245, id 54684, offset 0, flags [none], proto TCP (6), length 41)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x3df2 (correct), seq 722:723, ack 77, win 3897, length 1
+14:55:25.565877 IP (tos 0x0, ttl 245, id 54685, offset 0, flags [none], proto TCP (6), length 132)
+    10.192.10.202.telnet > sapphire.45523: Flags [P.], cksum 0x49dc (correct), seq 723:815, ack 77, win 3897, length 92
+

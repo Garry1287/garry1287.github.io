@@ -1,0 +1,190 @@
+---
+layout: post
+title:  "cyrus"
+date:   2013-02-05 03:51:00 +0400
+categories: mail
+tags: mail
+---
+
+# cyrus
+Неплохая вводная статья о cyrus
+
+[http://www.kryukov.biz/wiki/Cyrus-imapd](http://www.kryukov.biz/wiki/Cyrus-imapd)
+[http://www.bog.pp.ru/work/Cyrus_IMAP.html](http://www.bog.pp.ru/work/Cyrus_IMAP.html)
+[http://www.opennet.ru/docs/RUS/Cyrus_imap/overview.html](http://www.opennet.ru/docs/RUS/Cyrus_imap/overview.html)
+[http://xgu.ru/wiki/Cyrus_IMAP_Server](http://xgu.ru/wiki/Cyrus_IMAP_Server)
+[http://bezopasnik.org/unix/dok/Soft/postfix/20.htm](http://bezopasnik.org/unix/dok/Soft/postfix/20.htm)
+
+Пример настройки
+[http://www.lissyara.su/articles/openbsd/daemons/exim+cyrus-imapd+mysql/](http://www.lissyara.su/articles/openbsd/daemons/exim+cyrus-imapd+mysql/)
+[http://ftp.yandex.ru/mirrors/ftp.linux.kiev.ua/docs/mirrors/linfoline.homedns.org/howto/Cyrus-IMAP/index.html](http://ftp.yandex.ru/mirrors/ftp.linux.kiev.ua/docs/mirrors/linfoline.homedns.org/howto/Cyrus-IMAP/index.html)
+
+Восстановление	
+[http://www.clearos.ru/forum/viewtopic.php?p=16825](http://www.clearos.ru/forum/viewtopic.php?p=16825)
+
+
+
+
+Как залогиниться к cyradm
+
+Дистрибутив Fedora Core 5. Установлено:
+cyrus-sasl-ldap-2.1.21-10
+cyrus-sasl-lib-2.1.21-10
+cyrus-sasl-plain-2.1.21-10
+cyrus-sasl-2.1.21-10
+cyrus-imapd-utils-2.3.1-2.6.fc5
+cyrus-imapd-2.3.1-2.6.fc5
+
+Настройки такие (/etc/imapd.conf):
+configdirectory: /var/lib/imap
+partition-default: /var/spool/imap
+admins: cyrus kinjo
+sievedir: /var/lib/imap/sieve
+sendmail: /usr/sbin/sendmail
+hashimapspool: true
+sasl_pwcheck_method: saslauthd
+sasl_mech_list: PLAIN LOGIN
+tls_cert_file: /etc/pki/cyrus-imapd/cyrus-imapd.pem
+tls_key_file: /etc/pki/cyrus-imapd/cyrus-imapd.pem
+tls_ca_file: /etc/pki/tls/certs/ca-bundle.crt
+
+Не могу зайти в cyradm. Команда
+# cyradm -u cyrus myhost.ru
+выдаёт:
+Login failed: authentication failure at /usr/lib/perl5/site_perl/5.8.8/i386-linux-thread-multi/Cyrus/IMAP/Admin.pm line 119
+cyradm: cannot authenticate to server with as cyrus
+
+При этом
+#/usr/sbin/sasldblistusers2
+выдаёт
+cyrus@mail.irkutsk.2gis.ru: userPassword
+kinjo@mail.irkutsk.2gis.ru: userPassword
+
+Но команда
+# /usr/sbin/testsaslauthd -u cyrus -p passwod
+выдёт:
+0: NO "authentication failed"
+
+Я уже неделю читаю различные мануалы, но разобраться так и не смог. Подскажите в чём дело?
+
+Я подозреваю, что всё дело в sasl-аутентификации, но не могу понять, что от меня требуется.
+Заранее спасибо.
+Re: [FC 5] Помогите настроить cyrus-imapd
+24.06.2006 13:48 — Cherepulya # service saslauthd status
+saslauthd остановлен
+
+А у Вас он запущен? ;-)
+Re: [FC 5] Помогите настроить cyrus-imapd
+26.06.2006 17:41 — Kinjo Победил наконец-то! Сделал так:
+# chown cyrus /etc/sasldb2*
+
+А потом добавил пользователя командой
+# /usr/sbin/saslpasswd2 -c cyrus
+
+Ну и поменял строчку в /etc/imapd.conf:
+sasl_pwcheck_method: auxprop
+
+Спасибо всем, кто помог разобраться. Тему можно благополучно закрывать. 
+
+
+Ещё одно руководство
+
+
+And the reason initially is that installing cyrus on Hardy gives a permission error. Do a "chown -R cyrus /var/lib/cyrus" and restart cyrus. Now it should ask you for a password. Now you've got another problem ;)
+
+Do the following
+
+
+apt-get install sasl2-bin
+
+Then edit /etc/default/saslauthd as it suggests and set START=yes
+
+
+/etc/init.d/saslauthd start
+edit /etc/imap.conf and make sure that the following two settings are uncommented and with these values
+
+
+
+admins: cyrus
+...
+sasl_pwcheck_method: saslauthd
+
+restart cyrus and log in with
+
+
+cyradm -u cyrus --auth login localhost
+
+Oh, you may need to set the cyrus user passwd first. Just become root and set it with passwd. Now you can login and create a mailbox.
+
+
+localhost> cm ijc
+createmailbox: System I/O error
+
+Or maybe not - another permissions error it turns out.
+
+
+chown -R cyrus /var/spool/cyrus
+
+Log back in again and ... weeeeeeee
+
+
+localhost> cm ijc
+localhost> lm
+ijc (\HasNoChildren)
+localhost>
+
+There, nice and simple. Cough.
+
+
+
+
+
+
+
+
+
+Give the administrator create rights on the mailbox first, e.g:
+
+sam sysadmin.Inbox cyrus c
+dm sysadmin.Inbox
+
+
+2. в cyradm'е дать себе права на удаление (sam), потом уже пытаться удалить
+
+Если не сложно по подробнее? А точнее как узнать id? (setaclmailbox mailbox id rights ...) А правельнее поставить вопрос, чей это id, в мане по cyradm (1) я ничего не нашел =(
+
+По второму вопросу id - твой логин, под которым ты работаешь в cyradm'е
+
+
+
+
+
+
+T4E6w566l
+
+
+
+
+
+
+
+Почтовый сервер переехал в новый офис, где услуги предоставляет другой провайдер. Соответственно нужно было перенастроить сервер на новые IP-адреса. Проблемка еще усугублялась тем, что я был  в другом городе. Но, с "помощью лома и какой-то матери", новые IP-адреса присвоены, и можно подключиться по SSH-у.
+
+После перенастройки почтовика и его рестарта, обнаружил в логах почтового сервера следующие записи:
+Jun 23 20:34:40 arey exim[7747]: 2010-06-23 20:34:40 1ORRMd-0001bF-SO == xxx@xxx.net R=dnslookup T=remote_smtp defer (-53): retry time not reached for any host
+Jun 23 20:34:40 arey exim[7749]: 2010-06-23 20:34:40 1ORQEe-0001Px-In == xxx@xxx.kiev.ua R=dnslookup T=remote_smtp defer (-53): retry time not reached for any host
+Jun 23 20:34:40 arey exim[7738]: 2010-06-23 20:34:40 1ORLox-0000k4-N6 == xxx@xxx.ru R=dnslookup T=remote_smtp defer (-53): retry time not reached for any host
+
+Хм... Время повторной отправки сообщения еще не наступило. А почтовик уже корректно настроен...
+
+Чтобы "форсировать" отправку этих писем, необходимо выполнить следующие команды:
+
+# cd /var/spool/exim/db
+# rm retry retry.lockfile wait-remote_smtp wait-remote_smtp.lockfile
+# sh /usr/local/etc/rc.d/exim restart
+
+ После выполнения этих команд, почтовый сервер приступит к обработке почтовой очереди немедленно.
+
+
+
+

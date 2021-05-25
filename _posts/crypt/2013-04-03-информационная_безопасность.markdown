@@ -1,0 +1,255 @@
+---
+layout: post
+title:  "информационная_безопасность"
+date:   2013-04-03 08:27:30 +0400
+categories: информационная_безопасность
+tags: crypt
+---
+
+# информационная_безопасность
+Форумы
+
+О форумах [https://grabberz.com/showthread.php?t=13123](https://grabberz.com/showthread.php?t=13123)
+
+[http://xaker.name/](http://xaker.name/)
+[https://forum.exploit.in/](https://forum.exploit.in/)
+[https://exelab.ru/](https://exelab.ru/)
+[https://grabberz.com/](https://grabberz.com/)
+
+
+
+
+
+
+[https://www.nostarch.com](https://www.nostarch.com)
+[http://www.pentest-standard.org/index.php/Main_Page](http://www.pentest-standard.org/index.php/Main_Page)
+[https://www.pentestit.ru/](https://www.pentestit.ru/)
+[http://www.e-reading.club/book.php?book=99829](http://www.e-reading.club/book.php?book=99829)
+
+[https://defcon.ru/tag/owasp/](https://defcon.ru/tag/owasp/)
+
+
+На западе часто как раз используется разделение на Defensive и Offensive Security, т.е. довольно явное разделение методик и подходов на соответственно глухую оборону (инфрастуктура, работу с МЭ, NIDS\HIDS, мониторинг, патч мэнеджмент и т.д.) и «этическую» атаку (aka Pentest\Red Team assessment).
+
+Ну а у нас Offensive Security как раз и принято называть наступательной безопасностью, ибо позволяет провести некую этическую границу между именно корыстным хекингом и взломом.
+
+[https://habrahabr.ru/post/232931/](https://habrahabr.ru/post/232931/)
+[http://hackingdistributed.com/2017/05/01/bgp-attacks-on-btc/](http://hackingdistributed.com/2017/05/01/bgp-attacks-on-btc/)
+[https://btc-hijack.ethz.ch/files/btc_hijack.pdf](https://btc-hijack.ethz.ch/files/btc_hijack.pdf)
+[https://blog.acolyer.org/2017/06/27/hijacking-bitcoin-routing-attacks-on-cryptocurrencies/](https://blog.acolyer.org/2017/06/27/hijacking-bitcoin-routing-attacks-on-cryptocurrencies/)
+[https://www.disruptordaily.com/bgp-hijacking-vulnerability-allows-for-bitcoin-double-spending/](https://www.disruptordaily.com/bgp-hijacking-vulnerability-allows-for-bitcoin-double-spending/)
+[https://cryptoworld.su/%D0%BF%D0%B5%D1%80%D0%B5%D1%85%D0%B2%D0%B0%D1%82-%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-%D0%BF%D0%BE%D0%B4%D0%BC%D0%B5%D0%BD%D1%8B-bgp-%D1%81/](https://cryptoworld.su/%D0%BF%D0%B5%D1%80%D0%B5%D1%85%D0%B2%D0%B0%D1%82-%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-%D0%BF%D0%BE%D0%B4%D0%BC%D0%B5%D0%BD%D1%8B-bgp-%D1%81/)
+[https://www.secureworks.com/research/bgp-hijacking-for-cryptocurrency-profit](https://www.secureworks.com/research/bgp-hijacking-for-cryptocurrency-profit)
+[https://cryptoworld.su/%D0%BF%D0%B5%D1%80%D0%B5%D1%85%D0%B2%D0%B0%D1%82-%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-%D0%BF%D0%BE%D0%B4%D0%BC%D0%B5%D0%BD%D1%8B-bgp-%D1%81/](https://cryptoworld.su/%D0%BF%D0%B5%D1%80%D0%B5%D1%85%D0%B2%D0%B0%D1%82-%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-%D0%BF%D0%BE%D0%B4%D0%BC%D0%B5%D0%BD%D1%8B-bgp-%D1%81/)
+
+
+
+[https://habrahabr.ru/company/qrator/blog/329308/](https://habrahabr.ru/company/qrator/blog/329308/)
+[https://habrahabr.ru/post/320768/](https://habrahabr.ru/post/320768/)
+[https://habrahabr.ru/post/211176/](https://habrahabr.ru/post/211176/)
+
+
+DDos
+[https://habrahabr.ru/post/186566/](https://habrahabr.ru/post/186566/)
+
+
+wifi
+bgp
+
+1. Маскировка
+2.Сбор данных
+        ip адреса
+        нахождение
+        номер AS
+2. сканирование оборудования
+    NMAP, другие приблуды
+3. Попробовать майнить, посмотреть, как это работает (пулы манинга), как работает система
+4. Опробовать на нашей сети, получиться или нет (с серыми AS, c серыми адресам, с каким нибудь протоколом (http, ftp)))
+
+"Пул" (mining pool)
+
+
+1. Выбор форка
+2. Выбор пула
+3. Выбор майнера (программы)
+4. Запуск майнинга
+5. Вывод на свой кошелек
+
+4. Запуск майнинга
+
+В случае использования майнера cgminer, например, для Linux без графического интерфейса наберите в командной строке:
+
+./cgminer --scrypt -o stratum+tcp://хост_пула:порт -u Weblogin.Worker -p Worker_passwor
+
+где Weblogin.Worker — имя Вашего воркера, а Worker_password — его пароль
+Пример подразумевает, что пул поддерживает протокол stratum, что является де-факто стандартом для всех современных пулов.
+
+Так выглядит мой bat файл для запуска майнера Ethminer для добычи Эфира:
+
+ethminer.exe -G -S eth-eu.coinmine.pl:4000 -FS eth-us.coinmine.pl:4000 -O VIPepol.1:1
+
+Майнинг на CPU (процессоре).
+В случае отсутствия видеокарты майнить можно на центральном процессоре.
+Инструкции также находятся на пуле. Разница в настройке есть, но она минимальная. Для CPU нужен свой майнер.
+Если верно настроены параметры авторизации и URL адрес пула, вы увидите после запуска окно с информацией о майнинге в пуле.
+
+
+
+
+
+
+
+Для начала заработка криптов с использованием специального оборудования необходимо создание фермы. Самые популярные майнеры Avalon6 и AntMiner S7 при стоимости около 600 долларов США способны принести чистую прибыль от 0,1 до 0,2 BTC. Для начала работы необходимо: купить готовый модуль, либо самому построить ферму; скачать и установить специальную программу – майнер; зарегистрироваться в пуле добытчиков, указав свою мощность; получить часть задачи и приступить к работе.
+
+Крупнейшим пулом сети биткоина является Antpool, который принадлежит компании Bitmain.
+
+
+
+Облачный
+Да, hashflare пользуюсь, из реальных еще топовые hashing24 и genesis mining, сейчас очень много хайпов под облачные майнинги маскируется.
+
+HashFlare. Начало работы – июнь 2015 года. Минимальный вход/ вывод 1,2 USD/ 0,00085 BTC. Майнит, кроме битка, несколько криптовалют. Hashing24. Начало работы – июнь 2015 года. Минимальный вход/ вывод 19,95 USD/ 0,001 BTC. Мощности предоставляет компания «BitFury». Ввод-вывод средств осуществляется банковскими картами Visa/Mastercard. Genesis-Mining. Начало работы ­– февраль 2014 года. Минимальный вход/ вывод 30 USD/ 0,0001 BTC. Для целей облачной добычи битка сдаются в аренду мощности для алгоритмов SHA-256, X11, Dagger-Hashimoto. Достоинством является превышение выплат над затратами. Вход и вывод возможен банковскими картами, переводами. HashNest. Начало работы – июль 2014 года. Минимальный вход/ вывод 0,001 BTC/ 0,001 BTC. Хорошая статистика используемых этим сервисом карт ASIC S9. Eobot. Начало работы – июнь 2017 года. Минимальный вход/вывод неограничен. На данном сервисе добываются разные криптовалюты, есть кран, для возможности бесплатно получить криптовалюту.
+Источник: <a href="[http://sovets.net/13563-kak-majnit-bitkoiny.html](http://sovets.net/13563-kak-majnit-bitkoiny.html)" title="Способы майнинга биткоинов - принцип работы, как начать зарабатывать криптовалюту и необходимое оборудование">[http://sovets.net/13563-kak-majnit-bitkoiny.html](http://sovets.net/13563-kak-majnit-bitkoiny.html) </a>
+
+
+Сейчас майнинг будет работать только если у вас ферма порядка 1000 компов , и майните вы не у дяди на его пуле, а сделаете свою ноду и направите все эти компы на нее.
+
+Тут найдеш скорость майнинга для своих видюх [http://www.zpool.ca/bench](http://www.zpool.ca/bench)
+А вот тут калькулятором расчитаеш колько можно заработать [https://whattomine.com/](https://whattomine.com/)
+
+
+Обмен валюты
+[https://www.bestchange.ru/bitcoin-to-visa-mastercard-usd.html](https://www.bestchange.ru/bitcoin-to-visa-mastercard-usd.html)
+
+
+Нет регистрации – просто укажите вашему майнеру на наш stratum-прокси с вашим Биткоин-адресом в качестве имени пользователя
+
+stratum proxy
+
+bitcointalk
+[http://forum.bitcoinfo.ru/](http://forum.bitcoinfo.ru/)
+[https://www.reddit.com/](https://www.reddit.com/) - просто новостной сайт
+[https://bitcointalk.org/?board=10.0](https://bitcointalk.org/?board=10.0)
+
+
+
+Пулы
+[https://bitcoin-ukraine.com.ua/#/](https://bitcoin-ukraine.com.ua/#/)
+www.bitcoin-russia.ru
+
+
+Miningrigrentals — удобный и понятный сервис для майнинга биткоин. Англоязычный ресурс предлагает брать в аренду «буровые установки» и добывать монеты. Комиссия небольшая, можно сразу вывести деньги.
+
+Minergate — мощный пул для майнинга биткоин, etherium и других валют. Нужно скачать программу на компьютер, сделать настройку и майнинг пойдет в автоматическом режиме. Намайненное можно сразу вывести в личный кошелек за вычетом небольшой комиссии.
+
+Zpool  – американский сервис без регистрации, удобный интерфейс подойдет для шахтера-новичка. Выводит деньги только в сатошах. Уникальный скрипт обеспечивает высокую доходность пулу.
+
+Slush — мастодонт в добыче биткоинов, первый в мире пул, успешно работает с 2010 года. Использует 5% мощности сети, придумал собственную выгодную систему выплат, берет комиссию в 2%, недавно внедрил поддержку Zcash (Zec). Можно добывать биткоин и неймкоин.
+
+Eligius — регистрация необязательна, используется биткоин-кошелек для входа, монеты можно вывести без комиссии, его доля — 4% мощности.
+
+Ghash.io — некогда мощный пул, доходивший до значений 50% от общей мощности сети, теперь демонстрирует скромные 2-3%. Работает без комиссии, есть удобный обменник криптовалют. Здесь действует мультипул, предлагающий добывать множество валют на основе алгоритма Scrypt.
+
+Mining Pool Hub – один из перспективных сервисов для майнинга, подходит для новичков и профессионалов.
+
+
+
+
+
+
+Ethereum — криптовалюта второго поколения, которая, по прогнозам, заменит Биткоин.
+
+Ethpool.org — первый официальный пул для майнинга Ethereum, в связи с ростом популярности этой валюты в него нельзя было вступить, и пул работал лишь со старыми. Мощность этого пула составляет около 20%.  [https://www.youtube.com/watch?v=GHBFzomlHuw](https://www.youtube.com/watch?v=GHBFzomlHuw)
+
+ETH Nanopool — около 40% мощности, комиссия пула 2%. Пул активно развивается и растет.
+
+Ethereumpool — работает более 2 лет, имеет мощность около 2%, комиссия 2%, комиссия за вывод фиксированная.
+
+[https://btc.com/stats/pool](https://btc.com/stats/pool)
+[https://blockchain.info/ru/pools](https://blockchain.info/ru/pools)
+
+
+
+[https://bitmakler.com/mining_Bitcoin-BTC__pools](https://bitmakler.com/mining_Bitcoin-BTC__pools)
+
+
+
+
+[https://forum.exploit.in/](https://forum.exploit.in/)
+[https://exelab.ru/](https://exelab.ru/)
+
+Часто на кардинг форумах есть хакерские разделы. Из того, что стоит упомянуть - это Кардер.инфо, кардингворлд.сс и закрытая для внешнего мира Маза. На Мазу доступа не имею, туда нужны поручители и 3-значная сумма. 
+
+Кардер.инфо, Кардингворлд.сс
+
+
+
+Информация
+bitcoin.org
+[https://bitcointalk.org/index.php?topic=384821.0](https://bitcointalk.org/index.php?topic=384821.0)
+[https://bitcointalk.org/index.php?topic=52499.0](https://bitcointalk.org/index.php?topic=52499.0)
+[https://bitcointalk.org/index.php?topic=10321](https://bitcointalk.org/index.php?topic=10321)
+
+Как покупать в биткоинах
+Некоторые продавцы, например, Overstock, оставляют часть криптовалютной выручки себе, таким образом принимая на себя риски волатильности.
+
+
+Чтобы присоединиться к генерации Bitcoin в нашем пуле, вам нужно подключить свой майнер к Stratum интерфейсу, который доступен по адресу bitcoin-russia.ru:3333. В качестве логина следует использовать адрес для выплат. Вы также можете добавить имя воркера, в таком виде: YOUR_BTC_ADDRESS.RIG_ID
+
+YOUR_BTC_ADDRESS
+    Ваш адрес для выплат. Создайте новый с помощью Bitcoin Core или Electrum, или же используйте выданный биржей (например BTC-e).
+    Пример: 14Aq9H1fVkxfMxjwfmqkEkpdAuisjtME9H. 
+RIG_ID
+    Идентификатор машины, полезен если необходимо отличать машины друг от друга. Если вам этого не требуется, то идентификатор указывать необязательно. Во избежание возможных проблем желательно ограничиться использованием символов из следующего набора: буквы латинского алфавита, цифры от 0-9, а также символы "_" и "-".
+    Пример: rig-1 
+
+Также доступен бот в месенджере Telegram:
+
+@rupool_bot
+    Введите данное имя в поле поиска и создайте чат с этим пользователем. Далее следуйте инструкциям, которые будут отправлены вам ботом. 
+
+Бот предоставляет доступ к основной статистике по аккаунту, текущему курсу Bitcoin и некоторым другим данным. Кроме того, он своевременно уведомит вас об отключении оборудования, если таковое будет иметь место.
+Часто задаваемые вопросы
+
+Вопрос:
+    Что такое блок?
+Ответ:
+    Это фрагмент цепочки Bitcoin, удовлетворяющий особым требованиям сети. Успешное нахождение блока означает, что пул получает награду, которую распределяет между пользователями.
+Вопрос:
+    Что это за вкладка "Выплаты"? Выплаты кому и зачем?
+Ответ:
+    Это список последних 50 транзакций и итоговых сумм, которые пул отправил при обработке платежей своим пользователям. Если хотите увидеть более подробную информацию, то посмотрите статистику по соответствующему аккаунту. Это можно сделать введя адрес bitcoin в форме на главной странице, либо кликнув по нужному адресу в списке активных пользователей.
+Вопрос:
+    Как происходят начисления?
+Ответ:
+    В используемой системе начислений мы в реальном времени оплачиваем каждое полученное от пользователей решение, этот подход называется Pay-Per-Share (PPS).
+Вопрос:
+    Что произойдет, если ввести синтаксически некорректный bitcoin адрес в качестве имени пользователя?
+Ответ:
+    Решения, отправленные от имени такого пользователя, считаются добровольными пожертвованиями пулу. Они засчитываются как работа аккаунта 14R2r9FkyDmyxGB9xUVwVLdgsX9YfdVamk.
+Вопрос:
+    Я запустил майнер и он работает уже некоторое время, но я не вижу выплат. Это нормально? Если да, то почему?
+Ответ:
+    Это нормально, выплаты происходят автоматически по достижении порогового баланса. 
+
+    Stratum
+    [https://docs.google.com/document/d/17zHy1SUlhgtCMbypO8cHgpWH73V5iUQKk_0rWvMqSNs/edit?hl=en_US](https://docs.google.com/document/d/17zHy1SUlhgtCMbypO8cHgpWH73V5iUQKk_0rWvMqSNs/edit?hl=en_US)
+    [https://en.bitcoin.it/wiki/Stratum_mining_protocol](https://en.bitcoin.it/wiki/Stratum_mining_protocol)
+    [https://slushpool.com/help/manual/stratum-protocol](https://slushpool.com/help/manual/stratum-protocol)
+    
+    Пулы ничем не отличаются, разницы в настройке пула для SHA256 криптовалюты или Scrypt криптовалюты практически нет. А майнинг отличается оборудованием. SHA256 криптовалюты добываются с помощью ASIC, а scrypt криптовалюты добываются с помощью видеокарт(хотя первые ASICи стали появлятся и для scrypt )
+    
+    
+    Создание пула
+    [https://github.com/dogestreet/proxypool](https://github.com/dogestreet/proxypool)
+    [https://github.com/p2pool/p2pool](https://github.com/p2pool/p2pool)
+    [https://github.com/MPOS/php-mpos](https://github.com/MPOS/php-mpos)
+    [https://github.com/nicehash/nhethpool](https://github.com/nicehash/nhethpool)
+    [https://github.com/sammy007/open-ethereum-pool](https://github.com/sammy007/open-ethereum-pool)
+    [https://github.com/UNOMP/unified-node-open-mining-portal](https://github.com/UNOMP/unified-node-open-mining-portal)
+    [https://forum.cryptoff.org/index.php?/topic/1217-sozdanie-sobstvennogo-pula-unompmposmerged-mining/](https://forum.cryptoff.org/index.php?/topic/1217-sozdanie-sobstvennogo-pula-unompmposmerged-mining/)
+    
+    Пул
+    [https://ibipot.com/index.php](https://ibipot.com/index.php)
+    [https://www.multipool.us/](https://www.multipool.us/)
+    

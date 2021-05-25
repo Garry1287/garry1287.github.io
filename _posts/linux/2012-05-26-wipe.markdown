@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "wipe"
+date:   2012-05-26 02:25:39 +0400
+categories: linux
+tags: linux
+---
+
+# wipe
+[https://kali.tools/?p=2685](https://kali.tools/?p=2685)

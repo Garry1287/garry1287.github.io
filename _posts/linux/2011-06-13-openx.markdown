@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "openx"
+date:   2011-06-13 14:43:37 +0400
+categories: linux
+tags: linux
+---
+
+# openx
+[http://blog.denivip.ru/index.php/2011/07/jquery-openxtag-en/?lang=en](http://blog.denivip.ru/index.php/2011/07/jquery-openxtag-en/?lang=en)
+[http://blog.denivip.ru/index.php/2010/10/openx-highload/](http://blog.denivip.ru/index.php/2010/10/openx-highload/)
+[http://world-blog.ru/openx-russkaya-dokumentaciya-help-rus](http://world-blog.ru/openx-russkaya-dokumentaciya-help-rus)
+
+
+
+[https://www.adfox.ru/ru/solved_detail/7/clients/8/](https://www.adfox.ru/ru/solved_detail/7/clients/8/)
+[http://www.foba.ru/RU/creative/](http://www.foba.ru/RU/creative/)

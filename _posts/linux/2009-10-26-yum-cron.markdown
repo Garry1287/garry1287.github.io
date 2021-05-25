@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "yum-cron"
+date:   2009-10-26 20:04:12 +0300
+categories: linux
+tags: linux
+---
+
+# yum-cron
+[http://plone.lucidsolutions.co.nz/linux/centos/centos-7-automatic-updates-with-yum-cron](http://plone.lucidsolutions.co.nz/linux/centos/centos-7-automatic-updates-with-yum-cron)
+[http://plone.lucidsolutions.co.nz/linux/centos/centos-7-automatic-updates-with-yum-cron/view](http://plone.lucidsolutions.co.nz/linux/centos/centos-7-automatic-updates-with-yum-cron/view)
+[http://rtfm.co.ua/centos-yum-cron-avtomaticheskoe-obnovlenie-sistemy-i-paketov/](http://rtfm.co.ua/centos-yum-cron-avtomaticheskoe-obnovlenie-sistemy-i-paketov/)
+[http://blog.acmenet.ru/2014/09/14/centos-7-install/](http://blog.acmenet.ru/2014/09/14/centos-7-install/)
+[http://kamaok.org.ua/?p=725](http://kamaok.org.ua/?p=725)
+[http://www.remoteshaman.com/unix/centos/avtomaticheskoe-obnovlenie-centos-aka-yum-cron](http://www.remoteshaman.com/unix/centos/avtomaticheskoe-obnovlenie-centos-aka-yum-cron)

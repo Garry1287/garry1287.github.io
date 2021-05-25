@@ -1,0 +1,64 @@
+---
+layout: post
+title:  "pexpect"
+date:   2018-05-07 10:20:27 +0300
+categories: python
+tags: python
+---
+
+# pexpect
+[http://pexpect.readthedocs.org/en/stable/api/pexpect.html](http://pexpect.readthedocs.org/en/stable/api/pexpect.html)
+
+
+[https://ru.wikipedia.org/wiki/Expect](https://ru.wikipedia.org/wiki/Expect)
+[http://www.ibm.com/developerworks/ru/library/l-expect_1/index.html](http://www.ibm.com/developerworks/ru/library/l-expect_1/index.html)
+[http://kb.h1host.ru/article/view?id=308](http://kb.h1host.ru/article/view?id=308)
+
+
+[http://stackoverflow.com/questions/10463216/python-pexpect-timeout-falls-into-traceback-and-exists](http://stackoverflow.com/questions/10463216/python-pexpect-timeout-falls-into-traceback-and-exists)
+[http://www.programcreek.com/python/example/8691/pexpect.TIMEOUT](http://www.programcreek.com/python/example/8691/pexpect.TIMEOUT)
+[http://blog.pythonicneteng.com/2012/11/pexpect-module.html](http://blog.pythonicneteng.com/2012/11/pexpect-module.html)
+
+
+Пример с классом
+[http://python.6.x6.nabble.com/Pexpect-and-telnet-not-communicating-properly-td1532312.html](http://python.6.x6.nabble.com/Pexpect-and-telnet-not-communicating-properly-td1532312.html)
+
+
+Пример с исключениями
+[http://www.electricmonk.nl/log/2014/07/26/scripting-a-cisco-switch-with-python-and-expect/](http://www.electricmonk.nl/log/2014/07/26/scripting-a-cisco-switch-with-python-and-expect/)
+
+
+Надо через access-list делать
+        Сначала удалил
+        Потом новый залил
+        
+С IP route сложнее
+ Надо удалять разблокированные, сравнивая предыдущий файл ip_out с новым списком
+ и заливать новые, при этом не дублировать записи
+  То есть делать diff original new
+  Те, что с минусом удалять (no ip route ...)
+  diff out_ip.txt out_ip.tmp | grep '<' | awk '{print $2}'
+  
+  Те, что с плюсом добавлять (ip route ... Null0)
+  diff out_ip.txt out_ip.tmp | grep '>' | awk '{print $2}'
+  
+  Получаем 2 списка, применяем скрипт для блокировки разблокировки и всё
+  
+  
+  
+  
+  
+  diff -С orig new
+Если в оригинале нет строки, которая есть в новом, то она помечается + (добавить)
+Если в оригинале есть строка, которой нет в новом, то он помечается - (убрать)
+ 
+ 
+ diff -NU0
+ 
+ [https://ru.wikipedia.org/wiki/Diff](https://ru.wikipedia.org/wiki/Diff)
+ [http://rus-linux.net/lib.php?name=MyLDP/consol/HuMan/diff-ru.html](http://rus-linux.net/lib.php?name=MyLDP/consol/HuMan/diff-ru.html)
+ 
+ 
+ 1)Отсортировать
+ 2) Сравнить
+ 3) Если изменился, определить изменения

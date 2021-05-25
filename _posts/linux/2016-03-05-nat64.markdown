@@ -1,0 +1,79 @@
+---
+layout: post
+title:  "nat64"
+date:   2016-03-05 10:57:48 +0300
+categories: linux
+tags: linux
+---
+
+# nat64
+centos 6
+[https://nag.ru/articles/article/26964/tehnologii-dlya-migratsii-na-ipv6.html](https://nag.ru/articles/article/26964/tehnologii-dlya-migratsii-na-ipv6.html)
+
+[http://www.litech.org/tayga/README-0.9.2](http://www.litech.org/tayga/README-0.9.2)
+[http://www.litech.org/tayga/](http://www.litech.org/tayga/)
+[https://dellaert.org/2012/09/23/how-to-setup-an-ipv6-only-network-with-nat64-dns64-and-shorewall/](https://dellaert.org/2012/09/23/how-to-setup-an-ipv6-only-network-with-nat64-dns64-and-shorewall/)
+[http://onnocenter.or.id/wiki/index.php/IPv6_Router:_Setting_NAT64_%26_DNS64](http://onnocenter.or.id/wiki/index.php/IPv6_Router:_Setting_NAT64_%26_DNS64)
+
+
+Правильная статья
+[http://www.routereflector.com/2014/02/connecting-an-ipv6-only-site-to-an-ipv4-only-world/](http://www.routereflector.com/2014/02/connecting-an-ipv6-only-site-to-an-ipv4-only-world/)
+
+Этого делать не надо
+ip addr add 192.168.0.1 dev nat64
+ip addr add 2001:db8:1::1 dev nat64
+
+Заработало, когда сделал через ifcfg
+как здесь
+[https://www.sidorenko.io/post/2017/01/setting-up-nat64-with-tayga-on-centos/](https://www.sidorenko.io/post/2017/01/setting-up-nat64-with-tayga-on-centos/)
+DNSSEC раскурить
+[https://ripe72.ripe.net/presentations/152-IPv6-Only-DNS64-and-DNSSEC4.pdf](https://ripe72.ripe.net/presentations/152-IPv6-Only-DNS64-and-DNSSEC4.pdf)
+
+ip6tables
+[https://codebeer.ru/nastrojka-iptables-dlya-ipv6/](https://codebeer.ru/nastrojka-iptables-dlya-ipv6/)
+
+
+Принцип работы - двойной нат  ipv6 в ipv4, ipv4 в белый ip адрес
+DNS, работает как подделка 
+
+
+
+
+192.168.255.0  - транслируется в белый, так работает инет
+ 
+адреса из /64 транслируются в ipv4
+ 
+[http://opensource.telkomspeedy.com/wiki/index.php/OpenWRT_IPv6:_NAT64_dan_DNS64_menggunakan_BIND](http://opensource.telkomspeedy.com/wiki/index.php/OpenWRT_IPv6:_NAT64_dan_DNS64_menggunakan_BIND)
+[http://www.routereflector.com/2014/02/connecting-an-ipv6-only-site-to-an-ipv4-only-world/](http://www.routereflector.com/2014/02/connecting-an-ipv6-only-site-to-an-ipv4-only-world/)
+[https://dellaert.org/2012/09/23/how-to-setup-an-ipv6-only-network-with-nat64-dns64-and-shorewall/](https://dellaert.org/2012/09/23/how-to-setup-an-ipv6-only-network-with-nat64-dns64-and-shorewall/)
+[http://packetpushers.net/nat64-setup-using-tayga/](http://packetpushers.net/nat64-setup-using-tayga/)
+ 
+[http://ipvsix.me/?p=106](http://ipvsix.me/?p=106) комменты
+ 
+Add static routes to the nat64 ranges
+ 
+    ip route add 192.168.255.0/24 dev nat64
+    ip route add 2602:18c:101:4789:1::/96 dev nat64
+Нужно, чтобы linux знал куда отправлять  пакеты для обработки
+
+В комментах подцепить полезное
+[http://ipvsix.me/?p=106](http://ipvsix.me/?p=106)
+
+
+
+
+Тайга делает NAT ipv6 в ipv4 (серый) а потом ipv4 серый в ipv4 белый
+
+
+
+Нужна фейковая сеть /96 от которой будут прилетать адреса и /24 для нат 44 трансляции (это всё для конфигурации тайги и днс) - берём стандартные     64:ff9b::/96 (2001:db8:1:ffff::/96)    2a0c:4280:0:ffff::/96
+Нужна сеть ipv6 для локалки (выделяем из нашего пула)            2a0c:4280:0:0::/64     2a0c:4280:0:0::1/64 - Сервер    2a0c:4280:0:0::2/64  - Клиент
+Нужна белая сеть ipv4 для выхода в инет ! 81.20.197.40
+radvd - надо свою прописывать
+
+
+Стандартный набор для DNS dns64 2001:db8:1:ffff::/96
+Эти адреса нужны для fake запросов AAAA
+
+
+[http://tldp.org/HOWTO/Linux+IPv6-HOWTO/](http://tldp.org/HOWTO/Linux+IPv6-HOWTO/)

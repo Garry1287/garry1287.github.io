@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "генерация_для_tftp"
+date:   2013-03-10 07:27:31 +0400
+categories: programming
+tags: programming
+---
+
+# генерация_для_tftp
+[https://github.com/xcme/dracon](https://github.com/xcme/dracon)

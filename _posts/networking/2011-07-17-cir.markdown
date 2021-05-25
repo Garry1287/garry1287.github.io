@@ -1,0 +1,268 @@
+---
+layout: post
+title:  "cir"
+date:   2011-07-17 06:29:01 +0400
+categories: Networking
+tags: Networking
+---
+
+# cir
+ rate-limit input 51200000 9600000 19200000 conform-action transmit exceed-action drop
+CIR — commited information rate, в битах в секунду, определяет rate VC в соответствии с контрактом.
+CBS committed burst size (normal burst bytes) Bc- обычно 5-10% от CIR в битах или байтах  (количество трафика, которое может быть отправлено в Tс интервал без ограничения скорости) Bc — commited burst rate, измеряется в битах.                                          Количество трафика которое будет отправлено в течение Tc интервала.
+EBS extented burst size (extented burst)  в битах или байтах Be — excess burst size, в битах. Количество битов, которое может быть отправлено сверх указанного Bc после периода неактивности. 
+Shaped rate — rate, в битах за секунду, до которого конкретная настройка делает shape трафику. Может быть установлен или нет в значение равное CIR.
+Tc — временной интервал, измеряемый в секундах, в течение которого может быть отправлен commited burst (Bc). Для многих shaping утилит Tc=Bc/CIR.
+    [http://blog.ine.com/2009/12/12/the-meaning-of-bc-with-traffic-policing/](http://blog.ine.com/2009/12/12/the-meaning-of-bc-with-traffic-policing/)
+    
+Bc необходимо подбирать исходя из RTT (Tc не меньше RTT). От Bc зависит Tc. Чем меньше Тс берем (период замера времени), тем больше всплесков мы можем зафиксировать и тем аггрессивнее будем резать траффик, что не всегда хорошо.
+
+
+
+ rate-limit output 51200000 9600000 19200000 conform-action transmit exceed-action drop
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+police cir 1024000 ?
+
+  <1000-512000000>  Burst bytes
+  bc                Conform burst
+  conform-action    action when rate is less than conform burst
+  pir               Peak Information Rate
+
+
+police
+  <8000-10000000000>  Target Bit Rate (bIts per second) (postfix k, m, g optional; decimal point allo
+  cir                 Committed information rate
+  rate                Specify police rate, PCR for hierarchical policies or SCR for single-level ATM 4.0 policer policies
+
+
+  <1000-512000000>  Burst bytes
+  bc                Conform burst
+  conform-action    action when rate is less than conform burst
+  pir               Peak Information Rate
+
+
+
+CTD-C6(config-pmap-c)#police 1024000 bc 192000 ?
+  <1000-512000000>  Burst bytes
+  be                Excess burst
+  conform-action    action when rate is less than conform burst
+  pir               Peak Information Rate
+  <cr>
+
+
+  
+1)PIR - позволительный оверхэд трафика
+Excess information rate (EIR) is the magnitude of the burst above the CIR (PIR = EIR + CIR)
+2)police 1024000 - обычная целевая скорость в битах в секунду, возможны пристаки кило, мега, гига
+3) police cir 1024000 - Burst bytes 
+4)be - excess burst (in bytes)  (Two Token Bucket system)
+
+
+
+
+ Tc=Bc/CIR,
+ Tc - average интревал, необходимо подобрать Bc (committed burst) таким, чтобы измерение скорости нас удовлетворяло. Так скорость прыгает, но
+ Как измерить скорость?  Тс надо подобрать так, чем больше резкие всплески возможны на сети, тем больше Тс, таким образом исходя из формулы необходимо Bc делать больше.
+ Если поток трафика стабилен, то Тс можно брать меньше (устанавливая Bc меньше). Тем самым трафика отброситься меньше.
+  The sole purpose of policing is comparing the average metered traffic rate with the CIR (committed information rate) and marking the packets that exceed it. 
+  [http://blog.ine.com/2009/12/12/the-meaning-of-bc-with-traffic-policing/](http://blog.ine.com/2009/12/12/the-meaning-of-bc-with-traffic-policing/)
+  
+  
+  
+  Сумбурно и не совсем понятно, но все фичи
+  [http://cisco-conf.ru/qos/86-shaping-policing.html](http://cisco-conf.ru/qos/86-shaping-policing.html)
+  
+  
+  
+  
+ policy-map ClientPolicy-2Mb
+ class RETN-Policy
+ police cir 2048000 bc 384000 be 768000
+
+ 
+ 
+ police cir 5120000 bc 640000 be 640000
+conform-action transmit
+exceed-action drop
+violate-action drop
+
+
+
+
+
+
+
+
+5--ти мегабитный полисер на входящий трафик на ASR 1002.
+Внизу на исход трафик.
+
+police cir 5120000 bc 384000 be 640000
+conform-action transmit
+exceed-action drop
+violate-action drop
+
+Закачка соответсвует тарифу. Лишь первые 2-5 секунд трафика качается больше чем по тарифу, потом стабилизируется. speedtest.net показывает около 5-ти мегабит и вход и выход. выход бывает показывает больше.
+
+
+
+
+
+
+ Всем спасибо за советы!
+Сегодня целый день ковыряли и подбирали коэффициенты и параметры, в итоге нашли те,
+которые корректно стали зарезать скорость, согласно нашим тарифам без лишних всплесков и скачков.
+Зарезает как на 7201 так и на 10008
+
+Вот пример:
+
+40 Мбит / 20 Мбит
+
+Код
+policy-map platina_in
+  class all_map
+   police 20 mbps bc 2200000 pir 34 mbps be 320000
+
+policy-map platina_out
+  class all_map
+   police 40 mbps bc 2200000 pir 48 mbps be 320000
+
+
+22 Мбит / 11 Мбит
+
+Код
+policy-map bronza_in
+  class all_map
+   police 22 mbps bc 2200000 pir 30 mbps be 320000
+
+policy-map bronza_out
+  class all_map
+   police 11 mbps bc 2200000 pir 20 mbps be 320000
+   
+   
+   [https://null.53bits.co.uk/index.php?page=adsl-and-lns-shaping-llq](https://null.53bits.co.uk/index.php?page=adsl-and-lns-shaping-llq)
+   
+   
+   
+   Для интернет-провайдеров:
+
+    В policer’е уменьшить размер ведра (burst size). Это приведёт к тому, что TCP сессия не сможет слишком сильно разогнаться, пока есть свободные токены, и быстрее начнёт адаптацию под реальную пропускную способность.
+    Вместо policer’а использовать shaper (с небольшой глубиной очереди).
+    Использовать и shaper, и policer одновременно. В этом случае shaper располагается чуть раньше, чем policer. Shaper задерживает пакеты, сглаживая колебания. Из-за такой задержки policer успевает аккумулировать достаточное количество токенов, чтобы передавать трафик. Потери в таком случае минимизируются.
+
+    CIR или не CIR в полисере, работает одинаково
+    [https://anetworkerblog.com/2007/12/03/to-cir-or-not-cir/](https://anetworkerblog.com/2007/12/03/to-cir-or-not-cir/)
+    
+    Хорошо описано, но без объяснений
+    [http://xgu.ru/wiki/QoS_%D0%B2_Cisco](http://xgu.ru/wiki/QoS_%D0%B2_Cisco)
+    Объяснения здесь
+    [http://blog.ine.com/2011/05/22/understanding-single-rate-and-dual-rate-traffic-policing/](http://blog.ine.com/2011/05/22/understanding-single-rate-and-dual-rate-traffic-policing/)
+    
+    
+    
+    [https://habrahabr.ru/company/cbs/blog/317048/](https://habrahabr.ru/company/cbs/blog/317048/)
+    [http://www.intuit.ru/studies/courses/3591/833/lecture/14269?page=4](http://www.intuit.ru/studies/courses/3591/833/lecture/14269?page=4)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    у нас так:
+CODE
+policy-map ACCESS_10M_OUT
+  class class-default
+   police 10240000 1024000 1280000
+
+policy-map ACCESS_10M_IN
+  class class-default
+   police cir 10240000 bc 5120000
+    conform-action set-dscp-transmit default
+    exceed-action drop
+    violate-action drop
+
+
+
+
+
+
+police cir 5120000 bc 640000 be 640000
+conform-action transmit
+exceed-action drop
+violate-action drop
+
+5--ти мегабитный полисер на входящий трафик на ASR 1002.
+Внизу на исход трафик.
+
+police cir 5120000 bc 384000 be 640000
+conform-action transmit
+exceed-action drop
+violate-action drop
+
+Закачка соответсвует тарифу. Лишь первые 2-5 секунд трафика качается больше чем по тарифу, потом стабилизируется. speedtest.net показывает около 5-ти мегабит и вход и выход. выход бывает показывает больше.
+
+
+
+
+
+
+
+
+
+Всем спасибо за советы!
+Сегодня целый день ковыряли и подбирали коэффициенты и параметры, в итоге нашли те,
+которые корректно стали зарезать скорость, согласно нашим тарифам без лишних всплесков и скачков.
+Зарезает как на 7201 так и на 10008
+
+Вот пример:
+
+40 Мбит / 20 Мбит
+
+Код
+policy-map platina_in
+  class all_map
+   police 20 mbps bc 2200000 pir 34 mbps be 320000
+
+policy-map platina_out
+  class all_map
+   police 40 mbps bc 2200000 pir 48 mbps be 320000
+
+
+22 Мбит / 11 Мбит
+
+Код
+policy-map bronza_in
+  class all_map
+   police 22 mbps bc 2200000 pir 30 mbps be 320000
+
+policy-map bronza_out
+  class all_map
+   police 11 mbps bc 2200000 pir 20 mbps be 320000
+
+ police {cir cir}[bc conform-burst]{pir pir} [be peak-burst] [conform-action action [exceed-action action [violate-action action]]]  
+Configures traffic policing and specifies multiple actions applied to packets marked as conforming to, exceeding, or violating a specific rate. Use one line per action that you want to specify. Enters policy-map class police configuration mode.
+
+
+CIR=B(c)/T(c) — гарантированная полоса пропускания

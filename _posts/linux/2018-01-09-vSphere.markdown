@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "vSphere"
+date:   2018-01-09 06:37:08 +0300
+categories: linux
+tags: linux
+---
+
+# vSphere
+
+    Эндрю Таненбаум, Дэвид Уэзеролл. Компьютерные сети.
+    Виктор Олифер, Наталия Олифер. Компьютерные сети. Принципы, технологии, протоколы.
+    Михаил Михеев. Администрирование VMware vSphere 5.
+    vCloud Director User's Guide.

@@ -1,0 +1,384 @@
+---
+layout: post
+title:  "mysql оптимизация"
+date:   2012-02-21 13:27:51 +0400
+categories: sql
+tags: sql
+---
+
+# mysql оптимизация
+определить тип таблицы
+определить что грузить таблицу, какой запрос - log
+Или не так делаю, или реально нет таких запросов
+Добавить в cacti графики
+
+
+Узнать количество запросов к mysql и какие.
+ 
+   Включите логгирование медленных запросов. Либо с опцией --log-slow-queries или log-slow-queries = [путь до лог файла],
+ либо же в конфигурационном файле my.cnf указать в разделе [mysqld] параметр log-slow-queries.
+А потом их проанализировать.
+     
+
+
+key_buffer=1024M
+
+
+
+Что даст выключение query_cache?
+Уберет расходы процессорного времени на его поддержание в актуальном состоянии при модификации данных. 
+
+
+
+
+Определение типа
+MariaDB [cacti]> select engine from information_schema.tables where table_name='rra';
++--------+
+| engine |
++--------+
+| MyISAM |
++--------+
+1 row in set (0.00 sec)
+
+
+
+
+
+mytop -uroot -p915Nyg710 -hlocalhost -dcacti
+
+MySQL on localhost (5.5.33-MariaDB)                                                                                                                                                   up 21+22:45:37 [15:03:56]
+ Queries: 2.0G   qps: 1111 Slow:   12.6k         Se/In/Up/De(%):    92/01/05/00 
+             qps now: 1037 Slow qps: 0.0  Threads:   20 (   1/   0) 80/01/13/00 
+ Key Efficiency: 100.0%  Bps in/out: 326.4k/380.0k   Now in/out: 209.6k/371.1k
+
+      Id      User         Host/IP         DB      Time    Cmd Query or State                                                                                                                                  
+      --      ----         -------         --      ----    --- ----------                                                                                                                                      
+33603129     cacti       localhost      cacti         0  Sleep                                                                                                                                                 
+33606095      root       localhost      cacti         0  Query show full processlist                                                                                                                           
+33607053     cacti       localhost      cacti         0  Sleep                                                                                                                                                 
+33607033     cacti       localhost      cacti         1  Sleep                                                                                                                                                 
+33607039     cacti       localhost      cacti         1  Sleep                                                                                                                                                 
+33607041     cacti       localhost      cacti         1  Sleep                                                                                                                                                 
+33607042     cacti       localhost      cacti         1  Sleep                                                                                                                                                 
+33607003     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33607006     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33607012     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33607013     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33607014     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33607022     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33607028     cacti       localhost      cacti         2  Sleep                                                                                                                                                 
+33606920     cacti       localhost      cacti         3  Sleep                                                                                                                                                 
+33606987     cacti       localhost      cacti         3  Sleep                                                                                                                                                 
+33606866     cacti       localhost      cacti         4  Sleep                                                                                                                                                 
+33606875     cacti       localhost      cacti         4  Sleep                                                                                                                                                 
+33606896     cacti       localhost      cacti         4  Sleep                                                                                                                                                 
+33606906     cacti       localhost      cacti         4  Sleep 
+
+
+
+
+mysql -e "show processlist;" -uroot -p915Nyg710
++----------+-------+-----------+-------+---------+------+-------+------------------+----------+
+| Id       | User  | Host      | db    | Command | Time | State | Info             | Progress |
++----------+-------+-----------+-------+---------+------+-------+------------------+----------+
+| 33632865 | cacti | localhost | cacti | Sleep   |    0 |       | NULL             |    0.000 |
+| 33635058 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635066 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635071 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635086 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635100 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635106 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635128 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635133 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635136 | cacti | localhost | cacti | Sleep   |    2 |       | NULL             |    0.000 |
+| 33635138 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635162 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635182 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635191 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635194 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635201 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635204 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635209 | cacti | localhost | cacti | Sleep   |    1 |       | NULL             |    0.000 |
+| 33635223 | cacti | localhost | cacti | Sleep   |    0 |       | NULL             |    0.000 |
+| 33635235 | cacti | localhost | cacti | Sleep   |    0 |       | NULL             |    0.000 |
+| 33635238 | cacti | localhost | cacti | Sleep   |    0 |       | NULL             |    0.000 |
+| 33635239 | root  | localhost | NULL  | Query   |    0 | NULL  | show processlist |    0.000 |
++----------+-------+-----------+-------+---------+------+-------+------------------+----------+
+
+
+
+
+
+
+
+
+
+
+
+
+2
+
+	
+
+SHOW STATUS LIKE 'Threads_connected'; -- Кол-во подключенных клиентов
+SHOW STATUS LIKE 'Threads_running';   -- количество активных клиентов (кто не спит из подключенных)
+
+
+
+Кеш выключен
+MariaDB [(none)]>  SHOW VARIABLES LIKE "query_cache_size";
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| query_cache_size | 0     |
++------------------+-------+
+1 row in set (0.01 sec)
+
+
+Попробывать включить?
+
+
+
+SHOW VARIABLES LIKE 'query_cache%'
+
+
+виведит:
+query_cache_limit - 1048576
+query_cache_min_res_unit - 4096
+query_cache_size - 0
+query_cache_type - ON
+query_cache_wlock_invalidate OFF 
+
+
+
+
+Проблема из-за mysql?
+Нужен ли кеш?
+Хватает ли памяти?
+
+
+
+
+
+
+
+
+
+[http://www.percona.com/doc/percona-monitoring-plugins/1.1/cacti/installing-templates.html](http://www.percona.com/doc/percona-monitoring-plugins/1.1/cacti/installing-templates.html)
+[http://shurshun.ru/cacti-monitoring-mysql/](http://shurshun.ru/cacti-monitoring-mysql/)
+[http://mukka.pozor.hu/install-cacti-and-percona-monitoring-plugins-on-centos/](http://mukka.pozor.hu/install-cacti-and-percona-monitoring-plugins-on-centos/)
+[http://kovyrin.net/2013/06/26/mysql-percona-cacti-1-min/](http://kovyrin.net/2013/06/26/mysql-percona-cacti-1-min/)
+
+[https://github.com/major/MySQLTuner-perl](https://github.com/major/MySQLTuner-perl)
+
+
+
+log-slow-queries=<имя_файла>
+long_query_time=2
+
+Попробовать одну секунду
+
+В версии MySQL 5.1 глобальные сис­темные переменные slow_query_log
+и slow_query_log_file обеспечивают контроль над журналом медленных
+запросов во время выполнения, но в MySQL 5.0 невозможно включить
+
+попробовать
+long_query_time=0
+
+••Таб­лица могла быть заблокирована, поэтому запрос был вынужден
+ждать. Величина Lock_time показывает, как долго запрос ждал осво-
+бождения блокировки.
+
+
+long_query_time 		10
+log_slow_queries              | OFF
+
+| slow_query_log      | OFF                                                                                                          |
+| slow_query_log_file | cacti-slow.log  
+
+
+
+touch /var/log/mysql_slow_queries.log
+chown mysql.mysql -R /var/log/mysql_slow_queries.log 
+
+
+Сделать query cache?
+
+
+
+
+Нехватка места на диске, памяти и проблемы с иредами
+Или дрянная vps или неудачная сборка mysql
+Хотите узнать больше? Предоставьтк доступ к серверу
+
+
+
+ >>  MySQLTuner 1.3.0 - Major Hayden <major@mhtx.net>
+ >>  Bug reports, feature requests, and downloads at [http://mysqltuner.com/](http://mysqltuner.com/)
+ >>  Run with '--help' for additional options and output filtering
+Please enter your MySQL administrative login: root
+Please enter your MySQL administrative password: 
+[OK] Currently running supported MySQL version 5.5.33-MariaDB
+[OK] Operating on 64-bit architecture
+
+-------- Storage Engine Statistics -------------------------------------------
+[--] Status: +ARCHIVE +Aria +CSV +InnoDB +MRG_MYISAM 
+[--] Data in MyISAM tables: 28M (Tables: 57)
+[--] Data in InnoDB tables: 932M (Tables: 108)
+[--] Data in PERFORMANCE_SCHEMA tables: 0B (Tables: 17)
+[!!] Total fragmented tables: 115
+
+-------- Security Recommendations  -------------------------------------------
+[OK] All database users have passwords assigned
+
+-------- Performance Metrics -------------------------------------------------
+[--] Up for: 41m 4s (2M q [861.056 qps], 41K conn, TX: 730M, RX: 579M)
+[--] Reads / Writes: 92% / 8%
+[--] Total buffers: 192.0M global + 2.9M per thread (151 max threads)
+[OK] Maximum possible memory usage: 630.8M (63% of installed RAM)
+[OK] Slow queries: 0% (2/2M)
+[OK] Highest usage of available connections: 56% (86/151)
+[OK] Key buffer size / total MyISAM indexes: 32.0M/16.3M
+[OK] Key buffer hit rate: 100.0% (19M cached / 2K reads)
+[!!] Query cache is disabled
+[OK] Sorts requiring temporary tables: 0% (0 temp sorts / 375K sorts)
+[OK] Temporary tables created on disk: 2% (7K on disk / 359K total)
+[!!] Thread cache is disabled
+[!!] Table cache hit rate: 7% (79 open / 1K opened)
+[OK] Open file limit used: 12% (123/1K)
+[OK] Table locks acquired immediately: 99% (3M immediate / 3M locks)
+[!!] InnoDB  buffer pool / data size: 128.0M/932.2M
+[OK] InnoDB log waits: 0
+-------- Recommendations -----------------------------------------------------
+General recommendations:
+    Run OPTIMIZE TABLE to defragment tables for better performance
+    MySQL started within last 24 hours - recommendations may be inaccurate
+    Enable the slow query log to troubleshoot bad queries
+    Set thread_cache_size to 4 as a starting value
+    Increase table_open_cache gradually to avoid file descriptor limits
+    Read this before increasing table_open_cache over 64: [http://bit.ly/1mi7c4C](http://bit.ly/1mi7c4C)
+Variables to adjust:
+    query_cache_size (>= 8M)
+    thread_cache_size (start at 4)
+    table_open_cache (> 128)
+    innodb_buffer_pool_size (>= 932M)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    query_cache_size (>= 8M)
+    thread_cache_size (start at 4)
+
+This is for a system with little memory (32M - 64M) where MariaDB plays
+
+
+
+
+
+
+
+
+
+
+
+
+mysql> show variables
+  where Variable_name in ('version', 'log', 'general_log', 'general_log_file', 'log_output');
+ 
++------------------+---------------------------------------+
+| Variable_name    | Value                                 |
++------------------+---------------------------------------+
+| general_log      | OFF                                   |
+| general_log_file | /usr/local/mysql/data/datacharmer.log |
+| log              | OFF                                   |
+| log_output       | FILE                                  |
+| version          | 5.1.25-rc-community-log               |
++------------------+---------------------------------------+
+ 
+# Показать значения всех переменных для логов, плюс и медленные запросы
+mysql> SHOW VARIABLES WHERE Variable_name LIKE 'log%'
+  OR Variable_name LIKE 'general_log%'
+  OR Variable_name LIKE 'long%' OR Variable_name LIKE '%slow%'
+  OR Variable_name = 'version' ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$database_type = "mysql";
+$database_default = "cacti";
+$database_hostname = "localhost";
+$database_username = "cacti";
+$database_password = "4QDrBrp4uCUuuEQ5";
+
+
+
+
+
+Куча полезных ссылок
+[http://habrahabr.ru/post/159085/](http://habrahabr.ru/post/159085/)
+[http://ruhighload.com/index.php/2009/04/23/%D0%BE%D0%BF%D1%82%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-mysql-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0/](http://ruhighload.com/index.php/2009/04/23/%D0%BE%D0%BF%D1%82%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-mysql-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0/)
+[http://ruhighload.com/server](http://ruhighload.com/server)
+[http://www.percona.com/blog/2009/11/16/table_cache-negative-scalability/](http://www.percona.com/blog/2009/11/16/table_cache-negative-scalability/)
+[http://vds-admin.ru/mysql/sistemnye-peremennye-mysql-servera-fail-mycnf](http://vds-admin.ru/mysql/sistemnye-peremennye-mysql-servera-fail-mycnf)
+[http://habrahabr.ru/post/41166/](http://habrahabr.ru/post/41166/)
+[http://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_server/%D0%B1%D0%B0%D0%B7%D1%8B_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/mysql](http://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_server/%D0%B1%D0%B0%D0%B7%D1%8B_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/mysql)
+[http://habrahabr.ru/post/160189/](http://habrahabr.ru/post/160189/)
+[http://sys.dmitrow.com/node/110](http://sys.dmitrow.com/node/110)
+[http://sadmin.pp.ua/optimizaciya-mysql-myisam.html](http://sadmin.pp.ua/optimizaciya-mysql-myisam.html)
+[http://devacademy.ru/posts/profilirovanie-zaprosov-v-mysql/](http://devacademy.ru/posts/profilirovanie-zaprosov-v-mysql/)
+[http://hosting101.ru/articles/mysql-performance-1.html](http://hosting101.ru/articles/mysql-performance-1.html)
+[http://www.mysql.ru/docs/man/SHOW_VARIABLES.html](http://www.mysql.ru/docs/man/SHOW_VARIABLES.html)
+[http://mdex-nn.ru/page/slow-query-log-mysql.html](http://mdex-nn.ru/page/slow-query-log-mysql.html)
+[http://habrahabr.ru/post/31072/](http://habrahabr.ru/post/31072/)
+[http://nagg.ru/2010/09/vklyuchenie-query-cache-v-mysql-uluchshaem-proizvodite/](http://nagg.ru/2010/09/vklyuchenie-query-cache-v-mysql-uluchshaem-proizvodite/)
+web-scalability.com/2008/05/30/mysql-%d1%82%d1%8e%d0%bd%d0%b8%d0%bd%d0%b3-%d0%bd%d0%b0%d1%81%d1%82%d1%80%d0%b0%d0%b8%d0%b2%d0%b0%d0%b5%d0%bc-%d0%bf%d0%be-%d0%b2%d0%b7%d1%80%d0%be%d1%81%d0%bb%d0%be%d0%bc%d1%83/
+[http://habrahabr.ru/post/108418/](http://habrahabr.ru/post/108418/)
+[http://habrahabr.ru/post/66684/](http://habrahabr.ru/post/66684/)
+[http://habrahabr.ru/company/bitrix/blog/148874/](http://habrahabr.ru/company/bitrix/blog/148874/)
+[http://toster.ru/q/64562](http://toster.ru/q/64562)
+[http://habrahabr.ru/post/31072/](http://habrahabr.ru/post/31072/)
+
+Мониторинг через cacti
+[http://www.percona.com/doc/percona-monitoring-plugins/1.1/cacti/customizing-templates.html](http://www.percona.com/doc/percona-monitoring-plugins/1.1/cacti/customizing-templates.html)
+[http://www.percona.com/doc/percona-monitoring-plugins/1.1/cacti/installing-templates.html](http://www.percona.com/doc/percona-monitoring-plugins/1.1/cacti/installing-templates.html)
+[https://code.google.com/p/mysql-cacti-templates/](https://code.google.com/p/mysql-cacti-templates/)
+
+Эти помогли
+[http://www.sql.ru/forum/1093554/vopros-po-threads-created](http://www.sql.ru/forum/1093554/vopros-po-threads-created)
+[http://yapro.ru/web-master/mysql/tyuning-tredov-mysql-threads-tunning.html](http://yapro.ru/web-master/mysql/tyuning-tredov-mysql-threads-tunning.html)
+
+Кодировка
+[http://gahcep.github.io/blog/2013/01/05/mysql-utf8/](http://gahcep.github.io/blog/2013/01/05/mysql-utf8/)
+
+Утилита для проверки mysql
+[http://dedicatesupport.com/content/optimizatsiya-servera-mysql-shag-pervyi-utilita-mysqltuner](http://dedicatesupport.com/content/optimizatsiya-servera-mysql-shag-pervyi-utilita-mysqltuner)
+
+Оптимизация php
+[http://www.opennet.ru/docs/RUS/php_optimization/](http://www.opennet.ru/docs/RUS/php_optimization/)
+
+
+
+
+
+Кодировка mysql
+[http://gahcep.github.io/blog/2013/01/05/mysql-utf8/](http://gahcep.github.io/blog/2013/01/05/mysql-utf8/)

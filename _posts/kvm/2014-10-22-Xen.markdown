@@ -1,0 +1,19 @@
+---
+layout: post
+title:  "Xen"
+date:   2014-10-22 05:24:19 +0400
+categories: kvm
+tags: kvm
+---
+
+# Xen
+[http://tux-the-penguin.blogspot.ru/2010/07/kvm-xen.html](http://tux-the-penguin.blogspot.ru/2010/07/kvm-xen.html)
+[http://www.mmouse.ru/2009/01/22/instal-xen-in-open-suse-10/](http://www.mmouse.ru/2009/01/22/instal-xen-in-open-suse-10/)
+[http://guruadmin.ru/page/kak-ustanovit-i-nastroit-virtualizaciju-na-osnove-xen-v-opensuse-110](http://guruadmin.ru/page/kak-ustanovit-i-nastroit-virtualizaciju-na-osnove-xen-v-opensuse-110)
+[http://ru.opensuse.org/Archive:%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_Xen_%D0%BD%D0%B0_SuSE_Linux_10.0](http://ru.opensuse.org/Archive:%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_Xen_%D0%BD%D0%B0_SuSE_Linux_10.0)
+[http://www.linuxcenter.ru/lib/articles/system/xenlinux.phtml](http://www.linuxcenter.ru/lib/articles/system/xenlinux.phtml)
+[http://www.opennet.ru/docs/RUS/xen_manual/](http://www.opennet.ru/docs/RUS/xen_manual/)
+[http://habrahabr.ru/post/37824/](http://habrahabr.ru/post/37824/)
+[http://xgu.ru/wiki/Xen](http://xgu.ru/wiki/Xen)
+[http://www.ibm.com/developerworks/ru/library/cl-hypervisorcompare-xen/](http://www.ibm.com/developerworks/ru/library/cl-hypervisorcompare-xen/)
+[http://www.ibm.com/developerworks/ru/library/cl-hypervisorcompare-kvm/](http://www.ibm.com/developerworks/ru/library/cl-hypervisorcompare-kvm/)

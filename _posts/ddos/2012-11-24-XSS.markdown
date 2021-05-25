@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "XSS"
+date:   2012-11-24 06:51:36 +0400
+categories: XSS
+tags: ddos
+---
+
+# XSS
+[http://habrahabr.ru/company/ua-hosting/blog/270599/](http://habrahabr.ru/company/ua-hosting/blog/270599/)

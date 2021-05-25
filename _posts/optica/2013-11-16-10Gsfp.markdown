@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "10Gsfp"
+date:   2013-11-16 04:40:46 +0400
+categories: optica
+tags: optica
+---
+
+# 10Gsfp
+Multico XFP-10G-LR - это в Dlink
+
+X2-10GB-LR - это в каталист 4900

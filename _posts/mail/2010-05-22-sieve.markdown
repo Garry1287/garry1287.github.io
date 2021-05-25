@@ -1,0 +1,206 @@
+---
+layout: post
+title:  "sieve"
+date:   2010-05-22 13:12:57 +0400
+categories: mail
+tags: mail
+---
+
+# sieve
+require ["copy", "envelope"];
+if envelope :is "from" "i.dzuin@promsvyaz.ru" {
+redirect :copy "e.karnauhova@promsvyaz.ru";
+}
+
+
+
+cyradm -u ibd@sc.ru localhost
+85kzS2Z
+Работает
+
+
+
+sieveshell --user ibd@sc.ru --authname ibd@sc.ru localhost
+85kzS2Z
+
+% sieveshell -u cyradmin your.hostname.domain
+> put test.script
+> activate test
+> quit
+
+sieveshell --user a.pavlovich@sc.ru --authname a.pavlovich@sc.ru localhost
+Vd8fNvdS
+put /var/lib/sieve/a/a.pavlovich@sc.ru/baskov.script
+
+put /var/lib/sieve/domain/s/sc.ru/a/a^pavlovich/baskov.script
+activate baskov
+
+
+
+
+/var/lib/sieve/domain/s/sc.ru/a/a^pavlovich
+
+
+
+[http://cyrusimap.org/docs/cyrus-imapd/2.4.9/install-sieve.php](http://cyrusimap.org/docs/cyrus-imapd/2.4.9/install-sieve.php)
+[http://shigin.livejournal.com/128147.html](http://shigin.livejournal.com/128147.html)
+[http://www.woitasen.com.ar/2011/04/cyrus-sieve-scripts-in-shared-folders/](http://www.woitasen.com.ar/2011/04/cyrus-sieve-scripts-in-shared-folders/)
+[http://wiki.linuxwall.info/doku.php/en:ressources:astuces:sieve](http://wiki.linuxwall.info/doku.php/en:ressources:astuces:sieve)
+[http://www.cyrusimap.org/mediawiki/index.php/Cyrus_Sieve](http://www.cyrusimap.org/mediawiki/index.php/Cyrus_Sieve)
+[http://www.delouw.ch/linux/Postfix-Cyrus-Web-cyradm-HOWTO/html/cyrus-config.html](http://www.delouw.ch/linux/Postfix-Cyrus-Web-cyradm-HOWTO/html/cyrus-config.html)
+[http://wiki.kolab.org/Filtering_Emails_on_the_Server](http://wiki.kolab.org/Filtering_Emails_on_the_Server)
+[http://sieve.info/](http://sieve.info/)
+[http://kb.vircom.com/Kbase/default.asp?id=1332&Lang=1&SID=](http://kb.vircom.com/Kbase/default.asp?id=1332&Lang=1&SID=)
+[https://www.tty1.net/blog/2011/sieve-tutorial_en.html](https://www.tty1.net/blog/2011/sieve-tutorial_en.html)
+[http://wiki2.dovecot.org/Pigeonhole/Sieve/Examples](http://wiki2.dovecot.org/Pigeonhole/Sieve/Examples)
+[https://secure.gold.ac.uk/sieve-new/howto.php](https://secure.gold.ac.uk/sieve-new/howto.php)
+[https://ru.wikipedia.org/wiki/Sieve](https://ru.wikipedia.org/wiki/Sieve)
+[https://www.tty1.net/blog/2011/sieve-tutorial_en.html](https://www.tty1.net/blog/2011/sieve-tutorial_en.html)
+[https://en.wikipedia.org/wiki/Sieve_%28mail_filtering_language%29](https://en.wikipedia.org/wiki/Sieve_%28mail_filtering_language%29)
+[https://docs.astro.columbia.edu/wiki/SieveExamples](https://docs.astro.columbia.edu/wiki/SieveExamples)
+[http://help.altn.com/securitygateway/en/index.html?sieve_creating_scripts.htm](http://help.altn.com/securitygateway/en/index.html?sieve_creating_scripts.htm)
+[http://best-server.at.ua/publ/10-1-0-26](http://best-server.at.ua/publ/10-1-0-26)
+[https://htmlweb.ru/php/function/cyrus.php](https://htmlweb.ru/php/function/cyrus.php)
+[https://cyrusimap.org/mediawiki/index.php/Cyrus_Sieve](https://cyrusimap.org/mediawiki/index.php/Cyrus_Sieve)
+
+Cyrus mysql
+[http://www.azure.pp.ua/ru/articles/3-Mnogodomennaya_pochtovaya_sistema_na_baze_postfix_+_cyrus-imapd_+_MySQL.html](http://www.azure.pp.ua/ru/articles/3-Mnogodomennaya_pochtovaya_sistema_na_baze_postfix_+_cyrus-imapd_+_MySQL.html)
+
+
+[http://sysadmins.ru/topic340663.html](http://sysadmins.ru/topic340663.html)
+
+Озадачился тут наладить vacation на конкретных ящиках. Вроде ничего сложного, но не работает. Итак, все по порядку:
+
+Код:	
+msk# uname -a
+FreeBSD msk.domain.ru 8.0-RELEASE FreeBSD 8.0-RELEASE #3: Mon Jun  7 14:36:19 MSD 2010     tipoadmin@msk.domain.ru:/usr/obj/usr/src/sys/DRUGOE  i386
+msk#	
+
+
+кусок imapd.conf непосредственно относящееся к теме:
+
+Код:	
+sieveusehomedir: false
+sievedir: /var/imap/sieve
+sendmail: /usr/local/sbin/sendmail	
+
+
+проверка сива:
+
+Код:	
+msk# telnet msk sieve
+Trying 77.73.234.121...
+Connected to msk.domain.ru.
+Escape character is '^]'.
+"IMPLEMENTATION" "Cyrus timsieved v2.3.15"
+"SASL" "DIGEST-MD5 CRAM-MD5"
+"SIEVE" "comparator-i;ascii-numeric fileinto reject vacation imapflags notify envelope relational regex subaddress copy"
+OK
+logout
+OK "Logout Complete"
+Connection closed by foreign host.
+msk#	
+
+
+собственно скрипт:
+
+Код:	
+require ["vacation","fileinto"];
+if address :contains "To" "pupkin@domain.ru"
+{
+vacation "test vacation";
+}	
+
+
+активируем его:
+
+Код:	
+sieveshell --user=pupkin --authname=admin msk
+>put /var/imap/sieve/p/pupkin/test
+>activate test
+>quit	
+
+
+в папке юзера появляется:
+
+Код:	
+@defaultbc
+test
+test.bc
+test.script	
+
+
+пробуем послать пупкину письмо, оно приходит, vacation не происходит Shocked
+в логах сендмейла все стандартно, в логе debug.log присутсвуют строчки:
+
+Код:	
+Feb 16 12:54:54 msk lmtpunix[67356]: accepted connection
+Feb 16 12:54:54 msk lmtpunix[67356]: lmtp connection preauth'd as postman
+Feb 16 12:54:54 msk lmtpunix[67356]: duplicate_check: <711730904.20120216125149@yandex.ru>     user.pupkin             0
+Feb 16 12:54:54 msk lmtpunix[67356]: duplicate_check: <711730904.20120216125149@yandex.ru>     user.pupkin             0
+Feb 16 12:54:54 msk lmtpunix[67356]: mystore: starting txn 2147619404
+Feb 16 12:54:54 msk lmtpunix[67356]: mystore: committing txn 2147619404
+Feb 16 12:54:54 msk lmtpunix[67356]: duplicate_mark: <711730904.20120216125149@yandex.ru>      user.pupkin             1329382494 3310         
+Feb 16 12:54:54 msk lmtpunix[67356]: mystore: starting txn 2147619405
+Feb 16 12:54:54 msk lmtpunix[67356]: mystore: committing txn 2147619405
+Feb 16 12:54:54 msk lmtpunix[67356]: duplicate_mark: <711730904.20120216125149@yandex.ru>      .pupkin+@.sieve.        1329382494 0   
+
+
+
+ну и в теле письма сив отмечается:
+
+Код:	
+Return-Path: <kto-to@yandex.ru>
+Received: from mail.domain.ru ([unix socket])
+         by msk.domain.ru (Cyrus v2.3.15) with LMTPA;
+         Thu, 16 Feb 2012 12:54:54 +0400
+X-Sieve: CMU Sieve 2.3
+Received: from forward14.mail.yandex.net (forward14.mail.yandex.net [95.108.130.92])	
+
+
+Собственно вот и все, пните гуру в нужную сторону плз.
+
+
+
+
+
+
+
+
+
+Алевтина
+
+
+
+
+
+
+
+require ["copy", "envelope"];
+if envelope :is "from" "v.baskov@starttelecom.ru" {
+redirect :copy "e.karnauhova@promsvyaz.ru";
+}
+
+require ["copy", "envelope"];
+if envelope "to" "a.lebedkova@promsvyaz.ru"{
+redirect :copy "alevtina-l48@yandex.ru";
+}
+
+
+
+
+
+require ["copy"];
+if envelope "to" "a.lebedkova@promsvyaz.ru"{
+redirect :copy "alevtina-l48@yandex.ru";
+}
+
+require ["copy"];
+if address :all"{
+redirect :copy "alevtina-l48@yandex.ru";
+}
+
+require ["copy"];
+if size :over 1k{
+redirect :copy "alevtina-l48@yandex.ru";
+}

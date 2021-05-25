@@ -1,0 +1,272 @@
+---
+layout: post
+title:  "iperf"
+date:   2013-04-18 15:51:50 +0400
+categories: Networking
+tags: Networking
+---
+
+# iperf
+iperf
+
+
+
+Для tcp
+iperf -c 192.168.1.188 
+iperf -s
+
+-b, --bandwidth #[KM] for UDP, bandwidth to send at in bits/sec (default 1 Mbit/sec, implies -u) - используемая полоса для UDP (По умолчанию 1Mbit/sec)
+
+Для udp
+iperf -u -c 192.168.1.188  
+
+
+
+
+iperf -u -s
+
+Для изменения длины пакета используется ключ -l length
+Следует только помнить, что при length=0 реальная длина Ethernet-фрейма будет составлять 54 байта и делать в своих расчётах соответствующую поправку.
+
+Для изменения полосы трафика используется ключ -b bandwidth. 
+Параметр bandwidth выражается в битах в секунду и может содержать десятичную точку и суффиксы k и M, соответствующие приставкам кило- и мега-.
+
+
+Мы можем запустить несколько экземпляров клиентов и серверов на одной и той же машине. 
+Для развязки трафика используется назначение разных портов при помощи параметра -p port его значение на клиенте и 
+соответствующем сервере должно быть одинаковым (по умолчанию, он имеет значение 5001).
+
+В файлах помощи вы найдёте ещё параметр -S, позволяющий устанавливать значение Type Of Servise (TOS) в IP заголовке. 
+Вынужден вас разочаровать, под Windows это не работает. (Что характерно, я не смог установить это поле и в стандартном ping для Windows).
+
+
+
+Запуск сервера в UDP-режиме с выводом результатов раз в секунду, на порту 65005
+
+iperf -u -s -i1 -p 65005
+
+Тестирование UDP c длиной 100 байт со скоростью 20 Кбит/с в течение 180 секунд (имитация VoIP трафика, запускать нужно в обе стороны).
+
+iperf -u -c server_host -l100 -b20k -t180
+
+Передать 10 мегабайт данных на порт 65005
+
+iperf -n 10m -p 65005 -c server_host
+
+Вывод:
+
+[ ID] Interval       Transfer     Bandwidth       
+[  3] 0.0- 12.0 sec   10.0 MBytes   6.97 Mbits/sec 
+
+[http://bloggik.net/index.php/articles/networks/29/112-ethernet-test-speed](http://bloggik.net/index.php/articles/networks/29/112-ethernet-test-speed)
+
+[  3] MSS size 1448 bytes (MTU 1500 bytes, ethernet)
+
+
+
+На оптических линиях связи, размер jitter допускается не более 5.000 ms!
+
+
+
+
+Round Trip Time - RTT Время между отправкой запроса и получением ответа 
+― Количество проверочных пакетов: 1000 шт
+
+― Время ожидания ответа: 1 секунда
+
+― Размер полезной нагрузки ICMP: от 32 байт до 1472 байт
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Измерения рекомендуется производить не менее чем на трехминутном интервале.
+
+Ниже приведен пример использования утилиты. В качестве PC используются две Linux-машины Huan 172.16.12.1 (сервер) 
+и Lizard 172.16.10.1 (клиент). На серверной стороне выполняется команда
+
+iperf -s -p 1111
+
+после этого на клиентской стороне выполняется команда
+
+iperf -c 172.16.12.1 --format k -m -p 1111 -t 180
+
+Отчет со стороны сервера:
+
+[maxim@huan bin]$ ~/iperf/iperf -s -p 1111
+------------------------------------------------------------
+Server listening on TCP port 1111
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[ 6] local 172.16.12.1 port 1111 connected with 172.16.10.1 port 43410
+[ ID] Interval Transfer Bandwidth
+[ 6] 0.0-180.1 sec 79.6 MBytes 3.71 Mbits/sec
+
+Отчет со стороны клиента:
+
+[maxim@lizard bin]$ ~/iperf/iperf -c 172.16.12.1 --format k -m -p 1111 -t 180
+------------------------------------------------------------
+Client connecting to 172.16.12.1, TCP port 1111
+TCP window size: 16.0 KByte (default)
+------------------------------------------------------------
+[ 5] local 172.16.10.1 port 43410 connected with 172.16.12.1 port 1111
+[ ID] Interval Transfer Bandwidth
+[ 5] 0.0-180.2 sec 81488 KBytes 3705 Kbits/sec
+[ 5] MSS size 1444 bytes (MTU 1500 bytes, ethernet)
+
+в данном случае измерялся 4M канал, реально измерения показали емкость на 7% меньше.
+ Допустимая погрешность измерения до 10-15% определяется ростом очередей на маршрутизаторе при утилизации физического канала свыше 80%.
+ Измерения полосы на 4M физическом канале, скорость которого ограничена механизмом CAR до 2M показывают следующие результаты:
+
+Отчет со стороны сервера:
+
+[ 6] local 172.16.12.1 port 1111 connected with 172.16.10.1 port 43475
+[ ID] Interval Transfer Bandwidth
+[ 6] 0.0-10.1 sec 2.52 MBytes 2.09 Mbits/sec
+
+Отчет со стороны клиента:
+
+[maxim@lizard bin]$ ~/iperf/iperf -c 172.16.12.1 --format k -m -p 1111 -t 10
+------------------------------------------------------------
+Client connecting to 172.16.12.1, TCP port 1111
+TCP window size: 16.0 KByte (default)
+------------------------------------------------------------
+[ 5] local 172.16.10.1 port 43475 connected with 172.16.12.1 port 1111
+[ ID] Interval Transfer Bandwidth
+[ 5] 0.0-10.2 sec 2584 KBytes 2085 Kbits/sec
+[ 5] MSS size 1444 bytes (MTU 1500 bytes, ethernet)
+
+Как видим, предположения о погрешности при физическом ограничении канала оказались верными.
+
+
+
+
+
+
+
+
+
+
+Тестирование сервера UDP
+
+iperf -u -c 192.168.1.135 -l 100 -d -S 0xa0
+
+iperf -u -c 192.168.1.135 -b 30M -t 60 -l 100 -d
+
+
+
+
+[root@sapphire ~]# iperf -u -c 192.168.1.135 -b 30M -t 60 -l 100 -d
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 100 byte datagrams
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 192.168.1.135, UDP port 5001
+Sending 100 byte datagrams, IPG target: 26.67 us (kalman adjust)
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+[  4] local 192.168.1.11 port 37635 connected with 192.168.1.135 port 5001
+[  3] local 192.168.1.11 port 5001 connected with 192.168.1.135 port 50143
+[ ID] Interval       Transfer     Bandwidth        Jitter   Lost/Total Datagrams
+[  3]  0.0-23.5 sec  80.1 MBytes  28.6 Mbits/sec   0.465 ms 1379291/2219211 (62%)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Двойной тест на сервере
+------------------------------------------------------------
+Client connecting to 10.192.11.53, UDP port 5001
+Sending 800 byte datagrams, IPG target: 6103.52 us (kalman adjust)
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+[  6] local 10.192.11.22 port 50251 connected with 10.192.11.53 port 5001
+[  3]  0.0-13.7 sec  1.25 MBytes   764 Kbits/sec   0.239 ms    0/ 1640 (0%)
+[  6]  0.0-10.0 sec  1.25 MBytes  1.05 Mbits/sec
+[  6] Sent 1640 datagrams
+read failed: Message too long
+[  6] Server Report:
+[  6]  0.0-10.0 sec  1.25 MBytes  1.05 Mbits/sec   0.210 ms    0/ 1640 (0%)
+
+
+
+[  4]  0.0-60.0 sec  35.8 MBytes  5.00 Mbits/sec   0.097 ms    0/46876 (0%)
+[SUM]  0.0-60.0 sec  37.0 MBytes  5.17 Mbits/sec   0.239 ms    0/48516 (0%)
+[  5]  0.0-60.0 sec  35.8 MBytes  5.00 Mbits/sec
+[  5] Sent 46876 datagrams
+[  5] Server Report:
+[  5] 0.00-60.00 sec  35.8 MBytes  5.00 Mbits/sec   0.237 ms    0/46876 (0%) 120.372/119.154/147.220/ 0.121 ms  781 pps
+
+
+
+Один клиент
+[root@ruby ~]#  iperf -u -c 10.192.11.22 -d -l 800 -b 5M -t 60
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 800 byte datagrams
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Client connecting to 10.192.11.22, UDP port 5001
+Sending 800 byte datagrams, IPG target: 1280.00 us (kalman adjust)
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+[  4] local 10.192.11.53 port 56579 connected with 10.192.11.22 port 5001
+[  3] local 10.192.11.53 port 5001 connected with 10.192.11.22 port 49113
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-60.0 sec  35.8 MBytes  5.00 Mbits/sec
+[  4] Sent 46876 datagrams
+[  3]  0.0-60.0 sec  35.8 MBytes  5.00 Mbits/sec   0.238 ms    0/46876 (0%)
+[  4] Server Report:
+[  4]  0.0-60.0 sec  35.8 MBytes  5.00 Mbits/sec   0.097 ms    0/46876 (0%)
+
+
+
+Второй клиент
+ iperf -u -c 10.192.11.22 -d -l 800 -S 0xa0
+------------------------------------------------------------
+Client connecting to 10.192.11.22, UDP port 5001
+Sending 800 byte datagrams, IPG target: 6103.52 us (kalman adjust)
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+------------------------------------------------------------
+Server listening on UDP port 5001
+Receiving 800 byte datagrams
+UDP buffer size:  208 KByte (default)
+------------------------------------------------------------
+[  3] local 10.192.11.53 port 32880 connected with 10.192.11.22 port 5001
+[  4] local 10.192.11.53 port 5001 connected with 10.192.11.22 port 50251
+[ ID] Interval       Transfer     Bandwidth
+[  3]  0.0-10.0 sec  1.25 MBytes  1.05 Mbits/sec
+[  3] Sent 1640 datagrams
+[  4]  0.0-10.0 sec  1.25 MBytes  1.05 Mbits/sec   0.211 ms    0/ 1640 (0%)
+[  3] WARNING: did not receive ack of last datagram after 10 tries.
+

@@ -1,0 +1,326 @@
+---
+layout: post
+title:  "lacp"
+date:   2017-10-05 02:37:14 +0300
+categories: Networking
+tags: Networking
+---
+
+# lacp
+LACP - 802.3ad
+есть L2 и L3 агрегация портов
+для L3 создаётся виртуальный интерфейс (можно использовать маршрутизацию)
+для L2 используется физический (только коммутация)
+
+По идее надо на интерфейсах только дать команды
+channel-group 1 mode active 
+channel-group 1 mode passive
+
+Одну с одной стороны, другую с другой
+
+
+Настройка EtherChannel 2го уровня с помощью LACP
+
+
+
+Перед настройкой агрегирования лучше выключить физические интерфейсы. Достаточно отключить их с одной стороны (в примере на sw1), затем настроить агрегирование с двух сторон и включить интерфейсы.
+
+Настройка EtherChannel на sw1:
+
+sw1(config)# interface range f0/11-14
+sw1(config-if-range)# shutdown
+sw1(config-if-range)# channel-group 1 mode active
+Creating a port-channel interface Port-channel 1
+
+Настройка EtherChannel на sw2:
+
+sw2(config)# interface range f0/11-14
+sw2(config-if-range)# channel-group 1 mode passive
+Creating a port-channel interface Port-channel 1
+
+Включение физических интерфейсов на sw1:
+
+sw1(config)# interface range f0/11-14
+sw1(config-if-range)# no shutdown
+
+[править] Просмотр информации
+
+Суммарная информация о состоянии Etherchannel:
+
+sw1# show etherchannel summary
+Flags:  D - down        P - bundled in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+
+        M - not in use, minimum links not met
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+-----------------------------------------------
+1      Po1(SU)         LACP      Fa0/11(P)   Fa0/12(P)   Fa0/13(P)
+                                 Fa0/14(P)
+
+Информация о port-channel на sw1:
+
+sw1#sh etherchannel port-channel
+                Channel-group listing:
+                ----------------------
+
+Group: 1
+----------
+                Port-channels in the group:
+                ---------------------------
+
+Port-channel: Po1    (Primary Aggregator)
+
+------------
+
+Age of the Port-channel   = 0d:00h:14m:21s
+Logical slot/port   = 1/0          Number of ports = 4
+HotStandBy port = null
+Port state          = Port-channel Ag-Inuse
+Protocol            =   LACP
+Port security       = Disabled
+
+Ports in the Port-channel:
+
+Index   Load   Port     EC state        No of bits
+------+------+------+------------------+-----------
+  0     00     Fa0/11   Active             0
+  0     00     Fa0/12   Active             0
+  0     00     Fa0/13   Active             0
+  0     00     Fa0/14   Active             0
+
+Time since last port bundled:    0d:00h:01m:49s    Fa0/13
+Time since last port Un-bundled: 0d:00h:04m:20s    Fa0/14
+
+Информация о port-channel на sw2:
+
+sw2#sh etherchannel port-channel
+                Channel-group listing:
+                ----------------------
+
+Group: 1
+----------
+                Port-channels in the group:
+                ---------------------------
+
+Port-channel: Po1    (Primary Aggregator)
+
+------------
+
+Age of the Port-channel   = 0d:00h:13m:49s
+Logical slot/port   = 2/1          Number of ports = 4
+HotStandBy port = null
+Port state          = Port-channel Ag-Inuse
+Protocol            =   LACP
+Port security       = Disabled
+
+Ports in the Port-channel:
+
+Index   Load   Port     EC state        No of bits
+------+------+------+------------------+-----------
+  0     00     Fa0/11   Passive            0
+  0     00     Fa0/12   Passive            0
+  0     00     Fa0/13   Passive            0
+  0     00     Fa0/14   Passive            0
+
+Time since last port bundled:    0d:00h:03m:48s    Fa0/13
+Time since last port Un-bundled: 0d:00h:06m:18s    Fa0/14
+
+Информация LACP о локальном коммутаторе:
+
+sw1#sh lacp 1 internal
+Flags:  S - Device is requesting Slow LACPDUs
+        F - Device is requesting Fast LACPDUs
+        A - Device is in Active mode       P - Device is in Passive mode
+
+Channel group 1
+                            LACP port     Admin     Oper    Port        Port
+Port      Flags   State     Priority      Key       Key     Number      State
+Fa0/11    SA      bndl      32768         0x1       0x1     0xC         0x3D
+Fa0/12    SA      bndl      32768         0x1       0x1     0xD         0x3D
+Fa0/13    SA      bndl      32768         0x1       0x1     0x16        0x3D
+Fa0/14    SA      bndl      32768         0x1       0x1     0x17        0x3D
+sw1#
+
+Информация LACP об удаленном коммутаторе:
+
+sw1#show lacp 1 neighbor
+Flags:  S - Device is requesting Slow LACPDUs
+        F - Device is requesting Fast LACPDUs
+        A - Device is in Active mode       P - Device is in Passive mode
+
+Channel group 1 neighbors
+
+Partner's information:
+
+                  LACP port                        Admin  Oper   Port    Port
+Port      Flags   Priority  Dev ID          Age    key    Key    Number  State
+Fa0/11    SP      32768     000a.b8ab.eb80   5s    0x0    0x1    0x10E   0x3C
+Fa0/12    SP      32768     000a.b8ab.eb80  13s    0x0    0x1    0x10F   0x3C
+Fa0/13    SP      32768     000a.b8ab.eb80   5s    0x0    0x1    0x110   0x3C
+Fa0/14    SP      32768     000a.b8ab.eb80  16s    0x0    0x1    0x111   0x3C
+sw1#
+
+Счетчики LACP:
+
+sw1# show lacp 1 counters
+             LACPDUs         Marker      Marker Response    LACPDUs
+Port       Sent   Recv     Sent   Recv     Sent   Recv      Pkts Err
+---------------------------------------------------------------------
+Channel group: 1
+Fa0/11      13     11       0      0        0      0         0
+Fa0/12      13     10       0      0        0      0         0
+Fa0/13      25     22       0      0        0      0         0
+Fa0/14      13     11       0      0        0      0         0
+
+LACP system ID:
+
+sw1# sh lacp sys-id
+32768, 0012.0111.e580
+
+
+
+
+Для коммутатора A (на портах 1-8 включено
+автосогласование)
+1. Создайте группу агрегирования
+create link_aggregation group_id 1 type lacp
+create link_aggregation group_id 2 type lacp
+config link_aggregation algorithm mac_destination
+Ком2. Задайте членов этой группы
+config link_aggregation group_id 1 master_port 1 ports
+1-2 state enabled
+config lacp ports 1-2 mode active
+Коммутаconfig link_aggregation group_id 2 master_port 3 ports
+3-4 state enabled
+config lacp ports 3-4 mode active
+Для коммутаторов B и C (на портах 1-4 включено
+автосогласование)
+Ко1. Создайте группу агрегирования
+create link_aggregation group_id 1 type lacp
+config link_aggregation algorithm mac_source
+2. Задайте членов этой группы
+config link_aggregation group_id 1 master_port 1 ports
+1-2 state enabled
+
+
+
+
+
+
+Обязателен одинаковый набор вланов
+
+config link_aggregation algorithm mac_source
+create link_aggregation group_id 1 type lacp
+config link_aggregation group_id 1 master_port 23 ports 23-24 state enable
+config lacp_port 1-27 mode passive
+
+
+
+
+
+interface FastEthernet0/3
+ description #Link 1 MSTP
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 22,2610,2620,2630,2640,2650,2660
+ switchport mode trunk
+ power inline never
+ load-interval 30
+ storm-control broadcast level 50.00
+ channel-protocol lacp
+ channel-group 1 mode active
+ spanning-tree mst 2 port-priority 64
+end
+
+k9-s6#sh run int Fa0/4
+Building configuration...
+
+Current configuration : 364 bytes
+!
+interface FastEthernet0/4
+ description #Link 2 MSTP
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 22,2610,2620,2630,2640,2650,2660
+ switchport mode trunk
+ power inline never
+ load-interval 30
+ storm-control broadcast level 50.00
+ no cdp enable
+ channel-protocol lacp
+ channel-group 1 mode active
+ spanning-tree mst 1 port-priority 64
+
+
+
+
+
+
+create link_aggregation group_id 12 type lacp
+config link_aggregation group_id 12 master_port 21 ports 21-22 state enable
+config lacp_port 1-27 mode passive
+
+
+[http://dlink.ru/ru/faq/62/250.html](http://dlink.ru/ru/faq/62/250.html)
+
+
+
+ channel-protocol lacp
+ channel-group 1 mode passive
+
+ channel-protocol lacp
+ channel-group 1 mode passive
+
+
+
+
+create link_aggregation group_id 12 type lacp
+config link_aggregation group_id 12 master_port 1:12 ports 1:12,2:12 state enable
+config lacp_port 1:12 mode active
+config lacp_port 2:12 mode active
+
+
+
+
+
+
+
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 22,2610,2620,2630,2640,2650,2660
+ switchport mode trunk
+
+
+!
+interface FastEthernet0/3
+ description #Link 1 MSTP
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 22,26,1999,2610,2620,2630,2640,2650,2660
+ switchport mode trunk
+ power inline never
+ load-interval 30
+ storm-control broadcast level 50.00
+ channel-protocol lacp
+ channel-group 1 mode active
+
+!
+interface FastEthernet0/4
+ description #Link 2 MSTP
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 22,1999,2610,2620,2630,2640,2650,2660
+ switchport mode trunk
+ power inline never
+ load-interval 30
+ storm-control broadcast level 50.00
+ no cdp enable
+ channel-protocol lacp
+ channel-group 1 mode active

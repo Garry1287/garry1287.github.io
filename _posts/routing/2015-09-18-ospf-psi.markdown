@@ -1,0 +1,163 @@
+---
+layout: post
+title:  "ospf-psi"
+date:   2015-09-18 20:40:16 +0300
+categories: routing
+tags: routing
+---
+
+# ospf-psi
+Ospf в сети Промсвязь
+13 влан
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+81.20.192.11      0   2WAY/DROTHER    00:00:37    192.168.200.1   GigabitEthernet0/1.1021
+81.20.192.51      0   2WAY/DROTHER    00:00:36    192.168.200.4   GigabitEthernet0/1.1021
+81.20.192.53      0   2WAY/DROTHER    00:00:39    192.168.200.6   GigabitEthernet0/1.1021
+192.168.200.3     1   FULL/DR         00:00:37    192.168.200.3   GigabitEthernet0/1.1021
+
+
+81.20.192.5       1   2WAY/DROTHER    00:00:32    81.20.192.49    GigabitEthernet0/0.13
+81.20.192.50      1   FULL/BDR        00:00:34    81.20.192.50    GigabitEthernet0/0.13
+81.20.192.51      0   2WAY/DROTHER    00:00:32    81.20.192.51    GigabitEthernet0/0.13
+81.20.192.52     50   2WAY/DROTHER    00:00:34    81.20.192.52    GigabitEthernet0/0.13
+81.20.192.53      0   2WAY/DROTHER    00:00:39    81.20.192.53    GigabitEthernet0/0.13
+81.20.192.55      0   2WAY/DROTHER    00:00:30    81.20.192.55    GigabitEthernet0/0.13
+81.20.192.58      1   FULL/DR         00:00:32    81.20.192.58    GigabitEthernet0/0.13
+
+
+81.20.192.50      1   FULL/BDR        00:00:37    81.20.192.50    Vlan13
+81.20.192.51      0   2WAY/DROTHER    00:00:33    81.20.192.51    Vlan13
+81.20.192.52     50   2WAY/DROTHER    00:00:36    81.20.192.52    Vlan13
+81.20.192.53      0   2WAY/DROTHER    00:00:30    81.20.192.53    Vlan13
+81.20.192.55      0   2WAY/DROTHER    00:00:31    81.20.192.55    Vlan13
+81.20.192.58      1   FULL/DR         00:00:38    81.20.192.58    Vlan13
+81.20.192.62      0   2WAY/DROTHER    00:00:39    81.20.192.62    Vlan13
+
+
+81.20.192.5 - ctd-s1
+81.20.192.50 - ctd-s6  (так как ему выставлена 1)
+81.20.192.51 - ctd-c5
+81.20.192.52 - ctd-c6      Даже избирая число 50 - он не выбирается, а почему - потому что чем меньше cost, тем лучше
+81.20.192.53 - quartz
+81.20.192.55 - radium.sc.ru  
+81.20.192.58 - redback        (DR)
+81.20.192.62 - k9-c0	тут cost 0
+
+
+
+Ctd-s6
+81.20.203.10      1   FULL/DR         00:00:31    81.20.203.10    Vlan38 (Включит Грязинскую циску)
+81.20.192.5       1   FULL/DROTHER    00:00:33    81.20.192.49    Vlan13
+81.20.192.51      0   FULL/DROTHER    00:00:34    81.20.192.51    Vlan13
+81.20.192.52     50   FULL/DROTHER    00:00:32    81.20.192.52    Vlan13
+81.20.192.53      0   FULL/DROTHER    00:00:39    81.20.192.53    Vlan13
+81.20.192.55      0   FULL/DROTHER    00:00:30    81.20.192.55    Vlan13
+81.20.192.58      1   FULL/DR         00:00:32    81.20.192.58    Vlan13
+81.20.192.62      0   FULL/DROTHER    00:00:35    81.20.192.62    Vlan13
+
+
+
+
+
+
+
+10 влан
+ctd-s1
+81.20.192.1       1   FULL/DROTHER    00:00:36    81.20.192.1     Vlan10
+81.20.192.2       0   FULL/DROTHER    00:00:38    81.20.192.2     Vlan10
+81.20.192.3       0   FULL/DROTHER    00:00:39    81.20.192.3     Vlan10
+81.20.192.4       1   FULL/DROTHER    00:00:36    81.20.192.4     Vlan10
+81.20.192.7       0   FULL/DROTHER    00:00:38    81.20.192.7     Vlan10
+81.20.192.8       0   FULL/DROTHER    00:00:38    81.20.192.8     Vlan10
+81.20.192.9       0   FULL/DROTHER    00:00:34    81.20.192.9     Vlan10
+81.20.192.10      0   FULL/DROTHER    00:00:37    81.20.192.10    Vlan10
+81.20.192.11      0   FULL/DROTHER    00:00:39    81.20.192.11    Vlan10
+81.20.192.12      1   FULL/DROTHER    00:00:39    81.20.192.12    Vlan10
+81.20.192.13      0   FULL/DROTHER    00:00:36    81.20.192.13    Vlan10
+81.20.192.14      0   FULL/DROTHER    00:00:36    81.20.192.14    Vlan10
+81.20.192.19      0   FULL/DROTHER    00:00:39    81.20.192.19    Vlan10
+81.20.192.20      0   FULL/DROTHER    00:00:38    81.20.192.20    Vlan10
+81.20.192.22     50   FULL/DR         00:00:38    81.20.192.22    Vlan10
+81.20.192.24      0   FULL/DROTHER    00:00:37    81.20.192.24    Vlan10
+81.20.192.26      1   INIT/DROTHER    00:00:32    81.20.192.26    Vlan10
+81.20.192.29      0   FULL/DROTHER    00:00:39    81.20.192.29    Vlan10
+
+
+
+ats45-c0
+81.20.192.22      1   FULL/DR         00:00:32    81.20.202.102   GigabitEthernet0/1.68
+
+81.20.192.1       1   2WAY/DROTHER    00:00:36    81.20.192.1     GigabitEthernet0/0.10
+81.20.192.2       0   2WAY/DROTHER    00:00:33    81.20.192.2     GigabitEthernet0/0.10
+81.20.192.3       0   2WAY/DROTHER    00:00:36    81.20.192.3     GigabitEthernet0/0.10
+81.20.192.4       1   2WAY/DROTHER    00:00:38    81.20.192.4     GigabitEthernet0/0.10
+81.20.192.5       1   FULL/BDR        00:00:35    81.20.192.5     GigabitEthernet0/0.10
+81.20.192.7       0   2WAY/DROTHER    00:00:33    81.20.192.7     GigabitEthernet0/0.10
+81.20.192.8       0   2WAY/DROTHER    00:00:34    81.20.192.8     GigabitEthernet0/0.10
+81.20.192.9       0   2WAY/DROTHER    00:00:35    81.20.192.9     GigabitEthernet0/0.10
+81.20.192.10      0   2WAY/DROTHER    00:00:39    81.20.192.10    GigabitEthernet0/0.10
+81.20.192.11      0   2WAY/DROTHER    00:00:33    81.20.192.11    GigabitEthernet0/0.10
+81.20.192.13      0   2WAY/DROTHER    00:00:33    81.20.192.13    GigabitEthernet0/0.10
+81.20.192.14      0   2WAY/DROTHER    00:00:36    81.20.192.14    GigabitEthernet0/0.10
+81.20.192.19      0   2WAY/DROTHER    00:00:39    81.20.192.19    GigabitEthernet0/0.10
+81.20.192.20      0   2WAY/DROTHER    00:00:30    81.20.192.20    GigabitEthernet0/0.10
+81.20.192.22     50   FULL/DR         00:00:39    81.20.192.22    GigabitEthernet0/0.10
+81.20.192.24      0   2WAY/DROTHER    00:00:39    81.20.192.24    GigabitEthernet0/0.10
+81.20.192.26      1   INIT/DROTHER    00:00:34    81.20.192.26    GigabitEthernet0/0.10
+81.20.192.29      0   2WAY/DROTHER    00:00:31    81.20.192.29    GigabitEthernet0/0.10
+
+
+81.20.192.1	ctd-c0
+81.20.192.2	mailman.promsvyaz.ru
+81.20.192.3	postman.sc.ru
+81.20.192.4	ats45-s0
+81.20.192.5	ctd-s1	(BDR)
+81.20.192.6	ruby (Выключен)
+81.20.192.7 	topaz.sc.ru
+81.20.192.8   	diamond
+81.20.192.9  	hosting.sc.ru
+81.20.192.10 	asa
+81.20.192.11 	emerald.sc.ru
+81.20.192.12    ats45-c0
+81.20.192.13  	cde-s0
+81.20.192.14	cde-c2     
+81.20.192.19   	sapphire.sc.ru
+81.20.192.20    ast.sc.ru
+81.20.192.21	ruby (адрес для netflow)
+81.20.192.22   	cde-c3 (DR)
+81.20.192.24 	ctd-c2
+81.20.192.26  	ХЗ
+81.20.192.29 	ctd-c3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.Почему не выбирается ctd-c6 (потому что он был введён позже - падал или что-то ещё) Uptime 22 часа
+Состояние Init для 26 адреса - Интерфейс обнаружил пакет Hello, но 
+
+
+
+
+
+[http://habrahabr.ru/post/162163/](http://habrahabr.ru/post/162163/)
+[http://habrahabr.ru/post/117110/](http://habrahabr.ru/post/117110/)
+[http://habrahabr.ru/post/117099/](http://habrahabr.ru/post/117099/)
+
+
++ BGP
+[http://habrahabr.ru/post/150969/](http://habrahabr.ru/post/150969/)

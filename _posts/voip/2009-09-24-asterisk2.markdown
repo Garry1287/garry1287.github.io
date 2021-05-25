@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "asterisk2"
+date:   2009-09-24 23:15:20 +0400
+categories: voip
+tags: voip
+---
+
+# asterisk2
+[http://www.pbxware.ru/blog/asterisk-2014/](http://www.pbxware.ru/blog/asterisk-2014/)
+[http://vk.com/asterisk_dubna](http://vk.com/asterisk_dubna)

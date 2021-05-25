@@ -1,0 +1,27 @@
+---
+layout: post
+title:  "маршрутизация_в_psi"
+date:   2010-12-15 11:25:49 +0300
+categories: PSI
+tags: PSI
+---
+
+# маршрутизация_в_psi
+B*    0.0.0.0/0 [20/0] via 87.245.241.133, 4w5d
+      1.0.0.0/8 is variably subnetted, 1382 subnets, 18 masks
+
+
+B*   0.0.0.0/0 [20/0] via 81.16.117.9, 04:14:15
+
+
+2 дефолта нам объявляются он провайдеров верхнего уровня
+neighbor 1.1.1.1 default-originate таким образом скорее всего
+
+Мы объявляем дефорлты в сеть с помощью ospf и команды default-information originate
+
+
+
+
+
+
+

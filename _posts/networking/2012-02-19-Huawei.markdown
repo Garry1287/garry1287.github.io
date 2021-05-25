@@ -1,0 +1,94 @@
+---
+layout: post
+title:  "Huawei"
+date:   2012-02-19 22:27:24 +0400
+categories: Networking
+tags: Networking
+---
+
+# Huawei
+[https://docs.google.com/folder/d/0B6wW18mYskvBMDc2MWM5ZTYtNjZiMC00ZDE3LWExZjktYzEyYjI3OTI4MDFh/edit?pli=1&docId=0B6wW18mYskvBMHJiVFFmZ1I3Mjg](https://docs.google.com/folder/d/0B6wW18mYskvBMDc2MWM5ZTYtNjZiMC00ZDE3LWExZjktYzEyYjI3OTI4MDFh/edit?pli=1&docId=0B6wW18mYskvBMHJiVFFmZ1I3Mjg)
+[http://vialovo.maxopka.su/hardware/7-ma5605](http://vialovo.maxopka.su/hardware/7-ma5605)
+
+Китайская компания Huawei выпускает dslam'ы MA5605
+
+Dslam'ы расширяемые, в начальной конфигурации - 16 портов.
+
+Иногда клиенты жалуются на частые разрывы соединения с Интернет.
+
+Причиной могут быть как вирусы, так и проблемы с телефонной линией от абонента до АТС.
+
+MA5605 не имеет web-интерфейса. Взаимодействие с пользователем осуществляется при помощи командной строки.
+
+Для того чтобы посмотреть параметры линии с dslam'а, необходимо сделать следующее:
+
+Пуск->Выполнить
+
+В появившемся окне набрать 'cmd' (без апострофов)
+
+Появится окно командной строки.
+
+Далее приведен пример с комментариями.
+
+telnet <ip адрес dslam>
+
+Huawei MA5605 Multi-service Access Module.
+
+ 
+
+Copyright(C) 1998-2006 by Huawei Technologies Co., Ltd.
+
+Current time is Sun  22:18:27, 2011/05/01.
+
+> User name (<20 chars): root // По умолчанию root
+
+> Password (<20 chars): // По умолчанию admin
+
+MA5605>enable
+
+MA5605#configure terminal
+
+MA5605(config)#interface adsl 0/1 // Здесь 0/1 означает, что порт находится на модуле 1
+
+// т. е. если порт находится на модуле 2 то следует ввести 0/2
+
+MA5605(config-ADSL-0/1)#show line operation 1 // Здесь 1 - номер порта на модуле.
+
+Current line Operating Mode                            : G992.3-Annex M // Режим модуляции
+
+Channel mode                                           : Interleaved
+
+Downstream channel bit swap                            : Disable
+
+Upstream channel bit swap                              : Disable
+
+Downstream channel rate(Kbps)                          : 1022 // Текущая скорость нисходящего потока
+
+Upstream channel rate(Kbps)                            : 248 // Текущая скорость восходящего потока
+
+Downstream channel noise margin(dB)                    : 14.1 // Соотношение сигнал/шум в нисходящем потоке
+
+Upstream channel noise margin(dB)                      : 25.5 // Соотношение сигнал/шум в восходящем потоке
+
+Downstream channel attenuation(dB)                     : 61.0 // Затухание сигнала в нисходящем потоке
+
+Upstream channel attenuation(dB)                       : 36.5 // Затухание сигнала в восходящем потоке
+
+Downstream interleaved channel delay(ms)               : 5
+
+Upstream interleaved channel delay(ms)                 : 3
+
+Downstream max attainable rate(Kbps)                   : 2880 // Максимальная скорость достижимая в нисходящем потоке
+
+Upstream max attainable rate(Kbps)                     : 1010 // Максимальная скорость достижимая в восходящем потоке
+
+Downstream output power(dBm)                           : 17.4 // Выходная мощность нисходящего потока
+
+Upstream output power(dBm)                             : 12.8 // Выходная мощность восходящего потока
+
+Стоит отметить, что разрывы соединения, чаще всего, обусловлены низким значением параметра  channel noise margin
+(соотношение сигнал/шум) - меньше 7-ми дБ,
+
+ 
+
+Для того чтобы увеличить значение этого параметра, нужно избегать скруток, неизолированных участков телефонного кабеля, использования "лапши" при прокладке линии в помещении. Если скрутки все же неизбежны, то провода в них нужно тщательно зачистить, а также пропаять и заизолировать место скрутки.

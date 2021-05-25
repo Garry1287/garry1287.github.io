@@ -1,0 +1,18 @@
+---
+layout: post
+title:  "cisco_tac"
+date:   2011-03-08 00:58:03 +0300
+categories: cisco_tac
+tags: cisco
+---
+
+# cisco_tac
+[http://www.cisco.com/web/RU/service/tac/russian_intro.html](http://www.cisco.com/web/RU/service/tac/russian_intro.html)
+[http://www.cisco.com/cisco/web/support/RU/cisco_worldwide_contacts.html](http://www.cisco.com/cisco/web/support/RU/cisco_worldwide_contacts.html)
+[http://www.cisco.com/web/RU/service/tac/russian_intro.html](http://www.cisco.com/web/RU/service/tac/russian_intro.html)
+[http://www.cisco.com/cisco/web/psa/maintain.html](http://www.cisco.com/cisco/web/psa/maintain.html)
+[http://software.cisco.com/download/navigator.html?mdfid=282770988&i=rm](http://software.cisco.com/download/navigator.html?mdfid=282770988&i=rm)
+[http://www.cisco.com/web/partners/services/resources/tsquickstart/downloads/Global_Technical_Services_Quick_Start_Guide.pdf](http://www.cisco.com/web/partners/services/resources/tsquickstart/downloads/Global_Technical_Services_Quick_Start_Guide.pdf)
+[https://sso.cisco.com/autho/forms/CDClogin.html](https://sso.cisco.com/autho/forms/CDClogin.html)
+www.cisco.com/en/US/products/ps10537/tsd_products_support_series_home.html
+[http://habrahabr.ru/company/muk/blog/167633/](http://habrahabr.ru/company/muk/blog/167633/)

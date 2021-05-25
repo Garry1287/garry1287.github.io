@@ -1,0 +1,175 @@
+---
+layout: post
+title:  "crypto"
+date:   2009-05-18 21:33:27 +0400
+categories: crypto
+tags: crypto
+---
+
+# crypto
+Классификация алгоритмов шифрования (шифров)
+    Классификация алгоритмов шифрования
+
+
+1. Симметричные (с секретным, единым ключом, одноключевые, single-key).
+1.1. Потоковые (шифрование потока данных):
+
+    с одноразовым или бесконечным ключом (infinite-key cipher);
+    с конечным ключом (система Вернама - Vernam);
+    на основе генератора псевдослучайных чисел (ПСЧ). 
+
+1.2. Блочные (шифрование данных поблочно):
+1.2.1. Шифры перестановки (permutation, P-блоки);
+1.2.2. Шифры замены (подстановки, substitution, S-блоки):
+
+    моноалфавитные (код Цезаря);
+    полиалфавитные (шифр Видженера, цилиндр Джефферсона, диск Уэтстоуна, Enigma); 
+
+1.2.3. составные (таблица 1):
+
+    Lucipher (фирма IBM, США);
+    DES (Data Encryption Standard, США);
+    FEAL-1 (Fast Enciphering Algoritm, Япония);
+    IDEA/IPES (International Data Encryption Algorithm/
+    Improved Proposed Encryption Standard, фирма Ascom-Tech AG, Швейцария);
+    B-Crypt (фирма British Telecom, Великобритания);
+    ГОСТ 28147-89 (СССР); * Skipjack (США). 
+
+2. Асимметричные (с открытым ключом, public-key):
+
+    Диффи-Хеллман DH (Diffie, Hellman);
+    Райвест-Шамир-Адлeман RSA (Rivest, Shamir, Adleman);
+    DSA
+    Эль-Гамаль ElGamal. 
+
+Кроме того, есть разделение алгоритмов шифрования на собственно шифры (ciphers) и коды (codes). Шифры работают с отдельными битами, буквами, символами. Коды оперируют лингвистическими элементами (слоги, слова, фразы). 
+
+[http://www.comizdat.com/index_.php?id=484&in=kpp_articles_id](http://www.comizdat.com/index_.php?id=484&in=kpp_articles_id)
+
+
+
+
+
+
+
+
+Форматы
+ Удлинители (.der, .pem, .key, cer и др.) только для удобства, чтобы легко определить, что находится внутри (ну, мы хотели верить, что содержание соответствует расширение). Различные платформы и устройства требуют SSL сертификаты в различных форматах.
+
+
+
+
+
+Форматы
+pem - это формат файла ключей и/или сертификатов - текстовый (Base64)
+der - бинарный
+
+
+Common Extensions
+
+    .CRT = The CRT extension is used for certificates. The certificates may be encoded as binary DER or as ASCII PEM. The CER and CRT extensions are nearly synonymous.  Most common among *nix systems (сертификаты)
+    .CER = alternate form of .crt (Microsoft Convention) You can use MS to convert .crt to .cer (.both DER encoded .cer, or base64[PEM] encoded .cer) (сертификаты)  
+        The .cer file extension is also recognized by IE as a command to run a MS cryptoAPI command (specifically rundll32.exe cryptext.dll,CryptExtOpenCER) which displays a dialogue for importing and/or viewing certificate contents.
+        (эти форматы нужны, потому что иногда Windows Explorer не распознаёт pem)
+    .KEY = The KEY extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII PEM.  (ключи)
+
+The only time CRT and CER can safely be interchanged is when the encoding type can be identical.  (ie  PEM encoded CRT = PEM encoded CER)
+
+
+PKCS#7 - формат PKCS#7 используется для запросов на сертификацию к CA(центр сертификации )и не может содержать секретного ключа
+
+PKCS # 12   P12 .p12 - пределяет формат файла, используемый для хранения и/или транспортировки закрытого ключа (en:Private key), цепочки доверия от сертификата пользователя до корневого сертификата удостоверяющего центра и списка отзыва сертификатов (CRL). Один из стандартов семейства Public-Key Cryptography Standards (PKCS), PKCS # 12 является преемником "PFX" от Microsoft. 
+Содержит X.509 public key certificates, X.509 private keys, X.509 CRLs, generic data
+Unlike .pem files, this container is fully encrypted. Openssl can turn this into a .pem file with both public and private keys:openssl pkcs12 -in file-to-convert.p12 -out converted-file.pe
+[https://ru.wikipedia.org/wiki/PKCS12](https://ru.wikipedia.org/wiki/PKCS12)
+PKCS 12 - это просто особый формат архива определённый стандартом, а pem и der формат (кодировка) файла. Отделый ключ или сертификат может быть формате pem, а в формате p12 быть не может, так как это архив состоящий из сертификатов, ключей
+Обычно в PKCS#12 экспортируется вся иерархия доверия, дабы при импорте не было проблем с отсутствиющими сертефикатами корневых и промежуточных удостоверяющих центров.
+
+клиент создаёт сертификат и отправляет свой публичный сертификат(PKCS#7) - это запрос на сертификацию
+Microsoft использует по умолчанию формат PKCS#12(в руководстве по openssl этот формат охарактеризован, как один большой баг :)
+                PKCS # 12 является преемником "PFX" от Microsoft. Термины "PKCS # 12 файл" и "PFX файл" иногда используются как синонимы.
+                PFX получил тяжелую критику, является одним из самых сложных криптографических протоколов, но тем не менее остается единственным
+                стандартным способом сегодня для хранения закрытых ключей и сертификатов в одном зашифрованном файле.
+
+Openssl по умолчанию использует формат PKCS#10
+
+
+
+
+
+pfx, p12 -- these are PKCS #12 container files, DER encoded. They
+contain not only certificates, but also private keys in encrypted form.
+
+
+cer -- this is an X.509 certificate in binary form, DER encoded.
+
+crt -- typically it is a binary X.509 certificate, encapsulated in text (base-64) encoding.
+
+p7b -- this is a PKCS #7 file, I think. PKCS #7 is a container which may
+contain plain data, signed data, encrypted data, or combination of
+these. It may also contain set of certificates needed to validate the
+certification chain. One of possible uses of PKCS #7 is, for example,
+recertification request -- PKCS #10 certification request encapsulated
+as plain data in PKCS #7 Signed Data
+
+
+
+стандарты криптографии общего ключа (PKCS)
+
+Промышленный формат запросов на сертификацию. Это сокращение используется как центром сертификации Domino, так и приложениями администрирования сертификатов серверов. 
+Таким образом, если сервер АС понимает формат PKCS, он поймет и запрос пользователя на сертификацию. Это необходимо при отправке запросов на сертификацию серверов во внешние АС, поскольку внешний АС должен распознавать формат PKCS.
+
+Мой мини-справочник по PKCS-ам:
+PKCS#7 - Подпись и сертификаты  (Cryptographic Message Syntax Standard) стандарт, публикуемый и поддерживаемый все той же RSA Laboratories, описываемый синтаксис криптографических сообщений.
+PKCS#8 - Секретные ключи
+PKCS#10 - Запрос к УЦ на выпуск сертификата (Certification Request Standard)  - CRS
+PKCS#11 - API для криптотокенов
+PKCS#12 - Хранилище секретных  ключей и сертификатов (Personal Information Exchange Syntax Standard)
+
+	
+Список отзыва сертификатов (CRL)
+	
+	
+	
+	
+	
+	
+[http://libnix.com/%D0%BA%D0%BE%D0%BD%D0%B2%D0%B5%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82%D0%BE%D0%B2pemp7bpfxder.html](http://libnix.com/%D0%BA%D0%BE%D0%BD%D0%B2%D0%B5%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82%D0%BE%D0%B2pemp7bpfxder.html)
+[https://elims.org.ua/blog/formaty-sertifikatov/](https://elims.org.ua/blog/formaty-sertifikatov/)
+	
+	
+	
+Нет Формат .key. Вы можете иметь в частной (или публичной) ключ в PEM или DER-кодировке. И вы можете иметь закрытый ключ в формате PKCS#1 или PKCS#8 Формат. Удлинители (.der, .pem, .key, cer и др.) только для удобства, чтобы легко определить, что находится внутри (ну, мы хотели верить, что содержание соответствует расширение).
+
+Команда openssl genrsa -out rsaprivkey.pem 1024 созданный закрытый ключ в формате PKCS#1 и PEM Формат кодирования. В руководстве вы упомянули, существуют дополнительные шаги:
+
+openssl rsa -in rsaprivkey.pem -pubout -outform DER -out rsapubkey.der
+openssl pkcs8 -topk8 -inform PEM -outform DER -in rsaprivkey.pem -out rsaprivkey.der -nocrypt
+
+Шаг 1 извлекает открытый ключ из rsaprivkey.pem и кодирует его в формате DER. Шаг 2 трансформирует закрытый ключ из файла PKCS#1 в PKCS#8 Формат (незашифрованных) и DER-кодировке.
+
+В руководстве также отмечается, что некоторые Java единого примера ожидает DSA ключи. Ключи, которые были созданы с помощью openssl genrsa -out rsaprivkey.pem 1024 являются ключами RSA.
+
+
+
+
+
+
+
+ Прислали мне тут на днях два файла, пусть будут, dep.crt и dep.key. Надо было их подсунуть в Tomcat. Так как опыта работы с сертификатами нет, пришлось порыть интернеты. Результат - получилось. Процедуру можно свести к следующим действиям:
+
+    Объединяем оба файла в один:
+
+    cat dep.key dep.crt > dep.pem
+
+    Конвертируем в PKCS12:
+
+    openssl pkcs12 -export -in dep.pem -out dep.p12
+
+    $ openssl pkcs12 -export -in dep.pem -out dep.p12
+    Enter Export Password:
+    Verifying - Enter Export Password:
+
+    Обязательно вводим пароль. Без него следующие шаги у меня не прошли.
+    Передаём "dep.p12" на целевой хост, при необходимости. (У меня были разные хосты и первые два пункта я делал на своей машине, а остальное - на целевой.)
+

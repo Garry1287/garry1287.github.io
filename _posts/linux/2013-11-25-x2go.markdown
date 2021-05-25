@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "x2go"
+date:   2013-11-25 14:04:54 +0400
+categories: linux
+tags: linux
+---
+
+# x2go
+Please try
+
+  $ sudo rm -f /var/lib/x2go/x2go_sessions
+  $ sudo x2godbadmin --createdb

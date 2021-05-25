@@ -1,0 +1,67 @@
+---
+layout: post
+title:  "ospf+ldp"
+date:   2010-04-16 16:50:30 +0400
+categories: routing
+tags: routing
+---
+
+# ospf+ldp
+[http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13684-12.html](http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13684-12.html)
+[http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13685-13.html](http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13685-13.html)
+[http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/12151-trouble-main.html](http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/12151-trouble-main.html)
+[http://blog.ine.com/2011/03/30/ospf-and-mtu-mismatch/](http://blog.ine.com/2011/03/30/ospf-and-mtu-mismatch/)
+[http://forum.lissyara.su/viewtopic.php?t=27950](http://forum.lissyara.su/viewtopic.php?t=27950)
+[http://4cug.wordpress.com/2012/10/02/the-curious-case-of-ospf-adjacency-mtu/](http://4cug.wordpress.com/2012/10/02/the-curious-case-of-ospf-adjacency-mtu/)
+[https://mellowd.co.uk/ccie/?p=3361](https://mellowd.co.uk/ccie/?p=3361)
+[http://www.sadikhov.com/forum/index.php?/topic/166991-ospf/](http://www.sadikhov.com/forum/index.php?/topic/166991-ospf/)
+[http://blog.ine.com/2011/03/30/ospf-and-mtu-mismatch/](http://blog.ine.com/2011/03/30/ospf-and-mtu-mismatch/)
+[http://blog.ipspace.net/2009/11/ip-ospf-mtu-ignore-is-dangerous-command.html](http://blog.ipspace.net/2009/11/ip-ospf-mtu-ignore-is-dangerous-command.html)
+[http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/9237-9.html#wat](http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/9237-9.html#wat)
+[http://www.learnios.com/viewtopic.php?f=8&t=19316](http://www.learnios.com/viewtopic.php?f=8&t=19316)
+[http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13684-12.html#neighbors](http://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13684-12.html#neighbors)
+[http://www.cisco.com/cisco/web/support/RU/9/92/92089_9.html](http://www.cisco.com/cisco/web/support/RU/9/92/92089_9.html)
+
+
+2015/02/20 22:58:42 OSPF: nsm_change_state(81.20.192.12, Full -> Init): scheduling new router-LSA origination
+2015/02/20 22:58:42 OSPF: DR-Election[1st]: Backup 81.20.192.4
+2015/02/20 22:58:42 OSPF: DR-Election[1st]: DR     81.20.192.5
+2015/02/20 22:58:44 OSPF: Link State Acknowledgment: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:58:49 OSPF: Link State Acknowledgment: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:58:55 OSPF: nsm_change_state(81.20.192.5, Full -> Init): scheduling new router-LSA origination
+2015/02/20 22:58:55 OSPF: DR-Election[1st]: Backup 81.20.192.4
+2015/02/20 22:58:55 OSPF: DR-Election[1st]: DR     81.20.192.4
+2015/02/20 22:59:29 OSPF: Link State Update: Neighbor[81.20.192.5] state Init is less than Exchange
+2015/02/20 22:59:31 OSPF: Link State Acknowledgment: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:59:36 OSPF: Link State Update: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:59:37 OSPF: Link State Update: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:59:38 OSPF: Link State Update: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:59:38 OSPF: Link State Update: Neighbor[81.20.192.12] state Init is less than Exchange
+2015/02/20 22:59:38 OSPF: Link State Acknowledgment: Neighbor[81.20.192.5] state Init is less than Exchange
+2015/02/20 22:59:45 OSPF: Link State Acknowledgment: Neighbor[81.20.192.5] state Init is less than Exchange
+2015/02/20 22:59:49 OSPF: ospfTrapNbrStateChange trap sent: 81.20.192.12 now Init/DROther
+2015/02/20 22:59:49 OSPF: DR-Election[1st]: Backup 81.20.192.12
+2015/02/20 22:59:49 OSPF: DR-Election[1st]: DR     81.20.192.12
+2015/02/20 22:59:49 OSPF: ospfTrapNbrStateChange trap sent: 81.20.192.4 now ExStart/DROther
+2015/02/20 22:59:49 OSPF: Packet[DD]: Neighbor 81.20.192.12 Negotiation done (Master).
+2015/02/20 22:59:49 OSPF: nsm_change_state(81.20.192.12, Loading -> Full): scheduling new router-LSA origination
+2015/02/20 22:59:55 OSPF: ospfTrapNbrStateChange trap sent: 81.20.192.5 now Init/DROther
+2015/02/20 22:59:55 OSPF: DR-Election[1st]: Backup 81.20.192.12
+2015/02/20 22:59:55 OSPF: DR-Election[1st]: DR     81.20.192.5
+2015/02/20 22:59:55 OSPF: Packet[DD]: Neighbor 81.20.192.5 Negotiation done (Master).
+2015/02/20 22:59:56 OSPF: nsm_change_state(81.20.192.5, Exchange -> Full): scheduling new router-LSA origination
+
+
+LDP
+[https://ippoint.wordpress.com/2010/03/21/ldp-session-parameter/](https://ippoint.wordpress.com/2010/03/21/ldp-session-parameter/)
+[https://supportforums.cisco.com/discussion/10677171/bgp-neighbor-flap](https://supportforums.cisco.com/discussion/10677171/bgp-neighbor-flap)
+[http://www.cisco.com/c/en/us/td/docs/ios/12_0s/feature/guide/fssespro.html](http://www.cisco.com/c/en/us/td/docs/ios/12_0s/feature/guide/fssespro.html)
+[http://www.networkers-online.com/blog/2009/01/ldp-neighbor-discovery-session-establishment-and-maintenance/](http://www.networkers-online.com/blog/2009/01/ldp-neighbor-discovery-session-establishment-and-maintenance/)
+[https://rekrowten.wordpress.com/2013/05/31/bgp-keepalive-and-holddown-timer/](https://rekrowten.wordpress.com/2013/05/31/bgp-keepalive-and-holddown-timer/)
+[http://networkengineering.stackexchange.com/questions/4/troubleshooting-down-bgp-connections](http://networkengineering.stackexchange.com/questions/4/troubleshooting-down-bgp-connections)
+[http://habrahabr.ru/post/246425/](http://habrahabr.ru/post/246425/)
+[http://ieoc.com/forums/t/10905.aspx](http://ieoc.com/forums/t/10905.aspx)
+[https://supportforums.cisco.com/discussion/11760126/ldp-neighbors-down](https://supportforums.cisco.com/discussion/11760126/ldp-neighbors-down)
+[https://supportforums.cisco.com/discussion/11464511/ldp-neighbor-holdown-discovery-timer-expired](https://supportforums.cisco.com/discussion/11464511/ldp-neighbor-holdown-discovery-timer-expired)
+[https://supportforums.cisco.com/discussion/11398401/bgp-keeps-dropping](https://supportforums.cisco.com/discussion/11398401/bgp-keeps-dropping)
+[https://supportforums.cisco.com/discussion/11160841/mpls-nborship-flapping](https://supportforums.cisco.com/discussion/11160841/mpls-nborship-flapping)

@@ -1,0 +1,292 @@
+---
+layout: post
+title:  "backup"
+date:   2011-04-13 05:53:37 +0400
+categories: backup
+tags: backup
+---
+
+# backup
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^domain\.com$ [NC]
+RewriteRule ^(.*)$ [http://www.domain.com/](http://www.domain.com/)$1 [R=301,L]
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^example.ru
+RewriteRule (.*) [http://www.example.ru/](http://www.example.ru/)$1 [R=301,L]
+
+
+
+При настройке DNS для почтового сервера рекомендуется соблюдать следующие правила:
+
+1. Сервер исходящей почты должен представляться в команде HELO/EHLO своим внешним FQDN (т.е., например, не mail.firma.local, а mail.firma.ru)
+2. FQDN сервера исходящей почты должно однозначно разрешаться записью A во внешний IP-адрес сервера исходящей почты.
+3. Внешний IP-адрес сервера исходящей почты должен однозначно разрешаться записью PTR во внешний FQDN сервера исходящей почты 
+(т.е. A, PTR и HELO/EHLO должны однозначно соответствовать друг другу).
+4. Сервер исходящей почты должен быть указан в записях SPF всех доменов, для которых он является авторизованным для отправки 
+или пересылки почты.
+5. Запись MX должна существовать и указывать на FQDN сервера входящей почты.
+
+Пример1: один сервер (FQDN = HELO/EHLO = mail.firma.ru), один почтовый домен firma.ru.
+
+Записи в DNS (в соответствующих зонах):
+
+mail.firma.ru.	A	1.1.1.1	; HELO/EHLO = mail.firma.ru
+firma.ru.	MX	30	mail.firma.ru.
+firma.ru.	TXT	“v=spf1 a:mail.firma.ru -all”
+1.1.1.1.in-addr.arpa.	PTR	mail.firma.ru.
+
+Пример2: два собственных сервера входящей почты mail1.firma.ru и mail2.firma.ru,
+ собственный сервер исходящей почты exchange.firma.ru, запасной сервер исходящей почты у запасного провайдера relay.isp.net, 
+сервер исходящей почты филиала mail.urupinsk.net, почтовые домены superfirma.ru и myfirma.com, 
+домен firma.ru для отправки почты не используется:
+
+Записи в DNS (в соответствующих зонах):
+
+superfirma.ru.	MX	10	mail2.firma.ru.
+superfirma.ru.	MX	20	mail1.firma.ru.
+myfirma.com.	MX	10	mail1.firma.ru.
+myfirma.com.	MX	50	mail2.firma.ru.
+exchange.firma.ru.	A	1.1.1.1	; HELO/EHLO= exchange.firma.ru.
+1.1.1.1.in-addr.arpa.	PTR	exchange.firma.ru.
+relay.isp.net.	A	2.2.2.2	; HELO/EHLO= relay.isp.net.
+2.2.2.2.in-addr.arpa.	PTR	relay.isp.net.
+mail.urupinsk.net.	A	3.3.3.3	; HELO/EHLO= mail.urupinsk.net.
+3.3.3.3.in-addr.arpa.	PTR	mail.urupinsk.net.
+superfirma.ru.	TXT	“v=spf1 a:exchange.firma.ru a:relay.isp.net a:mail.urupinsk.net –all”
+myfirma.com.	TXT	“v=spf1 a:exchange.firma.ru a:relay.isp.net a:mail.urupinsk.net –all”
+firma.ru.	TXT	“v=spf1 –all” ; домен для электронной почты не используется
+mail1.firma.ru.	A	4.4.4.4
+mail2.firma.ru.	A	5.5.5.5
+4.4.4.4.in-addr.arpa.	PTR	mail1.firma.ru.
+5.5.5.5.in-addr.arpa.	PTR	mail2.firma.ru.
+
+
+
+
+dd if=/dev/sda | gzip > ~/mybackup.gz 
+
+
+
+
+
+
+tar -czf backup_emerald.tar.gz / --exclude=/proc --exclude=backup_emerald.tar.gz --exclude=/mnt --exclude=/sys --exclude=/tmp &
+
+
+postman
+tar -czf backup_postman_.tar.gz --exclude=/proc --exclude=backup_postman.tar.gz  --exclude=/mnt --exclude=/sys --exclude=/tmp
+
+sunrise
+tar -czf named_sunrise_$(date +%Y%m%d-%H%M%S).tar.gz /var/named
+tar -czf etc_sunrise_$(date +%Y%m%d-%H%M%S).tar.gz /etc
+
+
+1. под рут новый бекап в папку с chmod для backup_user
+2. cron делает бэкап
+3. На саппфире скрипт по scp забирает бекапы (каждый день)
+4. По rsync я забираю их на свою машину
+
+
+
+#!/bin/sh
+   /usr/bin/scp backup@emerald.sc.ru:/home/backup/backup/userdb_emerald.tar.gz /home/backup/backup/userdb_emerald_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp backup@emerald.sc.ru:/home/backup/backup/home_emerald.tar.gz /home/backup/backup/home_emerald_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp backup@emerald.sc.ru:/home/backup/backup/etc_emerald.tar.gz /home/backup/backup/etc_emerald_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp backup@ruby.sc.ru:/home/backup/backup/userdb_ruby.tar.gz /home/backup/backup/userdb_ruby_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp backup@ruby.sc.ru:/home/backup/backup/root_ruby.tar.gz /home/backup/backup/root_ruby_$(date +%Y%m%d-%H%M%S).tar.gz
+
+#!/bin/sh
+   /usr/bin/scp /home/backup/backup/userdb_postman.tgz backup@sapphire.sc.ru:/home/backup/backup/userdb_postman_$(date +%Y%m%d-%H%M%S).tgz
+   /usr/bin/scp /home/backup/backup/etc_postman.tar.gz backup@sapphire.sc.ru:/home/backup/backup/etc_postman_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp /home/backup/backup/named_postman.tar.gz backup@sapphire.sc.ru:/home/backup/backup/named_postman_$(date +%Y%m%d-%H%M%S).tar.gz
+
+#!/bin/sh
+   /usr/bin/scp /home/backup/backup/etc_diamond.tar.gz backup@sapphire.sc.ru:/home/backup/backup/etc_diamond_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp /home/backup/backup/usr_local_etc_diamon.tar.gz backup@sapphire.sc.ru:/home/backup/backup/usr_local_etc_diamon_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp /home/backup/backup/usr_local_mvts_diamond.tar.gz backup@sapphire.sc.ru:/home/backup/backup/usr_local_mvts_diamond_$(date +%Y%m%d-%H%M%S).tar.gz
+
+#!/bin/sh
+   /usr/bin/scp /home/backup/backup/etc_sunrise.tar.gz backup@sapphire.sc.ru:/home/backup/backup/etc_sunrise_$(date +%Y%m%d-%H%M%S).tar.gz
+   /usr/bin/scp /home/backup/backup/named_sunrise.tar.gz backup@sapphire.sc.ru:/home/backup/backup/named_sunrise_$(date +%Y%m%d-%H%M%S).tar.gz
+
+#!/bin/sh
+/bin/tar -czf /home/backup/backup/etc_sunrise.tar.gz /etc
+/bin/tar -czf /home/backup/backup/named_sunrise.tar.gz /var/named
+
+#!/bin/sh
+find /home/backup/backup/backup -ctime +30 -delete
+
+
+
+mysqldump --all-databases > all_databases.sql
+
+#!/bin/sh
+/usr/bin/mysqldump -u root -p915Nyg710 --opt cyradm > /home/backup/backup/cyradm.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt gortrans > /home/backup/backup/gortrans.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt lgek > /home/backup/backup/lgek.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt mail > /home/backup/backup/mail.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt metallurg  > /home/backup/backup/metallurg.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt modx > /home/backup/backup/modx.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt onigiri > /home/backup/backup/onigiri.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt seotchet_DB > /home/backup/backup/seotchet_DB.sql
+/usr/bin/mysqldump -u root -p915Nyg710 --opt zazhigai_ru > /home/backup/backup/zazhigai_ru.sql
+/bin/tar -czf /home/backup/backup/userdb_emerald.tar.gz /home/backup/backup/*.sql
+/bin/tar -czf /home/backup/backup/home_emerald.tar.gz /home
+/bin/tar -czf /home/backup/backup/etc_emerald.tar.gz /etc
+/bin/chown backup /home/backup/backup/*
+/bin/chgrp users /home/backup/backup/*
+
+
+emerald
+-------------------+
+| information_schema |
+| a_wolf             |
+| apollon            |
+| cs                 |
+| cyradm             |
+| db_vdo48           |
+| fortuna            |
+| gortrans           |
+| lgek               |
+| mail               |
+| metallurg          |
+| modx               |
+| mysql              |
+| onigiri            |
+| seotchet_DB        |
+| test               |
+| tmp                |
+| woox               |
+| zazhigai_ru  
+
+
+
+#!/bin/sh
+/usr/bin/mysqldump -u root -p915Nyg710 --opt --all-databases > /home/backup/backup/all_databases.sql
+/bin/tar -czf /home/backup/backup/userdb_ruby.tar.gz /home/backup/backup/all_databases.sql
+/bin/tar -czf /home/backup/backup/etc_ruby.tar.gz /etc
+/bin/tar -czf /home/backup/backup/root_ruby.tar.gz /root
+
+ruby
+| information_schema |
+| cacti              |
+| cyradm             |
+| mail               |
+| mysql              |
+| rt3                |
+| test               |
+| tmp  
+
+#!/bin/sh
+/usr/bin/mysqldump -u root --opt --all-databases > /home/backup/backup/all_databases.sql
+/bin/tar -czf /home/backup/backup/userdb_postman.tgz /home/backup/backup/all_databases.sql
+/bin/tar -czf /home/backup/backup/etc_postman.tar.gz /etc
+/bin/tar -czf /home/backup/backup/named_postman.tar.gz /var/named
+/bin/chown backup /home/backup/backup/*
+/bin/chgrp backup /home/backup/backup/*
+
+
+
+
+postman
+| mysql    |
+| radius   |
+| radphone |
+| test 
+
+#!/bin/sh
+/usr/bin/mysqldump -u root -p915Nyg710 --opt --all-databases > /home/backup/backup/all_databases.sql
+/bin/tar -czf /home/backup/backup/userdb_sapphire.tgz /home/backup/backup/all_databases.sql
+/bin/tar -czf /home/backup/backup/etc_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz /etc
+/bin/tar -czf /home/backup/backup/tftpboot.tar.gz /tftpboot
+/bin/chown backup /home/backup/backup/*
+/bin/chgrp users /home/backup/backup/*
+
+
+sapphire
+| information_schema |
+| cyradmin           |
+| mail               |
+| mysql              |
+| test 
+
+
+#!/bin/sh
+/bin/tar -czf /home/backup/backup/etc_diamond.tar.gz /etc
+/bin/tar -czf /home/backup/backup/usr_local_etc_diamon.tar.gz /usr/local/etc
+/bin/tar -czf /home/backup/backup/usr_local_mvts_diamond.tar.gz /usr/local/mvts --exclude=/usr/local/mvts/billing --exclude=/usr/local/mvts/debug
+/bin/chown backup /home/backup/backup/*
+/bin/chgrp backup /home/backup/backup/*
+
+
+
+
+#!/bin/sh
+/bin/tar -czf /home/backup/backup/etc_sunrise.tar.gz /etc
+/bin/tar -czf /home/backup/backup/named_sunrise.tar.gz /var/named
+/bin/chown backup /home/backup/backup/*
+/bin/chgrp backup /home/backup/backup/*
+
+
+ruby.sc.ru
+tar -cfpz backup_ruby_$(date +%Y%m%d-%H%M%S).tar.gz --exclude=/proc --exclude=backup_ruby.tar.gz  --exclude=/mnt --exclude=/sys --exclude=/tmp
+
+emerald.sc.ru
+tar -cfpz backup_emerald_$(date +%Y%m%d-%H%M%S).tar.gz --exclude=/proc --exclude=backup_emerald.tar.gz  --exclude=/mnt --exclude=/sys --exclude=/tmp
+
+
+sapphire.sc.ru
+tar -cfpz backup_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz --exclude=/proc --exclude=backup_sapphire.tar.gz  --exclude=/mnt --exclude=/sys --exclude=/tmp
+
+
+diamond.sc.ru
+tar -cfpz backup_diamond_$(date +%Y%m%d-%H%M%S).tar.gz --exclude=/proc --exclude=backup_diamond.tar.gz  --exclude=/mnt --exclude=/sys --exclude=/tmp
+
+ssh -f -N garry@sapphire.sc.int -L 8025:emerald.sc.ru:25 (на ssh клиенте) - то на garry.sc.int
+telnet localhost 8025 - достучались до емеральда
+$ ssh -g -f -N -L 9999:httpserver:80 user@bufhost
+ 
+
+ssh -f -N garry@garry.sc.int -L 8025:emerald.sc.ru:25
+$ ssh -g -f -N -L 9999:httpserver:80 user@localhost
+запустить на localhost, то есть у себя
+
+
+ssh -N -f -R 8025:emerald.sc.ru:25 garry@garry.sc.int (на ssh сервере) - то на sapphire.sc.ru
+
+
+
+ssh -f -N garry@sapphire.sc.ru -R 8025:emerald.sc.ru:25
+
+ssh -R [удаленный_адрес]:удаленный_порт:локальный_адрес:локальный_порт
+
+ssh -f -N garry@sapphire.sc.int -R 25:localhost:8025
+
+
+-zi | xargs exim -Mrm //очистит все замороженные сообщения из очереди
+exipick -i | xargs exim -Mrm //очистит все сообщения из очереди
+
+
+
+
+Сохранять в крон
+01      17,19   *       *       *       crontab -l > /var/home/smithy/root-crontab.sav
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+ 

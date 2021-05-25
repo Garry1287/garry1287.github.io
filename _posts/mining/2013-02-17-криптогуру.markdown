@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "криптогуру"
+date:   2013-02-17 16:36:05 +0400
+categories: mining
+tags: mining
+---
+
+# криптогуру
+[https://ru.insider.pro/lifestyle/2017-09-20/13-guru-mira-kriptovalyut/](https://ru.insider.pro/lifestyle/2017-09-20/13-guru-mira-kriptovalyut/)
+[https://www.youtube.com/user/PrisonOrFreedom/videos](https://www.youtube.com/user/PrisonOrFreedom/videos)
+[https://cryptocurrency.market/tai/](https://cryptocurrency.market/tai/)
+[https://www.youtube.com/channel/UC1ULGWsmJNqbNbMJ1MdNRjQ/videos](https://www.youtube.com/channel/UC1ULGWsmJNqbNbMJ1MdNRjQ/videos)
+[https://tokensale.eventchain.io](https://tokensale.eventchain.io)
+
+[https://github.com/bitcoinbook/bitcoinbook](https://github.com/bitcoinbook/bitcoinbook)
+
+
+Майнинг
+[https://habrahabr.ru/post/351452/](https://habrahabr.ru/post/351452/)
+[https://www.imperva.com/blog/2018/03/deep-dive-database-attacks-scarlett-johanssons-picture-used-for-crypto-mining-on-postgre-database/](https://www.imperva.com/blog/2018/03/deep-dive-database-attacks-scarlett-johanssons-picture-used-for-crypto-mining-on-postgre-database/)

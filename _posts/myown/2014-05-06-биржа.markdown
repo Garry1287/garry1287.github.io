@@ -1,0 +1,9 @@
+---
+layout: post
+title:  "биржа"
+date:   2014-05-06 10:43:46 +0400
+categories: биржа
+---
+
+# биржа
+[http://habrahabr.ru/post/119899/](http://habrahabr.ru/post/119899/)

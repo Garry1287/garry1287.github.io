@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "adsl"
+date:   2011-07-05 07:35:07 +0400
+categories: Networking
+tags: Networking
+---
+
+# adsl
+[http://www.adslclub.ru/forum/viewtopic.php?t=37432](http://www.adslclub.ru/forum/viewtopic.php?t=37432)
+[http://www.osp.ru/nets/2000/02/140944/](http://www.osp.ru/nets/2000/02/140944/)
+
+[http://neftekamskadsl.narod.ru/spr/teh/teh6.html](http://neftekamskadsl.narod.ru/spr/teh/teh6.html)
+
+[http://kunegin.com/ref3/dsl1/chapt4.htm](http://kunegin.com/ref3/dsl1/chapt4.htm)
+
+[http://ru.wikipedia.org/wiki/ITU_G.992.5_Annex_M](http://ru.wikipedia.org/wiki/ITU_G.992.5_Annex_M)
+[http://zyxel.ru/kb/1388](http://zyxel.ru/kb/1388)
+
+
+[http://www.vrn123.ru/wiki/services/xdsl/annex](http://www.vrn123.ru/wiki/services/xdsl/annex)
+
+
+[http://forum.nextrim.ru/index.php?topic=49574.0](http://forum.nextrim.ru/index.php?topic=49574.0)
+[http://forums.kuban.ru/f1027/%D0%A0%D0%B0%D0%B7%D1%80%D1%8B%D0%B2%D1%8B_%D0%BD%D0%B0_%D0%BB%D0%B8%D0%BD%D0%B8%D0%B8_%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B_dslam_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8-1992484.html](http://forums.kuban.ru/f1027/%D0%A0%D0%B0%D0%B7%D1%80%D1%8B%D0%B2%D1%8B_%D0%BD%D0%B0_%D0%BB%D0%B8%D0%BD%D0%B8%D0%B8_%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B_dslam_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8-1992484.html)

@@ -1,0 +1,344 @@
+---
+layout: post
+title:  "QoS S4B"
+date:   2012-01-22 10:21:06 +0400
+categories: zavod
+tags: zavod
+---
+
+# QoS S4B
+interface GigabitEthernet0/1
+ description #to SOVINTEL
+ bandwidth 30720
+ ip address 10.192.10.6 255.255.255.252
+ ip access-group catch-tos in
+ duplex auto
+ speed auto
+ service-policy output PLATINUM-ETH-30MB
+
+
+ip access-list extended catch-tos
+ permit icmp any 10.29.19.0 0.0.0.255 precedence critical
+ permit ip any 10.29.19.0 0.0.0.255 precedence critical
+ permit icmp any 10.29.18.0 0.0.0.255 precedence critical
+ permit ip any 10.29.18.0 0.0.0.255 precedence critical
+ permit icmp any any
+ permit ip any any
+
+
+
+Policy Based Route (PBR) можно использовать с целью маркировки, производя ее в соответствующей подпрограмме (Route-map может содержать параметр set ip precedence):
+
+!
+interface FastEthernet0/0
+ip address 192.168.0.2 255.255.255.0
+ip policy route-map MARK
+speed 100
+full-duplex
+no cdp enable
+!
+access-list 1 permit 192.168.0.0 0.0.0.255
+!
+route-map MARK permit 10
+match ip address 1
+set ip precedence priority
+! 
+
+
+Липецк
+172.19.7.144
+172.19.7.145
+172.19.7.146
+172.19.7.154
+172.19.7.148
+172.19.7.149
+
+Eбург
+10.98.30.121
+10.98.30.119
+
+Дания
+10.178.7.106
+10.178.7.107
+
+Ордынка
+10.29.30.27
+10.29.30.28
+
+
+
+Провайдер организовал VPN для заводов по Казахстану
+ну там в канале (1 Мбит) приоритизация: реал-тай (60%, дроп при превышении), бизнес-критикал (20%, понижение до обычного при превышении) и все остальное (20% на общих основаниях)
+Основное назначение: видеоконференцсвязь (которая настроена на реал-там (голос) и бизнек-критикал (видео)), IP-телефония, а второстпенное: почта, которой тоже иногда много.
+Ну провайдер обеспечивает типа нам параметры канала. Но вот когда на нашу цсику с локалки будут одновременно валится и ВКС и почта, а на нету QoS, то циска в канал VPN может много пустить почтового трафика, зарезав как то ВКС, и то что нам пров гарантировал на своем канале уже как-то наверно будет побоку, если уже на нашей стороне идет обрезка ВКС, такое же может быть?
+Стоит ли заморачиваться с QoS на нашей стороне?
+
+2. Приориет 5 - РТ, 3 - БК.
+
+
+policy-map qos-s4b
+ class sap4bis-1
+   set ip precedence 5
+
+switch(config)# interface range fa 0/1-24
+switch(config-if-range)# service-policy input inbound-accesslayer
+switch(config)# policy-map inbound-accesslayer
+switch(config-pmap)# class ipphone
+switch(config-pmap-c)# set ip dscp 40
+switch(config)# class-map match-all ipphone
+switch(config-cmap)# match access-group name officephone
+switch(config)# mac access-list extended officephone
+switch(config-ext-macl)# permit host 000.0a00.0111 any
+
+
+
+
+class-map match-any SAP4BIS
+ match access-group name S4NLMK
+
+
+policy-map QOS-S4B
+ class SAP4BIS
+  set precedence 3
+
+
+interface FastEthernet0/0.10
+ description # Mgmt interface for Msxi_Group-S0
+ encapsulation dot1Q 10
+ ip address 10.98.254.1 255.255.255.252
+ service-policy input QOS-S4B
+
+
+
+ip access-list extended SIP4NLMK
+ permit ip any host 172.19.7.144
+ permit ip any host 172.19.7.145
+ permit ip any host 172.19.7.146
+ permit ip any host 172.19.7.154
+ permit ip any host 172.19.7.148
+ permit ip any host 172.19.7.149
+ permit ip any host 10.98.30.121
+ permit ip any host 10.98.30.119
+ permit ip any host 10.178.7.106
+ permit ip any host 10.178.7.107
+ permit ip any host 10.29.30.27
+ permit ip any host 10.29.30.28
+ permit icmp any host 172.19.7.144
+ permit icmp any host 172.19.7.145
+ permit icmp any host 172.19.7.146
+ permit icmp any host 172.19.7.154
+ permit icmp any host 172.19.7.148
+ permit icmp any host 172.19.7.149
+ permit icmp any host 10.98.30.121
+ permit icmp any host 10.98.30.119
+ permit icmp any host 10.178.7.106
+ permit icmp any host 10.178.7.107
+ permit icmp any host 10.29.30.27
+ permit icmp any host 10.29.30.28
+
+ 
+ 
+ 
+
+    - name: Create class-map
+      ios_config:
+        parents:
+          - class-map match-all SAP4BIS
+        lines:
+          - match access-group name SIP4NLMK
+    
+          
+    - name: Create policy-map
+      ios_config:
+        parents:
+          - policy-map QOS-S4B
+          - class SAP4BIS
+        lines:
+          - set precedence 3
+        
+          
+    - name: Create access-list
+      ios_config:
+        parents:
+          - ip access-list extended S4NLMK
+        lines:
+        
+ permit ip any host 172.19.7.144
+ permit ip any host 172.19.7.145
+ permit ip any host 172.19.7.146
+ permit ip any host 172.19.7.154
+ permit ip any host 172.19.7.148
+ permit ip any host 172.19.7.149
+ permit ip any host 10.98.30.121
+ permit ip any host 10.98.30.119
+ permit ip any host 10.178.7.106
+ permit ip any host 10.178.7.107
+ permit ip any host 10.29.30.27
+ permit ip any host 10.29.30.28
+ permit icmp any host 172.19.7.144
+ permit icmp any host 172.19.7.145
+ permit icmp any host 172.19.7.146
+ permit icmp any host 172.19.7.154
+ permit icmp any host 172.19.7.148
+ permit icmp any host 172.19.7.149
+ permit icmp any host 10.98.30.121
+ permit icmp any host 10.98.30.119
+ permit icmp any host 10.178.7.106
+ permit icmp any host 10.178.7.107
+ permit icmp any host 10.29.30.27
+ permit icmp any host 10.29.30.28
+ 
+class-map match-any SAP4BIS
+match access-group name S4NLMK
+    
+          
+          policy-map QOS-S4B
+           class SAP4BIS
+       set precedence 3
+ 
+ show interfaces description
+ 
+ Maxi-C0-Eburg(config)#int Fa0/0.10
+Maxi-C0-Eburg(config-subif)#se
+Maxi-C0-Eburg(config-subif)#service-policy in
+Maxi-C0-Eburg(config-subif)#service-policy input QOS-S4B
+
+ To exclude host1 and host2 from execution and allow execution only in host3:
+
+$ ansible-playbook --limit '!hoost1:!host2:host3' yourPlaybook.yml
+ansible-playbook --limit '!10.192.11.6' qos_s4b_vchm.yml
+
+vienna-ce
+verona
+dansteel
+vpn-vchm
+
+maxi-revda-c0
+
+ansible-playbook --limit '!lipetsk!vpn-vchm!verona!dansteel!ordinka!maxi-revda-c0' qos_s4b_all.yml
+
+
+1. На всех CE + vchm-lipetsk, кроме Липецк, Ревда, Дания, ОРдынка выполнить конфигурирование   OK
+2. В липецке, Ревде, Дании, Ордыке сделать руками со своими access-list     OK
+3. На остальных узлах прописать service policy руками
+4. Сделать playbook для всех vchm кроме Липецка                                 OK
+5. Проверить                                                                                                        OK
+
+
+
+
+Липецк
+no ip access-list extended S4NLMK
+ip access-list extended S4NLMK
+ permit ip host 172.19.7.144 any
+ permit ip host 172.19.7.145 any
+ permit ip host 172.19.7.146 any
+ permit ip host 172.19.7.154 any
+ permit ip host 172.19.7.148 any
+ permit ip host 172.19.7.149 any
+ permit ip any host 10.98.30.121
+ permit ip any host 10.98.30.119
+ permit ip any host 10.178.7.106
+ permit ip any host 10.178.7.107
+ permit ip any host 10.29.30.27
+ permit ip any host 10.29.30.28
+ permit icmp host 172.19.7.144 any
+ permit icmp host 172.19.7.145 any
+ permit icmp host 172.19.7.146 any
+ permit icmp host 172.19.7.154 any
+ permit icmp host 172.19.7.148 any
+ permit icmp host 172.19.7.149 any
+ permit icmp any host 10.98.30.121
+ permit icmp any host 10.98.30.119
+ permit icmp any host 10.178.7.106
+ permit icmp any host 10.178.7.107
+ permit icmp any host 10.29.30.27
+ permit icmp any host 10.29.30.28
+ 
+ 
+ 
+ 
+ Ордынка
+ no ip access-list extended S4NLMK
+ip access-list extended S4NLMK
+permit ip any host 172.19.7.144
+  permit ip any host 172.19.7.145
+ permit ip any host 172.19.7.146
+ permit ip any host 172.19.7.154
+ permit ip any host 172.19.7.148
+ permit ip any host 172.19.7.149
+ permit ip any host 10.98.30.121
+ permit ip any host 10.98.30.119
+ permit ip any host 10.178.7.106
+ permit ip any host 10.178.7.107
+ permit ip host 10.29.30.27 any
+ permit ip host 10.29.30.28 any
+ permit icmp any host 172.19.7.144
+ permit icmp any host 172.19.7.145
+ permit icmp any host 172.19.7.146
+ permit icmp any host 172.19.7.154
+ permit icmp any host 172.19.7.148
+ permit icmp any host 172.19.7.149
+ permit icmp any host 10.98.30.121
+ permit icmp any host 10.98.30.119
+ permit icmp any host 10.178.7.106
+ permit icmp any host 10.178.7.107
+ permit icmp host 10.29.30.27 any
+ permit icmp host 10.29.30.28 any
+ 
+ Дания
+  no ip access-list extended S4NLMK
+ip access-list extended S4NLMK
+permit ip any host 172.19.7.144
+  permit ip any host 172.19.7.145
+ permit ip any host 172.19.7.146
+ permit ip any host 172.19.7.154
+ permit ip any host 172.19.7.148
+ permit ip any host 172.19.7.149
+ permit ip any host 10.98.30.121
+ permit ip any host 10.98.30.119
+ permit ip host 10.178.7.106 any
+ permit ip host 10.178.7.107 any
+ permit ip any host 10.29.30.27
+ permit ip any host 10.29.30.28
+ permit icmp any host 172.19.7.144
+ permit icmp any host 172.19.7.145
+ permit icmp any host 172.19.7.146
+ permit icmp any host 172.19.7.154
+ permit icmp any host 172.19.7.148
+ permit icmp any host 172.19.7.149
+ permit icmp any host 10.98.30.121
+ permit icmp any host 10.98.30.119
+ permit icmp host 10.178.7.106 any
+ permit icmp host 10.178.7.107 any
+ permit icmp any host 10.29.30.27
+ permit icmp any host 10.29.30.28
+ 
+ 
+ Ревда
+ no ip access-list extended S4NLMK
+ip access-list extended S4NLMK
+permit ip any host 172.19.7.144
+ permit ip any host 172.19.7.145
+ permit ip any host 172.19.7.146
+ permit ip any host 172.19.7.154
+ permit ip any host 172.19.7.148
+ permit ip any host 172.19.7.149
+ permit ip host 10.98.30.121 any
+ permit ip host 10.98.30.119 any
+ permit ip any host 10.178.7.106
+ permit ip any host 10.178.7.107
+ permit ip any host 10.29.30.27
+ permit ip any host 10.29.30.28
+ permit icmp any host 172.19.7.144
+ permit icmp any host 172.19.7.145
+ permit icmp any host 172.19.7.146
+ permit icmp any host 172.19.7.154
+ permit icmp any host 172.19.7.148
+ permit icmp any host 172.19.7.149
+ permit icmp host 10.98.30.121 any
+ permit icmp host 10.98.30.119 any
+ permit icmp any host 10.178.7.106
+ permit icmp any host 10.178.7.107
+ permit icmp any host 10.29.30.27
+ permit icmp any host 10.29.30.28

@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "cyrus2"
+date:   2017-08-07 14:19:02 +0300
+categories: mail
+tags: mail
+---
+
+# cyrus2
+[http://best-server.at.ua/publ/10-1-0-26](http://best-server.at.ua/publ/10-1-0-26)
+[http://old.malik.elcat.kg/cyrus-imap.shtml](http://old.malik.elcat.kg/cyrus-imap.shtml)
+[http://www.opennet.ru/docs/RUS/Cyrus_imap/install-configure.html](http://www.opennet.ru/docs/RUS/Cyrus_imap/install-configure.html)
+[http://freesource.info/wiki/AltLinux/Dokumentacija/PostfixCyrusImap](http://freesource.info/wiki/AltLinux/Dokumentacija/PostfixCyrusImap)
+[http://www.cyrusimap.org/docs/cyrus-imapd/2.3.18/](http://www.cyrusimap.org/docs/cyrus-imapd/2.3.18/)
+[https://lists.debian.org/debian-russian/2013/08/msg00206.html](https://lists.debian.org/debian-russian/2013/08/msg00206.html)
+[http://vstarikov.com/index.php/chavo/26-how-to-recover-from-cyrus-when-you-have-some-db-errors](http://vstarikov.com/index.php/chavo/26-how-to-recover-from-cyrus-when-you-have-some-db-errors)
+[http://www.banquise.org/software/how-to-recover-from-cyrus-when-you-have-some-db-errors/](http://www.banquise.org/software/how-to-recover-from-cyrus-when-you-have-some-db-errors/)
+comments.gmane.org/gmane.mail.imap.cyrus/30967
+[http://www.opennet.ru/docs/RUS/Cyrus_imap/overview.html](http://www.opennet.ru/docs/RUS/Cyrus_imap/overview.html)
+[http://blog.bsdmaster.com/2011/04/cyrus-database-backends-mismatch.html](http://blog.bsdmaster.com/2011/04/cyrus-database-backends-mismatch.html)
+[http://xgu.ru/wiki/Cyrus_IMAP_Server](http://xgu.ru/wiki/Cyrus_IMAP_Server)
+[http://www.kryukov.biz/wiki/Cyrus-imapd](http://www.kryukov.biz/wiki/Cyrus-imapd)
+
+
+[http://www.opennet.ru/docs/RUS/Cyrus_imap/overview.html](http://www.opennet.ru/docs/RUS/Cyrus_imap/overview.html)

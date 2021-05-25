@@ -1,0 +1,34 @@
+---
+layout: post
+title:  "freeNX"
+date:   2010-07-14 00:34:32 +0400
+categories: linux
+tags: linux
+---
+
+# freeNX
+nxsetup --install --setup-nomachine-key --clean --purge
+
+
+AllowUsers nx garry в /etc/ssh/sshd_config
+
+nxserver --adduser garry
+
+
+SSHD_PORT=2222
+
+ENABLE_PASSDB_AUTHENTICATION="1"
+
+
+
+
+[http://www.oaktable.net/content/installing-freenx-opensuse-114](http://www.oaktable.net/content/installing-freenx-opensuse-114)
+[https://wiki.archlinux.org/index.php/FreeNX_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29](https://wiki.archlinux.org/index.php/FreeNX_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29)
+[http://vasilisc.com/terminal_1c_linux](http://vasilisc.com/terminal_1c_linux)
+[http://centos.name/?page/howto/FreeNX](http://centos.name/?page/howto/FreeNX)
+[http://openfacts2.berlios.de/wikien/index.php/BerliosProject:FreeNX_-_FAQ](http://openfacts2.berlios.de/wikien/index.php/BerliosProject:FreeNX_-_FAQ)
+[http://mail.kde.org/pipermail/freenx-knx/attachments/20080519/ce753403/attachment-0001.pdf](http://mail.kde.org/pipermail/freenx-knx/attachments/20080519/ce753403/attachment-0001.pdf)
+  [http://fedoranews.org/contributors/rick_stout/freenx/](http://fedoranews.org/contributors/rick_stout/freenx/)
+[http://dmitrykhn.homedns.org/dm/nx_svr.html](http://dmitrykhn.homedns.org/dm/nx_svr.html)
+Памятка ssh
+[http://habrahabr.ru/post/122445/](http://habrahabr.ru/post/122445/)

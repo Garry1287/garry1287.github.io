@@ -1,0 +1,218 @@
+---
+layout: post
+title:  "debug-sfp"
+date:   2011-07-16 21:08:28 +0400
+categories: hardware
+tags: hardware
+---
+
+# debug-sfp
+CTD-S6#show interfaces Te1/5 transceiver detail 
+ITU Channel not available (Wavelength not available),
+Transceiver is internally calibrated.
+mA: milliamperes, dBm: decibels (milliwatts), NA or N/A: not applicable.
+++ : high alarm, +  : high warning, -  : low warning, -- : low alarm.
+A2D readouts (if they differ), are reported in parentheses.
+The threshold values are calibrated.
+
+                              High Alarm  High Warn  Low Warn   Low Alarm
+          Temperature         Threshold   Threshold  Threshold  Threshold
+Port       (Celsius)          (Celsius)   (Celsius)  (Celsius)  (Celsius)
+--------- ------------------  ----------  ---------  ---------  ---------
+Te1/5       33.3                74.0        70.0         0.0       -4.0
+
+                              High Alarm  High Warn  Low Warn   Low Alarm
+           Voltage            Threshold   Threshold  Threshold  Threshold
+Port       (Volts)            (Volts)     (Volts)    (Volts)    (Volts)
+---------  ---------------    ----------  ---------  ---------  ---------
+Te1/5      3.27                   N/A         N/A         N/A        N/A
+
+           Optical            High Alarm  High Warn  Low Warn   Low Alarm
+           Transmit Power     Threshold   Threshold  Threshold  Threshold
+Port       (dBm)              (dBm)       (dBm)      (dBm)      (dBm)
+---------  -----------------  ----------  ---------  ---------  ---------
+Te1/5        2.4                 4.4         0.4        -8.2      -12.2
+
+           Optical            High Alarm  High Warn  Low Warn   Low Alarm
+           Receive Power      Threshold   Threshold  Threshold  Threshold
+Port       (dBm)              (dBm)       (dBm)      (dBm)      (dBm)
+-------    -----------------  ----------  ---------  ---------  ---------
+Te1/5       -6.0                 4.4         0.4       -14.4      -18.4
+
+
+CTD-S6#sh idprom int Te1/5
+
+X2 Serial EEPROM Contents:
+Non-Volatile Register (NVR) Fields
+ X2 Version                           :0x1E = MSA Version 0x1E
+ NVR Size in bytes                    :0x300
+ Number of bytes used                 :0x100
+ Basic Field Address                  :0xB
+ Customer Field Address               :0x77
+ Vendor Field Address                 :0xA7
+ Extended Vendor Field Address        :0x0
+ Reserved                             :0x0
+ Transceiver type                     :0x2 =X2
+ Optical connector type               :0x1 =SC
+ Bit encoding                         :0x1 =NRZ
+ Normal BitRate in multiple of 1M b/s :0x2848
+ Protocol Type                        :0x1 =10GbE
+
+Standards Compliance Codes :
+ 10GbE Code Byte 0                    :0x2 =10GBASE-LR
+ 10GbE Code Byte 1                    :0x0
+ SONET/SDH Code Byte 0                :0x0
+ SONET/SDH Code Byte 1                :0x0
+ SONET/SDH Code Byte 2                :0x0
+ SONET/SDH Code Byte 3                :0x0
+ 10GFC Code Byte 0                    :0x0
+ 10GFC Code Byte 1                    :0x0
+ 10GFC Code Byte 2                    :0x0
+ 10GFC Code Byte 3                    :0x0
+ Transmission range in 10m            :0x3E8
+Fibre Type :
+ Fibre Type Byte 0                    :0x20 =SM, Generic
+ Fibre Type Byte 1                    :0x0 =Unspecified
+
+ Centre Optical Wavelength in 0.01nm steps - Channel 0 :0x1 0xFF 0xB8 
+ Centre Optical Wavelength in 0.01nm steps - Channel 1 :0x0 0x0 0x0 
+ Centre Optical Wavelength in 0.01nm steps - Channel 2 :0x0 0x0 0x0 
+ Centre Optical Wavelength in 0.01nm steps - Channel 3 :0x0 0x0 0x0 
+ Package Identifier OUI  :0xC09820
+ Transceiver Vendor OUI  :0x0
+ Transceiver vendor name :OEM             
+ Part number provided by transceiver vendor       :10GB-X2-LR      
+ Revision level of part number provided by vendor :02
+ Vendor serial number           :XX96L031        
+ Vendor manufacturing date code :2010010101
+
+Current Reference :
+ 5V Stressed Environment Reference 100 percent=1A   :0x1
+ 3.3V Stressed Environment Reference 100 percent=2A :0x1
+ APS Stressed Environment Reference 100 percent=2A  :0x4
+
+ Normal APS Voltage :0x4
+ Digital Optical Monitoring Capability Byte  :0xC1
+ Digital Optical Monitoring                  :Implemented
+ Low Power Start-up(LPS) Mode Capability Bit :0x1
+ Reserved             :0x0
+ Basic Field Checksum :0xBD
+
+ Customer Writable Area :
+  0x00: 58 32 2D 31 30 47 42 2D 4C 52 20 20 20 20 20 20
+  0x10: 20 56 30 33 20 58 58 39 36 4C 30 33 31 20 20 20
+  0x20: 31 30 2D 32 30 33 36 2D 30 33 20 20 41 30 20 20
+          
+ Vendor Specific :
+  0x00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x10: 00 00 00 00 00 00 00 00 00 99 11 2B C0 7E 21 13
+  0x20: C3 17 30 15 18 20 3C 00 00 00 00 00 00 00 00 00
+  0x30: 00 00 00 00 08 9C 57 81 1B F6 19 30 CE FE C1 B6
+  0x40: 38 3E 31 EB AF 00 00 00 00 00 00 00 00 00 4A 15
+  0x50: 94 BF 00 00 00 00 00 00 00
+          
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#
+CTD-S6#sh inventory
+NAME: "Switch System", DESCR: "Cisco Systems, Inc. WS-C4900M 3 slot switch "
+PID: MIDPLANE          , VID:      , SN: JAE145304VM
+
+NAME: "Linecard(slot 1)", DESCR: "4900M 10GE (X2) with 8 10GE X2 ports"
+PID: WS-C4900M         , VID: V07  , SN: JAE14520F3O
+
+NAME: "TenGigabitEthernet1/1", DESCR: "10Gbase-CX4"
+PID: X2-10GB-CX4       , VID: V03  , SN: OPC14506350
+
+NAME: "TenGigabitEthernet1/2", DESCR: "10Gbase-LR"
+PID: vY4.              , VID:      , SN: DE515RR019 
+
+NAME: "TenGigabitEthernet1/3", DESCR: "10Gbase-LR"
+PID: X2 to SFP+        , VID: V02  , SN: X2ABV530008
+
+NAME: "TenGigabitEthernet1/4", DESCR: "10Gbase-LR"
+PID: X2 to SFP+        , VID: V02  , SN: X2ABV530013
+
+NAME: "TenGigabitEthernet1/5", DESCR: "10Gbase-LR"
+PID: X2-10GB-LR        , VID: V03  , SN: XX96L031   
+
+NAME: "Linecard(slot 2)", DESCR: "10GE (X2), 1000BaseX (SFP) with 8 10GE X2 ports"
+PID: WS-X4908-10GE     , VID: V03  , SN: JAE1452064K
+
+NAME: "Converter 2/1", DESCR: "Converter Module"
+PID: CVR-X2-SFP        , VID: V02  , SN: FDO14520U16
+
+NAME: "GigabitEthernet2/9", DESCR: "1000BaseSX"
+PID: SFP-GE-S          , VID: V01  , SN: AGM1452P3F3
+
+NAME: "GigabitEthernet2/10", DESCR: "1000BaseSX"
+PID: Unspecified       , VID:      , SN: FNS14531822
+
+NAME: "Converter 2/2", DESCR: "Converter Module"
+PID: CVR-X2-SFP        , VID: V02  , SN: FDO14520SQ8
+
+NAME: "GigabitEthernet2/11", DESCR: "1000BaseT"
+PID: Unspecified       , VID:      , SN: MTC145300UQ
+
+NAME: "GigabitEthernet2/12", DESCR: "1000BaseT"
+PID: Unspecified       , VID:      , SN: MTC145300VP
+
+NAME: "Converter 2/3", DESCR: "Converter Module"
+PID: CVR-X2-SFP        , VID: V02  , SN: FDO1453135U
+
+NAME: "GigabitEthernet2/13", DESCR: "1000BaseLH"
+PID: Unspecified       , VID:      , SN: H1M9817    
+
+NAME: "GigabitEthernet2/14", DESCR: "1000Base-BX10-D"
+PID: Unspecified       , VID:      , SN: CLGD550255 
+
+NAME: "Converter 2/4", DESCR: "Converter Module"
+PID: CVR-X2-SFP        , VID: V02  , SN: FDO145312FN
+
+NAME: "GigabitEthernet2/15", DESCR: "1000BaseLH"
+PID: Unspecified       , VID:      , SN: H1M9818    
+
+NAME: "GigabitEthernet2/16", DESCR: "1000BaseLH"
+PID: SFP-GE-L          , VID: V01  , SN: SPC14490450
+
+NAME: "Converter 2/5", DESCR: "Converter Module"
+PID: CVR-X2-SFP        , VID: V02  , SN: FDO145217NL
+
+NAME: "GigabitEthernet2/17", DESCR: "1000BaseSX"
+PID: Unspecified       , VID:      , SN: M1205310253
+
+NAME: "GigabitEthernet2/18", DESCR: "1000BaseLH"
+PID: Unspecified       , VID:      , SN: F3K6727    
+
+NAME: "Converter 2/6", DESCR: "Converter Module"
+PID: CVR-X2-SFP        , VID: V02  , SN: FDO1453136B
+
+NAME: "GigabitEthernet2/19", DESCR: "1000BaseT"
+PID: Unspecified       , VID:      , SN: MG80T878   
+
+NAME: "GigabitEthernet2/20", DESCR: "1000BaseLH"
+PID: Unspecified       , VID:      , SN: F3K6932    
+
+NAME: "TenGigabitEthernet2/7", DESCR: "10Gbase-LR"
+PID: X2 to SFP+        , VID: V02  , SN: X2ABV530029
+
+NAME: "Fan", DESCR: "FanTray"
+PID: WS-X4992          , VID: V02  , SN: FOX1445H8J0
+
+NAME: "Power Supply 1", DESCR: "Power Supply ( AC 960W )"
+PID: PWR-C49M-1000AC   , VID: V01  , SN: SNI1450CA10
+
+NAME: "Power Supply 2", DESCR: "Power Supply ( AC 960W )"
+PID: PWR-C49M-1000AC   , VID: V01  , SN: SNI1450CA12

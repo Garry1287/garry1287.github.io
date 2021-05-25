@@ -1,0 +1,48 @@
+---
+layout: post
+title:  "gns3"
+date:   2018-04-15 13:02:12 +0300
+categories: Networking
+tags: Networking
+---
+
+# gns3
+[http://www.adminia.ru/gns3-i-vmware-laboratornyiy-stend/](http://www.adminia.ru/gns3-i-vmware-laboratornyiy-stend/)
+[http://www.it-club.org/leadership/ustanovka_i_nastroyka_e-mulyatora_marshrutizatorov_cisco_-_gns3_na_baze_dynamips1307300539.html](http://www.it-club.org/leadership/ustanovka_i_nastroyka_e-mulyatora_marshrutizatorov_cisco_-_gns3_na_baze_dynamips1307300539.html)
+[http://www.gns3.net/dynamips/](http://www.gns3.net/dynamips/)
+[http://rutracker.org/forum/viewtopic.php?t=847526](http://rutracker.org/forum/viewtopic.php?t=847526)
+[http://habrahabr.ru/post/135884/](http://habrahabr.ru/post/135884/)
+[http://gexeg.blogspot.ru/2008/12/cisco-gns3-dynagen-dynamips.html](http://gexeg.blogspot.ru/2008/12/cisco-gns3-dynagen-dynamips.html)
+[http://itmemos.blogspot.ru/2008/05/dynamips-gns3.html](http://itmemos.blogspot.ru/2008/05/dynamips-gns3.html)
+[http://blog.evgenmed.com/2011/01/gns3-cisco-based.html](http://blog.evgenmed.com/2011/01/gns3-cisco-based.html)
+[http://korzh.net/2011-11-emulyaciya-cisco-asa-v-gns3-na-ubuntu-11-10.html](http://korzh.net/2011-11-emulyaciya-cisco-asa-v-gns3-na-ubuntu-11-10.html)
+[http://blog.gns3.net/2009/12/how-to-emulate-cisco-asa/](http://blog.gns3.net/2009/12/how-to-emulate-cisco-asa/)
+
+
+
+
+
+Создание ASA в gns3
+[http://7200emu.hacki.at/viewtopic.php?t=9074](http://7200emu.hacki.at/viewtopic.php?t=9074)
+[http://www.fixedbyvonnie.com/2015/05/how-to-setup-an-5520-asa-5-2-in-gns-3-version-1-3/#.VnflW3YaHRa](http://www.fixedbyvonnie.com/2015/05/how-to-setup-an-5520-asa-5-2-in-gns-3-version-1-3/#.VnflW3YaHRa)
+[http://icisco.org/?p=353](http://icisco.org/?p=353)
+[http://securny.com/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-cisco-asa842-%D0%B8-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-asdm-%D0%B2-mac-os-x](http://securny.com/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-cisco-asa842-%D0%B8-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-asdm-%D0%B2-mac-os-x)
+[http://www.ekzorchik.ru/wordpress/2012/07/ubuntu-10-gns3-dynagen-cisco/](http://www.ekzorchik.ru/wordpress/2012/07/ubuntu-10-gns3-dynagen-cisco/)
+[http://netwild.ru/asa1/](http://netwild.ru/asa1/)
+[http://www.tectute.com/2013/03/emulate-cisco-asa-84-on-gns3.html](http://www.tectute.com/2013/03/emulate-cisco-asa-84-on-gns3.html)
+
+
+IP SLA
+[http://admindoc.ru/68/ip-sla-cisco-asa/](http://admindoc.ru/68/ip-sla-cisco-asa/)
+[http://networkology.net/2012/03/12/configuring-stateless-activestandby-failover/](http://networkology.net/2012/03/12/configuring-stateless-activestandby-failover/)
+
+
+
+Подключение компьютера к виртуальной сети gns3
+
+Создаётся виртуальный интерфейс (loopback), который через который и происходит соединение с сетью
+
+[http://blog.netskills.ru/2015/12/11-gns3-loopback.html](http://blog.netskills.ru/2015/12/11-gns3-loopback.html)
+[http://compnetstudies.blogspot.ru/p/blog-page_9.html](http://compnetstudies.blogspot.ru/p/blog-page_9.html)
+[http://websistent.com/how-to-connect-gns3-to-the-internet/](http://websistent.com/how-to-connect-gns3-to-the-internet/)
+

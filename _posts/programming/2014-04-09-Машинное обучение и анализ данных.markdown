@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "Машинное обучение и анализ данных"
+date:   2014-04-09 15:57:32 +0400
+categories: programming
+tags: programming
+---
+
+# Машинное обучение и анализ данных
+Машинное обучение и анализ данных
+
+[http://www.datasciencecourse.ru/?utm_source=yandex&utm_medium=cpc&utm_content=yandex_data&utm_campaign=data_science_search&utm_term=yandex%20data%20factory](http://www.datasciencecourse.ru/?utm_source=yandex&utm_medium=cpc&utm_content=yandex_data&utm_campaign=data_science_search&utm_term=yandex%20data%20factory)
+[https://www.coursera.org/specializations/machine-learning-data-analysis?utm_source=MIPT&utm_medium=institutions&utm_content=53zeu1Dk6K_2016-10-27T12:55:03.758Z&utm_campaign=source:yandex](https://www.coursera.org/specializations/machine-learning-data-analysis?utm_source=MIPT&utm_medium=institutions&utm_content=53zeu1Dk6K_2016-10-27T12:55:03.758Z&utm_campaign=source:yandex)|medium:cpc|campaign:data_science_search|content:yandex_data
+[https://yandexdatafactory.com/ru/solutions/custom-machine-learning-solutions/](https://yandexdatafactory.com/ru/solutions/custom-machine-learning-solutions/)
+[https://habrahabr.ru/company/mailru/blog/311694/](https://habrahabr.ru/company/mailru/blog/311694/)

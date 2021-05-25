@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "erps"
+date:   2014-07-21 07:59:14 +0400
+categories: Networking
+tags: Networking
+---
+
+# erps
+Кольцо ERPS восстанавливается не мгновенно после восстановления разорванного линка: сначала должно пройти время WTR timer, которое минимум - 5 минут
+
+[http://forum.dlink.ru/viewtopic.php?p=887369](http://forum.dlink.ru/viewtopic.php?p=887369)
+
+На DGS-3627 можно настроить до 8 raps vlan, по одному на кольцо.
+Никаких настроек subring в этом случае не требуется.
+
+[http://forum.dlink.ru/viewtopic.php?p=887369](http://forum.dlink.ru/viewtopic.php?p=887369)
+
+
+[http://forum.dlink.ru/viewtopic.php?f=2&t=172850](http://forum.dlink.ru/viewtopic.php?f=2&t=172850)
+[http://forum.dlink.ru/viewtopic.php?p=934516](http://forum.dlink.ru/viewtopic.php?p=934516)
+
+
+[http://forum.dlink.ru/viewtopic.php?f=2&t=144688&sid=b47a5b288198cb66de5e31cda8407730&start=15](http://forum.dlink.ru/viewtopic.php?f=2&t=144688&sid=b47a5b288198cb66de5e31cda8407730&start=15)
+[http://forum.dlink.ru/viewtopic.php?p=929270](http://forum.dlink.ru/viewtopic.php?p=929270)

@@ -1,0 +1,487 @@
+---
+layout: post
+title:  "mqc"
+date:   2008-12-10 09:37:43 +0300
+categories: mqc
+tags: cisco
+---
+
+# mqc
+GW2921-1#ping 10.29.1.1 repeat 100
+
+Type escape sequence to abort.
+Sending 100, 100-byte ICMP Echos to 10.29.1.1, timeout is 2 seconds:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Success rate is 100 percent (100/100), round-trip min/avg/max = 1/1/4 ms
+GW2921-1#ping 10.10.120.3         
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.10.120.3, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+GW2921-1#ping 10.10.120.3 repeat 100
+
+Type escape sequence to abort.
+Sending 100, 100-byte ICMP Echos to 10.10.120.3, timeout is 2 seconds:
+!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
+!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
+Success rate is 84 percent (84/100), round-trip min/avg/max = 1/1/1 ms
+
+
+
+GW2921-2#ping 10.29.1.1 repeat 100
+
+Type escape sequence to abort.
+Sending 100, 100-byte ICMP Echos to 10.29.1.1, timeout is 2 seconds:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Success rate is 100 percent (100/100), round-trip min/avg/max = 1/1/4 ms
+GW2921-2#ping 10.10.120.3 repeat 100
+
+Type escape sequence to abort.
+Sending 100, 100-byte ICMP Echos to 10.10.120.3, timeout is 2 seconds:
+!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
+!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
+Success rate is 84 percent (84/100), round-trip min/avg/max = 1/1/4 ms
+
+
+Ошибок нет
+
+ip icmp rate-limit unreachable 1000
+
+
+
+
+
+
+
+
+cde-c3
+
+class-map match-any STANDARD
+ match ip precedence 0  1 
+class-map match-any REAL-TIME
+ match ip precedence 5 
+class-map match-any CHK-PRE
+ match ip precedence 3 
+class-map match-any CHK-REA
+ match ip precedence 5 
+class-map match-any VIDEO
+ match ip precedence 4 
+class-map match-any PREMIUM
+ match ip precedence 3 
+!         
+!         
+policy-map PLATINUM
+ class REAL-TIME
+    priority percent 60
+ class PREMIUM
+    bandwidth percent 35
+     random-detect
+ class class-default
+    fair-queue
+policy-map PLATINUM-ETH-10M
+ class class-default
+    shape average 10000000
+  service-policy PLATINUM
+policy-map EL-QOS-PRIO
+ class REAL-TIME
+    priority percent 25
+ class class-default
+    fair-queue
+policy-map EL-QOS-ETH
+ class class-default
+    shape average 448000
+  service-policy EL-QOS-PRIO
+policy-map CHK-PRIO
+ class CHK-REA
+    priority percent 40
+ class CHK-PRE
+    bandwidth percent 50
+ class class-default
+    fair-queue
+policy-map CHK-QOS
+ class class-default
+    shape average 1024000
+  service-policy CHK-PRIO
+policy-map TTK_ACCESS_256K_OUT
+ class class-default
+    shape average 256000
+policy-map E-RGS
+ class REAL-TIME
+    priority percent 50
+ class VIDEO
+    bandwidth percent 40
+ class class-default
+    fair-queue
+policy-map PLATINUM-ETH-10MB
+ class class-default
+    shape average 10240000
+  service-policy PLATINUM
+policy-map PLATINUM-ETH
+ class class-default
+    shape average 20480000
+  service-policy PLATINUM
+policy-map TTK_ACCESS_256K_IN
+ class class-default
+   police cir 256000
+     exceed-action drop 
+
+
+interface GigabitEthernet0/0.857
+ description NLMK NTK via Beeline (Sovitel)( AS - 65019)
+ bandwidth 10000
+ encapsulation dot1Q 857
+ ip vrf forwarding nlmk-vpn
+ ip address 10.192.10.77 255.255.255.252
+ ip flow ingress
+ ip flow egress
+ no cdp enable
+ service-policy output PLATINUM-ETH-10M
+
+
+
+class-map match-any STANDARD
+ match ip precedence 0  1 
+class-map match-any REAL-TIME
+ match ip precedence 5 
+class-map match-any PREMIUM
+ match ip precedence 3 
+!
+!
+policy-map PLATINUM
+ class REAL-TIME
+  priority percent 60
+ class PREMIUM
+  bandwidth percent 15
+  random-detect
+ class class-default
+!
+!
+!
+
+
+interface Serial0/2/0:0
+ description # Uplink to &Equant
+ bandwidth 1984
+ no ip address
+ encapsulation frame-relay IETF
+ load-interval 30
+ no fair-queue
+ frame-relay traffic-shaping
+ frame-relay lmi-type ansi
+!
+
+
+
+
+RUMELCO-CE0#show policy-map interface Serial0/2/0:0.16
+ Serial0/2/0:0.16: DLCI 16 -
+
+  Service-policy output: PLATINUM
+
+    Class-map: REAL-TIME (match-any)
+      826588838 packets, 99742272369 bytes
+      30 second offered rate 386000 bps, drop rate 0 bps
+      Match: ip precedence 5 
+        826588800 packets, 99742265220 bytes
+        30 second rate 386000 bps
+      Queueing
+        Strict Priority
+        Output Queue: Conversation 136 
+        Bandwidth 60 (%)
+        Bandwidth 1228 (kbps) Burst 30700 (Bytes)
+        (pkts matched/bytes matched) 130434176/16239257109
+        (total drops/bytes drops) 42461/20259498
+
+    Class-map: PREMIUM (match-any)
+      2335672 packets, 173036489 bytes
+      30 second offered rate 0 bps, drop rate 0 bps
+      Match: ip precedence 3 
+        2335672 packets, 173036489 bytes
+        30 second rate 0 bps
+      Queueing
+        Output Queue: Conversation 137 
+        Bandwidth 15 (%)
+        Bandwidth 307 (kbps)
+        (pkts matched/bytes matched) 352695/26467251
+        (depth/total drops/no-buffer drops) 0/0/0
+         exponential weight: 9
+         mean queue depth: 0
+
+  class    Transmitted      Random drop      Tail drop    Minimum Maximum  Mark
+           pkts/bytes       pkts/bytes       pkts/bytes    thresh  thresh  prob
+      0       0/0               0/0              0/0           20      40  1/10
+      1       0/0               0/0              0/0           22      40  1/10
+      2       0/0               0/0              0/0           24      40  1/10
+      3 2335672/173036489       0/0              0/0           26      40  1/10
+      4       0/0               0/0              0/0           28      40  1/10
+      5       0/0               0/0              0/0           30      40  1/10
+      6       0/0               0/0              0/0           32      40  1/10
+      7       0/0               0/0              0/0           34      40  1/10
+   rsvp       0/0               0/0              0/0           36      40  1/10
+
+
+    Class-map: class-default (match-any)
+      1182828874 packets, 779229037318 bytes
+      30 second offered rate 243000 bps, drop rate 0 bps
+      Match: any 
+
+
+
+
+
+ max-reserved-bandwidth 98
+
+
+
+
+
+
+
+telnet 10.192.10.90
+!
+hostname Viz-Sov-Ce0
+
+
+class-map match-any REAL-TIME
+ match ip precedence 5 
+class-map match-any PREMIUM
+ match ip precedence 3 
+!
+!
+policy-map PLATINUM
+ class REAL-TIME
+  priority percent 60
+ class PREMIUM
+  bandwidth percent 35
+  random-detect
+ class class-default
+
+
+interface Serial0/1/0
+ description # Uplink to Golden-Telecom IPVPN
+ bandwidth 2048
+ ip address 10.192.10.90 255.255.255.252
+ load-interval 30
+ service-policy output PLATINUM
+
+
+map-class frame-relay EQ-FR
+ frame-relay cir 2048000
+ frame-relay mincir 2048000
+ service-policy output PLATINUM
+
+
+[http://www.mianet.ru/index.php/sysadmin/cisco/197-cisco-qos--](http://www.mianet.ru/index.php/sysadmin/cisco/197-cisco-qos--)
+[http://habrahabr.ru/post/62831/](http://habrahabr.ru/post/62831/)
+
+Cos выставленные приоритеты на 2 или 3  уровне
+Очереди обрабатываются по разному
+У циско есть различные способы обработки разных очередей, универсальный и хороший MQC
+
+
+
+
+[http://ardenpackeer.com/tutorials/qos-voip/qos-applying-cbwfq-to-a-sub-interface/](http://ardenpackeer.com/tutorials/qos-voip/qos-applying-cbwfq-to-a-sub-interface/)
+
+
+
+
+
+
+Стандартно настроенный qos для VPN NLMK
+
+class-map match-any REAL-TIME
+ match ip precedence 5 
+class-map match-any PREMIUM
+ match ip precedence 3 
+!
+!
+policy-map PLATINUM
+ class REAL-TIME
+  priority percent 60
+ class PREMIUM
+  bandwidth percent 35
+  random-detect
+ class class-default
+
+
+На интерфейс
+service-policy output PLATINUM
+bandwidth 2048
+(например)
+
+
+
+
+
+
+
+
+
+
+
+
+
+class-map match-any STANDARD
+ match ip precedence 0  1 
+class-map match-any REAL-TIME
+ match ip precedence 5 
+class-map match-any CHK-PRE
+ match ip precedence 3 
+class-map match-any CHK-REA
+ match ip precedence 5 
+class-map match-any VIDEO
+ match ip precedence 4 
+class-map match-any PREMIUM
+ match ip precedence 3 
+!
+!
+policy-map PLATINUM
+ class REAL-TIME
+    priority percent 60
+ class PREMIUM
+    bandwidth percent 35
+     random-detect
+ class class-default
+    fair-queue
+policy-map PLATINUM-ETH-10M
+ class class-default
+    shape average 10000000
+  service-policy PLATINUM
+policy-map EL-QOS-PRIO
+ class REAL-TIME
+    priority percent 25
+ class class-default
+    fair-queue
+policy-map EL-QOS-ETH
+ class class-default
+    shape average 448000
+  service-policy EL-QOS-PRIO
+policy-map CHK-PRIO
+ class CHK-REA
+    priority percent 40
+ class CHK-PRE
+    bandwidth percent 50
+ class class-default
+    fair-queue
+policy-map CHK-QOS
+ class class-default
+    shape average 1024000
+  service-policy CHK-PRIO
+policy-map TTK_ACCESS_256K_OUT
+ class class-default
+    shape average 256000
+policy-map E-RGS
+ class REAL-TIME
+    priority percent 50
+ class VIDEO
+    bandwidth percent 40
+ class class-default
+    fair-queue
+policy-map PLATINUM-ETH-10MB
+ class class-default
+    shape average 10240000
+  service-policy PLATINUM
+policy-map PLATINUM-ETH
+ class class-default
+    shape average 20480000
+  service-policy PLATINUM
+policy-map TTK_ACCESS_256K_IN
+ class class-default
+   police cir 256000
+     exceed-action drop 
+
+
+
+
+
+policy-map PLATINUM-ETH-4MB
+ class class-default
+    shape average 4096000
+  service-policy PLATINUM
+
+
+policy-map PLATINUM-ETH-1MB
+ class class-default
+    shape average 1024000
+  service-policy PLATINUM
+
+
+
+policy-map PLATINUM-ETH-100MB
+ class class-default
+    shape average 102400000
+  service-policy PLATINUM
+
+policy-map PLATINUM-ETH-12MB
+ class class-default
+    shape average 12228000
+  service-policy PLATINUM
+
+
+
+
+class-map match-any STANDARD
+  match ip precedence 0  1 
+class-map match-any REAL-TIME
+  match ip precedence 5 
+class-map match-any GEODIS-PRIO
+  match access-group 101
+class-map match-any VIDEO
+  match ip precedence 4 
+class-map match-any PREMIUM
+  match ip precedence 3 
+!
+!
+policy-map PRIO-CS5
+  class REAL-TIME
+   priority percent 50
+  class class-default
+   bandwidth percent 50
+policy-map PLATINUM
+  class REAL-TIME
+   priority percent 60
+  class PREMIUM
+   bandwidth percent 35
+   random-detect
+  class class-default
+policy-map REAL-TIME-TEST
+  class class-default
+   shape average 128000
+   service-policy PRIO-CS5
+policy-map E-RGS
+  class REAL-TIME
+   priority percent 50
+  class VIDEO
+   bandwidth percent 40
+  class class-default
+   fair-queue
+policy-map GEODIS-PRIO
+  class GEODIS-PRIO
+   bandwidth 256
+  class class-default
+   fair-queue
+policy-map PLATINUM-ETH
+  class class-default
+   shape average 10420000
+   service-policy PLATINUM
+policy-map PLATINUM-TTK
+  class REAL-TIME
+   priority percent 60
+  class PREMIUM
+   bandwidth percent 15
+   random-detect
+  class class-default
+
+
+policy-map PLATINUM-ETH
+
+
+
+policy-map PLATINUM-ETH-10MB
+ class class-default
+    shape average 10240000
+  service-policy PLATINUM

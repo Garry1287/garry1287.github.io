@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "Drop Pkts"
+date:   2012-07-12 14:05:22 +0400
+categories: Networking
+tags: Networking
+---
+
+# Drop Pkts
+1). ingress back pressure, flow control, rate limitation
+2). port is not in forwarding state
+3). dropped by ACL
+4). dropped because there are no destination ports for the packets
+5). dropped because it is set to blocked in FDB
+6). packet exceeds MAX MTU
+7). packet buffer full 
+
+
+
+
+

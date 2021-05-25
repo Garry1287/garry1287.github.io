@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "качество сети"
+date:   2018-09-30 11:17:03 +0300
+categories: Networking
+tags: Networking
+---
+
+# качество сети
+Следующие метрики являются основными и опорными для оценки качества сетей и систем связи:
+
+    пропускная способность (bandwidth) - iperf
+    пакетная пропускная способность  pps - тоже iperf
+    потери фреймов - ?? iperf - хз  
+    задержка    т.е. через сколько пакет отправленный из точки A оказаться в точке B, Для этого придуман протокол PTP (Precision Time Protocol, IEEE 1588
+        one-trip  (ping, traceroute, mtrace)
+        round-trip
+        jitter
+        delay variation
+    минимальный MTU
+    бёрстность  -  нормированная максимальная битовая скорость
+    
+    [http://habrahabr.ru/post/250821/](http://habrahabr.ru/post/250821/)

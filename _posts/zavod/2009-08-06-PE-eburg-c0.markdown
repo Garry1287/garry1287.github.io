@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "PE-eburg-c0"
+date:   2009-08-06 22:14:27 +0400
+categories: zavod
+tags: zavod
+---
+
+# PE-eburg-c0
+interface GigabitEthernet0/0.1999
+ description #Test Eburg MPLS
+ encapsulation dot1Q 1999
+ ip address 81.20.192.113 255.255.255.252
+ ip ospf priority 3
+ ip ospf mtu-ignore
+ mpls netflow egress
+ mpls label protocol ldp
+ mpls ip
+ no cdp enable
+end
+
+
+router ospf 110
+network 81.20.192.112 0.0.0.3 area 0
+no passive-interface GigabitEthernet0/0.1999
+
+
+!
+router bgp 20866
+neighbor 81.20.192.66 remote-as 20866
+neighbor 81.20.192.66 update-source Loopback0
+
+
+ address-family vpnv4
+ neighbor 81.20.192.66 activate
+ neighbor 81.20.192.66 send-community extended
+
+
+

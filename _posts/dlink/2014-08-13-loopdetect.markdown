@@ -1,0 +1,342 @@
+---
+layout: post
+title:  "loopdetect"
+date:   2014-08-13 05:52:50 +0400
+categories: dlink
+tags: dlink
+---
+
+# loopdetect
+3010g вобще не адекватные железки - у них через полгода работы могут без каких либо причин начать флудить порты.
+ну а что касается тех же 1228me/3028/3526, то на практике используем такую конфигурацию:
+ena loopd
+conf loopd ports 1-24 st ena
+conf traffic control all broad ena
+config stp ports 25-26 restricted_tcn false restricted_role false
+config stp ports 27-28 restricted_tcn false restricted_role false
+config stp ports 1-24 edge true fbpdu enable restricted_role true restricted_tcn true
+conf stp ports 1-24 lbd enable
+
+при условии что 1-24 - это только абоненты, а 25-26(25-28) - это магистральники.
++ отдельно для аплинк порта выключаем fbpdu.
+топология - звезда.
+
+для 3612/3627 loopdetect в режиме vlan-based;
+для 3100 - edge true fbpdu ena на все порты кроме аплинка (без edge true не отрабатывает stp loopdetect).
+
+storm control на броадкаст включаем везде и всегда, а вот threshold значений хватает и дефолтных.
+долго обкатывали разные прошивки, остановились на следующих:
+DES_3028_52_V2.41-B05.had
+des3526r6_6.00-b23.had
+DGS36xxRun_2.55-B05.had
+
+на 1228/me хватает и штатных.
+
+необходимости шить какие то прошивки посвежей - пока не возникало - вроде как все проблемы с которыми встречались ранее - в этих не встречались еще.
+
+нет. fbpdu = forward bpdu. в случае если топология звезда - возвращать bpdu к корню дерева нет смысла.
+
+
+
+
+Странно, и какой смысл использовать stp в топологии звезда ?
+
+И с какой радости bpdu возвращаются к корню, если их генерирует корень, а остальные свичи их релеят вниз по дереву ?
+в том то и смысл..
+1) на длинках portbased loopdetect порой тупит, - просто попробуйте патчкордом порты по соединять. так что спаннинг будет вас страховать.
+2) в случае если два соседа, подключенные к разным коммутаторам, соединят кабели тупым свичем - вы выложите не одну гору кирпичей, вместо того чтоб по команде sh stp ports inst 0 увидеть alternative/discarding
+
+а bpdu как раз таки вернется к корню, если будет ситуация с соседями - т.к. по умолчанию в длинках forward bpdu включен глобально - и во преки теориям - bpdu летит не до первого же коммутатора, который заблокирует порт, а до самого корня (особенно если пакет с одного влана ушел в другой)
+
+
+По рекомендациям самого длинка для DES3526 или loopdetect или stp на порту.
+Ибо есть проблемы при одновременном использовании. 
+
+
+поэтому из 3526 stp lbd и убрали.
+чисто теоретически lbd на stp должен был бы срабатывать если порт с одним вланом замкнуть с портом с другим вланом - на деле возникал такой коллапс, что можно было железку потерять.
+если честно - на то чтоб выработать более менее рабочий вариант поимки колец/флуда пришлось наступить на немалое кол-во граблей.
+
+не советую на 3010g даже смотреть. вариант с 3026+sfp-слот куда более интересный, при незначительной разнице в цене.
+1228/me - урезанный вариант 3028, но уже с адекватной прошивкой (3028 надо первым делом шить).
+на 3100 с loopdetect конечно очень грустно, но терпимо.
+про 2108 ничего сказать не могу - не пробовали. 
+
+Тут же написано, что нельзя включать стп на портах которые учавствуют в стп.
+Включайте ldb только на абонентских портах + убедитесь, что на абон портах stp state не стоит в enabled
+
+
+STP LBD имеет смысл использовать только на клиентских портах, но нужно ещё защитить порт от поддельных bpdu: restricted_role true & restricted_tcn true
+
+ну с этой моделью все понятно, а каково поведение loopdetect на des3026, des3028, des3200?
+и имеет ли смысл использовать обе технологии одновременно?
+
+ИМХО на 3200 нет STP LBD, есть просто LBD, который имеет функционал и того и другого.
+
+
+
+
+
+
+
+
+
+
+Прошу прояснить работу loopdetect на des-3028
+Я так понимаю, есть 2 варианта:
+
+первый:
+enable loopdetect
+config loopdetect...
+etc.
+
+второй:
+enable stp
+config stp lbd enable
+etc. 
+ 
+А если используется и 1-й вариант и stp, что надо делать с lbd в разделе stp? Выключать?
+
+Выключать.
+
+
+
+Никто вам не мешает выключить stp на клиентских портах и включить там lbd и сделать наоборот - включить stp и выключить lbd - на аплинках.
+
+
+
+
+
+Приношу извинения, ситуация на данный момент следующая.
+В прошивке 2.71 реализована версия LBD 4.02, при которой одновременно stp и lbd на порту уже не работает, но lbd при этом умеет ловить только петли за портом, но не между портами коммутатора. Реализация LBD 4.03 (где ловится петля как за одним портом, так и между портами) будет в R2.8 предположительно в январе 2012.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jul 16 14:40:06 topaz kernel: [16278.866866] named[1686]: segfault at 90 ip b762b313 sp b6b62110 error 6 in libisc.so.83.0.1[b75ee000+5b000]
+Jul 16 14:40:06 topaz named[2717]: Shutting down name server BIND - Warning: named not running! /etc/init.d/named: line 229:  2726 Segmentation fault      ${RNDC_BIN} status &>/dev/null
+Jul 16 14:40:06 topaz kernel: [16278.944029] rndc[2728] general protection ip:b75e9ea8 sp:b66280c0 error:0 in libdns.so.81.3.1[b758a000+1a5000]
+Jul 16 14:40:06 topaz named[2717]: ..done
+
+
+
+
+
+
+
+Jul 16 16:15:37 topaz named[3292]: starting BIND 9.8.1-P1 -4 -t /var/lib/named -u named
+Jul 16 16:15:37 topaz named[3292]: built with '--prefix=/usr' '--bindir=/usr/bin' '--sbindir=/usr/sbin' '--sysconfdir=/etc' '--localstatedir=/var' '--libdir=/usr/lib' '--includedir=/usr/include/bind' '--mandir=/usr/share/man' '--infodir=/usr/share/info' '--with-openssl' '--enable-threads' '--with-libtool' '--enable-runidn' '--with-libxml2' '--with-dlz-mysql' '--with-dlz-ldap' 'CFLAGS=-fomit-frame-pointer -fmessage-length=0 -O2 -Wall -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables -g -DNO_VERSION_DATE -fno-strict-aliasing' 'LDFLAGS=-L/usr/lib'
+Jul 16 16:15:37 topaz named[3292]: adjusted limit on open files from 4096 to 1048576
+Jul 16 16:15:37 topaz named[3292]: found 1 CPU, using 1 worker thread
+Jul 16 16:15:37 topaz named[3292]: using up to 4096 sockets
+Jul 16 16:15:37 topaz named[3292]: loading configuration from '/etc/named.conf'
+Jul 16 16:15:37 topaz named[3292]: using default UDP/IPv4 port range: [1024, 65535]
+Jul 16 16:15:37 topaz named[3292]: using default UDP/IPv6 port range: [1024, 65535]
+Jul 16 16:15:37 topaz named[3292]: no IPv6 interfaces found
+Jul 16 16:15:37 topaz named[3292]: listening on IPv4 interface lo, 127.0.0.1#53
+Jul 16 16:15:37 topaz kernel: [22010.203992] named[3295]: segfault at 2b ip 0000002b sp b69a1400 error 4
+Jul 16 16:15:37 topaz named[3241]: Starting name server BIND - Warning: /var/lib/named/var/run/named/named.pid exists! ..failed
+Jul 16 16:15:37 topaz systemd[1]: named.service: control process exited, code=exited status=1
+Jul 16 16:15:37 topaz systemd[1]: Unit named.service entered failed state.
+
+
+
+
+
+
+
+VPN на базе IPSec, PPTP, L2TP и SSL, 
+
+config traffic control 1-27 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
+
+
+config traffic control 1-25 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
+config traffic control 2:1-2:25 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
+config traffic control 3:1-3:25 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
+
+
+
+Владимир 89042182100 Хозяин БЦ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Задача:
+1. Обеспечить на оконечных портах DES-3526/3550 отсутствие петель в неуправляемых сегментах (cli и snmp)
+2. Обеспечить на оконечных портах DES-3028/3052 отсутствие петель в неуправляемых сегментах (cli и snmp)
+
+Ситуация, показанная на рисунке, вынуждает управляемый коммутатор постоянно перестраивать «дерево» STP при получении своего же собственного BPDU. Новая функция LoopBack Detection отслеживает такие ситуации и блокирует порт, на котором обнаружена петля, тем самым предотвращая проблемы в сети независимо от работы STP протокола. Т.е. неважно, включен STP протокол на порту или выключен – петля будет обнаружена, и порт будет заблокирован. Петля на порту обнаруживается путём отсылки коммутатором пакета с адресом назначения CF-00-00-00-00-00 (9000 Ethernet Configuration Test protocol (Loopback)). Это нужно учитывать при составлении правил ACL.
+Пример настройки функции LoopBack Detection (LBD) des-3526 (cli):
+DES-3526:admin# enable loopdetect
+DES-3526:admin# config loopdetect ports 1-24 state enabled
+DES-3526:admin# config loopdetect recover_timer 60 interval 10 mode port-based
+
+Recover_timer – время, в течение которого порты будут отключены.
+Interval – интервалы между отправкой пакетов обнаружения петли. Время для этих параметров задаётся глобально на коммутаторе.
+Mode port-based – Режим обнаружения петли на порту коммутатора. При обнаружении петли блокируется порт.
+Mode vlan-based – Режим обнаружения петли в VLAN. Используется в случаях, когда на одном порту присутствует несколько VLAN. При обнаружении петли блокируется трафик из конкретного VLAN.
+Пример настройки функции LoopBack Detection (LBD) на des-3526 по snmp:
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.1.0 i 1
+# 1 – включить, 2 – выключить LoopBack Detection
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.2.1.1.2.1 i 1
+#1- включить loopdetect на 1 порту, 2 – выключить
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.2.0 i 10
+# Задаем интервалы между отправкой пакетов обнаружения петли в секундах (значение от 1 до 32767)
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.3.0 i 60
+#Задаем время,  в течение которого порты будут отключены, при обнаружении петли в секундах (значение от 0 до 1000000) .
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.4.0 i 2
+#Задаем режим обнаружения петли на порту коммутатора 1 – VLAN-Based, 2 – Port-Based
+
+Посмотреть состояние портов по snmp можно следующим образом
+
+snmpwalk -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.2.1.1.4
+
+Где:
+INTEGER: 1 – normal
+INTEGER: 2 – loop
+INTEGER: 3 – error
+
+Посмотреть настройки LoopBack Detection можно командой show loopdetect
+DES-3526:admin# show loopdetect
+Command: show loopdetect
+
+Loopdetect Global Settings
+—————————
+Loopdetect Status : Enabled
+Loopdetect Interval : 10
+Recover Time : 60
+Mode : Port-Based
+Пример настройки функции LoopBack Detection (LBD) на des-3028 (cli):
+DES-3028:4# enable loopdetect
+DES-3028:4# config loopdetect ports 1-24 state enabled
+DES-3028:4# config loopdetect recover_timer 60 interval 10
+Пример настройки функции LoopBack Detection (LBD) на des-3028 по snmp:
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.1.1.0  i 1
+# 1 – включить, 2 – выключить LoopBack Detection
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.2.1.1.2.1 i 1
+#1- включить loopdetect на 1 порту, 2 – выключить
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.1.2.0  i 10
+# Задаем интервалы между отправкой пакетов обнаружения петли в секундах (значение от 1 до 32767)
+
+snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.1.3.0 i 60
+#Задаем время,  в течение которого порты будут отключены, при обнаружении петли в секундах (значение от 0 до 1000000) .
+
+Посмотреть состояние портов по snmp можно следующим образом
+snmpwalk -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.2.1.1.4
+
+Где:
+INTEGER: 1 – normal
+INTEGER: 2 – loop
+INTEGER: 3 – error
+
+Посмотреть настройки LoopBack Detection можно командой show loopdetect
+DES-3028:4#show loopdetect
+Command: show loopdetect
+
+Loopdetect Global Settings
+—————————
+Loopdetect Status : Enabled
+Loopdetect Interval : 10
+Recover Time : 60
+
+Как заметили, у des-3028 только 1 режим – режим обнаружения петли на порту коммутатора.
+
+Вот и вся настройка. Ниже приведен скрипт для включения loopdetect на коммутаторе, в зависимости от модели.
+
+#!/usr/local/bin/bash
+
+if [ ! $# == 1 ]
+then echo «Используйте: $0 <ip-адрес коммутатора>»
+exit 1
+fi
+
+COMMUNITY=»private»
+
+#  Проверяем связь с коммутатором
+ping -c1 $1 &> /dev/null
+
+if [ $? == 0 ]
+then
+
+# Определяем тип коммутатора
+switch=`snmpget -v2c -c $COMMUNITY $1 1.3.6.1.2.1.1.1.0`
+
+# 3526
+if [[ $switch == *3526* ]]; then
+echo «des-3526 enable loopdetect»
+for (( i=1; i<=24 ; i++ ))
+do
+snmpset -v2c -c $COMMUNITY $1 .1.3.6.1.4.1.171.11.64.1.2.12.2.1.1.2.$i i 1
+done
+snmpset -v2c -c $COMMUNITY $1 .1.3.6.1.4.1.171.11.64.1.2.12.1.1.0 i 1 \
+.1.3.6.1.4.1.171.11.64.1.2.12.1.2.0 i 10 \
+.1.3.6.1.4.1.171.11.64.1.2.12.1.3.0 i 60 \
+.1.3.6.1.4.1.171.11.64.1.2.12.1.4.0 i 2
+# 3028
+elif [[ $switch == *3028* ]]; then
+echo «des-3028 enable loopdetect»
+for (( i=1; i<=24 ; i++ ))
+do
+snmpset -v2c -c $COMMUNITY $1 .1.3.6.1.4.1.171.11.63.6.2.21.2.1.1.2.$i i 1
+done
+snmpset -v2c -c $COMMUNITY $1 .1.3.6.1.4.1.171.11.63.6.2.21.1.1.0 i 1 \
+.1.3.6.1.4.1.171.11.63.6.2.21.1.2.0 i 10 \
+.1.3.6.1.4.1.171.11.63.6.2.21.1.3.0 i 60
+else echo -e «\E[40;31mНе могу определить тип коммутатора»
+tput sgr0
+exit
+fi
+fi

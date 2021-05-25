@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "rs232"
+date:   2014-02-17 05:22:16 +0400
+categories: Networking
+tags: Networking
+---
+
+# rs232
+[http://estohard.narod.ru/Protocols/rs232/rs232_1.htm](http://estohard.narod.ru/Protocols/rs232/rs232_1.htm)
+[http://www.kramer.ru/academy/courses/1141](http://www.kramer.ru/academy/courses/1141)
+[http://linuxshare.ru/docs/hardware/null-modem.html](http://linuxshare.ru/docs/hardware/null-modem.html)
+
+[http://www.ethernut.de/en/documents/rs232primer.html](http://www.ethernut.de/en/documents/rs232primer.html)
+[http://pinouts.ru/SerialPortsCables/Nullmodem9to9_pinout.shtml](http://pinouts.ru/SerialPortsCables/Nullmodem9to9_pinout.shtml)

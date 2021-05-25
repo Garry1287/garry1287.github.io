@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "VOIP"
+date:   2010-03-15 21:20:07 +0300
+categories: voip
+tags: voip
+---
+
+# VOIP
+[http://subnets.ru/blog/?p=1299](http://subnets.ru/blog/?p=1299)

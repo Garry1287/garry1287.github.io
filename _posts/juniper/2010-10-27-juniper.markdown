@@ -1,0 +1,1547 @@
+---
+layout: post
+title:  "juniper"
+date:   2010-10-27 21:28:24 +0400
+categories: juniper
+tags: juniper
+---
+
+# juniper
+Посмотреть тип sfp
+garry@ctd-s2# run show chassis hardware 
+Hardware inventory:
+Item             Version  Part number  Serial number     Description
+Chassis                                LX0213276419      EX4550-32F
+Routing Engine 0 REV 14   750-039067   LX0213276419      EX4550-32F
+FPC 0            REV 14   750-039067   LX0213276419      EX4550-32F
+  CPU                     BUILTIN      BUILTIN           FPC CPU
+  PIC 0                   BUILTIN      BUILTIN           32x 1G/10G SFP/SFP+
+    Xcvr 0                NON-JNPR     EMB141029007      SFP+-10G-SR
+    Xcvr 1                NON-JNPR     SCB7500133        SFP+-10G-LR
+    Xcvr 2       PO_3:    NON-JNPR     CIB141029032      SFP+-10G-LR
+    Xcvr 3                NON-JNPR     GR1201010300      SFP-T
+    Xcvr 5                NON-JNPR     XP96U2753         SFP+-10G-LR
+    Xcvr 6                NON-JNPR     SE3X400010        SFP+-10G-LR
+    Xcvr 11      t&       NON-JNPR     FNS14531822       SFP-SX
+    Xcvr 12               NON-JNPR     MTC145300UQ       SFP-T
+    Xcvr 13      k        NON-JNPR     MTC145300VP       SFP-T
+    Xcvr 14               NON-JNPR     K6Y7205           SFP-LX10
+    Xcvr 15               NON-JNPR     H3M8745           SFP-LX10
+    Xcvr 16               NON-JNPR     438AI30507748     SFP-LX10
+    Xcvr 17      "        NON-JNPR     SPC14490450       SFP-LX10
+    Xcvr 18      "        NON-JNPR     M1205310253       SFP-SX
+    Xcvr 19      =        NON-JNPR     P13A06110316      SFP-LX10
+    Xcvr 20      7        NON-JNPR     MG80T878          SFP-T
+    Xcvr 21      Cg       NON-JNPR     K6Y7650           SFP-LX10
+    Xcvr 23      XIU      NON-JNPR     F15A01730069      SFP-LX
+    Xcvr 24               NON-JNPR     MTC100001         SFP-T
+    Xcvr 25               NON-JNPR     EMB141029004      SFP+-10G-SR
+    Xcvr 26               NON-JNPR     CIB141029035      SFP+-10G-LR
+    Xcvr 30               NON-JNPR     EMB141029002      SFP+-10G-LR
+    Xcvr 31               NON-JNPR     EMB141029002      SFP+-10G-LR
+Power Supply 0   REV 03   740-041741   1GA23180063       JPSU-650W-AC-AFO
+Power Supply 1   REV 03   740-041741   1GA23220623       JPSU-650W-AC-AFO
+Fan Tray                                                 Fan Module, Airflow Out (AFO)
+
+
+
+
+---
+garry@ctd-s2# run show chassis pic fpc-slot 0 pic-slot 0 
+FPC slot 0, PIC slot 0 information:
+  Type                             32x 1G/10G SFP/SFP+ Builtin
+  State                            Online    
+  Uptime			 373 days, 15 hours, 54 minutes, 8 seconds
+
+PIC port information:
+                         Fiber                    Xcvr vendor       Wave-    Xcvr
+  Port Cable type        type  Xcvr vendor        part number       length   Firmware
+  0    10GBASE SR        MM    OEM                SFP-10G-MM        850 nm   0.0   
+  1    10GBASE LR        SM    OEM                SFP+ LR           1310 nm  0.0   
+  2    10GBASE LR        SM    OEM                SFP-10G-BDA 20KM  1270 nm  0.0   
+  3    GIGE 1000T        n/a   OEM                SFP-T             n/a      0.0   
+  5    10GBASE LR        SM    OEM                10GB-SFP-U27      1270 nm  0.0   
+  6    10GBASE LR        SM    OptiCin            SFP+1330-1270.20  1330 nm  0.0   
+  11   GIGE 1000SX       MM    CISCO-FINISAR      FTLF8519P2BCL-C5  850 nm   0.0   
+  12   GIGE 1000T        n/a   CISCO-METHODE      SP7041-E          n/a      0.0   
+  13   GIGE 1000T        n/a   CISCO-METHODE      SP7041-E          n/a      0.0   
+  14   GIGE 1000LX10     SM    OEM                SFP-LX-1310       1310 nm  0.0   
+  15   GIGE 1000LX10     SM    OEM                1000BASE-LX       n/a      0.0   
+  16   GIGE 1000LX10     SM    OPTOSTAR           OP-SFP-LX-10      1310 nm  0.0   
+  17   GIGE 1000LX10     SM    CISCO-SUMITOMO     SCP6G44-C1-BMH    1310 nm  0.0   
+  18   GIGE 1000SX       MM    OEM                GP-8524-S5C       850 nm   0.0   
+  19   GIGE 1000LX10     SM    OEM                SFP-1000B         1310 nm  0.0   
+  20   GIGE 1000T        n/a   OEM                SFP-T             n/a      0.0   
+  21   GIGE 1000LX10     SM    OEM                SFP-LX-1310       1310 nm  0.0   
+  23   GIGE 1000LX       SM    OEM                SFP-1000B 3KM     1550 nm  0.0   
+  24   GIGE 1000T        n/a   FINISAR CORP.      FCMJ-8521-3-EX    n/a      0.0   
+  25   10GBASE SR        MM    OEM                SFP-10G-MM        850 nm   0.0   
+  26   10GBASE LR        SM    OEM                SFP-10G-BDB 20KM  1330 nm  0.0   
+  30   10GBASE LR        SM    OEM                SFP-10G-BDA 60KM  1270 nm  0.0   
+  31   10GBASE LR        SM    OEM                SFP-10G-BDA       1270 nm  0.0   
+
+
+
+
+
+
+Просмотр мощьности оптического сигнала
+run show interfaces diagnostics optics xe-0/0/2 
+[http://net-notes.ru/blog/category/juniper/](http://net-notes.ru/blog/category/juniper/)
+
+[https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-interfaces-diagnostics-optics-ex-series.html](https://www.juniper.net/documentation/en_US/junos/topics/reference/command-summary/show-interfaces-diagnostics-optics-ex-series.html)
+
+"Juniper MX Series" и "Juniper Networks Warrior" от O'REILLY
+[http://it-donnet.ru/juniper/](http://it-donnet.ru/juniper/)
+
+
+[http://www.juniper.net/us/en/products-services/switching/ex-series/ex4550/#/](http://www.juniper.net/us/en/products-services/switching/ex-series/ex4550/#/)
+[http://xgu.ru/wiki/JUNOS](http://xgu.ru/wiki/JUNOS)
+[http://juniper-rus.blogspot.ru/2012/10/2.html](http://juniper-rus.blogspot.ru/2012/10/2.html)
+[https://habrahabr.ru/sandbox/80771/](https://habrahabr.ru/sandbox/80771/)
+
+Хорошая статья
+[http://www.sharontools.com/blog/tips/juniper-ex-switches-configuration-examples/](http://www.sharontools.com/blog/tips/juniper-ex-switches-configuration-examples/)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Взять с cisco пример того, что надо
+1.SSH
+ssh доступ
+пользователей сделать
+
+
+set system services ssh
+
+root@Juniper# set system services ssh
+root@Juniper# set system services ssh protocol-version v2
+
+запрещаем подключаться по ssh с лгином root
+
+root@Juniper# set system services ssh root-login deny
+
+ограничиваем количество одновременных подключений (в примере 10)
+
+root@Juniper# set system services ssh connection-limit 10
+
+ограничиваем число попыток ввода пароля за одну минуту (в примере не более 5 попыток в минуту)
+
+root@Juniper# set system services ssh rate-limit 5
+
+Установка пользователя
+set system login user smithy class super-user authentication plain-text-password
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. Настройка интерфейса (stp, trunk,acess)
+link-mode 
+automatic—Link mode is auto-negotiated. This is the default for EX Series switches. The link operates at the highest possible speed, depending on the capabilities of the remote end.
+full-duplex—Connection is full duplex.
+half-duplex—Connection is half duplex.
+
+802.3ad—Specify an aggregated Ethernet bundle. See Configuring Aggregated Ethernet Links (CLI Procedure).
+auto-negotiation—Enable or disable autonegotation of flow control, link mode, and speed.
+flow-control—Enable or disable flow control.
+link-mode—Specify full duplex, half duplex, or autonegotiation. On EX4300 switches, the interfaces operate in full duplex mode only.
+loopback—Enable or disable loopback mode.
+speed—Specify 10 Mbps, 100 Mbps, 1 Gbps, or autonegotiation.
+
+Read more at [https://stage.juniper.net/techpubs/en_US/junos13.2/topics/task/configuration/ex-series-gigabit-interfaces-cli-els.html#7dibjOtkX4r2cSC2.99](https://stage.juniper.net/techpubs/en_US/junos13.2/topics/task/configuration/ex-series-gigabit-interfaces-cli-els.html#7dibjOtkX4r2cSC2.99)
+
+.Настройка интерфейса
+set description "TRUNK_to_Router"
+
+
+Физический интерфейс по умолчанию является ничего не умеющим портом. Для полноценной работы с 802.1Q и соединения с другими коммутаторами необходимо ассоциировать порт с механизмом коммутации. В таком режиме у порта может быть только один подыинтерфейс (unit) и только с номером 0. Создание дополнительных подыинтерфейсов на порту после этого невозможно.
+
+edit interfaces fe-0/0/1 unit 0 family ethernet-switching
+ set port-mode trunk
+ set vlan members test_net_2
+ set native-vlan-id 1
+ exit
+
+ unit - аналог сабинтерфейса
+
+  ge-0/0/22 {
+        ether-options {
+            link-mode full-duplex;
+            speed {
+                auto-negotiation;
+            }
+        }
+        unit 0 {
+            enable;
+            family ethernet-switching {
+                port-mode trunk;
+                vlan {
+                    members [ 2610 2620 2630 ];
+                }
+            }
+        }
+    }
+
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3.snmp
+garry@ctd-s2# set snmp description "ctd-s2" 
+
+{master:0}[edit]
+garry@ctd-s2# set snmp location "CTD"          
+
+{master:0}[edit]
+garry@ctd-s2# set snmp contact "iptech@sc.ru" 
+
+{master:0}[edit]
+garry@ctd-s2# 1
+              ^
+unknown command.
+
+{master:0}[edit]
+garry@ctd-s2# 
+
+{master:0}[edit]
+garry@ctd-s2# set snmp community public authorization read-only 
+
+{master:0}[edit]
+garry@ctd-s2# set snmp community Sh73ah91Kld authorization ?           
+Possible completions:
+  read-only            Allow read-only access
+  read-write           Allow read and write access
+{master:0}[edit]
+garry@ctd-s2# set snmp community Sh73ah91Kld authorization rew                                                                                                                        
+                                                           ^
+syntax error, expecting <data>.
+garry@ctd-s2# set snmp community Sh73ah91Kld authorization read-write ?
+Possible completions:
+  <[Enter]>            Execute this command
++ apply-groups         Groups from which to inherit configuration data
++ apply-groups-except  Don't inherit configuration data from these groups
+  client-list-name     The name of client list or prefix list
+> clients              List of source address prefix ranges to accept
+> logical-system       Use logical-system name for v1/v2c clients
+> routing-instance     Use routing-instance name for v1/v2c clients
+  view                 View name
+  |                    Pipe through a command
+{master:0}[edit]
+garry@ctd-s2# set snmp community Sh73ah91Kld authorization read-write          
+
+{master:0}[edit]
+garry@ctd-s2# set snmp co
+                         ^
+'co' is ambiguous.
+Possible completions:
+> community            Configure a community string
+  contact              Contact information for administrator
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list ?
+Possible completions:
+  <client-list-name>   The name for the client list
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access ?
+Possible completions:
+  <[Enter]>            Execute this command
+  <prefix>             Address or prefix
++ apply-groups         Groups from which to inherit configuration data
++ apply-groups-except  Don't inherit configuration data from these groups
+  |                    Pipe through a command
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access apply-groups ? 
+Possible completions:
+  <value>              Groups from which to inherit configuration data
+  [                    Open a set of values
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access 192.168.121.0/24 ?
+Possible completions:
+  <[Enter]>            Execute this command
++ apply-groups         Groups from which to inherit configuration data
++ apply-groups-except  Don't inherit configuration data from these groups
+  restrict             Deny access
+  |                    Pipe through a command
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access 192.168.121.0/24 192.168.113.0/24
+                                                               ^
+syntax error.
+
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access 192.168.121.0/24                    
+
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access 192.168.121.0/24 ?  
+Possible completions:
+  <[Enter]>            Execute this command
++ apply-groups         Groups from which to inherit configuration data
++ apply-groups-except  Don't inherit configuration data from these groups
+  restrict             Deny access
+  |                    Pipe through a command
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access 192.168.121.0/24 apply-groups ?          
+Possible completions:
+  <value>              Groups from which to inherit configuration data
+  [                    Open a set of values
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list ?                                           
+Possible completions:
+  <client-list-name>   The name for the client list
+  psi-access           The name for the client list
+{master:0}[edit]
+garry@ctd-s2# set snmp client-list psi-access 192.168.113.0/24                    
+
+{master:0}[edit]
+garry@ctd-s2# show snmp client-list psi-access 
+192.168.121.0/24;
+192.168.113.0/24;
+
+{master:0}[edit]
+garry@ctd-s2# set snmp community public client-list-name ?    
+Possible completions:
+  <client-list-name>   The name of client list or prefix list
+{master:0}[edit]
+garry@ctd-s2# set snmp community public client-list-name psi-access 
+
+{master:0}[edit]
+garry@ctd-s2# set snmp community Sh73ah91Kld client-list-name psi-access 
+
+[http://www.juniper.net/techpubs/en_US/junos14.1/topics/example/snmp-config-cli-qfx-series.html#0Xz8MbqiI9z7ZD9u.97](http://www.juniper.net/techpubs/en_US/junos14.1/topics/example/snmp-config-cli-qfx-series.html#0Xz8MbqiI9z7ZD9u.97)
+[http://itstickers.besthw.net/%D0%B2%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-snmp-%D0%BD%D0%B0-juniper/](http://itstickers.besthw.net/%D0%B2%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-snmp-%D0%BD%D0%B0-juniper/)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. ntp
+garry@ctd-s2# set system ntp server 81.20.196.53 prefer    
+{master:0}[edit]
+garry@ctd-s2# set system ntp server 81.20.196.54           
+set system  time-zone GMT-3;
+
+show system uptime 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5. acess-list
+ ntp telnet snmp ssh 
+Сделал по статье  [http://forum.lissyara.su/viewtopic.php?t=43472](http://forum.lissyara.su/viewtopic.php?t=43472)
+    lo0 {
+        unit 0 {
+            family inet {
+                filter {
+                    input block.services;
+                }
+            }
+        }
+    }
+
+    
+    firewall {
+    family inet {
+        filter block.services {
+            term 10 {
+                from {
+                    source-address {
+                        192.168.121.0/24;
+                        192.168.113.0/24;
+                        192.168.1.0/24;
+                    }
+                    destination-port [ telnet ssh snmp ntp ];
+                }
+                then accept;
+            }
+            term 20 {
+                from {
+                    destination-port [ telnet ssh ntp snmp ];
+                }
+                then {
+                    discard;
+                }
+            }
+            term 30 {
+                then accept;            
+            }
+        }
+    }
+}
+
+
+policy-options {
+    prefix-list lan-mngt {
+        192.168.113.0/24;
+        192.168.121.0/24;
+    }
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+6. prefix-list и firewall [http://jnciastepbystep.blogspot.ru/2013/02/2-telnet-ssh.html](http://jnciastepbystep.blogspot.ru/2013/02/2-telnet-ssh.html)
+                                    [https://habrahabr.ru/post/173031/](https://habrahabr.ru/post/173031/)
+                                    [http://www.juniper.net/techpubs/en_US/junos12.3/information-products/pathway-pages/config-guide-firewall-filter/config-guide-firewall-filter.html#configuration](http://www.juniper.net/techpubs/en_US/junos12.3/information-products/pathway-pages/config-guide-firewall-filter/config-guide-firewall-filter.html#configuration)
+                                    [http://shop.nag.ru/article/juniper-policy-and-filter-kak-sdelat](http://shop.nag.ru/article/juniper-policy-and-filter-kak-sdelat)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------                           
+7. траффик мирроринг [http://www.juniper.net/techpubs/en_US/junos12.3/topics/example/port-mirroring-local-ex-series.html](http://www.juniper.net/techpubs/en_US/junos12.3/topics/example/port-mirroring-local-ex-series.html)
+ monitor session 1 source interface Te1/6 - 7
+monitor session 1 source interface Te2/7
+monitor session 1 source interface Gi2/11 , Gi2/14
+monitor session 1 source interface Po2
+monitor session 1 destination interface Te1/1
+
+[edit ethernet-switching-options]
++   analyzer sorm-monitor {
++       input {
++           ingress {
++               interface xe-0/0/6.0;
++               interface xe-0/0/7.0;
++               interface xe-0/0/8.0;
++               interface ge-0/0/12.0;
++               interface ge-0/0/15.0;
++           }
++       }
++       output {
++           interface {
++               xe-0/0/1.0;
++           }
++       }
++   }
+надо добавить Po2
+ --------------------------------------------------------------------------------------------------------------------------------------------------------------------------     
+8. Etherchannel    [http://www.junosworkbook.com/workbooks/jncia/configuring-lacp-aggregate-ethernet-interfaces](http://www.junosworkbook.com/workbooks/jncia/configuring-lacp-aggregate-ethernet-interfaces)
+                            [https://blog.michaelfmcnamara.com/2013/11/lacp-configuration-examples-part-5/](https://blog.michaelfmcnamara.com/2013/11/lacp-configuration-examples-part-5/)
+      
+set vlans VLAN-100 vlan-id 100
+set vlans VLAN-200 vlan-id 200
+set interfaces vlan unit 100 family inet address 192.168.100.20/24
+set interfaces vlan unit 200 family inet address 192.168.200.20/24
+set vlans VLAN-100 l3-interface vlan.100
+set vlans VLAN-200 l3-interface vlan.200
+
+delete interfaces ge-0/0/0 unit 0
+delete interfaces ge-0/0/1 unit 0
+set chassis aggregated-devices ethernet device-count 1                      #определяем количестов интерфейсов
+                                                                                                            [http://www.juniper.net/documentation/en_US/junos12.1/topics/concept/interface-security-aggregated-ethernet-device-count-understanding.html](http://www.juniper.net/documentation/en_US/junos12.1/topics/concept/interface-security-aggregated-ethernet-device-count-understanding.html)
+                                                                                                            [https://www.juniper.net/techpubs/en_US/junos/topics/task/configuration/chassis-aggregated-devices-configuring.html](https://www.juniper.net/techpubs/en_US/junos/topics/task/configuration/chassis-aggregated-devices-configuring.html)
+set interfaces ge-0/0/0 ether-options 802.3ad ae0
+set interfaces ge-0/0/1 ether-options 802.3ad ae0
+set interfaces ae0 aggregated-ether-options lacp active
+set interfaces ae0 aggregated-ether-options lacp periodic fast
+
+set interfaces ae0 unit 0 family ethernet-switching
+set interfaces ae0 unit 0 family ethernet-switching port-mode trunk
+set interfaces ae0 unit 0 family ethernet-switching port-mode trunk vlan members VLAN-100 members VLAN-200 
+      
+      root> show interfaces ae0 extensive
+      root> show ethernet-switching table
+      
+      
+      
+      
+garry@ctd-s2# delete interfaces ge-0/0/13 unit 0 
+
+{master:0}[edit]
+garry@ctd-s2# delete interfaces ge-0/0/20 unit 0   
+
+set chassis aggregated-devices ethernet device-count 1
+ set interfaces ge-0/0/13 ether-options 802.3ad ae1
+set interfaces ge-0/0/20 ether-options 802.3ad ae1
+set interfaces ae1 aggregated-ether-options lacp active
+set interfaces ae1 aggregated-ether-options lacp periodic fast
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+9. MSTP
+delete protocols rstp
+
+set protocols mstp configuration-name AcmeNetworks
+set protocols mstp revision-level 1
+set protocols mstp msti 1 vlan 100
+set protocols mstp msti 2 vlan 200
+
+set protocols mstp msti 1 bridge-priority 16384
+commit and-quit
+
+
+[https://www.juniper.net/documentation/en_US/junos15.1/topics/task/configuration/layer-2-services-stp-configuration-mstp.html](https://www.juniper.net/documentation/en_US/junos15.1/topics/task/configuration/layer-2-services-stp-configuration-mstp.html)
+[http://www.juniper.net/documentation/en_US/junos14.1/topics/example/stp-mstp-qfx-series.html](http://www.juniper.net/documentation/en_US/junos14.1/topics/example/stp-mstp-qfx-series.html)
+[https://www.juniper.net/techpubs/en_US/junos14.1/topics/example/spanning-trees-ex-series-mstp-configuring.html](https://www.juniper.net/techpubs/en_US/junos14.1/topics/example/spanning-trees-ex-series-mstp-configuring.html)
+[http://www.juniper.net/techpubs/en_US/junos12.2/topics/example/spanning-trees-ex-series-mstp-configuring.html](http://www.juniper.net/techpubs/en_US/junos12.2/topics/example/spanning-trees-ex-series-mstp-configuring.html)
+[http://blog.sbolshakov.ru/11-3-mstp/](http://blog.sbolshakov.ru/11-3-mstp/)
+set protocols <stp-protocol> interface <interface> edge
+[http://www.juniper.net/techpubs/en_US/junos16.1/topics/reference/configuration-statement/bpdu-timeout-action-edit-protocols-stp.html](http://www.juniper.net/techpubs/en_US/junos16.1/topics/reference/configuration-statement/bpdu-timeout-action-edit-protocols-stp.html)
+bpdu-block-on-edge is enabled:
+set ethernet-switching-options bpdu-block interface <interface> disable
+Это для non-edge портов
+
+run show spanning-tree interface
+ show spanning-tree bridge 
+ show spanning-tree interface 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+10. OSPF
+НАША КОНФИГУРАЦИЯ
+policy-statement STATIC-TO-OSPF
+term exportstatic1 {
+from protocol static;
+then accept;}
+}
+
+policy-statement DIRECT-TO-OSPF {
+    from protocol direct;
+    then accept;
+
+}
+
+У juniper по умолчанию priority 128. Тянет одеяло на себя
+
+set routing-options router-id 81.20.192.8
+set protocols ospf area 0.0.0.0 interface vlan.10 priority 0
+set protocols ospf export STATIC-TO-OSPF
+set protocols ospf export DIRECT-TO-OSPF
+
+Другие настройки не нужны пока, metric и приорити потом, на боевой конфигурации
+
+
+
+
+ПРИМЕРЫ для OSPF
+
+ set routing-options router-id 177.162.4.24
+ 
+ 
+Установка priority
+[edit]
+set protocols ospf area 0.0.0.0 interface ge-0/0/1 priority 200
+
+
+Статические маршруты
+policy-statement exportstatic1 {
+term exportstatic1 {
+from protocol static;
+then accept;
+}
+}
+
+set protocols ospf export exportstatic1
+
+
+
+Распределение directly connected маршутов           export [ exportstatic exportdirect ];
+policy-statement exportdirect {
+
+    from protocol direct;
+
+    then accept;
+
+}
+
+
+
+
+
+admin@host2> configure
+Entering configuration mode
+
+[edit]
+admin@host2# edit policy-options policy-statement STATIC-to-OSPF
+
+[edit policy-options policy-statement STATIC-to-OSPF]
+admin@host2# set term 1 from protocol static
+
+[edit policy-options policy-statement STATIC-to-OSPF]
+admin@host2# set term 1 then accept
+
+
+Так как cost - это метрика, то в juniper 
+либо устанавливается bandwidth 
+ set protocols ospf reference-bandwidth 10g
+или установкой метркики
+[edit]
+set protocols ospf area 0.0.0.0 interface fe-1/0/1 metric 5
+
+ [http://www.juniper.net/techpubs/en_US/junos16.1/topics/example/ospf-segment-cost-configuring.html](http://www.juniper.net/techpubs/en_US/junos16.1/topics/example/ospf-segment-cost-configuring.html)
+ 
+Проверка
+show ospf interface and the show ospf neighbor
+
+Установка Mtu на juniper, mtu ignore нет на данной железке
+root@SRX# set interfaces ge-0/0/0 mtu 1514 
+[https://kb.juniper.net/InfoCenter/index?page=content&id=KB19382&actp=search](https://kb.juniper.net/InfoCenter/index?page=content&id=KB19382&actp=search)
+
+
+[http://netwild.ru/juniper-ospf/](http://netwild.ru/juniper-ospf/)
+[http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-configuring-interfaces.html](http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-configuring-interfaces.html)
+[http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-areas.html](http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-areas.html)
+[http://www.juniper.net/techpubs/en_US/junos12.1/information-products/pathway-pages/config-guide-routing/config-guide-ospf.html#configuration](http://www.juniper.net/techpubs/en_US/junos12.1/information-products/pathway-pages/config-guide-routing/config-guide-ospf.html#configuration)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+11. default и другие маршруты
+Статические маршруты
+set routing-options static route 192.168.47.0/24 next-hop 172.16.1.2
+set routing-options static route 0.0.0.0/0 next-hop 172.16.1.1
+
+Маршруты на NULL
+set routing-options static route 66.66.66.0/24 discard
+[http://forums.juniper.net/t5/Routing/Null0-Interface-in-Juniper/td-p/10060](http://forums.juniper.net/t5/Routing/Null0-Interface-in-Juniper/td-p/10060)
+
+Static, Aggregate и Generate routes в JunOS
+[https://habrahabr.ru/post/274873/](https://habrahabr.ru/post/274873/)
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+12. jumbo-frames 
+
+Below are the setps on how to enable Jumbo frames on an aggregate interface on EX series switches
+
+The following is the set of command to create a link aggregation bundle and enable jumbo frames:
+
+{master:0}[edit interfaces ge-0/0/0]
+user@switch# show
+unit 0 {
+    family ethernet-switching;
+}
+
+{master:0}[edit interfaces ge-0/0/0]
+user@switch# delete unit 0
+
+{master:0}[edit interfaces ge-0/0/0]
+user@switch# show | compare
+[edit interfaces ge-0/0/0]
+unit 0 {
+   family ethernet-switching;
+}
+
+user@switch# set chassis aggregated-devices ethernet device-count 4 >>>>4 LAG bundles can be created from 0-3
+user@switch# set interfaces ge-0/0/40 ether-options 802.3ad ae0
+user@switch# set interfaces ge-0/0/42 ether-options 802.3ad ae0
+user@switch# set interfaces ae0 mtu 9200
+
+Note: MTU can only be set on the bundle interface not on the child member.
+
+Jumbo frames can be configured on the EX series Ethernet switches via 2 methods, the CLI (Command Line Interface) and J-Web interface.
+
+Configuration using the CLI:
+
+user@switch# set interfaces ge-0/0/0 mtu 9216      
+(Maximum transmit packet size (256..9216))
+
+
+To modify the default media MTU size for a RVI interface, include the MTU statement at the [edit interfaces interface-name] hierarchy level:
+
+    [edit interfaces vlan]
+    set mtu bytes;
+
+
+    
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+13. Иные команды
+request system reboot
+show chassis hardware
+run show ethernet-switching table interface ge-0/0/22 
+
+garry@ctd-s2# run show chassis routing-engine
+Показывает статистику на интерфейсе в реальном времени
+root@juniper> monitor traffic interface ge-0/0/1 {какие пакеты и куда идут на интерфейсе}
+root@juniper> monitor interface traffic {трафик на всех интерфейсах}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+14. Логирование
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+15. Заведение vlan
+configure
+garry@ctd-s2# set vlans new-backbone vlan-id 13 
+set vlans backbone-gryazi vlan-id 38 description "Backbone for Gryazi" 
+
+
+Подаем влан через порт
+garry@ctd-s2# set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members backbone      
+
+{master:0}[edit]
+garry@ctd-s2# set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members new-backbone 
+
+Делаем транком
+set interfaces ge-0/0/0 unit 0 family ethernet-switching port-mode trunk 
+
+
+Создаем интерфейс-влан
+set interfaces vlan unit 10 family inet address 81.20.192.8/27 
+set vlans backbone l3-interface vlan.10 
+
+
+[http://network-begin.blogspot.ru/2013/06/juniper-1.html](http://network-begin.blogspot.ru/2013/06/juniper-1.html)
+[http://xgu.ru/wiki/VLAN_%D0%B2_Juniper](http://xgu.ru/wiki/VLAN_%D0%B2_Juniper)
+
+
+
+Создаем VLAN и RVI.
+[edit vlans]
+user@switch# set blue vlan-id 100
+user@switch# set red vlan-id 200
+
+[edit interfaces]
+user@switch# set vlan unit 100 family inet address 192.0.2.1/25
+user@switch# set vlan unit 200 family inet address 192.0.2.129/25
+
+.Настройка интерфейса
+set description "TRUNK_to_Router"
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+16. Скрипт для переноса вланов с catalyst на juniper
+Говотовы оба 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+17. Боевая конфигурация OSPF
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+18. QOS mls qos trust dscp
+[http://www.juniper.net/documentation/en_US/junos15.1/topics/example/cos-ex-series-configuring.html](http://www.juniper.net/documentation/en_US/junos15.1/topics/example/cos-ex-series-configuring.html)
+QNQ [http://blog.sbolshakov.ru/10-3-q-in-q-config/](http://blog.sbolshakov.ru/10-3-q-in-q-config/)
+[http://www.juniper.net/techpubs/en_US/release-independent/junos/information-products/topic-collections/hardware/ex-series/ex2500/ex2500-config-guide-30.pdf](http://www.juniper.net/techpubs/en_US/release-independent/junos/information-products/topic-collections/hardware/ex-series/ex2500/ex2500-config-guide-30.pdf)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+19. Подсчёт sfp модулей и схема - Банально переткнуть порт в порт
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+20 ОРГАНИЗАЦИЯ и работы с конфигами
+load set ...
+load override
+load replace
+
+
+Копирование руками
+ file copy /config/juniper.conf.gz﻿ ftp://user:pass@ftpserver.fq.dn/ex2200﻿
+
+
+[http://netpool.ru/networks/juniper_configuration_backup](http://netpool.ru/networks/juniper_configuration_backup)
+[https://kb.juniper.net/InfoCenter/index?page=content&id=KB11194&actp=search](https://kb.juniper.net/InfoCenter/index?page=content&id=KB11194&actp=search)
+SCP
+[https://forum.ivorde.com/junos-system-configuration-archival-is-not-working-over-scp-t19351.html](https://forum.ivorde.com/junos-system-configuration-archival-is-not-working-over-scp-t19351.html)
+
+rescue - конфигурация для восстановления
+
+[https://habrahabr.ru/sandbox/80771/](https://habrahabr.ru/sandbox/80771/)
+[http://it-wtf.com/juniper/juniper-commands/](http://it-wtf.com/juniper/juniper-commands/)
+[http://juniper.ucoz.ru/index/file_from_server/0-43](http://juniper.ucoz.ru/index/file_from_server/0-43)
+
+
+Сработало
+load override "scp://backup@192.168.121.1:/home/backup/juniper/ctd-s2-commit/ctd-s2_juniper.conf.gz" 
+Убирать нах хвост
+
+load set  "scp://backup@192.168.121.1:/home/backup/juniper/ctd-s2-plan/f_inst_1.txt"
+
+В операционном режиме сохранить активную конфигурацию можно командой:
+root@SRX-01> show configuration | save backup/juniper.conf
+
+Следующая команда сохранит активную конфигурацию в формате set:
+root@SRX-01> show configuration | display set | save backup/juniper-set.conf
+Wrote 12 lines of output to 'backup/juniper-set.conf'
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+21. Storm Control 
+set ethernet-switching-options storm-control interface ge-0/0/0 bandwidth 15000
+kilobits per second 
+[http://www.juniper.net/techpubs/en_US/junos12.1/topics/example/rate-limiting-storm-control-configuring.html](http://www.juniper.net/techpubs/en_US/junos12.1/topics/example/rate-limiting-storm-control-configuring.html)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+22. Настройка loopback
+Как обычный интерфейс
+[http://www.juniper.net/techpubs/en_US/junos13.2/topics/usage-guidelines/interfaces-configuring-the-loopback-interface.html](http://www.juniper.net/techpubs/en_US/junos13.2/topics/usage-guidelines/interfaces-configuring-the-loopback-interface.html)
+
+
+
+
+[https://www.juniper.net/documentation/en_US/junos14.2/topics/concept/junos-software-configuration-groups-understanding.html](https://www.juniper.net/documentation/en_US/junos14.2/topics/concept/junos-software-configuration-groups-understanding.html)
+[https://www.juniper.net/documentation/en_US/junos14.2/topics/reference/configuration-statement/apply-groups.html](https://www.juniper.net/documentation/en_US/junos14.2/topics/reference/configuration-statement/apply-groups.html)
+[http://www.juniper.net/techpubs/en_US/junos12.3/topics/example/port-mirroring-local-ex-series.html](http://www.juniper.net/techpubs/en_US/junos12.3/topics/example/port-mirroring-local-ex-series.html)
+
+
+
+[https://habrahabr.ru/post/316518/](https://habrahabr.ru/post/316518/)
+[https://habrahabr.ru/post/306084/](https://habrahabr.ru/post/306084/)
+
+[http://thenetworksherpa.com/ospf-master-the-mtu-madness/](http://thenetworksherpa.com/ospf-master-the-mtu-madness/)
+[http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-route-summarization.html](http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-route-summarization.html)
+[http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-graceful-restart.html](http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-graceful-restart.html)
+
+
+
+
+
+
+
+
+
+
+Настроить все реально по пунктам, вспомнить, как работает скрипт.
+
+14. 
+Логирование
+Боевая конфигурация OSPF
+
+
+
+
+1.ssh -ok
+2.Настройка портов
+        1.Выбор xe или ge   OK
+        2. Настройка duplex, 
+        3. Фичи STP     OK
+        4. Борьба со storm и т д.
+3.snmp - OK
+4. ntp - Ok
+5. acess-list - OK  - проверить
+7. траффик мирроринг  ok
+8. Etherchannel  - ok
+9. MSTP OK
+
+delete protocols rstp
+
+set protocols mstp configuration-name AcmeNetworks
+set protocols mstp revision-level 1
+set protocols mstp msti 1 vlan 100
+set protocols mstp msti 2 vlan 200
+
+set protocols mstp msti 1 bridge-priority 16384
+commit and-quit
+
+
+mstp {
+    configuration-name TEST-MSTP;
+    revision-level 1;
+    interface ge-0/0/0.0 {
+        disable;
+    }
+    interface ge-0/0/22.0 {
+        mode point-to-point;
+    }
+    interface ae1.0 {
+        mode point-to-point;
+    }
+    msti 1 {
+        bridge-priority 16k;
+        vlan 2610;
+    }
+    msti 2 {
+        vlan [ 2620 2630 2622 2621 ];
+    }
+
+
+    mstp {
+    configuration-name TEST;
+    revision-level 1;
+    interface ge-0/0/36.0 {
+        mode point-to-point;
+    }
+    interface ge-0/0/37.0 {
+        mode point-to-point;
+    }
+    msti 1 {
+        bridge-priority 8k;
+        vlan 2610;
+    }
+    msti 2 {
+        vlan 2620;
+    }
+    msti 3 {
+        vlan 2630;
+    }
+}
+
+
+
+
+delete protocols rstp
+set protocols mstp configuration-name PSI
+set protocols mstp revision-level 777
+set protocols mstp bridge-priority 8192
+set protocols mstp msti 1 bridge-priority 24576
+set protocols mstp msti 2 bridge-priority 24576
+set protocols mstp msti 3 bridge-priority 24576
+set protocols mstp msti 4 bridge-priority 24576
+
+
+
+
+
+spanning-tree mode mst
+spanning-tree portfast default
+spanning-tree portfast bpdufilter default
+spanning-tree extend system-id
+!
+spanning-tree mst configuration
+ name PSI
+ revision 777
+ instance 1 vlan 10, 66, 98, 131, 209, 214, 219, 284, 294, 298, 584, 648
+ instance 1 vlan 655, 671, 680, 691, 693, 813, 838, 861-862, 953-954, 966-970
+ instance 1 vlan 976-978, 1015-1016, 1021, 1023, 1036, 1041, 1890, 2007-2008
+ instance 1 vlan 2033-2034, 2401-2402, 2500
+ 
+ instance 2 vlan 9, 13, 16, 90, 99-101, 105, 109, 111, 123, 132-133, 151-152
+ instance 2 vlan 154, 172, 201, 204, 208, 218, 227, 628-629, 700, 817, 840
+ instance 2 vlan 895, 986, 1026, 1029-1030, 1035, 1038, 1819, 1898-1899
+ instance 2 vlan 1901, 1964, 1985, 1987, 1994-1995, 1997, 1999, 2017-2018
+ instance 2 vlan 2032, 2503, 2999, 3995, 4000-4001
+ 
+ instance 3 vlan 53-55, 57-65, 68, 95, 202-203, 213, 267, 270, 272, 281
+ instance 3 vlan 577, 773, 778, 787, 833, 894, 1011-1012, 1019, 1022, 1805
+ instance 3 vlan 1807, 1812, 1817, 1820, 1962, 2002, 2040, 2300-2302, 3154
+ 
+ instance 4 vlan 5, 11, 21-28, 34, 36, 38, 40, 106, 113, 122, 165, 205-206
+ instance 4 vlan 217, 620, 982, 987, 1017, 1024-1025, 1027, 1801-1804, 1806
+ instance 4 vlan 1808-1811, 1813-1816, 1818, 1821-1824, 1950-1953, 1955-1957
+ instance 4 vlan 2006, 2031, 2050, 3998
+ 
+!
+spanning-tree mst 0 priority 8192
+spanning-tree mst 1-4 priority 24576
+
+
+    
+    
+
+
+
+10. OSPF
+11. default и другие маршруты
+дефолт удалить
+set routing-options static route 81.20.192.0/20 discard
+set routing-options static route 81.20.192.0/23 discard
+set routing-options static route 81.20.195.0/24 discard
+set routing-options static route 81.20.196.0/22 discard
+set routing-options static route 81.20.200.0/21 discard
+set routing-options static route 81.20.200.0/22 discard
+set routing-options static route 81.20.204.0/22 discard
+
+set routing-options static route 81.20.192.6/32 next-hop 81.20.192.55
+set routing-options static route 81.20.192.17/32 next-hop 81.20.192.55
+set routing-options static route 81.20.195.33/32 next-hop 81.20.192.55
+
+
+12. jumbo-frames  OK
+set interfaces ge-0/0/0 mtu 9216      
+(Maximum transmit packet size (256..9216))
+
+To modify the default media MTU size for a RVI interface, include the MTU statement at the [edit interfaces interface-name] hierarchy level:
+    [edit interfaces vlan]
+    set mtu bytes;
+
+
+13. SVI - ok
+set interfaces vlan unit 10 family inet address 81.20.192.8/27 
+set vlans backbone l3-interface vlan.10 
+
+set interfaces vlan unit 13 family inet address 81.20.192.62/28
+set vlans backbone2 l3-interface vlan.13
+
+set interfaces vlan unit 38 family inet address 81.20.203.9/29
+set vlans Gryazi-mngt l3-interface vlan.38
+
+set interfaces vlan unit 37 family inet address 172.28.0.10/24
+set vlans mntg-gryazi1 l3-interface vlan.37
+
+14. Логирование
+15. Заведение vlan - OK
+16. Скрипт для переноса вланов с catalyst на juniper - OK
+20 ОРГАНИЗАЦИЯ и работы с конфигами OK
+21. Storm Control 
+22. Настройка loopback OK
+
+
+
+
+
+
+
+
+
+
+
+
+interface Vlan10
+ description # PSI Backbone
+ ip address 81.20.192.7 255.255.255.224
+ ip ospf mtu-ignore
+end
+
+!
+interface Vlan13
+ description #SB Interface # pheonix 20.05.2011
+ ip address 81.20.192.50 255.255.255.240
+ ip ospf priority 100
+ ip ospf mtu-ignore
+end
+
+!
+
+interface Vlan38
+ description #Gryazi backbone #garry 15.02.2012
+ ip address 81.20.203.9 255.255.255.248
+ ip ospf cost 300
+ ip ospf mtu-ignore
+
+
+router ospf 110
+ router-id 81.20.192.50
+ log-adjacency-changes
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+ passive-interface default
+ no passive-interface Vlan10
+ no passive-interface Vlan13
+ no passive-interface Vlan38
+ network 81.20.192.0 0.0.0.31 area 0
+ network 81.20.192.48 0.0.0.15 area 0
+ network 81.20.203.8 0.0.0.7 area 0
+ distribute-list prefix no-sc-local-distribution out
+ distribute-list prefix no-199-net in
+!
+ip default-gateway 192.168.120.254
+ip route 81.20.192.0 255.255.240.0 Null0
+ip route 81.20.192.0 255.255.254.0 Null0
+ip route 81.20.192.6 255.255.255.255 81.20.192.55
+ip route 81.20.192.17 255.255.255.255 81.20.192.55
+ip route 81.20.195.0 255.255.255.0 Null0
+ip route 81.20.195.33 255.255.255.255 81.20.192.55
+ip route 81.20.196.0 255.255.252.0 Null0
+ip route 81.20.200.0 255.255.248.0 Null0
+ip route 81.20.200.0 255.255.252.0 Null0
+ip route 81.20.204.0 255.255.252.0 Null0
+no ip http server
+
+ip prefix-list no-199-net seq 1 deny 81.20.199.240/29 le 32
+ip prefix-list no-199-net seq 10 permit 0.0.0.0/0 le 32
+!
+ip prefix-list no-sc-local-distribution seq 80 deny 192.168.0.0/16 le 32
+ip prefix-list no-sc-local-distribution seq 90 permit 0.0.0.0/0 le 32
+!
+ip prefix-list no-sc-local-sb-distribution seq 4 deny 10.0.0.0/16 le 32
+ip prefix-list no-sc-local-sb-distribution seq 5 deny 172.20.0.0/14 le 32
+ip prefix-list no-sc-local-sb-distribution seq 6 deny 172.31.3.0/24 le 32
+ip prefix-list no-sc-local-sb-distribution seq 9 permit 81.20.192.48/28 le 32
+ip prefix-list no-sc-local-sb-distribution seq 10 permit 0.0.0.0/0 le 32
+
+
+На in запрещается 81.20.199.240/29 и все подсети
+На out запрещается 192.168.0.0/16 и все подсети
+
+import - из ospf в routing table
+export - из routing tables в ospf
+
+export static, direct,   запрещаем 81.20.199.240/29 le 32 по ospf
+фильтруем ospf маршруты
+import  no-sc-local-distribution (хотя тут нужен другой наверно лист)
+
+81.20.199.240/29 - сеть на редбэк
+
+10. OSPF
+НАША КОНФИГУРАЦИЯ
+policy-statement STATIC-TO-OSPF
+term exportstatic1 {
+from protocol static;
+then accept;}
+}
+
+policy-statement DIRECT-TO-OSPF {
+    from protocol direct;
+    then accept;
+
+}
+
+У juniper по умолчанию priority 128. Тянет одеяло на себя
+
+set routing-options router-id 81.20.192.8
+set protocols ospf area 0.0.0.0 interface vlan.10 priority 0
+set protocols ospf export STATIC-TO-OSPF
+set protocols ospf export DIRECT-TO-OSPF
+
+Другие настройки не нужны пока, metric и приорити потом, на боевой конфигурации
+
+
+
+
+ПРИМЕРЫ для OSPF
+
+ set routing-options router-id 177.162.4.24
+ 
+ 
+Установка priority
+[edit]
+set protocols ospf area 0.0.0.0 interface ge-0/0/1 priority 200
+
+
+Статические маршруты
+policy-statement exportstatic1 {
+term exportstatic1 {
+from protocol static;
+then accept;
+}
+}
+
+set protocols ospf export exportstatic1
+
+
+
+Распределение directly connected маршутов           export [ exportstatic exportdirect ];
+policy-statement exportdirect {
+
+    from protocol direct;
+
+    then accept;
+
+}
+
+
+
+
+
+admin@host2> configure
+Entering configuration mode
+
+[edit]
+admin@host2# edit policy-options policy-statement STATIC-to-OSPF
+
+[edit policy-options policy-statement STATIC-to-OSPF]
+admin@host2# set term 1 from protocol static
+
+[edit policy-options policy-statement STATIC-to-OSPF]
+admin@host2# set term 1 then accept
+
+
+Так как cost - это метрика, то в juniper 
+либо устанавливается bandwidth 
+ set protocols ospf reference-bandwidth 10g
+или установкой метркики
+[edit]
+set protocols ospf area 0.0.0.0 interface fe-1/0/1 metric 5
+
+
+
+
+
+Фильтры
+
+user@R2# show interfaces
+so-0/2/0 {
+unit 0 {
+family inet {
+address 10.0.2.2/30;
+}
+}
+}
+user@R2# show policy-options
+policy-statement filter_routes {
+from {
+route-filter 10.0.16.0/30 exact;
+}
+then reject;
+}
+user@R2# show protocols ospf
+import filter_routes;
+area 0.0.0.0 {
+interface so-0/2/0.0;
+}
+
+
+
+--------------------------------------------------------------------------------------------
+Вот это для нас готове решение
+policy-statement no-sc-local-distribution {
+        term net_1 {
+                            from {
+                                route-filter 192.168.0.0/16 orlonger;
+                                     }
+                            then reject;
+                            }
+}
+
+policy-statement no-199-net {
+       term net_1 {
+                from {
+                            route-filter 81.20.199.240/29 orlonger;
+                            }
+                then reject
+                };
+}
+
+
+set protocols ospf import no-sc-local-distribution;
+set protocols ospf export no-199-net;
+set protocols ospf export STATIC-TO-OSPF
+set protocols ospf export DIRECT-TO-OSPF
+
+
+policy-statement STATIC-TO-OSPF
+term exportstatic1 {
+from protocol static;
+then accept;}
+}
+
+policy-statement DIRECT-TO-OSPF {
+    from protocol direct;
+    then accept;
+
+}
+
+--------------------------------------------------------------------------------------------
+[http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-routing-policy.html](http://www.juniper.net/techpubs/en_US/junos12.1/topics/topic-map/ospf-routing-policy.html)
+
+
+
+
+
+
+
+
+
+
+Конфиг OSPF
+У juniper по умолчанию priority 128. Тянет одеяло на себя
+
+
+set routing-options router-id 81.20.192.8
+set protocols ospf area 0.0.0.0 interface vlan.10 priority 0
+set protocols ospf area 0.0.0.0 interface vlan.13 priority 0
+set protocols ospf area 0.0.0.0 interface vlan.38 priority 0
+
+C какой метрикой произойдёт получение статик и коннектед сетей (как установить)
+[http://www.juniper.net/techpubs/en_US/junos/topics/reference/general/routing-protocols-default-route-preference-values.html](http://www.juniper.net/techpubs/en_US/junos/topics/reference/general/routing-protocols-default-route-preference-values.html)
+[http://www.costiser.ro/2013/11/21/cisco-vs-juniper-advertising-inactive-routes-into-bgp/#.WKrgRNU4UoS](http://www.costiser.ro/2013/11/21/cisco-vs-juniper-advertising-inactive-routes-into-bgp/#.WKrgRNU4UoS)
+
+Пример
+policy-statement rip-2-ospf { 
+        from protocol rip;
+        then {
+            metric 5;
+            accept;
+        }
+    }
+}
+
+ospf {
+    export rip-2-ospf;
+     } 
+
+
+
+
+ Какой приорити установить надо? надо установить 0
+ 
+ Логирование OSPF
+ ospf {
+traceoptions {
+file ospf.debug size 5m files 5;
+flag error;
+flag normal;
+flag flooding;
+flag event;
+flag state;
+flag hello send receive detail;
+flag packets;
+}
+ root@SRX# set protocols ospf traceoptions file debug-ospf files 5 size 1m    
+root@SRX# set protocols ospf traceoptions flag all 
+ 
+ 
+ 
+ Проблема с MTU - узнать какой MTU у соседей
+ Надо оставить по умолчанию на интрефейсах vlan.10 , 13, 38 стандартное ip mtu
+ Они не зависят от jumbo frames на физических интерфейсах
+
+
+
+ip ospf mtu-ignore
+А приходят? ospf в фильтре на lo0 разрешен?
+
+
+
+Конфиг DLINK
+[http://forum.nag.ru/forum/index.php?showtopic=64212&st=0](http://forum.nag.ru/forum/index.php?showtopic=64212&st=0)
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ROUTE-FILTER
+
+
+[http://www.juniper.net/techpubs/en_US/junos/topics/usage-guidelines/policy-configuring-route-lists-for-use-in-routing-policy-match-conditions.html](http://www.juniper.net/techpubs/en_US/junos/topics/usage-guidelines/policy-configuring-route-lists-for-use-in-routing-policy-match-conditions.html)
+
+Краткая заметка   Understanding Route Filters for Use in Routing Policy Match Conditions (схоже с router map) Фильтарация префиксов происходит здесь
+
+The route-filter option is typically used to match an incoming route address to destination match prefixes of any type except for unicast source addresses
+
+[edit policy-options policy-statement policy-name term term-name from]
+route-filter destination-prefix match-type {
+actions;
+}
+Команда route-filter применятеся к dest префиксам, source-address-filter соответсвенно к source
+
+source-address-filter source-prefix match-type {
+actions;
+}
+
+
+Список match-type
+1) address-mask netmask-value
+	
+
+All of the following are true:
+    The bit-wise logical AND of the netmask-value pattern and the incoming IPv4 or IPv6 route address and the bit-wise logical AND of the netmask-value pattern and the destination-prefix address are the same
+   1 условие) Побитовое логическое AND маски(netmask-value) и входящего(проверяемого) маршрута и побитовое логическое AND маски(netmask-value) и префикса назначения(10.1.0.0/24) должны быть одинаковы
+   2 условие) Префикс входящего(проверяемого) маршрута и префикса назначения(/24) должны быть равны
+   
+policy-options {
+        policy-statement from_customer_a {
+        term term_1 {
+            from {
+                        route-filter 10.1.0.0/24 address-mask 255.255.241.0;
+                        }
+            then {
+                        ...
+                        reject;
+                        }
+             }
+        }
+}    
+   
+ 2) exact - точное совпадение
+ 3)longer -  длина префикса больше входящего(проверяемого) маршрута, чем указанного для dest или src
+ 4)orlonger - равен или длинее
+ 5)prefix-length-range prefix-length2-prefix-length3
+ 6)through {destination-prefix2 | source-prefix2}
+ 7)upto prefix-length2
+    
+How Route Filters Are Evaluated in Routing Policy Match Conditions (Как вычисляются фильтры)
+    
+ Поиск идёт не по порядку а по длиннейшему префиксу(по более специфичному) 192.168.0.0/15 длинее, чем 192.168.0.0/14 
+
+ Можно указать опцию walkup, чтобы все префиксы  - [http://www.juniper.net/techpubs/en_US/junos/topics/concept/walkup-route-filter-policy-option-overview.html](http://www.juniper.net/techpubs/en_US/junos/topics/concept/walkup-route-filter-policy-option-overview.html) 
+  Но начинается все также с длиннейшего префикса
+    Порядок не играет значения.
+  
+  actions
+  [http://www.juniper.net/techpubs/en_US/junos/topics/usage-guidelines/policy-configuring-actions-in-routing-policy-terms.html](http://www.juniper.net/techpubs/en_US/junos/topics/usage-guidelines/policy-configuring-actions-in-routing-policy-terms.html)
+  Есть разнообразные для BGP,  в целях простых - accept reject
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+show ethernet-switching table
+show route table 
+run show interfaces ae3
+show route
+
+ Использование PIPE
+Для вывода оперативных и конфигурационных команд, таких как show предусмотрена возможность фильтрации. Когда в команде после знака вопроса в листинге имеется вариант | pipe, то вывод команды может быть отфильтрован. Для фильтрации в конце команды можно поставить | и одну из следующих опций:
+
+    compare (filename | rollback n) - Доступен только в режиме конфигурации для команды show. Сопоставляет изменения в конфигурации с другим файлом конфигурации.
+
+    count - Показывает число строк в выводе.
+
+    display changed - Доступно только в режиме конфигурации. Теги изменений атрибута junos:changed, используется только для XML.
+
+    display commit-scripts - Показывает данные после применения commit scripts.
+
+    display detail - Доступно только в режиме конфигурации. Показывает дополнительную информацию о содержании конфигурации.
+
+    display inheritance - Доступно только в режиме конфигурации. Показывает информацию о наследовании в конфигурации и группу источника.
+
+    display omit - Доступно только в режиме конфигурации. Пропускает разделы конфигурации с опцией omit.
+
+    display set - Доступно только в режиме конфигурации. Показывает команды set, которыми создавались разделы конфигурации.
+
+    display xml - Показывает вывод в формате NETCONF/XML.
+
+    except regular-expression - Игнорирует текст, входящий в регулярное выражение в выводе. Если регулярное выражение содержит пробелы, операторы или wildcard символы, нужно заключать его в кавычки.
+
+    find regular-expression - Показывает вывод, начинающийся с первого вхождения текста, входящего в регулярное выражение. Если регулярное выражение содержит пробелы, операторы или wildcard символы, нужно заключать его в кавычки.
+
+    hold - Останавливает вывод строкой --(more)--.
+
+    last - Показывает последний отрезок информации.
+
+    match regular-expression - Выводит строки, содержащие текст, который входит в регулярное выражение. Если регулярное выражение содержит пробелы, операторы или wildcard символы, нужно заключать его в кавычки.
+
+    no-more - Показывает вывод весь сразу, без стоп-строки --(more)--.
+
+    request message - Показывает вывод нескольким пользователям.
+
+    resolve - Конвертирует IP адрес в Domain Name Server (DNS) имя. Усекает оригинальный размер, если не указана опция full-names.
+
+    save filename - Сохраняет вывод в файл или URL.
+
+    trim - Вырезает указанное число символов с начала строки вывода.
+
+
+
+
+    
+План действий
+1. STP оставляем как есть, просто включем на новых портах stp. Настроить порт для STP на Juniper
+
+2. Статик маршруты с худшей метрикой сделать, нафиг надо - по одному перекину и всё
+ip route 81.20.192.0 255.255.240.0 Null0
+ip route 81.20.192.0 255.255.254.0 Null0
+ip route 81.20.192.6 255.255.255.255 81.20.192.55
+ip route 81.20.192.17 255.255.255.255 81.20.192.55
+ip route 81.20.195.0 255.255.255.0 Null0
+ip route 81.20.195.33 255.255.255.255 81.20.192.55
+ip route 81.20.196.0 255.255.252.0 Null0
+ip route 81.20.200.0 255.255.248.0 Null0
+ip route 81.20.200.0 255.255.252.0 Null0
+ip route 81.20.204.0 255.255.252.0 Null0
+
+Отфильтровать default, который есть на juniper (либо вообще его убрать), не объявлять его по osfp
+3. Заменить в OSPF в 38 vlan IP адрес на  81.20.203.11   - OK
+4. Подготовить STP порт Te1/8 на catalyst
+
+
+STEPS
+1. Te2/8 перенести в Te1/8, настроить порт под STP на Catalyst
+2. Настроить порт на Juniper
+3. Скроссировать
+4. Проверить mstp 
+5. Проверить ospf
+
+
+
+Копирование файлов
+file copy /config/juniper.conf scp://user@ssh-host/tmp/juniper.conf
+user@ssh-host's password: ******
+juniper.conf         100% |*********************************************************************************|  2198       00:00
+
+
+
+
+
+
+
+
+
+
+
+Для Суриката
+[https://www.juniper.net/documentation/en_US/junos/topics/example/port-mirroring-local-qfx-series.html](https://www.juniper.net/documentation/en_US/junos/topics/example/port-mirroring-local-qfx-series.html)
+
+Mirroring Employee-to-Web Traffic for Local Analysis
+
+To mirror only traffic sent by employees to the Web for local analysis, perform the tasks explained in this section.
+CLI Quick Configuration
+
+To quickly configure local port mirroring of traffic from employee computers that is destined for the Web, copy the following commands and paste them into a switch terminal window:
+[edit]
+set ethernet-switching-options analyzer employee–web–monitor output interface xe-0/0/47.0
+set firewall family ethernet-switching filter watch-employee term employee-to-corp from destination-address 192.0.2.16/28
+set firewall family ethernet-switching filter watch-employee term employee-to-corp from source-address 192.0.2.16/28
+set firewall family ethernet-switching filter watch-employee term employee-to-corp then accept
+set firewall family ethernet-switching filter watch-employee term employee-to-web from destination-port 80
+set firewall family ethernet-switching filter watch-employee term employee-to-web then analyzer employee-web-monitor
+set interfaces xe-0/0/0 unit 0 family ethernet-switching filter input watch-employee
+set interfaces xe-0/0/6 unit 0 family ethernet-switching filter input watch-employee
+Step-by-Step Procedure
+
+To configure local port mirroring of employee-to-web traffic from the two ports connected to employee computers:
+
+    Configure the output interface:
+    [edit interfaces]
+    user@switch# set xe-0/0/47 unit 0 family ethernet-switching
+    Configure the employee-web-monitor analyzer output. (Configure only the output—the input comes from the filter.)
+    [edit ethernet-switching-options]
+    user@switch# set analyzer employee-web-monitor output interface xe-0/0/47.0
+
+    Configure a firewall filter called watch-employee that includes a term to match traffic sent to the Web and send it to the analyzer employee-web-monitor. Traffic to and from the corporate subnet (destination or source address of 192.0.2.16/28) does not need to be copied, so create another term to accept that traffic before it reaches the term that sends Web traffic to the analyzer:
+    [edit firewall family ethernet-switching]
+    user@switch# set filter watch-employee term employee-to-corp from destination-address 192.0.2.16/28
+    user@switch# set filter watch-employee term employee-to-corp from source-address 192.0.2.16/28
+    user@switch# set filter watch-employee term employee-to-corp then accept
+    user@switch# set filter watch-employee term employee-to-web from destination-port 80
+    user@switch# set filter watch-employee term employee-to-web then analyzer employee-web-monitor
+    Apply the firewall filter to the appropriate interfaces as an ingress filter (egress filters do not allow analyzers):
+    [edit interfaces]
+    user@switch# set xe-0/0/0 unit 0 family ethernet-switching filter input watch-employee
+    user@switch# set xe-0/0/6 unit 0 family ethernet-switching filter input watch-employee
+
+Results
+
+Check the results of the configuration:
+[edit]
+user@switch# show ethernet-switching-options
+analyzer employee-web-monitor {
+output {
+interface xe-0/0/47.0;
+}
+}
+}
+...
+firewall family ethernet-switching {
+filter watch-employee {
+term employee-to-web {
+from {
+destination-port 80;
+}
+then analyzer employee-web-monitor;
+}
+}
+}
+...
+interfaces {
+xe-0/0/0 {
+unit 0 {
+family ethernet-switching {
+filter {
+input watch-employee;
+}
+}
+}
+}
+xe-0/0/6 {
+family ethernet-switching {
+filter {
+input watch-employee;
+}
+}
+}
+}
+Verification
+Verifying That the Analyzer Has Been Correctly Created
+Purpose
+
+Verify that the analyzer named employee-monitor or employee-web-monitor has been created on the switch with the appropriate input interfaces and appropriate output interface.
+Action
+
+You can verify that the port mirror analyzer has been configured as expected using the show analyzer command.
+user@switch> show analyzer
+
+  Analyzer name                : employee-monitor
+  Output interface             : xe-0/0/47.0
+  Mirror ratio                 : 1
+  Loss priority                : Low
+  Ingress monitored interfaces : xe-0/0/0.0
+  Ingress monitored interfaces : xe-0/0/6.0
+  Egress monitored interfaces  : None
+ 
+
+Meaning
+
+This output shows that the employee-monitor analyzer:
+
+    Has a ratio of 1 (mirroring every packet, the default setting)
+
+    Has a loss priority of low (set this option to high only when the analyzer output is to a VLAN)
+
+    Is mirroring the traffic entering the xe-0/0/0 and xe-0/0/6 interfaces
+
+    Is sending the mirrored traffic to the xe-0/0/47 interface
+
+
+apply-groups
+Позволяет группировать определённые 
+[https://packetpushers.net/junos-configuration-groups/](https://packetpushers.net/junos-configuration-groups/)
+
+
+[https://www.juniper.net/documentation/en_US/junos/topics/example/port-mirroring-local-qfx-series.html](https://www.juniper.net/documentation/en_US/junos/topics/example/port-mirroring-local-qfx-series.html)
+
+set ethernet-switching-options analyzer sorm-monitor input ingress vlan

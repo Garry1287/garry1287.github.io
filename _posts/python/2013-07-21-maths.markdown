@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "maths"
+date:   2013-07-21 00:12:19 +0400
+categories: python
+tags: python
+---
+
+# maths
+
+Машинное обучение
+[https://www.coursera.org/specializations/machine-learning-data-analysis](https://www.coursera.org/specializations/machine-learning-data-analysis)
+[https://newtonew.com/overview/mooc-podborka-luchshih-kursov-po-matematike](https://newtonew.com/overview/mooc-podborka-luchshih-kursov-po-matematike)
+[https://www.youtube.com/playlist?list=PL66kIi3dt8A5yWqr_l2sJAold0y4gy4m4](https://www.youtube.com/playlist?list=PL66kIi3dt8A5yWqr_l2sJAold0y4gy4m4)
+[https://habrahabr.ru/company/spbau/blog/249955/](https://habrahabr.ru/company/spbau/blog/249955/)

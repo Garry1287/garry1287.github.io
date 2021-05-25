@@ -1,0 +1,46 @@
+---
+layout: post
+title:  "esxi"
+date:   2018-12-31 01:59:11 +0300
+categories: linux
+tags: linux
+---
+
+# esxi
+192.168.1.44 vmware mngt - windows машина для управления, запущенная на самом esxi
+192.168.200.200 vCenter Server
+
+192.168.121.21 vCenter Server второй ip
+192.168.121.22 nas1.sc.int - Debian NAS server
+
+22 порт k9-s9
+
+
+
+
+
+
+
+[http://www.uhlib.ru/kompyutery_i_internet/virtualnye_mashiny_neskolko_kompyuterov_v_odnom/p4.php](http://www.uhlib.ru/kompyutery_i_internet/virtualnye_mashiny_neskolko_kompyuterov_v_odnom/p4.php)
+[http://www.sover.pro/blogs/59-virtual-vmware-esxi.html](http://www.sover.pro/blogs/59-virtual-vmware-esxi.html)
+[http://communities.vmware.com/thread/183759?start=0&tstart=0](http://communities.vmware.com/thread/183759?start=0&tstart=0)
+[http://wiki.vm4.ru/InstBase/vm2esxi](http://wiki.vm4.ru/InstBase/vm2esxi)
+
+vmdk - формат vmware, поддерживается kvm - нужно провести тест по переносу машины с vmware на kvm
+vmx - настройки машины
+[http://www.vmware.com/technical-resources/interfaces/vmdk.html](http://www.vmware.com/technical-resources/interfaces/vmdk.html)
+
+Миграция и backup
+[http://phas13.blogspot.ru/2011/06/esxi.html](http://phas13.blogspot.ru/2011/06/esxi.html)
+[http://www.vmc-company.ru/veeam/backup-replication/](http://www.vmc-company.ru/veeam/backup-replication/)
+[http://www.sourica.ru/page/bekap-esxi-chast-1-prostoj-put](http://www.sourica.ru/page/bekap-esxi-chast-1-prostoj-put)
+[http://www.onix.kiev.ua/static.aspx?id=migration_to_vm_esxi](http://www.onix.kiev.ua/static.aspx?id=migration_to_vm_esxi)
+
+Разобраться в хитросплетениях управленческой сети
+
+[http://www.vmgu.ru](http://www.vmgu.ru)
+
+
+
+На esxi - 192.168.121.21 vCenter Server второй ip
+/vmfs/volumes/NAS1/

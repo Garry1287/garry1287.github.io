@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "cluster3"
+date:   2016-09-22 01:57:30 +0300
+categories: linux
+tags: linux
+---
+
+# cluster3
+heartbeat.
+
+[http://ericsysmin.com/2016/02/18/configuring-high-availability-ha-zabbix-server-on-centos-7/](http://ericsysmin.com/2016/02/18/configuring-high-availability-ha-zabbix-server-on-centos-7/)
+[https://skcave.wordpress.com/2014/11/04/creating-high-availability-cluster-with-centos-7/](https://skcave.wordpress.com/2014/11/04/creating-high-availability-cluster-with-centos-7/)
+
+
+[https://habrahabr.ru/company/ivi/blog/240237/](https://habrahabr.ru/company/ivi/blog/240237/)

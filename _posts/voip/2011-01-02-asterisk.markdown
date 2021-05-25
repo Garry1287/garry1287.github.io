@@ -1,0 +1,33 @@
+---
+layout: post
+title:  "asterisk"
+date:   2011-01-02 14:07:34 +0300
+categories: voip
+tags: voip
+---
+
+# asterisk
+[http://www.astarta-m.ru/sol_itoi.php](http://www.astarta-m.ru/sol_itoi.php)
+[http://www.astarta-m.ru/sol_digium.php](http://www.astarta-m.ru/sol_digium.php)
+
+Назначение
+
+Астарта iBase шлюз TDMoIP [Цена от 18 т.р.] предназначен для передачи потоков E1 через пакетную сеть Ethernet. Пара шлюзов обеспечивает прозрачную передачу потоков E1 с восстановлением несущей частоты 2.048 Mbit/s на ведомой стороне.
+Шлюз адаптирован для работы как в выделенных сетях с высокой скоростью и надежностью доставки пакетов, так и в публичной сети Internet.
+
+Низкая стоимость системы достигнута благодаря применению последних разработок зарубежных chip-компаний, решающих основную часть задачи в одной микросхеме.
+
+
+
+[http://www.asterisk-rostov.ru/asterisk/elastix/](http://www.asterisk-rostov.ru/asterisk/elastix/)
+
+
+Elastix - что это?
+В состав дистрибутива Elastix входят:
+
+    IP АТС (программная АТС Asterisk)
+    почтовый сервер
+    сервер обмена мгновенными сообщениями
+    факс сервер
+    сервер конференций
+    CRM система

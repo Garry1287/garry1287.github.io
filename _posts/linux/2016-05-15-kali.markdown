@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "kali"
+date:   2016-05-15 09:21:19 +0300
+categories: linux
+tags: linux
+---
+
+# kali
+[https://habrahabr.ru/company/ruvds/blog/338668/](https://habrahabr.ru/company/ruvds/blog/338668/)
+[https://codeby.net/forum/forums/ehtichnyj-xaking-i-testirovanie-na-proniknovenie.131/](https://codeby.net/forum/forums/ehtichnyj-xaking-i-testirovanie-na-proniknovenie.131/)
+[https://codeby.net/karta-sajta/](https://codeby.net/karta-sajta/)
+[https://www.kali.org/downloads/](https://www.kali.org/downloads/)
+[http://fb.ru/article/226695/kali-linux-instruktsiya-po-primeneniyu-obzor-i-otzyivyi](http://fb.ru/article/226695/kali-linux-instruktsiya-po-primeneniyu-obzor-i-otzyivyi)

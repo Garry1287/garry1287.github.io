@@ -1,0 +1,114 @@
+---
+layout: post
+title:  "du-sh"
+date:   2015-03-19 08:43:12 +0300
+categories: du-sh
+tags: du-sh
+---
+
+# du-sh
+du -s *|sort -nr|cut -f 2-|while read a;do du -hs $a;done
+
+
+Gi0/8
+62,172,3028
+
+
+Gi0/15
+switchport trunk allowed vlan 22,878,3053
+
+spanning-tree bpdufilter disable
+spanning-tree bpduguard disable
+spanning-tree cost auto
+spanning-tree link-type auto
+spanning-tree port-priority 128
+
+
+
+
+spanning-tree forward-time 15
+spanning-tree hello-time 2
+spanning-tree max-age 20
+spanning-tree mode rstp
+spanning-tree priority 32768
+spanning-tree transmit hold-count 6
+
+
+
+
+snmp-server protocol enable
+snmp-server protocol version all
+snmp-server contact no contact
+snmp-server location no location
+snmp-server name no name
+snmp-server traps authorization
+snmp-server traps e1
+snmp-server traps ethernet
+snmp-server traps pgs
+snmp-server traps snmp
+
+
+interface gigabitethernet0/6
+logging event link-status
+no mvr type
+ip address 0.0.0.0 255.255.255.0
+no location
+spanning-tree bpdufilter disable
+spanning-tree bpduguard disable
+spanning-tree cost auto
+spanning-tree link-type auto
+spanning-tree port-priority 128
+switchport access vlan 1
+no queue bandwidth limit
+duplex auto
+flowcontrol receive desired
+switchport mode trunk
+switchport trunk native vlan 1
+no switchport protected
+no shutdown
+speed auto
+no storm-control
+no switchport block multicast
+no switchport block unicast
+no mls qos trust cos
+no mls qos trust dscp
+end
+
+
+interface gigabitethernet0/7
+logging event link-status
+no mvr type
+ip address 0.0.0.0 255.255.255.0
+no location
+spanning-tree bpdufilter disable
+spanning-tree bpduguard disable
+spanning-tree cost auto
+spanning-tree link-type auto
+spanning-tree port-priority 128
+switchport access vlan 1
+no queue bandwidth limit
+duplex auto
+flowcontrol receive desired
+switchport mode trunk
+switchport trunk native vlan 1
+no switchport protected
+no shutdown
+speed auto
+no storm-control
+no switchport block multicast
+no switchport block unicast
+no mls qos trust cos
+no mls qos trust dscp
+end
+
+
+
+
+
+
+
+
+
+
+
+

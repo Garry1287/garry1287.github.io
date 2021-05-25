@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "bacula"
+date:   2012-11-30 13:26:31 +0400
+categories: bacula
+tags: bacula
+---
+
+# bacula
+[http://habrahabr.ru/post/86526/](http://habrahabr.ru/post/86526/)
+[http://www.lissyara.su/articles/freebsd/programms/bacula/](http://www.lissyara.su/articles/freebsd/programms/bacula/)
+[http://www.bacula.org/2.4.x-manuals/bacula-web/bweb-index.png](http://www.bacula.org/2.4.x-manuals/bacula-web/bweb-index.png)
+[http://www.bacula.org/](http://www.bacula.org/)
+[http://bog.pp.ru/work/bacula.html](http://bog.pp.ru/work/bacula.html)
+[http://www.ibm.com/developerworks/ru/library/l-Backup_4/index.html](http://www.ibm.com/developerworks/ru/library/l-Backup_4/index.html)
+[http://habrahabr.ru/sandbox/29696/](http://habrahabr.ru/sandbox/29696/)
+[http://www.opennet.ru/soft/Short_Doc_Bacula.pdf](http://www.opennet.ru/soft/Short_Doc_Bacula.pdf)
+[http://habrahabr.ru/post/135291/](http://habrahabr.ru/post/135291/)
+[http://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_server/%D1%80%D0%B5%D0%B7%D0%B5%D1%80%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BA%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5/bacula](http://help.ubuntu.ru/wiki/%D1%80%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_ubuntu_server/%D1%80%D0%B5%D0%B7%D0%B5%D1%80%D0%B2%D0%BD%D0%BE%D0%B5_%D0%BA%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5/bacula)
+[http://docs.mirocow.com/doku.php?id=bacula](http://docs.mirocow.com/doku.php?id=bacula)
+[https://www.linux.org.ru/forum/admin/6454263](https://www.linux.org.ru/forum/admin/6454263)
+
+[http://www.bareos.org/en/](http://www.bareos.org/en/)

@@ -1,0 +1,210 @@
+---
+layout: post
+title:  "lvm"
+date:   2018-08-25 04:45:50 +0300
+categories: lvm
+tags: lvm
+---
+
+# lvm
+1. PV (Physical Volume) — физические тома (это могут быть разделы или целые «неразбитые» диски)
+2. VG (Volume Group) — группа томов (объединяем физические тома (PV) в группу, создаём единый диск,
+ который будем дальше разбивать так, как нам хочется)
+3. LV (Logical Volume) — логические разделы, собственно раздел нашего нового «единого диска» ака Группы Томов,
+ который мы потом форматируем и используем как обычный раздел, обычного жёсткого диска.
+
+/boot  (156MB)
+vg_garry
+
+lv_home			Остальное
+lv_swap			1G
+lv_usr			30G
+lv_var			30G
+lv_root /		10G
++ Оставить неиспользованными 20G
+
+
+
+
+
+
+
+
+[http://tux-the-penguin.blogspot.ru/2010/12/lvm.html](http://tux-the-penguin.blogspot.ru/2010/12/lvm.html)
+[http://help.ubuntu.ru/wiki/lvm](http://help.ubuntu.ru/wiki/lvm)
+[http://www.opennet.ru/docs/RUS/linux_lvm/](http://www.opennet.ru/docs/RUS/linux_lvm/)
+
+
+[http://xgu.ru/wiki/LVM](http://xgu.ru/wiki/LVM)
+[http://www.idevelopment.info/data/Unix/Linux/LINUX_ManagingPhysicalLogicalVolumes.shtml](http://www.idevelopment.info/data/Unix/Linux/LINUX_ManagingPhysicalLogicalVolumes.shtml)
+
+raid and lvm
+[https://wiki.archlinux.org/index.php/Software_RAID_and_LVM](https://wiki.archlinux.org/index.php/Software_RAID_and_LVM)
+
+
+
+
+
+
+[http://igorka.com.ua/2010-09-16/osnovy-lvm-chto-takoe-pv-vg-lv/](http://igorka.com.ua/2010-09-16/osnovy-lvm-chto-takoe-pv-vg-lv/)
+
+
+
+
+
+Полезные штучки с Lvm
+[http://dyrik.ru/linux/podruzhimsya-s-lvm.html](http://dyrik.ru/linux/podruzhimsya-s-lvm.html)
+
+
+Подробное руководство.
+[https://access.redhat.com/documentation/ru-RU/Red_Hat_Enterprise_Linux/6/html/Logical_Volume_Manager_Administration/index.html](https://access.redhat.com/documentation/ru-RU/Red_Hat_Enterprise_Linux/6/html/Logical_Volume_Manager_Administration/index.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. делаем снепшот и копируем его (dd отлично подойдет, но можно и через qemu-img)
+2. сняв бекап, убираем снепшот, так что место занято тут не будет
+3. для восстанвления, создаем новый LV нужного размера, и пишем в него из бекапа
+
+помимо образа диска, надо сохранить и настройки ВМ, из virsh dumpxml VMNAME
+
+
+
+
+
+
+
+Нет я обычно архивирую tar-ом структура диска (точки монтирования типа /usr, /bin, /etc и т.д. ), если надо развернуть 
+ backup: беру новый диск, правлю fdisk-ом, потом разархиваирую всё tar-ом, 
+правлю fstab и файл загрузчика, потом восстанавливаю загрузчик (grub). И всё -- новый диск в работе. 
+Преимущество: можно восстановить на любой диск, даже меньшего объема, легковесный архив. 
+Вот что я имею в виду, а не tar-ить lvm... Вот возьму я на рабочей ВМ затарю всю структуру каталогов,
+ вот как потом ее восстановить, как примонтировать ту  партицию диска part1 (напомню, part1 поделен на партиции)??
+
+
+
+
+
+
+
+
+Сначала создаем виртуальный диск (говорят, что LVM быстрее всего) с типом драйвера ide.
+ 3.Подключаю этот LVM-том к VM как ide, scsi или virtio-диск. Запускаю VM.
+
+
+
+
+Выбор
+- блочное устройсто
+      -раздел диска
+      -lvm том
+      -raw образ
+- файлы
+      - qcow2 образ
+	  и т.д.
+
+Преобразование из qcow2 в lvm
+[https://www.nnbfn.net/2011/03/convert-kvm-qcow2-to-lvm-raw-partition/](https://www.nnbfn.net/2011/03/convert-kvm-qcow2-to-lvm-raw-partition/)
+
+qcow2 -> raw -> lvm (dd в lvm)
+
+Дисковые образы виртуальных машин
+[http://koder-ua.blogspot.ru/2012/01/libvirt-co-3.html](http://koder-ua.blogspot.ru/2012/01/libvirt-co-3.html)
+
+
+[http://flug.org.ua/lists/debian-russian/92622/](http://flug.org.ua/lists/debian-russian/92622/)
+на блочном уст-ве и на LVM2 скорость будет примерно одинакова - 
+чуть выше raw на ФС и довольно значительно выше qcow2 (назначение у последнего несколько иное)
+обязательно нужно включать aio=native
+можно так же поиграться с параметром cache, 
+вплоть до =nosafe если бекапы под рукой всегда))
+
+все это справедливо для cache=none, что как-бы стандартно для продакшн (по очевидным причинам).
+ с включенным же кешированием и закешированными данными скорость raw-образа на ФС может значительно выше быть...
+
+
+
+
+Итак.
+md0 - /boot на 300-500м. (ext2)
+md1 - pv для lvm
+Для каждой виртуалки отдельный lv.
+Всё.
+Если диск вылетел зачем-то - значит менять/проверять диск, а не хернёй
+страдать. Диски просто так не вылетают.
+Мониторить смартом и mdadm.
+Имею такую конфигурацию на ~20 железяках. Местами, правда там не mdraid,
+а хардварный, но бьётся всё так же и сути не меняет.
+
+
+
+
+
+[http://en.wikibooks.org/wiki/QEMU/Images](http://en.wikibooks.org/wiki/QEMU/Images)
+[http://bborisenko.blogspot.ru/2011/02/qemu-kvm.html](http://bborisenko.blogspot.ru/2011/02/qemu-kvm.html)
+
+
+
+ Qemu / KVM. Кеширование виртуальных дисков.
+Qemu / KVM поддерживает кэширование виртуальных жестких дисков. Для настройки используется опция cache. Опция может принимать следующие значения:
+
+    none
+    writeback
+    writethrough
+
+По умолчанию для всех блочных устройств используется режим writethrough. Недостатком этого метода является то, что для выполнения операции записи требуется больше времени, чем для устройств с отключенным кешированием.
+Режим "Write through" означает, что контроллер рапортует об успешной записи блока данных, когда этот блок физически записан на диски. "Write back" - рапорт об успешной записи идет сразу после помещения блока данных в кеш, до физической записи на диски.
+
+Разница между ними, в теории - первый надежнее, второй быстрее.
+
+Вот что указано в man qemu:
+
+cache=cache
+cache is "none", "writeback", or "writethrough" and controls how the host cache is used to access block data.
+By default, writethrough caching is used for all block device. This means that the host page cache will be used to read and write data but write notification will be sent to the guest only when the data has been reported as written by the storage subsystem.
+Writeback caching will report data writes as completed as soon as the data is present in the host page cache. This is safe as long as you trust your host. If your host crashes or loses power, then the guest may experience data corruption. When using the ‘-snapshot’ option, writeback caching is used by default.
+The host page cache can be avoided entirely with ‘cache=none’. This will attempt to do disk IO directly to the guests memory. QEMU may still perform an internal copy of the data.
+Some block drivers perform badly with ‘cache=writethrough’, most notably, qcow2. If performance is more important than correctness, ‘cache=writeback’ should be used with qcow2.
+
+
+
+First quick dd test
+
+[root@hypervisor ~]# dd if=/dev/zero of=/benchmark/test bs=1M count=4096
+4096+0 records in
+4096+0 records out
+4294967296 bytes (4.3 GB) copied, 23.3488 s, 184 MB/s
+
+[root@lvm2-based ~]# dd if=/dev/zero of=/tmp/test bs=1M count=4096
+4096+0 records in
+4096+0 records out
+4294967296 bytes (4.3 GB) copied, 46.6472 s, 92.1 MB/s
+
+[root@qcow2-based ~]# dd if=/dev/zero of=/tmp/test bs=1M count=4096
+4096+0 records in
+4096+0 records out
+4294967296 bytes (4.3 GB) copied, 44.9293 s, 95.6 MB/s
+
+I was very disappointed first by the difference between the hypervisor and the guests but also the similar results from both guests (even QCOW2 better than LVM2).
+
+
+
+
+
+
+
+Расширение lvm раздела с виртуальной машиной
+[http://unix-heaven.org/resizing-kvm-disk-image-lvm](http://unix-heaven.org/resizing-kvm-disk-image-lvm)
+[http://www.linux.org.ru/forum/admin/6411581](http://www.linux.org.ru/forum/admin/6411581)

@@ -1,0 +1,33 @@
+---
+layout: post
+title:  "dns-заворот-на-53"
+date:   2014-08-12 03:22:49 +0400
+categories: dns
+tags: dns
+---
+
+# dns-заворот-на-53
+Вот так заработало
+
+selfip="10.0.0.11"
+dnsip="10.0.0.4"
+nw="10.0.0.0/24"
+iptables -t nat -A PREROUTING -s $nw -p udp --dport 53 -j DNAT --to-destination $dnsip
+iptables -t nat -A PREROUTING -s $nw -p tcp --dport 53 -j DNAT --to-destination $dnsip
+iptables -t nat -A POSTROUTING -p tcp --dst $dnsip --dport 53 -j SNAT --to-source $selfip
+iptables -t nat -A POSTROUTING -p udp --dst $dnsip --dport 53 -j SNAT --to-source $selfip﻿
+
+ 
+
+Проверяю
+
+>nslookup zv.fm
+╤хЁтхЁ:  google-public-dns-a.google.com
+Address:  8.8.8.8
+
+╚ь :     zv.fm
+Address:  10.0.0.4
+
+ 
+
+Всем спасибо за участие :)

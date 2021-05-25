@@ -1,0 +1,67 @@
+---
+layout: post
+title:  "Zakladki2"
+date:   2012-05-07 10:04:48 +0400
+categories: linux
+tags: linux
+---
+
+# Zakladki2
+[http://www.rsyslog.com/doc/rsyslog_reliable_forwarding.html](http://www.rsyslog.com/doc/rsyslog_reliable_forwarding.html)
+[http://www.rsyslog.com/doc/rsyslog_high_database_rate.html](http://www.rsyslog.com/doc/rsyslog_high_database_rate.html)
+[http://rtfm.co.ua/debian-log-syslog-mysql-loganalyzer/](http://rtfm.co.ua/debian-log-syslog-mysql-loganalyzer/)
+[http://wiki.rsyslog.com/index.php/PhpLogCon_Mysql_Configuration_Examples](http://wiki.rsyslog.com/index.php/PhpLogCon_Mysql_Configuration_Examples)
+[http://wiki.rsyslog.com/index.php/PhpLogCon_Delete_Records](http://wiki.rsyslog.com/index.php/PhpLogCon_Delete_Records)
+
+
+
+
+KVM
+[http://rus-linux.net/nlib.php?name=/MyLDP/vm/kvmvirtserv.html](http://rus-linux.net/nlib.php?name=/MyLDP/vm/kvmvirtserv.html)
+[http://doc.opensuse.org/documentation/html/openSUSE/opensuse-kvm/cha.kvm.inst.html](http://doc.opensuse.org/documentation/html/openSUSE/opensuse-kvm/cha.kvm.inst.html)
+[http://habrahabr.ru/post/170259/?utm_source=twitterfeed&utm_medium=twitter](http://habrahabr.ru/post/170259/?utm_source=twitterfeed&utm_medium=twitter)
+[http://rus-linux.net/nlib.php?name=/MyLDP/vm/KVM/kvm_introduction.html](http://rus-linux.net/nlib.php?name=/MyLDP/vm/KVM/kvm_introduction.html)
+[http://www.linux-kvm.org/page/Main_Page](http://www.linux-kvm.org/page/Main_Page)
+[http://www.osp.ru/news/articles/2008/31/5156386/?rss_feed=123456](http://www.osp.ru/news/articles/2008/31/5156386/?rss_feed=123456)
+[http://habrahabr.ru/qa/23384/](http://habrahabr.ru/qa/23384/)
+[http://habrahabr.ru/qa/33521/](http://habrahabr.ru/qa/33521/)
+[http://docs.fedoraproject.org/ru-RU/Fedora/12/html/Virtualization_Guide/chap-Virtualization_Guide-KVM_live_migration.html](http://docs.fedoraproject.org/ru-RU/Fedora/12/html/Virtualization_Guide/chap-Virtualization_Guide-KVM_live_migration.html)
+[https://ru.ispdoc.com/index.php/%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F_%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0_%D0%BD%D0%B0_XEN_%D0%B8_KVM](https://ru.ispdoc.com/index.php/%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F_%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE_%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0_%D0%BD%D0%B0_XEN_%D0%B8_KVM)
+[http://www.opennet.ru/tips/info/2590.shtml](http://www.opennet.ru/tips/info/2590.shtml)
+[http://bulson.livejournal.com/3274.html](http://bulson.livejournal.com/3274.html)
+[http://zauris.ru/kvm.html](http://zauris.ru/kvm.html)
+[http://redhat-club.org/forum/viewtopic.php?id=8926](http://redhat-club.org/forum/viewtopic.php?id=8926)
+[http://habrahabr.ru/post/121218/](http://habrahabr.ru/post/121218/)
+[http://habrahabr.ru/post/104308/](http://habrahabr.ru/post/104308/)
+[http://ru.ispdoc.com/index.php/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_VDS_%D0%B4%D0%BB%D1%8F_KVM_%D0%B8%D0%B7_%D0%BF%D1%83%D1%81%D1%82%D0%BE%D0%B3%D0%BE_%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D0%B0_%28VDSmanager%29](http://ru.ispdoc.com/index.php/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_VDS_%D0%B4%D0%BB%D1%8F_KVM_%D0%B8%D0%B7_%D0%BF%D1%83%D1%81%D1%82%D0%BE%D0%B3%D0%BE_%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D0%B0_%28VDSmanager%29)
+[http://www.altlinux.org/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8F_KVM](http://www.altlinux.org/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8F_KVM)
+[http://habrahabr.ru/post/120717/](http://habrahabr.ru/post/120717/)
+[http://ru.ispdoc.com/index.php/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D0%BE%D0%B2_%D0%B4%D0%B8%D1%81%D0%BA%D0%B0_%D0%B4%D0%BB%D1%8F_KVM_%28VDSmanager%29](http://ru.ispdoc.com/index.php/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D0%BE%D0%B2_%D0%B4%D0%B8%D1%81%D0%BA%D0%B0_%D0%B4%D0%BB%D1%8F_KVM_%28VDSmanager%29)
+[http://www.ibm.com/developerworks/ru/library/l-virtual-networking/](http://www.ibm.com/developerworks/ru/library/l-virtual-networking/)
+[http://gnu.su/news.php?extend.1408](http://gnu.su/news.php?extend.1408)
+[http://habrahabr.ru/post/71709/](http://habrahabr.ru/post/71709/)
+
+Сетевой мост
+[http://rus-linux.net/nlib.php?name=/MyLDP/vm/KVM/kvm_bridge.html](http://rus-linux.net/nlib.php?name=/MyLDP/vm/KVM/kvm_bridge.html)
+Управление фермой серверов
+[http://www.xakep.ru/post/57596/default.asp?print=true](http://www.xakep.ru/post/57596/default.asp?print=true)
+
+
+TLB
+[http://ru.wikipedia.org/wiki/%C1%F3%F4%E5%F0_%E0%F1%F1%EE%F6%E8%E0%F2%E8%E2%ED%EE%E9_%F2%F0%E0%ED%F1%EB%FF%F6%E8%E8](http://ru.wikipedia.org/wiki/%C1%F3%F4%E5%F0_%E0%F1%F1%EE%F6%E8%E0%F2%E8%E2%ED%EE%E9_%F2%F0%E0%ED%F1%EB%FF%F6%E8%E8)
+[http://rus-linux.net/lib.php?name=MyLDP/hard/memory/memory3.html](http://rus-linux.net/lib.php?name=MyLDP/hard/memory/memory3.html)
+[http://www.intuit.ru/studies/courses/604/460/lecture/5870?page=1](http://www.intuit.ru/studies/courses/604/460/lecture/5870?page=1)
+[http://www.intuit.ru/studies/courses/604/460/info](http://www.intuit.ru/studies/courses/604/460/info)
+
+
+Загрузка linux
+[http://www.ibm.com/developerworks/ru/library/l-boot-rootfs/](http://www.ibm.com/developerworks/ru/library/l-boot-rootfs/)
+
+
+
+bash
+[http://useunix.ru/bash-konspekt-dlya-nachinayushhix-izuchat-bash](http://useunix.ru/bash-konspekt-dlya-nachinayushhix-izuchat-bash)
+[http://redhat-club.org/2011/%D1%81%D0%B5%D0%BA%D1%80%D0%B5%D1%82%D1%8B-bash](http://redhat-club.org/2011/%D1%81%D0%B5%D0%BA%D1%80%D0%B5%D1%82%D1%8B-bash)
+[http://linuxgeeks.ru/bash-2.htm](http://linuxgeeks.ru/bash-2.htm)
+[http://ubuntu-favorite-os.blogspot.ru/2010/05/bash-1.html](http://ubuntu-favorite-os.blogspot.ru/2010/05/bash-1.html)
+[http://linuxland.itam.nsc.ru/misc/Shell/bash-conspect.html](http://linuxland.itam.nsc.ru/misc/Shell/bash-conspect.html)

@@ -1,0 +1,65 @@
+---
+layout: post
+title:  "cacti улучшения"
+date:   2018-07-02 11:40:28 +0300
+categories: cacti улучшения
+tags: cacti
+---
+
+# cacti улучшения
+Установка
+[http://drach.pro/blog/item/33-centos-7-web-server](http://drach.pro/blog/item/33-centos-7-web-server)
+
+
+Ускорить cacti
+
+Are you using Spine? or cmd.php?
+What are your Settings (Settings >> Poller) for
+"Maximum Concurrent Poller Processes"
+"Maximum Threads per Process"
+"Number of PHP Script Servers"
+"Script and Script Server Timeout Value"
+
+What type of hardware? What is your poller interval? How long is cacti taking to poll (its posted in the logs)? What is the disk io wait during polling?
+
+[http://habrahabr.ru/post/115493/](http://habrahabr.ru/post/115493/)
+Полезные плагины
+[http://docs.cacti.net/plugin:boost](http://docs.cacti.net/plugin:boost)
+[http://docs.cacti.net/plugin:discovery#discovery](http://docs.cacti.net/plugin:discovery#discovery)
+[http://docs.cacti.net/plugin:rrdclean#rrdclean](http://docs.cacti.net/plugin:rrdclean#rrdclean)
+[http://docs.cacti.net/plugin:monitor](http://docs.cacti.net/plugin:monitor)
+[http://docs.cacti.net/plugin:thold](http://docs.cacti.net/plugin:thold)
+
+
+
+
+
+
+[http://forum.lissyara.su/viewtopic.php?p=154288](http://forum.lissyara.su/viewtopic.php?p=154288)
+[http://ixnfo.com/ustanovka-i-nastroyka-weathermap.html](http://ixnfo.com/ustanovka-i-nastroyka-weathermap.html)
+
+
+
+
+
+
+[http://habrahabr.ru/post/143747/](http://habrahabr.ru/post/143747/)
+
+Помогло банальное переименование MSTP в MSTP.conf, а также снос и установка плагина занова
+
+DEBUG cacti
+[http://www.unsam.ru/2011/01/cacti.html](http://www.unsam.ru/2011/01/cacti.html)
+[http://docs.cacti.net/manual:087:4_help.2_debugging#debugging](http://docs.cacti.net/manual:087:4_help.2_debugging#debugging)
+
+QuickTree
+[http://thingy.com/haj/cacti/quicktree-plugin.html](http://thingy.com/haj/cacti/quicktree-plugin.html)
+[http://forums.cacti.net/viewtopic.php?f=19&t=34317&start=30](http://forums.cacti.net/viewtopic.php?f=19&t=34317&start=30)
+patch -p1 -N < data_source_deactivate.patch
+
+
+
+
+
+Что необходимо
+1. Cisco cpu
+2. Cisco memory

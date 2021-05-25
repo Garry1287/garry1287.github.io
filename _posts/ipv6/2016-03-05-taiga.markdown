@@ -1,0 +1,200 @@
+---
+layout: post
+title:  "taiga"
+date:   2016-03-05 12:57:43 +0300
+categories: ipv6
+tags: ipv6
+---
+
+# taiga
+DEVICE=eth1.50
+TYPE=Vlan
+VLAN=yes
+ONBOOT=yes
+NM_CONTROLLED=no
+BOOTPROTO=static
+IPADDR=10.0.0.1
+NETMASK=255.255.255.252
+IPV6INIT=yes
+IPV6ADDR=2a0c:4280:0::2/64
+
+
+
+
+
+[root@srv-akim garry]# cat /etc/quagga/ospf6d.conf
+!
+! Zebra configuration saved from vty
+!   2018/03/29 16:25:47
+!
+hostname akim.sc.int
+password 8 RfOPwWz3eDLgg
+enable password 8 8NoHtEewj6DD2
+log file /var/log/quagga/ospf6d.log informational
+log stdout
+service advanced-vty
+service password-encryption
+!
+debug ospf6 lsa unknown
+debug ospf6 neighbor state
+!
+interface eth1.50
+ ipv6 ospf6 cost 1
+ ipv6 ospf6 hello-interval 10
+ ipv6 ospf6 dead-interval 40
+ ipv6 ospf6 retransmit-interval 5
+ ipv6 ospf6 priority 1
+ ipv6 ospf6 transmit-delay 1
+ ipv6 ospf6 instance-id 0
+!
+router ospf6
+ router-id 1.1.1.1
+ redistribute connected
+ redistribute static
+ interface eth1.50 area 0.0.0.0
+!
+access-list access4 permit 127.0.0.1/32
+!
+ipv6 access-list access6 permit 3ffe:501::/32
+ipv6 access-list access6 permit 2001:200::/48
+ipv6 access-list access6 permit ::1/128
+!
+ipv6 prefix-list test-prefix seq 1000 deny any
+!
+route-map static-ospf6 permit 10
+ match ipv6 address prefix-list test-prefix
+ set metric-type type-2
+ set metric 2000
+!
+line vty
+ access-class access4
+ ipv6 access-class access6
+ exec-timeout 0 0
+!
+
+
+
+
+
+
+cat /etc/tayga/default.conf
+tun-device tunnat64
+ipv4-addr 192.168.255.1
+prefix 2a0c:4280:1:ffff::/96
+dynamic-pool 192.168.255.0/24
+data-dir /var/lib/tayga/default
+
+
+[root@srv-akim garry]# less /var/lib/tayga/default/dynamic.map 
+192.168.255.160 2a0c:4280::b33d:180f:145a:d34d  1522065656
+
+
+acl "ignore" { // do not apply DNS64 to this addresses
+  10/8;
+  172.16/12;
+};
+
+acl "clients" { // your IPv6 clients
+  ::1/128;
+  2a0c:4280:0:0::/64; // maybe some network with IPv6 clients
+};
+
+options {
+        listen-on port 53 { any; };
+        listen-on-v6 port 53 { any; };
+
+        dns64 2a0c:4280:1:ffff::/96 {
+                    recursive-only no;
+                    clients { clients; };
+                    mapped { !ignore; any; };
+                    break-dnssec yes; // more on this below
+                    exclude { 2a0c:4280:1:ffff::/96; };
+        };
+
+        directory       "/var/named";
+        dump-file       "/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+        recursion yes;
+        dnssec-enable yes;
+        dnssec-validation yes;
+        allow-query { localnets; localhost; };
+
+        /* Path to ISC DLV key */
+        bindkeys-file "/etc/named.iscdlv.key";
+
+        managed-keys-directory "/var/named/dynamic";
+};
+
+logging {
+    channel bind_log {
+    file "/var/log/named/named.log";
+    print-time yes;
+    print-category yes;
+    print-severity yes;
+    };
+    channel update_debug {
+    file "/var/log/named/update-debug.log";
+    severity debug 3;
+    print-time yes;
+    print-category yes;
+    print-severity yes;
+    };
+    channel security_info {
+    file "/var/log/named/security-info.log";
+    severity info;
+    print-time yes;
+    print-category yes;
+    print-severity yes;
+    };
+    category default { bind_log;};
+    category xfer-in { bind_log;};
+    category xfer-out { bind_log;};
+    category update { update_debug;};
+    category security { security_info;};
+};
+
+#logging {
+#        channel default_debug {
+#                file "data/named.run";
+#                severity dynamic;
+#        };
+#};
+
+zone "." IN {
+        type hint;
+        file "named.ca";
+};
+
+include "/etc/named.rfc1912.zones";
+include "/etc/named.root.key";
+
+
+
+
+
+
+--------------------------------------------------------------------
+-A INPUT -i tunnat64 -j nat64-fw 
+
+------------------------------------------------------------------------
+
+
+interface eth1.20
+{
+       AdvSendAdvert on;
+       MinRtrAdvInterval 30;
+       MaxRtrAdvInterval 100;
+       prefix  2a0c:4280:0:0::/64 
+       {
+               AdvOnLink on;
+               AdvAutonomous on;
+               AdvRouterAddr off;
+       };
+
+        RDNSS 2a0c:4280:0:0::1
+        {
+        };
+
+};
+

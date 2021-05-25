@@ -1,0 +1,439 @@
+---
+layout: post
+title:  "Vienna"
+date:   2017-10-05 09:39:17 +0300
+categories: zavod
+tags: zavod
+---
+
+# Vienna
+Сети для маршрутизации
+
+AS65050
+
+
+10.170.0.0 255.255.254.0
+10.170.2.0 255.255.254.0
+10.170.10.0 255.255.254.0
+10.170.12.0 255.255.254.0
+10.170.22.0 255.255.255.0
+10.170.21.0 255.255.255.0
+10.170.8.0 255.255.254.0
+10.170.18.0 255.255.254.0
+10.170.4.0 255.255.254.0
+10.170.6.0 255.255.254.0
+10.170.14.0 255.255.254.0
+10.170.16.0 255.255.254.0
+10.170.23.0 255.255.255.0
+10.170.24.0 255.255.255.0
+10.170.25.0 255.255.255.0
+10.170.250.0 255.255.255.0
+10.170.254.0 255.255.255.0
+10.70.253.0 255.255.255.248
+
+
+
+
+
+network 10.170.0.0 mask 
+
+
+
+
+
+Настройка CE0
+
+Qos
+class-map match-any REAL-TIME
+ match ip precedence 5 
+class-map match-any PREMIUM
+ match ip precedence 3 
+!         
+!
+policy-map PLATINUM
+ class REAL-TIME
+  priority percent 60
+ class PREMIUM
+  bandwidth percent 15
+  random-detect
+ class class-default
+policy-map PLATINUM-ETH-20MB
+ class class-default
+  shape average 204800000
+  service-policy PLATINUM
+
+IP адреса
+interface GigabitEthernet0/0
+ description # Uplink to NLMK IPVPN via Golden-Telecom (new Ethernet) #smithy 24.06.2013
+ bandwidth 20480
+ load-interval 30
+ duplex auto
+ speed auto
+ no cdp enable
+ service-policy output PLATINUM-ETH-20MB
+!
+interface GigabitEthernet0/1
+ description #Uplink to MNG NET #pheonix 29.08.2012
+ ip address 10.98.98.1 255.255.255.0
+ duplex auto
+ speed auto
+
+
+
+
+BGP
+router bgp 65050
+ bgp log-neighbor-changes
+ neighbor 10.192.10.169 remote-as 20866
+ !
+ address-family ipv4
+network 10.170.0.0 mask 255.255.254.0
+network 10.170.2.0 mask 255.255.254.0
+network 10.170.10.0 mask 255.255.254.0
+network 10.170.12.0 mask 255.255.254.0
+network 10.170.22.0 mask 255.255.255.0
+network 10.170.21.0 mask 255.255.255.0
+network 10.170.8.0 mask 255.255.254.0
+network 10.170.18.0 mask 255.255.254.0
+network 10.170.4.0 mask 255.255.254.0
+network 10.170.6.0 mask 255.255.254.0
+network 10.170.14.0 mask 255.255.254.0
+network 10.170.16.0 mask 255.255.254.0
+network 10.170.23.0 mask 255.255.255.0
+network 10.170.24.0 mask 255.255.255.0
+network 10.170.25.0 mask 255.255.255.0
+network 10.170.250.0 mask 255.255.255.0
+network 10.170.254.0 mask 255.255.255.0
+network 10.70.253.0 mask 255.255.255.248
+  redistribute connected
+  redistribute static
+  redistribute ospf 110
+  neighbor 10.192.10.169 activate
+ exit-address-family
+
+
+OSPF
+router ospf 110
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+ redistribute bgp 65050 metric 1 metric-type 1 subnets
+ passive-interface default
+ no passive-interface GigabitEthernet0/1
+ network 10.170.254.0 0.0.0.255 area 0
+
+
+snmp
+snmp-server community Sh73ah91Kld RW 57
+snmp-server community public RO
+snmp-server community Fv8Ya64PQ RO 56
+snmp-server ifindex persist
+snmp-server tftp-server-list 57
+snmp-server location Vienna-CE0
+snmp-server contact iptech@sc.ru
+snmp-server file-transfer access-group 57 protocol tftp
+
+
+ntp
+ntp logging
+ntp access-group peer 61
+ntp access-group serve-only 62
+ntp update-calendar
+ntp server 10.192.10.252 prefer
+ntp server 10.192.10.253
+
+
+log
+logging history size 0
+logging trap notifications
+logging origin-id hostname
+logging facility local2
+logging 10.192.10.253
+
+access-list для snmp, ntp, log
+
+access-list 10 permit 10.192.10.0 0.0.0.255
+access-list 10 permit 10.170.254.0 0.0.0.255
+access-list 10 permit 10.170.253.0 0.0.0.255
+access-list 56 permit 10.192.10.190
+access-list 56 permit 172.19.4.0 0.0.3.255
+access-list 56 deny   any
+access-list 57 permit 10.192.10.252
+access-list 57 permit 10.192.10.253
+access-list 57 permit 10.192.10.190
+access-list 57 deny   any
+access-list 61 permit 10.192.10.252
+access-list 61 permit 10.192.10.253
+access-list 61 deny   any
+access-list 61 remark NTP: access-group peer
+access-list 62 permit 10.0.0.0 0.255.255.255
+access-list 62 deny   any
+access-list 62 remark NTP: access-group serve-only
+
+
+line vty 0 4
+ exec-timeout 480 0
+ privilege level 15
+ login local
+ transport input ssh
+line vty 5 15
+ exec-timeout 480 0
+ privilege level 15
+ login local
+ transport input ssh
+
+
+
+стандартный пароль
+enable
+
+
+
+
+logging buffered informational
+enable secret
+username hd secret
+
+
+
+
+
+
+
+
+
+
+
+
+Настройка LB0
+
+
+service timestamps debug datetime msec localtime
+service timestamps log datetime localtime
+service password-encryption
+
+interface Gi0/1
+ ip address 10.170.254.2 255.255.255.0
+ no cdp enable
+!
+interface Gi0/0
+ ip address 10.170.253.3 255.255.255.248
+ no cdp enable
+
+
+
+router ospf 110
+ log-adjacency-changes
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+ passive-interface default
+ no passive-interface GigabitEthernet0/1
+ no passive-interface GigabitEthernet0/1
+ network 10.170.253.0 0.0.0.7 area 0
+ network 10.170.254.0 0.0.0.255 area 0
+
+
+
+На второй 
+
+interface Gi0/1
+  ip ospf cost 200
+
+interface Gi0/0
+  interface Gi0/1
+
+
+
+
+
+
+Настройка ASA + failover
+
+Инспекция SQL для Oracle
+
+
+1.
+
+ ASA Version 8.0(4) 
+!
+hostname Maxi-ASA
+domain-name asa.mg
+enable password iN3PDFn9GUwaTLrE encrypted
+passwd 2KFQnbNIdI.2KYOU encrypted
+names
+!
+interface Ethernet0/0
+ nameif outside
+ security-level 100
+ ip address 10.98.99.9 255.255.255.248 standby 10.98.99.10 
+ ospf cost 10
+ ospf mtu-ignore
+!
+interface Ethernet0/1
+ no nameif
+ no security-level
+ no ip address
+!
+interface Ethernet0/1.12
+ vlan 12
+ nameif vlan12
+ security-level 100
+ ip address 10.98.0.1 255.255.255.0 standby 10.98.0.254 
+ ospf cost 100
+!
+interface Ethernet0/1.18
+ vlan 18
+ nameif vlan18
+ security-level 100
+ ip address 10.98.16.1 255.255.255.0 standby 10.98.16.254 
+ ospf cost 100
+!
+interface Ethernet0/1.65
+ vlan 65
+ nameif vlan65
+ security-level 100
+ ip address 10.98.254.66 255.255.255.248 standby 10.98.254.67 
+ ospf cost 100
+!
+interface Ethernet0/1.72
+ vlan 72
+ nameif vlan72
+ security-level 100
+ ip address 10.98.254.74 255.255.255.248 standby 10.98.254.75 
+ ospf cost 100
+!             
+interface Ethernet0/1.100
+ vlan 100
+ nameif vlan100
+ security-level 0
+ no ip address
+!
+interface Ethernet0/2
+ shutdown
+ no nameif
+ no security-level
+ no ip address
+!
+interface Ethernet0/3
+ description LAN/STATE Failover Interface
+!
+interface Management0/0
+ nameif management
+ security-level 100
+ ip address 10.98.98.7 255.255.255.0 standby 10.98.98.8 
+ ospf cost 10
+ management-only
+!
+boot system disk0:/asa804-k8.bin
+ftp mode passive
+clock timezone MSK 4
+dns server-group DefaultDNS
+ domain-name asa.mg
+same-security-traffic permit inter-interface
+same-security-traffic permit intra-interface
+access-list vlan11_access_in extended permit ip any any 
+access-list vlan11_access_in extended permit tcp any any 
+access-list vlan11_access_in extended permit udp any any 
+access-list vlan11_access_in extended permit icmp any any 
+access-list outside_access_in extended permit ip any any 
+access-list outside_access_in extended permit tcp any any 
+access-list outside_access_in extended permit udp any any 
+access-list outside_access_in extended permit icmp any any 
+access-list vlan65_access_in extended permit ip any any 
+access-list vlan65_access_in extended permit tcp any any 
+access-list vlan65_access_in extended permit udp any any 
+access-list vlan65_access_in extended permit icmp any any 
+access-list VOIP-MAXI extended permit ip host 10.98.0.253 81.20.192.0 255.255.240.0 
+pager lines 24
+logging enable
+logging timestamp
+logging monitor debugging
+logging buffered informational
+logging trap notifications
+logging asdm informational
+logging facility 18
+logging device-id hostname
+mtu outside 1500
+mtu vlan12 1500
+mtu vlan18 1500
+mtu vlan65 1500
+mtu vlan72 1500
+mtu vlan100 1500
+mtu management 1500
+failover
+failover lan unit secondary
+failover lan interface new-link Ethernet0/3
+failover link new-link Ethernet0/3
+failover interface ip new-link 10.90.252.9 255.255.255.252 standby 10.90.252.10
+monitor-interface vlan12
+monitor-interface vlan18
+icmp unreachable rate-limit 1 burst-size 1
+asdm image disk0:/asdm-613.bin
+no asdm history enable
+arp timeout 14400
+access-group outside_access_in in interface outside
+access-group outside_access_in in interface vlan12
+access-group outside_access_in in interface vlan18
+access-group vlan65_access_in in interface vlan65
+access-group outside_access_in in interface vlan72
+access-group outside_access_in in interface vlan100
+!
+router ospf 110
+ router-id 10.98.99.9
+ network 10.98.99.8 255.255.255.248 area 0
+ network 10.98.254.64 255.255.255.248 area 0
+ network 10.98.254.72 255.255.255.248 area 0
+ area 0
+ log-adj-changes
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+!
+timeout xlate 3:00:00
+timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
+timeout sunrpc 0:10:00 h323 0:05:00 h225 1:00:00 mgcp 0:05:00 mgcp-pat 0:05:00
+timeout sip 0:30:00 sip_media 0:02:00 sip-invite 0:03:00 sip-disconnect 0:02:00
+timeout sip-provisional-media 0:02:00 uauth 0:05:00 absolute
+dynamic-access-policy-record DfltAccessPolicy
+aaa authentication http console LOCAL 
+aaa authentication ssh console LOCAL 
+aaa authentication telnet console LOCAL 
+http server enable
+http 10.98.98.0 255.255.255.0 management
+snmp-server location Maxi-ASA
+snmp-server contact iptech@sc.ru
+snmp-server enable traps snmp authentication linkup linkdown coldstart
+service resetoutside
+crypto ipsec security-association lifetime seconds 28800
+crypto ipsec security-association lifetime kilobytes 4608000
+telnet 10.192.10.0 255.255.255.0 outside
+telnet 10.98.98.0 255.255.255.0 management
+telnet 10.192.10.0 255.255.255.0 management
+telnet timeout 5
+ssh 10.192.10.0 255.255.255.0 outside
+ssh timeout 5
+console timeout 0
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+ntp server 10.192.10.190 source outside prefer
+ntp server 10.192.10.252 prefer
+ntp server 10.192.10.253
+ssl encryption rc4-sha1
+username nlmk password t9M8vtFGzzLwZNNo encrypted privilege 15
+!             
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect h323 h225 
+  inspect h323 ras 
+!
+service-policy global_policy global
+prompt hostname context 
+Cryptochecksum:6ee56f57b0ab9724ca785057c3dfdc50
+: end

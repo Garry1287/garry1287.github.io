@@ -1,0 +1,40 @@
+---
+layout: post
+title:  "вентилятор cisco2"
+date:   2012-12-05 06:53:49 +0400
+categories: hardware
+tags: hardware
+---
+
+# вентилятор cisco2
+[http://www.elitan.ru/price/item333105](http://www.elitan.ru/price/item333105)
+[http://www.chipdip.ru/product/ec4020h12s/](http://www.chipdip.ru/product/ec4020h12s/)
+
+[http://www.lipetsk.ret.ru/?gid=989034&pn=prod](http://www.lipetsk.ret.ru/?gid=989034&pn=prod)
+
+Вентилятор 40*40*10мм Evercool EC4020H12S
+
+
+Для 3845 дорогой пиздец
+[http://www.ebay.com/itm/NEW-SEALED-Cisco-CISCO3845FANASSY-Fan-1YearWarranty-2-Available-/272082550601?_ul=RU](http://www.ebay.com/itm/NEW-SEALED-Cisco-CISCO3845FANASSY-Fan-1YearWarranty-2-Available-/272082550601?_ul=RU)
+[http://www.cwc-group.com/ci38fanre.html](http://www.cwc-group.com/ci38fanre.html)
+[http://www.cisco.com/c/en/us/td/docs/routers/access/3800/hardware/installation/guide/hw/38comp.html#wp1008956](http://www.cisco.com/c/en/us/td/docs/routers/access/3800/hardware/installation/guide/hw/38comp.html#wp1008956)
+[https://www.cablesandkits.com/cisco-3845-fan-assembly-and-faceplate-cisco3845fanassy-new-p-1149.html](https://www.cablesandkits.com/cisco-3845-fan-assembly-and-faceplate-cisco3845fanassy-new-p-1149.html)
+
+3660
+[http://www.ebay.com/itm/Cisco-800-04736-02-3600-series-3660-Router-Fan-Tray-Module-/300750386951?_ul=BO](http://www.ebay.com/itm/Cisco-800-04736-02-3600-series-3660-Router-Fan-Tray-Module-/300750386951?_ul=BO)
+[http://www.cisco.com/c/en/us/td/docs/routers/access/2600/hardware/module/installation/guide/aims_ins.html](http://www.cisco.com/c/en/us/td/docs/routers/access/2600/hardware/module/installation/guide/aims_ins.html)
+[https://www.cablesandkits.com/cisco-3660-series-replacement-fan-assembly-p-1720.html](https://www.cablesandkits.com/cisco-3660-series-replacement-fan-assembly-p-1720.html)
+
+
+
+[http://ru.aliexpress.com/item/Cooler-Fan-For-NMB-8015-3106KL-04W-B59-12v0-24A-cisco-3725-fan/1878840239.html?spm=2114.41010708.4.11.GC8QtP](http://ru.aliexpress.com/item/Cooler-Fan-For-NMB-8015-3106KL-04W-B59-12v0-24A-cisco-3725-fan/1878840239.html?spm=2114.41010708.4.11.GC8QtP)
+[http://ru.aliexpress.com/cheap/cheap-cisco-3725-router.html](http://ru.aliexpress.com/cheap/cheap-cisco-3725-router.html)
+
+
+
+SDRAM - The Cisco 
+
+s1skillall -9 7201 ships with default memory of 1-GB SDRAM, extensible to 2-GB SDRAM. There is only one memory slot. 
+The memory on the Cisco 7201 is double data-rate (DDR) memory, which provides high-performance memory access rates. Note: The Cisco 7301 SDRAM memory module is not compatible with the Cisco 7201 SDRAM memory module. 
+[http://www.cisco.com/c/en/us/products/collateral/routers/7201-router/product_data_sheet0900aecd80630b58.html](http://www.cisco.com/c/en/us/products/collateral/routers/7201-router/product_data_sheet0900aecd80630b58.html)

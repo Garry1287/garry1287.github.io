@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "ccna"
+date:   2012-10-14 01:10:44 +0400
+categories: ccna
+tags: certification
+---
+
+# ccna
+[http://habrahabr.ru/company/skillfactory/blog/168595/](http://habrahabr.ru/company/skillfactory/blog/168595/)
+[http://habrahabr.ru/post/155329/](http://habrahabr.ru/post/155329/)
+[http://habrahabr.ru/post/123646/](http://habrahabr.ru/post/123646/)
+[http://habrahabr.ru/post/129542/](http://habrahabr.ru/post/129542/)

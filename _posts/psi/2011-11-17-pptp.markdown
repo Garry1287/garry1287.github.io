@@ -1,0 +1,91 @@
+---
+layout: post
+title:  "pptp"
+date:   2011-11-17 15:56:46 +0400
+categories: PSI
+tags: PSI
+---
+
+# pptp
+
+[http://www.nestor.minsk.by/sr/2005/03/050315.html](http://www.nestor.minsk.by/sr/2005/03/050315.html)
+[http://ru.wikipedia.org/wiki/PPTP](http://ru.wikipedia.org/wiki/PPTP)
+[http://interface31.ru/tech_it/2010/08/nastraivaem-vpn-server-chast-1-obshhie-voprosy.html](http://interface31.ru/tech_it/2010/08/nastraivaem-vpn-server-chast-1-obshhie-voprosy.html)
+[http://kaplunenko.name/setup-pptp%E2%80%93vpn-server-ubuntu-10-04/](http://kaplunenko.name/setup-pptp%E2%80%93vpn-server-ubuntu-10-04/)
+[http://en.wikipedia.org/wiki/Link_Control_Protocol](http://en.wikipedia.org/wiki/Link_Control_Protocol)
+[http://en.wikipedia.org/wiki/Point-to-Point_Protocol](http://en.wikipedia.org/wiki/Point-to-Point_Protocol)
+
+
+
+
+
+
+sudo iptables -A INPUT -p gre -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 1723 -j ACCEPT
+
+
+
+
+pptpd.conf
+
+localip 81.20.192.19
+remoteip 192.168.168.100-199
+
+
+
+Вписываем следущее:
+
+#
+# Lock the port
+#
+lock
+
+#
+# We don't need the tunnel server to authenticate itself
+#
+#noauth
+auth
+
+name vpn1
+
+#ms-dns 81.20.192.19
+ms-dns 192.168.1.11
+#
+# Turn off transmission protocols we know won't be used
+#
+nobsdcomp
+nodeflate
+
+#
+# We want MPPE
+#
+#require-mppe
+
+refuse-chap # запрещение авторизации по протоколу CHAP
+require-mppe-128 # поддержка шифрования MPPE128
+require-mschap-v2 # поддержка метода аутентификации MSCHAP v2
+
+#
+# We want a sane mtu/mru
+#
+mtu 1400
+mru 1400
+
+#
+# Time this thing out of it goes poof
+#
+lcp-echo-failure 10
+lcp-echo-interval 10
+
+
+
+
+
+
+
+
+Пароли
+vi /etc/ppp/chap-secrets
+
+test1           vpn1            testpass        192.168.168.100
+

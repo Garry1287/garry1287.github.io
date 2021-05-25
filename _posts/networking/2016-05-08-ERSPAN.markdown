@@ -1,0 +1,96 @@
+---
+layout: post
+title:  "ERSPAN"
+date:   2016-05-08 03:25:05 +0300
+categories: Networking
+tags: Networking
+---
+
+# ERSPAN
+[https://packetcorner.wordpress.com/2014/06/14/encapsulated-remote-span-erspan/](https://packetcorner.wordpress.com/2014/06/14/encapsulated-remote-span-erspan/)
+[https://www.cisco.com/c/en/us/support/docs/lan-switching/switched-port-analyzer-span/211403-Configure-ASR1000-Local-ERSPAN.html](https://www.cisco.com/c/en/us/support/docs/lan-switching/switched-port-analyzer-span/211403-Configure-ASR1000-Local-ERSPAN.html)
+[https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/lanswitch/configuration/xe-3s/lanswitch-xe-3s-book/lnsw-conf-erspan.html#GUID-4FF72FB4-CDC4-40CC-AA25-E32C8CE58E95](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/lanswitch/configuration/xe-3s/lanswitch-xe-3s-book/lnsw-conf-erspan.html#GUID-4FF72FB4-CDC4-40CC-AA25-E32C8CE58E95)
+[https://forum.nag.ru/index.php?/topic/70085-utechki-pamyati-asr1002/](https://forum.nag.ru/index.php?/topic/70085-utechki-pamyati-asr1002/)
+
+interface GigabitEthernet0/0/0
+ ip address 192.168.1.1 255.255.255.0
+ negotiation auto
+! 
+interface GigabitEthernet0/0/2
+ no ip address
+ negotiation auto
+! 
+interface Loopback1
+ ip address 10.1.1.1 255.255.255.255
+!
+monitor session 10 type erspan-source
+ source interface Te0/3/0
+ destination
+  erspan-id 10
+  ip address 10.1.1.1
+  origin ip address 10.1.1.1
+monitor session 20 type erspan-destination
+ destination interface Gi0/0/6
+ source
+  erspan-id 10
+  ip address 10.1.1.1
+
+
+
+
+monitor session 1 type local
+ description FOR_RKN
+ source interface Te0/3/0 rx
+ destination interface Gi0/0/6
+
+
+
+
+
+
+
+
+
+
+
+Te0/3/0.13
+
+
+
+
+monitor session 10 type erspan-source
+ source interface Te0/3/0
+ destination
+  erspan-id 10
+  ip address 81.20.192.75
+  origin ip address 81.20.192.75
+
+monitor session 20 type erspan-destination
+ destination interface Gi0/0/6
+ source
+  erspan-id 10
+  ip address 81.20.192.75
+
+
+
+monitor session 10 type erspan-source
+ source interface Te0/3/0
+ destination
+  erspan-id 10
+  ip address 91.190.64.1
+  origin ip address 91.190.64.1
+
+monitor session 20 type erspan-destination
+ destination interface Gi0/0/6
+ source
+  erspan-id 10
+  ip address 91.190.64.1
+
+If any of the sources that are monitored are part of a Dot1q trunk, the traffic analyzed with SPAN is dropped by the outgoing interface. In order to fix this issue, add the plim ethernet vlan filter disable command to the physical ERSPAN destination interface.
+
+
+
+ip access-list extended ACL-4-RKN
+ permit tcp any any range domain www
+ permit tcp any any eq 443
+ permit tcp any any established

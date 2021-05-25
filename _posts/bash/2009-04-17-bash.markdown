@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "bash"
+date:   2009-04-17 04:28:56 +0400
+categories: bash
+tags: bash
+---
+
+# bash
+[http://www.k-max.name/linux/peremennye-intepretatora-bash/](http://www.k-max.name/linux/peremennye-intepretatora-bash/)
+[http://snowarch.blogspot.ru/2011/06/bash.html](http://snowarch.blogspot.ru/2011/06/bash.html)
+[http://www.opennet.ru/docs/RUS/bash_scripting_guide/c2792.html](http://www.opennet.ru/docs/RUS/bash_scripting_guide/c2792.html)
+[http://habrahabr.ru/post/198482/](http://habrahabr.ru/post/198482/)
+
+
+[http://www.net4me.net/docs/linux/abs-guide/c13406.html](http://www.net4me.net/docs/linux/abs-guide/c13406.html)
+[http://itbuben.org/blog/Unix-way/807.html](http://itbuben.org/blog/Unix-way/807.html)
+[http://rtfm.co.ua/bash-ispolzovanie-komandy-trap-dlya-perexvata-signalov-preryvaniya-processa/](http://rtfm.co.ua/bash-ispolzovanie-komandy-trap-dlya-perexvata-signalov-preryvaniya-processa/)
+[http://igorka.com.ua/2009-12-21/lekciya-22-bash-cikly-i-funkcii/](http://igorka.com.ua/2009-12-21/lekciya-22-bash-cikly-i-funkcii/)
+
+[http://habrahabr.ru/post/221273/](http://habrahabr.ru/post/221273/)
+
+[http://habrahabr.ru/post/47163/](http://habrahabr.ru/post/47163/)
+
+[https://habrahabr.ru/company/ruvds/blog/325522/](https://habrahabr.ru/company/ruvds/blog/325522/)

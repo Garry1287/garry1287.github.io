@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "php-centos6"
+date:   2014-12-25 14:04:57 +0300
+categories: php-centos6
+tags: centos
+---
+
+# php-centos6
+ 
+Обновление php
+Устанавливаем remi
+
+[https://rtfm.co.ua/centos-obnovlenie-php-5-3-do-5-5/](https://rtfm.co.ua/centos-obnovlenie-php-5-3-do-5-5/)
+[https://itldc.com/blog/php54-upgrade-centos6x/](https://itldc.com/blog/php54-upgrade-centos6x/)
+[https://blog.remirepo.net/pages/Config-en](https://blog.remirepo.net/pages/Config-en)
+[http://admi.me/lesson-obnovlenie-php-s-5-3---5-6-centos-39](http://admi.me/lesson-obnovlenie-php-s-5-3---5-6-centos-39)

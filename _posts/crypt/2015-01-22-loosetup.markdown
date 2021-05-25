@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "loosetup"
+date:   2015-01-22 18:43:46 +0300
+categories: loosetup
+tags: crypt
+---
+
+# loosetup
+[https://www.walkernews.net/2007/07/01/create-linux-loopback-file-system-on-disk-file/](https://www.walkernews.net/2007/07/01/create-linux-loopback-file-system-on-disk-file/)

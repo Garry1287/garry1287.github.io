@@ -1,0 +1,30 @@
+---
+layout: post
+title:  "hightload2"
+date:   2018-08-21 14:09:08 +0300
+categories: linux
+tags: linux
+---
+
+# hightload2
+[http://highload.guide/blog/about-highload-2014.html?goal=0_f190819385-b9b7914833-145671713](http://highload.guide/blog/about-highload-2014.html?goal=0_f190819385-b9b7914833-145671713)
+highload.guide/blog/mysql-replication.html
+[http://highload.guide/blog/asynchronous-replication.html](http://highload.guide/blog/asynchronous-replication.html)
+[http://smira.ru/posts/anatomy-of-web-service.html](http://smira.ru/posts/anatomy-of-web-service.html)
+[http://smira-webinar.highload.ru/](http://smira-webinar.highload.ru/)
+[http://highload.guide/blog/scalable-configuration-nginx.html](http://highload.guide/blog/scalable-configuration-nginx.html)
+[http://highload.guide/blog/web-caching-memcached.html](http://highload.guide/blog/web-caching-memcached.html)
+[http://highload.guide/blog/scaling-logic.html](http://highload.guide/blog/scaling-logic.html)
+[http://highload.guide/blog/inside-webserver.html](http://highload.guide/blog/inside-webserver.html)
+[http://highload.guide/blog/about-highload-2014.html](http://highload.guide/blog/about-highload-2014.html)
+[http://hi-load.php.com.ua/topic/31/](http://hi-load.php.com.ua/topic/31/)
+[http://highload.guide/](http://highload.guide/)
+
+Список книг
+[http://habrahabr.ru/company/mailru/blog/267579/](http://habrahabr.ru/company/mailru/blog/267579/)
+[http://habrahabr.ru/company/mailru/blog/265103/](http://habrahabr.ru/company/mailru/blog/265103/)
+[http://habrahabr.ru/company/mailru/blog/268395/](http://habrahabr.ru/company/mailru/blog/268395/)
+
+
+MailGroup
+[http://habrahabr.ru/company/mailru/blog/254843/](http://habrahabr.ru/company/mailru/blog/254843/)

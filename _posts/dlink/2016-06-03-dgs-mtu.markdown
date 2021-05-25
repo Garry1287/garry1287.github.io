@@ -1,0 +1,75 @@
+---
+layout: post
+title:  "dgs-mtu"
+date:   2016-06-03 23:17:43 +0300
+categories: dlink
+tags: dlink
+---
+
+# dgs-mtu
+ping  -f  -s 1524 grz2-s0.sc.int
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.80.B31
+IP MTU                      : 1710
+
+
+
+ping -f -s 1524 k9-s9
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.52.B45
+IP MTU                      : 1712
+
+
+ping -f -s 1490 v21a-s0
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.80.B31
+IP MTU                      : 1712
+
+
+ping  -f  -s 1490 grz1-s0.sc.int
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.84.B43
+IP MTU                      : 1712
+
+
+
+
+
+
+Проходит всё
+garry:~ # ping -f -s 2500 k9-s8
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.50.B25
+IP MTU                      : 1710
+
+
+
+
+ping -f -s 2000 13d-s0
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.50.B25
+IP MTU                      : 1712
+
+
+
+ping -f -s 1490 15d-s0
+Boot PROM Version : Build 1.10-B09
+Firmware Version  : Build 2.80.B31
+IP MTU                      : 1712
+
+
+Схему
+Прошивки    v21 и grz2 прошивка одинаковая а mtu разное
+Настройки
+
+[http://forum.dlink.ru/viewtopic.php?f=2&t=137525](http://forum.dlink.ru/viewtopic.php?f=2&t=137525)
+[http://forum.nag.ru/forum/index.php?showtopic=83449](http://forum.nag.ru/forum/index.php?showtopic=83449)
+[http://forum.dlink.ru/viewtopic.php?f=2&t=141265&sid=4b2772cd2af75d60ee2a6a634928fd22&start=15](http://forum.dlink.ru/viewtopic.php?f=2&t=141265&sid=4b2772cd2af75d60ee2a6a634928fd22&start=15)
+[http://forum.dlink.ru/viewtopic.php?f=2&t=141265](http://forum.dlink.ru/viewtopic.php?f=2&t=141265)
+[http://www.osp.ru/lan/1998/07-08/133611/](http://www.osp.ru/lan/1998/07-08/133611/)
+[http://forum.dlink.ru/viewtopic.php?f=2&t=123538&start=15](http://forum.dlink.ru/viewtopic.php?f=2&t=123538&start=15)
+
+Спам
+[http://www.sakhttk.ru/ru/support/faq_inet/16.html](http://www.sakhttk.ru/ru/support/faq_inet/16.html)
+[http://www.sakhttk.ru/ru/support/faq_inet/17.html](http://www.sakhttk.ru/ru/support/faq_inet/17.html)
+[http://www.sakhttk.ru/ru/support/faq_inet/18.html](http://www.sakhttk.ru/ru/support/faq_inet/18.html)

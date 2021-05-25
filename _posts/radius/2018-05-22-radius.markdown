@@ -1,0 +1,123 @@
+---
+layout: post
+title:  "radius"
+date:   2018-05-22 10:36:48 +0300
+categories: radius
+tags: radius
+---
+
+# radius
+Framed-IP-Address	:=	10.4.0.36
+Cisco-AVPair	+=	lcp:interface-config=description # Zhesternev A.V. ul Frunze 32-92
+Cisco-AVPair	+=	lcp:interface-config=rate-limit input 512000 96000 192000 conform-action transmit exceed-action drop
+Cisco-AVPair	+=	lcp:interface-config=rate-limit output 512000 96000 192000 conform-action transmit exceed-action drop
+
+Cleartext-Password	:=	d5eThE5u
+
+
+phys
+
+Simultaneous-Use	:=	1
+
+
+
+
+
+Framed-Protocol		:=	PPP
+
+Service-Type	:=	Framed-User
+Framed-Compression	:=	Van-Jacobsen-TCP-IP
+
+
+
+
+
+
+
+user	Auth-Type := Local, User-Password == "testing"
+                Service-Type = Framed-User,
+                Framed-Protocol = PPP,
+                Framed-IP-Address = 172.16.3.33,
+                Framed-IP-Netmask = 255.255.255.0,
+                Framed-Routing = Broadcast-Listen,
+                Framed-MTU = 1500,
+                Framed-Compression = Van-Jacobsen-TCP-IP
+
+
+testuser	Auth-Type:=MS-CHAP
+		Cleartext-Password:=12345
+		Service-Type:=Framed-User
+		Framed-Protocol:=PPP
+		Framed-IP-Address:=10.4.0.36
+		Cisco-AVPair+=lcp:interface-config=description # testuser address
+		Cisco-AVPair+=lcp:interface-config=rate-limit input 512000 96000 192000 conform-action transmit exceed-action drop
+		Cisco-AVPair+=lcp:interface-config=rate-limit output 512000 96000 192000 conform-action transmit exceed-action drop
+		Framed-Compression:=Van-Jacobsen-TCP-IP
+
+
+phys
+
+Simultaneous-Use	:=	1
+
+
+
+
+
+Framed-Protocol		:=	PPP
+
+Service-Type	:=	Framed-User
+Framed-Compression	:=	Van-Jacobsen-TCP-IP
+
+
+
+
+
+
+NAS - сервер
+
+ 81.20.192.14 {
+        # secret and password are mapped through the "secrets" file.
+        secret      = testing123
+        nastype     = cisco
+}
+
+
+
+
+snmp-server community public RO 20
+snmp-server community KlJ4gHli37 RW 21
+snmp-server ifindex persist
+snmp-server location KAR
+snmp-server contact garry@sc.ru
+snmp-server enable traps tty
+
+
+
+
+
+
+
+
+Fri Jul 17 11:10:46 2009 [8353]: Received unknown attribute 65 vendor 0 from el-ds-c0-fa0-0.net.promsvyaz.ru
+Fri Jul 17 11:10:46 2009 [8353]: Received unknown attribute 67 vendor 0 from el-ds-c0-fa0-0.net.promsvyaz.ru
+Fri Jul 17 11:10:46 2009 [8353]: Received unknown attribute 66 vendor 0 from el-ds-c0-fa0-0.net.promsvyaz.ru
+Fri Jul 17 11:10:46 2009 [8353]: Received unknown attribute 196 vendor 0 from el-ds-c0-fa0-0.net.promsvyaz.ru
+Fri Jul 17 11:10:46 2009 [8353]: Received unknown attribute 87 vendor 0 from el-ds-c0-fa0-0.net.promsvyaz.ru
+Fri Jul 17 11:10:46 2009 [29103]: check_user_attributes 'REL-Bahus@vpn.sc.ru' result: 0
+Fri Jul 17 11:10:46 2009 [29103]: Accounting (Stop): OK : 20 'REL-Bahus@vpn.sc.ru' (port:327) via 'el-ds-c0-fa0-0.net.promsvyaz.ru' from (el-ds-c0-fa0-0.net.
+promsvyaz.ru) - PPP
+
+
+
+
+interface FastEthernet0/1.75
+ description # PPPoE termination endpoint for xDSL physical client
+ encapsulation dot1Q 75
+ pppoe enable group global
+
+
+
+-A INPUT -s 81.20.192.0/255.255.240.0 -d 81.20.192.9 -p tcp -m multiport --dports 22,110,143 -j allowed_ports
+
+iptables -A INPUT -s 172.20.0.0/255.255.0.0 -d 81.20.192.9 -p tcp -m multiport --dports 110,143 -j allowed_ports
+iptables -A INPUT -s 172.24.0.0/255.255.0.0 -d 81.20.192.9 -p tcp -m multiport --dports 110,143 -j allowed_ports

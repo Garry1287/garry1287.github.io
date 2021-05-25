@@ -1,0 +1,209 @@
+---
+layout: post
+title:  "ipv6-steps"
+date:   2010-12-22 20:31:34 +0300
+categories: Networking
+tags: Networking
+---
+
+# ipv6-steps
+or customers establishing bgp sessions with us using quagga the following is a sample, dual stack ipv4 / ipv6 configuration.
+
+
+hostname your_router_name 
+password your_router_password 
+log file /var/log/quagga/bgpd.log 
+log stdout 
+! 
+router bgp your_as_number 
+no synchronization 
+bgp router-id your_ipv4_address 
+network your_ipv4_space 
+neighbor vrorg_router_ipv4_address remote-as vrorg_as_number 
+neighbor vrorg_router_ipv4_address description VRORG-v4 
+neighbor vrorg_router_ipv6_address remote-as vrorg_as_numbe 
+neighbor vrorg_router_ipv6_address description VRORG-v6 
+no auto-summary 
+no neighbor vrorg_router_ipv6_address activate 
+! 
+address-family ipv6 
+network your_ipv6_space 
+neighbor vrorg_router_ipv6_address activate 
+neighbor vrorg_router_ipv6_address route-map IPV6-OUT out 
+exit-address-family 
+! 
+ipv6 prefix-list pl-ipv6 seq 10 permit your_ipv6_space 
+route-map IPV6-OUT permit 10 
+match ipv6 address prefix-list pl-ipv6 
+set ipv6 next-hop global your_ipv6_address 
+! 
+line vty 
+! 
+
+
+
+
+
+
+------------------------------------
+
+BGP Dual Stack IPv4 IPV6 Configuration Guide.
+
+I recently worked in this configuration and works pretty nice.
+
+ 
+
+Router A
+
+interface GigabitEthernet1
+ ip address 192.168.64.215 255.255.255.0
+ ipv6 address 2001:AAAA:BBBB:CCCC::1/64
+
+router bgp XXXX
+ bgp router-id 1.1.1.1
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 2001:AAAA:BBBB:CCCC::2 remote-as 2
+ neighbor 192.168.64.214 remote-as 2
+ !
+ address-family ipv4
+  redistribute connected
+  neighbor 192.168.64.214 activate
+ exit-address-family
+ !
+ address-family ipv6
+  redistribute connected
+  neighbor 2001:AAAA:BBBB:CCCC::2 activate
+ exit-address-family
+
+ 
+
+ 
+
+Router B
+
+ 
+
+interface GigabitEthernet1
+ ip address 192.168.64.215 255.255.255.0
+ negotiation auto
+ ipv6 address 2001:AAAA:BBBB:CCCC::1/64
+
+ 
+
+
+router bgp 2
+ bgp router-id 2.2.2.2
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 2001:AAAA:BBBB:CCCC::1 remote-as 1
+ neighbor 192.168.64.215 remote-as 1
+ !
+ address-family ipv4
+  redistribute connected
+  neighbor 192.168.64.215 activate
+ exit-address-family
+ !
+ address-family ipv6
+  redistribute connected
+  neighbor 2001:AAAA:BBBB:CCCC::1 activate
+  neighbor 2001:AAAA:BBBB:CCCC::1 prefix-list v6_in in
+ exit-address-family
+
+ 
+
+Filter Inbound
+
+ipv6 prefix-list v6_in seq 5 deny 2001:1111:2222:3333::/64
+ipv6 prefix-list v6_in seq 10 permit ::/0 le 1
+
+
+[https://www.noction.com/blog/ipv4_bgp_vs_ipv6_bgp](https://www.noction.com/blog/ipv4_bgp_vs_ipv6_bgp)
+ ----------------------------------------------------------------------------------------------------------------------------
+[http://mindless.gr/2011/07/dual_stack_bgp_configuration_quagga/](http://mindless.gr/2011/07/dual_stack_bgp_configuration_quagga/)
+------------------------------------------------------------------------------------------------------------------------------
+
+OSPF 
+[http://www.iamroot.ru/2013/05/trek-ccnproute-cisco-nastrojka-ospf-ipv6-routing.html](http://www.iamroot.ru/2013/05/trek-ccnproute-cisco-nastrojka-ospf-ipv6-routing.html)
+[http://jok.su/notes/cisco/nastrojka-ospf-ipv6-routing.html](http://jok.su/notes/cisco/nastrojka-ospf-ipv6-routing.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Which of the following statements refer to 6RD?
+
+There are two correct answers. Please choose both of them to get the full score for this question.
+Select one or more:
+
+Does not require signalling to know that the transition mechanism is available
+
+Requires a signalling to let the device know that the transition mechanism is available
+
+Encapsulates IPv6 inside an IPv4 packet
+Correct! 6RD is a tunnelling mechanism that encapsulates IPv6 inside IPv4.
+
+Encapsulates IPv4 in IPv6
+
+
+4 Глава
+DAD процесс
+
+
+The "Destination Options” are only to be processed by the destination of the packet.
+The "Destination Options” are only to be processed by the destination of the packet.
+Select one:
+True
+False
+Feedback
+
+"Destination Options" may appear twice in the Extension Headers and they should only be processed by the destination of the IPv6 packet. All the devices in the middle should ignore these options.
+
+
+
+
+When a message is sent to a Solicited Node address, it will be processed ONLY by the hosts that joined that multicast group.
+
+Which is the IPv6 Transition Mechanism that is very easy to roll out for a large customer base (for example, ADSL, home users); Latency is low and customer experience is good because the whole tunnelling mechanism is within the provider's network?
+
+
+Please write down the name of the IPv6 Transition Mechanism.
+
+
+6in4
+
+
+
+
+
+
+
+
+
+
+
+[https://habr.com/en/post/64592/](https://habr.com/en/post/64592/)
+

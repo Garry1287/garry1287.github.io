@@ -1,0 +1,113 @@
+---
+layout: post
+title:  "mysql"
+date:   2013-05-06 18:02:12 +0400
+categories: sql
+tags: sql
+---
+
+# mysql
+mysqladmin -u root password new_password
+Для начало установим пароль
+
+[http://ru.opensuse.org/SDB:%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_MySQL](http://ru.opensuse.org/SDB:%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_MySQL)
+
+
+
+Так же необходимо сменить пароль пользователю 'root', для этого используйте SQL запрос "UPDATE":
+
+UPDATE user SET Password=PASSWORD('new_password') WHERE user='root';
+
+
+
+
+
+use lipbalkon
+update jos_menu set alias=''  where link='index.php?option=com_content&view=frontpage';
+
+
+mysql -u root -p -f name_database < C:\mydb_backup_name_database.txt
+
+GRANT ALL ON um.* TO umit@localhost IDENTIFIED BY 'Otto80FUtL';
+flush privileges;
+
+
+ftp
+Qtech
+hBeaFd37f
+
+
+
+
+Восстановление cacti
+mysqlcheck --auto-repair --databases cacti -u root -p
+
+repair table poller_item;
+
+
+
+
+
+
+
+Создание базы данных
+
+CREATE DATABASE usmfed;
+
+GRANT ALL ON usmfed.* TO usmfed@localhost IDENTIFIED BY 'm3YfnDag';
+flush privileges;
+
+
+
+
+CREATE DATABASE usmgarant;
+
+GRANT ALL ON usmgarant.* TO usmgarant@localhost IDENTIFIED BY 'Nd38adfg';
+flush privileges;
+
+
+
+
+
+
+
+
+Шаг 6: Запуск MariaDB службы
+
+[root@server ~]# service mysql start
+Starting MySQL...... SUCCESS! 
+[root@server ~]# chkconfig mysql on
+
+
+Шаг 7: Установка root пароля
+
+[root@server ~]#/usr/bin/mysql_secure_installation
+
+
+
+
+# mysql -uroot zabbix < schema.sql
+# mysql -uroot zabbix < images.sql
+# mysql -uroot zabbix < data.sql
+
+
+
+
+
+
+
+# service mysql start
+
+проводим необходимые операции:
+
+# /usr/bin/mysqladmin -u root password your-password
+# mysql_secure_installation
+
+
+
+
+
+
+Бэкап
+
+

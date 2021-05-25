@@ -1,0 +1,103 @@
+---
+layout: post
+title:  "systemd"
+date:   2015-11-02 22:38:31 +0300
+categories: linux
+tags: linux
+---
+
+# systemd
+[http://habrahabr.ru/company/infobox/blog/241237/](http://habrahabr.ru/company/infobox/blog/241237/)
+
+[http://centos.1050465.n5.nabble.com/CentOS-Run-script-at-startup-td5728960.html](http://centos.1050465.n5.nabble.com/CentOS-Run-script-at-startup-td5728960.html)
+
+
+
+Добавить в автозагрузку
+rc.local
+или создания своего unit
+
+
+
+>
+> > I just install the newest version of Centos 7 and I am a bit disappointed
+> > with new /etc/rc/local file I found that it's not usable anymore.
+>
+> You can re-enable it with this command:
+>
+> systemctl enable rc-local.service 
+
+
+
+
+
+
+Hello,
+
+thank you for your quick answer.
+
+You are completely right with this:
+
+because they die away in case of network errors and reboots
+
+
+my script contain Reverse SSH Tunnel:
+[root@lab3 system]# cat /opt/ssh_tunnel.sh
+#!/bin/bash
+ssh -f -N -R 12345:localhost:22 root@158.216.189.170
+
+So as I understood from your explanation, I can do it in two different ways.
+
+*First way: *
+To create systemd-unit with path to existing script:
+
+[Unit]
+> Description=My Service
+> After=network.service systemd-networkd.service network-online.target
+> [Service]
+> Type=oneshot
+> *ExecStart=/usr/bin/bash /opt/ssh_tunnel.sh*
+> [Install]
+> WantedBy=multi-user.target
+
+
+
+*Second way:*
+To create systemd-unit with all configuration inside.
+
+[Unit]
+
+> Description=SSH-Forwarding
+> After=network.service systemd-networkd.service network-online.target
+> [Service]
+> Type=simple
+> ExecStart=
+> */usr/bin/ssh -i /home/gateway/.ssh/id_ecdsa gateway@${REMOTE_HOST} -N -C*
+> *-L${LOCAL_ADDRESS}:${LOCAL_PORT}:127.0.0.1:${REMOTE_PORT}*Restart=always
+> RestartSec=60
+> TimeoutSec=30
+> CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_DAC_OVERRIDE
+> [Install]
+> WantedBy=multi-user.target
+... [show rest of quote]
+
+
+But in First Way I don't see this records:
+
+Restart=always
+> RestartSec=60
+> TimeoutSec=30
+
+
+So that means that my tunnel will die from time to time. (because network
+failure or something like that)
+And i see difference in this record (I will try to learn about it):
+
+Type=oneshot
+> Type=simple
+
+
+So this means that the best practice is to use *Second Way* described by
+you?
+
+PS: Sry for double sending

@@ -1,0 +1,565 @@
+---
+layout: post
+title:  "netflow2"
+date:   2018-03-29 23:47:53 +0300
+categories: Networking
+tags: Networking
+---
+
+# netflow2
+Есть версии протокола netflow - 5,8,9 и т.д.
+А есть схемы аггрегации, применимые начианя с 8 версии (9 тоже подходит)
+
+
+
+
+
+Добрый день!
+
+Выяснились определенные подробности с потоком NetFlow.
+
+Насколько я понял, на данный момент используется три структуры потока NetFlow
+
+1) С AS и TOS
+2) Подсеть/порт БЕЗ TOS
+3) Версия 13, AS, подсеть/порт и TOS
+
+Вариант (3) (Версия 13) устроил бы текущий биллинг ПСИ в качестве единственного
+формата, однако не все оборудование может отдавать поток в формате Версии 13.
+Устаревшее оборудование не может.
+
+Один инстанс коллектора Онимы может работать только с одной версией структуры
+потока. 
+Т.е. в качестве одного из вариантов решения можно предложить разделение потоков
+разной структуры NetFlow статистики по разным портам и запуск трех разных
+инстансов коллекторов Онимы.
+
+Поэтому
+1) Вопрос Валентину Олейнику - мы принимаем наличие трех потоков NefFlow разной
+структуры и миримся с этим?
+2) Просьба Игорю Дзюину - разнести тестовые потоки NetFlow статитстики, идущие
+на lipap2 по трем разным портам
+Порт 2055 (используется сейчас) - поток с AS и TOS
+Порт 2056 - подсеть/порт БЕЗ TOS
+Порт 2057 -  Версия 13, AS, подсеть/порт и TOS
+
+
+
+Порт 2055 (используется сейчас) - поток с AS и TOS
+
+Порт 2056 - подсеть/порт БЕЗ TOS
+
+Порт 2057 -  Версия 13, AS, подсеть/порт и TOS
+
+Порт 2055 (используется сейчас) - поток с AS и TOS
+Порт 2056 - подсеть/порт БЕЗ TOS
+Порт 2057 -  Версия 13, AS, подсеть/порт и TOS
+
+8.5	Source/Destination Prefix and Input/Output interface			ip flow-aggregation cache prefix	2056
+8.9	Source and Destination AS, Input and Output interface + ToS		ip flow-aggregation cache as-tos	2055
+8.13	Protocol and Port + ToS							ip flow-aggregation cache prefix-tos	2057
+
+
+
+
+
+
+
+Прошу разделить на 3 группы оборудование СПД по версиям Flow. Для каждой
+коробки, с которой снимается Flow, указать название и версию IOS.
+
+
+
+
+
+
+
+ctdc3_v08m13_port="9993"
+ctdc3_v08m13_version="8.13"
+
+ctdc0_v08m13_port="9990"
+ctdc0_v08m13_version="8.13"
+
+ctdc2_v08m13_port="8003"
+ctdc2_v08m13_version="8.13"
+
+cdec2as_port="9992"
+cdec2as_version="8.9"
+
+cdec2prefix_port="9994"
+cdec2prefix_version="8.5"
+
+stoskc0prefix_port="9991"                                                                                                                                    
+stoskc0prefix_version="8.5"                                                                                                                                  
+                                                                                                                                                             
+stoskc0as_port="9995"                                                                                                                                        
+stoskc0as_version="8.9"                                                                                                                                      
+                                                                                                                                                             
+victoriac0prefix_port="9996"                                                                                                                                 
+victoriac0prefix_version="8.5"                                                                                                                               
+                                                                                                                                                             
+victoriac0as_port="9997"                                                                                                                                     
+victoriac0as_version="8.9"                                                                                                                                   
+                                                                                                                                                             
+ats45c0prefix_port="8004"                                                                                                                                    
+ats45c0prefix_version="8.5"                                                                                                                                  
+                                                                                                                                                             
+#ats45c0as_port="8005"                                                                                                                                       
+#ats45c0as_version="8.9"                                                                                                                                     
+                                                                                                                                                             
+#bostc0prefix_port="8000"                                                                                                                                    
+#bostc0prefix_version="8.5"                                                                                                                                  
+                                                                                                                                                             
+#bostc0as_port="8001"
+#bostc0as_version="8.9"
+
+cdec0prefix_port="8017"
+cdec0prefix_version="8.5"
+
+#cdec0as_port="8018"
+#cdec0as_version="8.9"
+
+#elc0prefix_port="9998"
+#elc0prefix_version="8.5"
+
+#elc0as_port="9999"
+#elc0as_version="8.9"
+
+karc0prefix_port="8014"
+karc0prefix_version="8.5"
+
+#karc0as_port="8015"
+#karc0as_version="8.9
+
+otradac0prefix_port="8016"
+otradac0prefix_version="8.5"
+
+parussc0prefix_port="8010"
+parussc0prefix_version="8.5"
+
+parusc0_v08m13_port="8011"
+parusc0_v08m13_version="8.13"
+
+rtmc0prefix_port="8012"
+rtmc0prefix_version="8.5"
+
+#rtmc0as_port="8013"
+#rtmc0as_version="8.9"
+
+whsc0prefix_port="8006"
+whsc0prefix_version="8.5"
+
+#whsc0as_port="8007"
+#whsc0as_version="8.9"
+
+pripasyc0prefix_port="8019"
+pripasyc0prefix_version="8.5"
+
+cdec3prefix_port="8020"
+cdec3prefix_version="8.5"
+
+cdec3as_port="8021"
+cdec3as_version="8.9"
+
+unisprintM9c0prefix_port="8008"
+unisprintM9c0prefix_version="8.5"
+
+unisprintM9c0as_port="8009"
+unisprintM9c0as_version="8.9"
+
+ctdc4prefix_port="8022"
+ctdc4prefix_version="8.5"
+
+k6c0prefix_port="8023"
+k6c0prefix_version="8.5"
+
+ctdc6prefix_port="8024"
+ctdc6prefix_version="8.5"
+
+grzc0prefix_port="8025"
+grzc0prefix_version="8.5"
+
+k9c0prefix_port="8026"
+k9c0prefix_version="8.5"
+
+
+
+
+Версии 5 и 9 используются в cisco
+Начиная с 8 версии есть схемы агрегации, которая как я понял и используется во flow-tools
+
+
+
+
+
+ Flow-tools  is library and a collection of programs used to collect, send, process, and generate reports from NetFlow data.  The tools can be used
+       together on a single server or distributed to multiple servers for large deployments.  The flow-toools library provides an API for development  of
+       custom  applications  for NetFlow export versions 1,5,6 and the 14 currently defined version 8 subversions.  A Perl and Python interface have been
+       contributed and are included in the distribution.
+
+       Flow data is collected and stored by default in host byte order, yet the files are portable across big and little endian architectures.
+
+       Commands that utilize the network use a localip/remoteip/port designation for communication.  "localip" is the IP address the host will use  as  a
+       source for sending or bind to when receiving NetFlow PDU's (ie the destination address of the exporter.  Configuring the "localip" to 0 will force
+       the kernel to decide what IP address to use for sending and listen on all IP addresses for receiving.  "remoteip" is the  destination  IP  address
+       used  for  sending  or  the expected address of the source when receiving.  If the "remoteip" is 0 then the application will accept flows from any
+       source address.  The "port" is the UDP port number used for sending or receiving.  When using multicast  addresses  the  localip/remoteip/port  is
+       used to represent the source, group, and port respectively.
+
+       Flows  are  exported from a router in a number of different configurable versions.  A flow is a collection of key fields and additional data.  The
+       flow key is {srcaddr, dstaddr, input, output, srcport, dstport, prot, ToS}.  Flow-tools supports one export version per file.
+
+       Export versions 1, 5, 6, and 7 all maintain {nexthop, dPkts, dOctets, First, Last, flags}, ie the next-hop IP address, number of  packets,  number
+       of  octets  (bytes), start time, end time, and flags such as the TCP header bits.  Version 5 adds the additional fields {src_as, dst_as, src_mask,
+       dst_mask}, ie source AS, destination AS, source network mask, and destination network mask.  Version 7 which is specific to the Catalyst  switches
+       adds  in  addition  to the version 5 fields {router_sc}, which is the Router IP address which populates the flow cache shortcut in the Supervisor.
+       Version 6 which is not officially supported by Cisco adds in addition to the version 5 fields {in_encaps, out_encaps, peer_nexthop}, ie the  input
+       and  output  interface encapsulation size, and the IP address of the next hop within the peer.  Version 1 exports do not contain a sequence number
+       and therefore should be avoided, although it is safe to store the data as version 1 if the additional fields are not used.
+
+
+
+
+
+       Version 8 IOS NetFlow is a second level flow cache that reduces the data exported from the router.  
+There are currently 11 formats, all  of  which
+       provide {dFlows, dOctets, dPkts, First, Last} for the key fields.
+
+
+         8.1 -  Source and Destination AS, Input and Output interface
+         8.2 -  Protocol and Port
+         8.3 -  Source Prefix and Input interface
+         8.4 -  Destination Prefix and Output interface
+         8.5 -  Source/Destination Prefix and Input/Output interface
+         8.9 -  8.1 + ToS
+         8.10 - 8.2 + ToS
+         8.11 - 8.3 + ToS
+         8.12 - 8.5 + ToS
+         8.13 - 8.2 + ToS
+         8.14 - 8.3 + ports + ToS
+
+
+       Version 8 CatIOS NetFlow appears to be a less fine grained first level flow cache.
+
+
+         8.6 - Destination IP, ToS, Marked ToS,
+         8.7 - Source/Destination IP, Input/Output interface, ToS, Marked ToS,
+         8.8 - Source/Destination IP, Source/Destination Port,
+               Input/Output interface, ToS, Marked ToS,
+
+
+
+
+ip flow-aggregation cache ?
+
+  as                      AS aggregation
+  as-tos                  AS-TOS aggregation
+  bgp-nexthop-tos         BGP nexthop TOS aggregation
+  destination-prefix      Destination Prefix aggregation
+  destination-prefix-tos  Destination Prefix TOS aggregation
+  prefix                  Prefix aggregation
+  prefix-port             Prefix-port aggregation
+  prefix-tos              Prefix-TOS aggregation
+  protocol-port           Protocol and port aggregation
+  protocol-port-tos       Protocol, port and TOS aggregation
+  source-prefix           Source Prefix aggregation
+  source-prefix-tos       Source Prefix TOS aggregation
+
+
+
+
+
+
+8.5	Source/Destination Prefix and Input/Output interface			ip flow-aggregation cache prefix
+8.9	Source and Destination AS, Input and Output interface + ToS		ip flow-aggregation cache as-tos
+8.13	Protocol and Port + ToS							ip flow-aggregation cache prefix-tos
+
+
+
+
+
+
+                 Use pdu_version format output.
+
+           1    NetFlow version 1 (No sequence numbers, AS, or mask)
+           5    NetFlow version 5
+           6    NetFlow version 6 (5+ Encapsulation size)
+           7    NetFlow version 7 (Catalyst switches)
+
+
+           8.1  NetFlow AS Aggregation
+           8.2  NetFlow Proto Port Aggregation
+           8.3  NetFlow Source Prefix Aggregation
+           8.4  NetFlow Destination Prefix Aggregation
+           8.5  NetFlow Prefix Aggregation
+           8.6  NetFlow Destination (Catalyst switches)
+           8.7  NetFlow Source Destination (Catalyst switches)
+           8.8  NetFlow Full Flow (Catalyst switches)
+           8.9  NetFlow ToS AS Aggregation
+           8.10 NetFlow ToS Proto Port Aggregation
+           8.11 NetFlow ToS Source Prefix Aggregation
+           8.12 NetFlow ToS Destination Prefix Aggregation
+           8.13 NetFlow ToS Prefix Aggregation
+           8.14 NetFlow ToS Prefix Port Aggregation
+           1005 Flow-Tools tagged version 5
+
+
+
+8.1  as                      AS aggregation
+8.9  as-tos                  AS-TOS aggregation
+  bgp-nexthop-tos         BGP nexthop TOS aggregation
+8.4  destination-prefix      Destination Prefix aggregation
+8.12  destination-prefix-tos  Destination Prefix TOS aggregation
+8.5  prefix                  Prefix aggregation
+8.14  prefix-port             Prefix-port aggregation   (хз- остальное вроде совпадает)
+8.13  prefix-tos              Prefix-TOS aggregation
+8.2  protocol-port           Protocol and port aggregation
+8.10  protocol-port-tos       Protocol, port and TOS aggregation
+8.3  source-prefix           Source Prefix aggregation
+8.11  source-prefix-tos       Source Prefix TOS aggregation
+
+
+Это для каталиста
+ 8.6  NetFlow Destination (Catalyst switches)
+           8.7  NetFlow Source Destination (Catalyst switches)
+           8.8  NetFlow Full Flow (Catalyst switches)
+
+
+
+ip flow-export version 5 origin-as
+ip flow-aggregation cache prefix
+ cache entries 16384
+ export destination 81.20.192.21 999
+ mask source minimum 20
+ mask destination minimum 20
+ enabled
+!
+ip flow-aggregation cache prefix-tos
+ cache entries 16384
+ export destination 81.20.192.21 9990
+ mask source minimum 20
+ mask destination minimum 20
+ enabled
+!
+!
+
+
+
+
+
+
+
+
+NetFlow, первоначально представленный компанией Cisco, претерпел ряд изменений. 
+Существует несколько версий, в тои числе устаревшие (версии 1 и 6), 
+внутренние невыпущенные версии (версии 2, 3 и 4), редко используемые версии 
+(версия 7 - запускается только для коммутаторов, не маршрутизаторов) и версия 8 (предлагает возможность агрегации данных для сокращения объема данных NetFlow). Наибольшей популярностью пользуются версии 5 и 9.
+
+Версия 5 NetFlow - наиболее широко используемая версия NetFlow для анализа трафика. 
+У нее есть все свойства, необходимые для реальных рабочих условий, кроме того, ее поддерживают маршрутизаторы разных производителей.
+
+Версия 9 NetFlow (см. RFC 3954 "NetFlow - экспортные сервисы систем Cisco, версия 9" 
+"Cisco Systems NetFlow Services Export Version 9") - это наиболее мощная,  гибкая и расширяемая версия протокола Cisco IP flow.
+ Записи 9 версии настраиваемые, поскольку их описывают шаблоны. Это позволяет собирать большее количество метрических данных. 
+Эта версия NetFlow чаще всего используется для среды передачи, например для мониторинга IPv6, MPLS и пр.
+
+Версия 9 NetFlow стала основой для современных стандартов IPFIX (RFC 3917, RFC 5101, RFC 5102 и пр.). 
+Хотя IPFIX (иногда именуемая 10 версией NetFlow) в  некоторых аспектах "обгоняет" NetFlow 9, 
+она не так широко используется производителями сетевых инфраструктур в качестве промышленного стандарта.
+
+Существует также несколько дочерних протоколов NetFlow, которые предоставляют аналогичные свойства с определенными вариантами
+ или реализуемые другими производителями. Например, 
+sFlow основан на выборке и  является широко масштабируемой технологией,
+ применяемой для высокоскоростных сетей; с другой стороны, выборка в значительной степени снижает точность. 
+
+
+
+
+
+NetFlow — это протокол, разработанный компанией Cisco и предназначенный для сбора информации об IP-трафике внутри сети. 
+Маршрутизаторы Cisco анализируют проходящий через интерфейс траффик, 
+суммируют данные и отправляют статистику в формате NetFlow на специальный узел, 
+называемый NetFlow Сollector. NetFlow часто используется для ведения биллинга или для анализа траффика сети. 
+Протокол существует в нескольких версиях, последняя версия 9 предназначена для учёта траффика между АС (Автономная Система) 
+и в импортируемых данных имеет несколько дополнительных полей таких как АС источника, АС назначения и пр., 
+но обычно, для биллинга в не сложной сети внутри одной АС достаточно информации, содержащейся в данных NetFlow версии ‎5.
+
+В общем случае, для того, чтобы настроить протокол NetFlow на устройствах Сisco, необходимо выполнить следующие команды:
+
+conf t
+ip flow-export destination 10.1.11.111 9991
+ip flow-export version 9
+ip flow-export source loopback1
+ip flow-cache timeout active 1
+ip flow-cache timeout inactive 15
+
+interface G0/0
+ip flow ingress
+ip flow egress
+exit
+
+
+
+
+
+Главная >> Статьи и заметки >> Сети >> Cisco >> Настраиваем NetFlow на Cisco
+Настраиваем NetFlow на Cisco 	Печать	
+
+NetFlow — это протокол, разработанный компанией Cisco и предназначенный для сбора информации об IP-трафике внутри сети.
+ Маршрутизаторы Cisco анализируют проходящий через интерфейс траффик, суммируют данные и отправляют статистику в формате NetFlow на специальный узел,
+ называемый NetFlow Сollector. NetFlow часто используется для ведения биллинга или для анализа траффика сети. 
+Протокол существует в нескольких версиях, последняя версия 9 предназначена для учёта траффика между АС (Автономная Система) 
+и в импортируемых данных имеет несколько дополнительных полей таких как АС источника, АС назначения и пр., но обычно, для биллинга в не сложной сети внутри одной АС достаточно информации, 
+содержащейся в данных NetFlow версии ‎5.
+
+В общем случае, для того, чтобы настроить протокол NetFlow на устройствах Сisco, необходимо выполнить следующие команды:
+
+conf t
+ip flow-export destination 10.1.11.111 9991
+ip flow-export version 9
+ip flow-export source loopback1
+ip flow-cache timeout active 1
+ip flow-cache timeout inactive 15
+
+interface G0/0
+ip flow ingress
+ip flow egress
+exit
+
+Строчка
+
+ip flow-cache timeout active 1
+
+указывает с какой периодичностью добавлять в кеш netflow, данные о трафике ещё активной сессии.
+
+Другими словами, если пользователь скачивает большой файл за 30 минут, и timeout active = 40 минут, 
+то поток считается непрерывным, и информация о том сколько скачал пользователь на 15 минуте закачки не отправится на netflow collector,
+ а если timeout active = 5 минут, то каждые 5 минут данные о текущем потоке записываются в кеш на маршрутизаторе и импортируются на коллектор.
+ Чем меньше значение, тем точнее на коллекторе информация о текущих закачках, но тем больше записей NetFlow гоняется по сети и хранится на коллекторе.
+
+
+
+ip flow-cache timeout inactive 15
+
+- указывает время, в течение которого если в существующем потоке не передаются данные, то он закрывается, и информация о нём записывается в кеш, а затем передаётся на коллектор.
+
+ 
+
+Проверить работает ли NetFlow на устройстве можно так:
+
+show ip flow export
+show ip cache flow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ip flow-export version 5
+   Эта команда может иметь подопции (peer-as или origin-as
+
+
+
+
+
+
+
+
+
+
+
+
+policy-map PLATINUM-ETH-10MB
+ class class-default
+    shape average 10240000
+  service-policy PLATINUM
+
+
+
+
+
+
+
+interface GigabitEthernet0/1
+ description # Link to TTK 10Mb
+ ip address 10.192.10.74 255.255.255.252
+ load-interval 30
+ service-policy output PLATINUM-ETH-10MB
+
+
+
+
+
+
+
+
+
+
+
+ats45c0prefix
+cdec0prefix
+cdec2as
+cdec2prefix
+cdec3as
+cdec3prefix
+ctdc0_v08m13
+ctdc2_v08m13
+ctdc3_v08m13
+ctdc4prefix
+ctdc6prefix
+grzc0prefix
+k6c0prefix
+k9c0prefix
+karc0prefix
+parussc0prefix
+rtmc0prefix
+stoskc0as
+stoskc0prefix
+unisprintM9c0as
+victoriac0as
+victoriac0prefix
+
+
+
+
+
+
+
+[http://ip.v6net.ru/flow/netflow](http://ip.v6net.ru/flow/netflow)
+[http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/nfexpfv9.html](http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/nfexpfv9.html)
+[http://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9_ps6601_Products_White_Paper.html](http://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9_ps6601_Products_White_Paper.html)
+[http://www.tux.in.ua/articles/3328](http://www.tux.in.ua/articles/3328)
+[http://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9.html](http://www.cisco.com/en/US/technologies/tk648/tk362/technologies_white_paper09186a00800a3db9.html)
+[http://subnets.ru/blog/?p=124](http://subnets.ru/blog/?p=124)
+[http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/12s_mdnf.html](http://www.cisco.com/en/US/docs/ios/12_0s/feature/guide/12s_mdnf.html)
+[http://microsin.net/adminstuff/cisco/manageengine-netflow-analyzer.html](http://microsin.net/adminstuff/cisco/manageengine-netflow-analyzer.html)
+[http://habrahabr.ru/post/175359/](http://habrahabr.ru/post/175359/)
+[http://www.cisco.com/en/US/docs/ios-xml/ios/netflow/configuration/12-4/cfg-nflow-aggr-cache.html](http://www.cisco.com/en/US/docs/ios-xml/ios/netflow/configuration/12-4/cfg-nflow-aggr-cache.html)
+[http://www.rusnoc.ru/index.php?option=com_content&view=article&id=15:ustanovka-i-nastrojka-cisco-flow-tools&catid=4:cisco&Itemid=3](http://www.rusnoc.ru/index.php?option=com_content&view=article&id=15:ustanovka-i-nastrojka-cisco-flow-tools&catid=4:cisco&Itemid=3)
+[http://nag.ru/articles/article/16929/podschet-i-analiz-setevogo-trafika.html](http://nag.ru/articles/article/16929/podschet-i-analiz-setevogo-trafika.html)
+
+
+[http://www.lancope.com/blog/netflow-v5-vs-netflow-v9/](http://www.lancope.com/blog/netflow-v5-vs-netflow-v9/)
+[http://www.plixer.com/blog/netflow/netflow-v9-vs-netflow-v5/](http://www.plixer.com/blog/netflow/netflow-v9-vs-netflow-v5/)

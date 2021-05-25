@@ -1,0 +1,27 @@
+---
+layout: post
+title:  "devops"
+date:   2014-04-28 14:07:32 +0400
+categories: devops
+tags: devops
+---
+
+# devops
+[https://habrahabr.ru/post/324142/](https://habrahabr.ru/post/324142/)
+
+16 марта в 17:34
+Настройка автоматического разворачивания независимых development окружений на одной машине (Docker, Ansible, TeamCity) из песочницы 
+
+
+
+[https://habrahabr.ru/company/netologyru/blog/328426/](https://habrahabr.ru/company/netologyru/blog/328426/)
+
+
+
+
+
+[https://blog.selectel.ru/task-management-jenkins/](https://blog.selectel.ru/task-management-jenkins/)
+[http://www.myshared.ru/slide/312174/](http://www.myshared.ru/slide/312174/)
+[http://www.liventerprise.com/tool/Jenkins/](http://www.liventerprise.com/tool/Jenkins/)
+[http://www.pvsm.ru/plugins/36682](http://www.pvsm.ru/plugins/36682)
+[https://www.ibm.com/developerworks/ru/library/d-continuous-delivery-framework-jenkins/](https://www.ibm.com/developerworks/ru/library/d-continuous-delivery-framework-jenkins/)

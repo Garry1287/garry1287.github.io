@@ -1,0 +1,228 @@
+---
+layout: post
+title:  "yum"
+date:   2016-05-23 14:08:13 +0300
+categories: linux
+tags: linux
+---
+
+# yum
+>В юме вроде бы можно просто yum downgrade <пакет>
+
+[http://www.pub2me.net/yum-history-rollback/](http://www.pub2me.net/yum-history-rollback/)
+[http://rus-linux.net/kos.php?name=/papers/fedora8/yum_howto.html](http://rus-linux.net/kos.php?name=/papers/fedora8/yum_howto.html)
+[http://hrafn.me/articles/package-management-in-rhel6-yum/](http://hrafn.me/articles/package-management-in-rhel6-yum/)
+
+
+
+Создание своего репозитория
+[http://system-administrators.info/?p=3094](http://system-administrators.info/?p=3094)
+
+
+
+yum clean all
+yum update
+
+
+
+yum grouplist
+yum groupinstall
+
+# yum grouplist
+# yum groupinfo
+# yum groupinstall
+# yum groupremove
+# yum groupupdate
+
+
+
+# yum list installed    #показать список установленных пакетов
+# yum list available   #показать список доступных пакетов
+# yum info ${package name}    #показать информацию о пакете
+# yum provides    ${file name or lib name}  #показать какому пакету принадлежит библиотека или файл.
+           # yum provides /etc/modprobe.conf 
+
+
+# yum --disablerepo=* --enablerepo=epel  ${action}   # сделать что-либо указав определенный репозитарий.
+# yum --disablerepo=* --enablerepo=epel  list available  #например, вывести список доступных пакетов в репозитории epel
+
+# yum remove ${package name/s}    #удалить пакет\пакеты
+
+
+
+rpm -qa #показать список установленных пакетов
+# rpm -ql  ${package name}  #показать список файлов от установленного пакета
+# rpm -ql exim
+# rpm -qlp  ${package name}  #показать список файлов в неустановленном пакете. 
+# rpm -qf  ${file name}   #показать какому пакету принадлежит файл. (аналог yum provides)
+# rpm -Uvh ${path or url to package name/s} #установка\обновления отделно взятого rpm
+
+
+
+
+Следующая команда выводит список доступых обновлений:
+
+    yum list updates
+
+Для того, чтобы применить все доступные обновления, выполните:
+
+    уum update
+
+Также вы можете обновить только необходимый пакет, указав его имя:
+
+    уum update %имя пакета%
+
+
+
+
+недавно нашел хорошую пошаговую инструкцию по обновлению ядра в CentOS и RedHat. есть два способа, 
+если есть постоянный интернет, то проделайте следующее: - uname -r - просмотр версии ядра системы - yum list | grep kernel - проверка новых версий ядра в репозитории
+yum -y install kernel - установка ядра из репозитория далее смотрите этапы ручной установки нового ядра системы: 
+
+Подготовка:
+1. Установка пакета gcc -yum -y install gcc (знакомая вещь??? :) )
+2. Установка пакета ncurses-devel -yum -y install ncurses-devel 
+3. Переход в каталог /usr/src/ -cd /usr/src/ 
+4. Качаем файлы ядра с сайта kernel.org 
+5. Распаковываем пакет с файлами ядра 
+6. Переход в папку с файлами ядра
+
+Установка: 
+1. Конфигурация ядра -make menuconfig M – как модуль. Поддержка какого либо устройства или функции будет добавлена в виде загружаемого модуля * – 
+это built-in то есть встроенная в ядро поддержка устройства или какой либо функции
+2. Очистка временных файлов -make clean 
+3. Создание сжатого образа ядра -make bzImage 
+4. Компиляция модулей -make modules 
+5. Установка модулей -make modules_install 
+6. Установка ядра -make install 
+7. Перезагрузка системы
+
+
+
+
+
+
+
+
+
+Небольшое руководство по корректному удалению старых ядер на Fedora, CentOS, Red Hat (RHEL).
+Обычно, о решении данной проблемы начинают задумываться, когда в /boot неожиданно перестает хватать места и машина после обновления просто не грузится.
+
+    Для начала проверим установленные ядра
+
+$ rpm -q kernel
+kernel-2.6.32-220.el6.x86_64
+kernel-2.6.32-279.el6.x86_64
+kernel-2.6.32-279.2.1.el6.x86_64
+kernel-2.6.32-358.6.2.el6.x86_64
+
+    Для удаления старых ядер воспользуемся yum-utils
+
+# Install yum utils
+yum install yum-utils
+ 
+# Package-cleanup set count as how many old kernels you want left #
+package-cleanup --oldkernels --count=2
+
+    Для автоматического удаления ядер при обновлениии необходимо изменить параметр installonly_limit в /etc/yum.conf.
+
+installonly_limit=3
+
+
+
+
+
+
+
+
+****************************
+Управление пакетами
+
+[http://forum.lissyara.su/viewtopic.php?t=18401](http://forum.lissyara.su/viewtopic.php?t=18401)
+
+
+Установка и настройка yum
+[http://rus-linux.net/kos.php?name=/papers/fedora8/yum_howto.html](http://rus-linux.net/kos.php?name=/papers/fedora8/yum_howto.html)
+
+
+Yum шпаргалка
+[http://habrahabr.ru/sandbox/95851/](http://habrahabr.ru/sandbox/95851/)
+
+
+
+
+
+Yum откат
+[http://www.pub2me.net/yum-history-rollback/](http://www.pub2me.net/yum-history-rollback/)
+
+
+
+
+
+************************************************
+Yum - восстановления после прерывания транзакции обновления
+[http://memoryhigh.ru/centos-oshibka-yum-complete-transaction/](http://memoryhigh.ru/centos-oshibka-yum-complete-transaction/)
+
+
+Получили
+
+....
+--> Finished Dependency Resolution
+Error:  Multilib version problems found. This often means that the root
+       cause is something else and multilib version checking is just
+       pointing out that there is a problem. Eg.:
+
+         1. You have an upgrade for libxml2 which is missing some
+            dependency that another package requires. Yum is trying to
+            solve this by installing an older version of libxml2 of the
+            different architecture. If you exclude the bad architecture
+            yum will tell you what the root cause is (which package
+            requires what). You can try redoing the upgrade with
+            --exclude libxml2.otherarch ... this should give you an error
+            message showing the root cause of the problem.
+
+         2. You have multiple architectures of libxml2 installed, but
+            yum can only see an upgrade for one of those arcitectures.
+            If you don't want/need both architectures anymore then you
+            can remove the one with the missing update and everything
+            will work.
+
+         3. You have duplicate versions of libxml2 installed already.
+            You can use "yum check" to get yum show these errors.
+
+       ...you can also use --setopt=protected_multilib=false to remove
+       this checking, however this is almost never the correct thing to
+       do as something else is very likely to go wrong (often causing
+       much more problems).
+
+       Protected multilib versions: libxml2-2.7.6-14.el6.x86_64 != libxml2-2.7.6-12.el6_4.1.x86_64
+Error: Protected multilib versions: libxml2-2.7.6-14.el6.x86_64 != libxml2-2.7.6-12.el6_4.1.i686
+ You could try using --skip-broken to work around the problem
+** Found 163 pre-existing rpmdb problem(s), 'yum check' output follows:
+
+
+
+Удаляем устаревшие пакеты:
+
+package-cleanup --cleandupes
+
+
+Проверяем наличие незаконченных транзакций
+ yum-complete-transaction
+
+
+Потом повторяем, чтобы увидеть что проблемы нет
+
+package-cleanup --problems
+#No Problems Found
+package-cleanup --cleandupes
+#No duplicates to remove
+
+
+Можно сделать yum update
+
+yum-complete-transaction
+
+
+
+[https://redhat-club.org/2011/%D1%83%D1%82%D0%B8%D0%BB%D0%B8%D1%82%D1%8B-yum](https://redhat-club.org/2011/%D1%83%D1%82%D0%B8%D0%BB%D0%B8%D1%82%D1%8B-yum)

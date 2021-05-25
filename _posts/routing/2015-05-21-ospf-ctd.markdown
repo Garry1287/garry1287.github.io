@@ -1,0 +1,390 @@
+---
+layout: post
+title:  "ospf-ctd"
+date:   2015-05-21 03:29:19 +0300
+categories: routing
+tags: routing
+---
+
+# ospf-ctd
+1. Типы LSA
+Type 1 LSA — Router LSA
+Type 2 LSA — Network LSA
+Type 3 LSA — Network Summary LSA 
+Type 4 LSA — ASBR Summary LSA 
+Type 5 LSA — AS External LSA
+Type 6 LSA — Multicast OSPF LSA     
+Type 7 LSA — AS External LSA for NSSA — объявления о состоянии внешних каналов автономной системы в NSSA зоне. Это объявление может передаваться только в NSSA зоне. На границе зоны пограничный маршрутизатор преобразует type 7 LSA в type 5 LSA.
+Type 8 LSA — Link LSA — анонсирует link-local адрес и префикс(ы) маршрутизатора всем маршрутизаторам разделяющим канал (link). Отправляется только если на канале присутствует более чем один маршрутизатор. Распространяются только в пределах канала (link).
+Type 9 LSA — Intra-Area-Prefix LSA  ставит в соответствие: список префиксов IPv6 и маршрутизатор, указывая на Router LSA, список префиксов IPv6 и транзитную сеть, указывая на Network LSA. Распространяются только в пределах одной зоны.
+
+LSA первого типа [Router] – каждый маршрутизатор создает этот тип LSA чтобы рассказать о себе всей области. В LSDB для каждой области содержится один LSA первого типа для каждого маршрутизатора, в котором указаны RID, IP адреса всех интерфейсов, а так же тупиковые (stub) сети. Не покидают область.
+LSA второго типа [Network] – создаются DR на броадкастовом или NBMA сегменте и описывают сеседей, присоединенных к сегменту. Не покидают область.
+LSA третьего тип [Summary, Network Summary] – создаются ABR для того, чтобы рассказать о маршрутах до соседей, полученных из LSA первого и второго типов в одной области и передать эту информацию в другую. Описывают подсети, стоимость маршрута исключая топологию области.
+LSA чертвертого типа [Summary, ASBR Summary] – похожи на LSA третьего типа, используются чтобы передать маршрут до ASBR соседям из других областей.
+LSA пятого типа [External, AS External] – создаются на ASBR для внешних маршрутов внедренных в OSPF.
+LSA шестого типа [Multicast, Group Membership] – расширение OSPF протокола, которое не поддерживается в маршрутизаторах Cisco.
+LSA седьмого типа [NSSA External] – создаются ASBR если он находится внутри NSSA области вместо LSA пятого типа.
+
+
+
+2. Типы маршрутов
+Обозначения маршрутов OSPF:
+
+    O — OSPF intra-area (router LSA) и network LSA — сети в зоне маршрутизатора. (в одной ospf area)
+    O IA — OSPF interarea (summary LSA) — сети вне зоны маршрутизатора, но в той же автономной системе. (из другой ospf area) - у нас такого хрен найдешь - O IA    192.168.200.0/29 [110/11] via 81.20.192.53, 00:00:08, Vlan13 в дргой ospf area
+                    router ospf
+                            ospf router-id 81.20.192.53
+                            redistribute connected route-map redist
+                            redistribute static route-map red
+                            passive-interface default
+                            no passive-interface vlan13
+                            no passive-interface vlan1021
+                            network 81.20.192.48/28 area 0.0.0.0
+                            network 192.168.200.0/29 area 0.0.0.1
+
+    O E1 — Type 1 external routes — сети вне автономной системы маршрутизатора. К метрике внешнего маршрута добавляется cost всех линков по которым передавался маршрут. Используется когда несколько маршрутизаторов анонсируют внешнюю сеть.
+    O E2 — Type 2 external routes (по умолчанию) — сети вне автономной системы маршрутизатора. Используется только cost внешнего маршрута.
+    O N1 — Type 1 NSSA external routes
+    O N2 — Type 2 NSSA external routes 
+
+
+3. Типы зон
+Магистральная зона (backbone area
+Стандартная зона (standard area) Обычная зона, которая создается по умолчанию. Эта зона принимает обновления каналов, суммарные маршруты и внешние маршруты.
+Тупиковая зона (stub area)
+            Тупиковая зона не принимает информацию о внешних маршрутах для автономной системы, но принимает маршруты из других зон. Если маршрутизаторам из тупиковой зоны необходимо передавать информацию за границу автономной системы, то они используют маршрут по умолчанию. В тупиковой зоне не может находиться ASBR.
+Totally stubby area
+            Totally stubby area не принимает информацию о внешних маршрутах для автономной системы и маршруты из других зон. Если маршрутизаторам необходимо передавать информацию за пределы зоны, то они используют маршрут по умолчанию. Cisco-proprietary тип зоны.
+ Not-so-stubby area (NSSA)
+            Зона NSSA определяет дополнительный тип LSA — LSA type 7. В NSSA зоне может находиться ASBR.          
+            
+
+На ctd-s1
+sh ip ospf database adv-router 81.20.192.25
+
+            OSPF Router with ID (81.20.192.5) (Process ID 110)
+
+                Router Link States (Area 0)
+
+Link ID         ADV Router      Age         Seq#       Checksum Link count
+81.20.192.25    81.20.192.25    935         0x8000481D 0x00947A 3
+
+                Net Link States (Area 0)
+
+Link ID         ADV Router      Age         Seq#       Checksum
+81.20.192.25    81.20.192.25    1185        0x800002C9 0x007EC2
+81.20.192.113   81.20.192.25    1926        0x80001178 0x00BE77
+81.20.193.145   81.20.192.25    935         0x80000575 0x000EC4
+
+                Type-5 AS External Link States
+
+Link ID         ADV Router      Age         Seq#       Checksum Tag
+81.20.192.21    81.20.192.25    1925        0x80004363 0x009182 0
+81.20.192.40    81.20.192.25    1925        0x80004364 0x004240 0
+81.20.192.44    81.20.192.25    1925        0x80004364 0x001A64 0
+
+
+На emerald
+                Router Link States (Area 0.0.0.1)
+
+Link ID         ADV Router      Age  Seq#       CkSum  Link count
+81.20.192.53    81.20.192.53     223 0x8000df3c 0x3a0f 1
+
+                Summary Link States (Area 0.0.0.1)
+
+Link ID         ADV Router      Age  Seq#       CkSum  Route
+81.20.192.0     81.20.192.53     572 0x80000011 0xa33c 81.20.192.0/27
+81.20.192.18    81.20.192.53    1832 0x80000009 0x1e8e 81.20.192.18/32
+81.20.192.48    81.20.192.53     342 0x8000009e 0xfc16 81.20.192.48/28
+81.20.192.112   81.20.192.53     322 0x80000012 0xef61 81.20.192.112/30
+81.20.193.144   81.20.192.53    1222 0x80000011 0xa58b 81.20.193.144/30
+81.20.196.168   81.20.192.53     312 0x80000012 0x9183 81.20.196.168/30
+81.20.196.172   81.20.192.53     592 0x80000012 0x69a7 81.20.196.172/30
+81.20.197.248   81.20.192.53    1602 0x80000011 0x655f 81.20.197.248/30
+81.20.197.252   81.20.192.53      52 0x80000012 0x3b84 81.20.197.252/30
+81.20.203.0     81.20.192.53    1382 0x80000011 0xdcda 81.20.203.0/30
+81.20.203.4     81.20.192.53    1312 0x80000011 0xb4fe 81.20.203.4/30
+81.20.203.8     81.20.192.53    1162 0x8000009d 0x0af1 81.20.203.8/29
+172.20.0.16     81.20.192.53     492 0x80000011 0x6ca8 172.20.0.16/32
+172.20.1.0      81.20.192.53    1602 0x80000011 0xef37 172.20.1.0/30
+172.24.0.0      81.20.192.53     932 0x80000011 0xdc44 172.24.0.0/24
+192.168.253.56  81.20.192.53     882 0x80000011 0xd477 192.168.253.56/29
+192.168.253.80  81.20.192.53    1252 0x80000011 0xe350 192.168.253.80/29
+
+                ASBR-Summary Link States (Area 0.0.0.1)
+
+Link ID         ADV Router      Age  Seq#       CkSum
+81.20.192.2     81.20.192.53      12 0x80000012 0x3a82
+81.20.192.3     81.20.192.53      52 0x8000000a 0x4083
+81.20.192.4     81.20.192.53    1712 0x80000011 0x2893
+81.20.192.5     81.20.192.53     132 0x80000012 0x12a8
+81.20.192.12    81.20.192.53     842 0x80000011 0xd7db
+
+
+
+Router Link States - это о себе, о роутере - директли коннектед    каждый маршрутизатор создает этот тип LSA чтобы рассказать о себе всей области. В LSDB для каждой области содержится один LSA первого типа для каждого маршрутизатора, в котором указаны RID, IP адреса всех интерфейсов, а так же тупиковые (stub) сети. Не покидают область.
+show ip ospf database router 192.1.1.3
+
+Net Link States - DR посылает о соседях  - O   создаются DR на броадкастовом или NBMA сегменте и описывают сеседей, присоединенных к сегменту. Не покидают область      
+show ip ospf database network 
+
+Summary Link States - ABR посылает о своих линках в другую area ( O IA )       создаются ABR для того, чтобы рассказать о маршрутах до соседей, полученных из LSA первого и второго типов в одной области и передать эту информацию в другую. Описывают подсети, стоимость маршрута исключая топологию области.
+show ip ospf database summary 192.1.2.0
+
+ASBR-Summary Link States   -  создаются ABR и отправляются в зону 1, чтобы рассказать о маршрутах к ASBR находящихся в зоне 0 (зон может быть больше с промежуточными)
+show ip ospf database asbr-summary 192.1.2.0
+
+Type-5 AS External Link States LSA пятого типа [External, AS External] – создаются на ASBR для внешних маршрутов внедренных в OSPF.
+show ip ospf database external 
+
+
+Обозначения маршрутов OSPF:
+
+    O — OSPF intra-area (router LSA) и network LSA — сети в зоне маршрутизатора.
+    O IA — OSPF interarea (summary LSA) — сети вне зоны маршрутизатора, но в той же автономной системе.  (3 и 4 тип)
+    O E1 — Type 1 external routes — сети вне автономной системы маршрутизатора. К метрике внешнего маршрута добавляется cost всех линков по которым передавался маршрут. Используется когда несколько маршрутизаторов анонсируют внешнюю сеть.
+    O E2 — Type 2 external routes (по умолчанию) — сети вне автономной системы маршрутизатора. Используется только cost внешнего маршрута.
+    O N1 — Type 1 NSSA external routes
+    O N2 — Type 2 NSSA external routes 
+
+
+
+
+
+
+
+router ospf
+ ospf router-id 81.20.192.53
+ redistribute connected route-map redist
+ redistribute static route-map red
+ passive-interface default
+ no passive-interface vlan13
+ no passive-interface vlan1021
+ network 81.20.192.48/28 area 0.0.0.0
+ network 192.168.200.0/29 area 0.0.0.1
+
+ 
+ 
+
+                Summary Link States (Area 0.0.0.0)
+
+Link ID         ADV Router      Age  Seq#       CkSum  Route
+192.168.200.0   81.20.192.53    1212 0x80004dcb 0xd4df 192.168.200.0/29
+
+
+
+                Summary Link States (Area 0.0.0.1)
+
+Link ID         ADV Router      Age  Seq#       CkSum  Route
+81.20.192.0     81.20.192.53     572 0x80000011 0xa33c 81.20.192.0/27
+81.20.192.18    81.20.192.53    1832 0x80000009 0x1e8e 81.20.192.18/32
+81.20.192.48    81.20.192.53     342 0x8000009e 0xfc16 81.20.192.48/28
+81.20.192.112   81.20.192.53     322 0x80000012 0xef61 81.20.192.112/30
+81.20.193.144   81.20.192.53    1222 0x80000011 0xa58b 81.20.193.144/30
+81.20.196.168   81.20.192.53     312 0x80000012 0x9183 81.20.196.168/30
+81.20.196.172   81.20.192.53     592 0x80000012 0x69a7 81.20.196.172/30
+81.20.197.248   81.20.192.53    1602 0x80000011 0x655f 81.20.197.248/30
+81.20.197.252   81.20.192.53      52 0x80000012 0x3b84 81.20.197.252/30
+81.20.203.0     81.20.192.53    1382 0x80000011 0xdcda 81.20.203.0/30
+81.20.203.4     81.20.192.53    1312 0x80000011 0xb4fe 81.20.203.4/30
+81.20.203.8     81.20.192.53    1162 0x8000009d 0x0af1 81.20.203.8/29
+172.20.0.16     81.20.192.53     492 0x80000011 0x6ca8 172.20.0.16/32
+172.20.1.0      81.20.192.53    1602 0x80000011 0xef37 172.20.1.0/30
+172.24.0.0      81.20.192.53     932 0x80000011 0xdc44 172.24.0.0/24
+192.168.253.56  81.20.192.53     882 0x80000011 0xd477 192.168.253.56/29
+192.168.253.80  81.20.192.53    1252 0x80000011 0xe350 192.168.253.80/29
+
+
+
+
+
+
+
+
+    Down — начальное состояние процесса обнаружения соседей. Это состояние указывает на то, что от соседей не была получена свежая информация. В NBMA сетях Hello-пакеты могут отправляться и соседям в состоянии Down, однако с меньшей частотой (PollInterval)
+
+        Attempt — это состояние имеет смысл только для соседей, которые присоединены к NBMA сетям. Оно указывает на то, что от соседа не была получена свежая информация и что нужно сделать попытку связаться с соседом. Это делается путём отправки соседу сообщений Hello с промежутком времени Hello Interval (в Cisco в этом состоянии сообщения Hello отправляются каждый PollInterval. Имеет смысл для соседей в NBMA сетях, которые заданы командой neighbor) 
+
+    Init — состояние, в котором находится маршрутизатор, отправивший своему соседу hello и ожидающий от него ответного hello
+    Two-way — при получении ответных hello маршрутизатор должен увидеть в них свой RID в списке соседей. Если это так, то он устанавливает отношения и переходит в состояние two-way
+
+        Когда в широковещательном сегменте более 3х маршрутизаторов, то в этом состоянии остаются между собой маршрутизаторы DROTHER 
+
+    Exstart — маршрутизаторы определяют Master/Slave отношения на основании Router ID. Маршрутизатор с высшим RID становится Master-маршрутизатором, который определяет DD Sequence number, а также первым начинает обмен DD-пакетами
+    Exchange — маршрутизаторы посылают друг другу database description пакеты (DD) с информацией о сетях, содержащихся в их собственной LSDB
+    Loading — Если маршрутизатор видит, что части маршрутов нет в его LSDB, он посылает сообщение LSR с перечислением тех сетей, по которым он хочет получить дополнительную информацию.  Пока маршрутизатор находится в ожидании ответа в виде LSU сообщений, он пребывает в состоянии Loading
+    Full — Когда маршрутизатор получил всю информацию и LSDB на обоих маршрутизаторах синхронизирована, оба маршрутизатора переходят в состояние fully adjacent (FULL) 
+        FULL/DROTHER  - нормальное состояние, котда смотришь с BDR или DR на остальные
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Проверить можно физику, таймеры, маски, аутентификацию, мту. Курить дебаг
+
+Мониторинг 10 влана, 13 влана
+
+	
+tcam кончилась, значит всё что не влезло в ткам идёт на проц, проц там дохлый
+меняйте sdm профиль
+
+1. Перекинуть стык двух ospf процессов с ctd-s1 на ctd-s6
+2. ребутнуть его
+3 .debug ctd-s1 в файл  x
+4. dead-interval проверить
+5. везде сделать  ip ospf mtu-ignore
+6. сделать для asbr между двумя backbone, а приоритет определить командой cost. Сделать cost лучше для asbr (ctd-s6) - меньшим. Сделать большим соst для второго - asbr ats45-s0, Как это будет работать - хз????
+7. Просуммировать все сети объявляемые через ip unnumbered
+router ospf 100
+summary-address 128.213.64.0 255.255.224.0
+redistribute bgp 50 metric 1000 subnets
+
+
+Вынести серверы в отдельную stub c двумя asbr, которые будут присылать им дефолты с разной метрикой
+
+
+
+
+400-500 байт на один маршрут
+Как правило, таблица маршрутизации с размером менее 500 КБ может поддерживаться с помощью 2-4 МБ RAM. Крупные сети с
+размером таблицы, превышающим 500 КБ могут потребовать 8-16 МБ или 32-64 МБ, если полные маршруты вводятся в Интернет.
+
+
+
+
+
+Являются ли маршруты между двумя бэкбонаса  LSA третьего типа 
+Нет не являются, они все в area0, только маршруты идут не напрямую а через ctd-s0
+
+
+
+
+
+
+
+
+Mar 25 03:05:03 lip-ctd-c7-fe0-1-10.net.promsvyaz.ru 2962167: CTD-C7: Mar 25 03:05:02: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.9 on FastEthernet0/1.10 from 2WAY to DOWN, Neighbor Down: Dead timer expired
+Mar 25 03:40:41 lip-ctd-c7-fe0-1-10.net.promsvyaz.ru 2962312: CTD-C7: Mar 25 03:40:40: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.14 on FastEthernet0/1.10 from 2WAY to DOWN, Neighbor Down: Dead timer expired
+Mar 25 05:37:58 lip-ctd-c7-fe0-1-10.net.promsvyaz.ru 2962782: CTD-C7: Mar 25 05:37:57: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.9 on FastEthernet0/1.10 from 2WAY to DOWN, Neighbor Down: Dead timer expired
+Mar 25 05:38:02 lip-ctd-c7-fe0-1-10.net.promsvyaz.ru 2962783: CTD-C7: Mar 25 05:38:01: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.20 on FastEthernet0/1.10 from 2WAY to DOWN, Neighbor Down: Dead timer expired
+Mar 25 08:19:01 lip-ctd-c7-fe0-1-10.net.promsvyaz.ru 2963430: CTD-C7: Mar 25 08:19:00: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.9 on FastEthernet0/1.10 from 2WAY to DOWN, Neighbor Down: Dead timer expired
+
+
+1. Поменять местами  ctd-s6 и ctd-s1
+Сначала включить ospf  и в оба backbone на ctd-s6 и ctd-s1
+
+
+ctd-s6
+
+interface Vlan13
+ description #SB Interface # pheonix 20.05.2011
+ ip address 81.20.192.50 255.255.255.240
+ ip ospf priority 100
+ ip ospf mtu-ignore
+!
+interface Vlan27
+ description #BackBone Lan
+ ip address 192.168.121.2 255.255.255.0
+
+router ospf 110
+ router-id 81.20.192.50
+ log-adjacency-changes
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+ passive-interface default
+ no passive-interface Vlan13
+ no passive-interface Vlan38
+ network 81.20.192.48 0.0.0.15 area 0
+ network 81.20.203.8 0.0.0.7 area 0
+ distribute-list prefix no-sc-local-distribution out
+ distribute-list prefix no-199-net in
+
+
+
+Присоединиться через 192.168.121.2
+
+Добавить влан 
+
+interface Vlan10
+ description # PSI Backbone
+ ip address 81.20.192.7 255.255.255.224
+ ip ospf mtu-ignore
+
+router ospf 110
+ no passive-interface Vlan10
+ network 81.20.192.0 0.0.0.31 area 0
+
+
+Присоединиться к 192.168.113.4 
+
+ctd-s1
+Удалить 13 влан
+no interface Vlan13
+
+router ospf 110
+no  network 81.20.192.48 0.0.0.15 area 0
+ passive-interface Vlan13
+
+
+
+
+
+interface Vlan10
+ description # PSI Backbone
+ ip address 81.20.192.5 255.255.255.224
+ ip ospf mtu-ignore
+!
+interface Vlan13
+ description #SB Interface # pheonix 20.05.2011
+ ip address 81.20.192.49 255.255.255.240
+ ip ospf cost 300
+ ip ospf mtu-ignore
+!
+interface Vlan22
+ ip address 192.168.113.4 255.255.255.0
+ ip access-group 103 in
+ ip access-group 102 out
+
+
+
+router ospf 110
+ router-id 81.20.192.5
+ log-adjacency-changes
+ redistribute connected metric 1 metric-type 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+ passive-interface default
+ no passive-interface Vlan10
+ no passive-interface Vlan13
+ network 81.20.192.0 0.0.0.31 area 0
+ network 81.20.192.48 0.0.0.15 area 0
+ distribute-list no-sc-local-distribution out
+
+
+2. Reload ctd-s1
+
+

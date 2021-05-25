@@ -1,0 +1,95 @@
+---
+layout: post
+title:  "routemap"
+date:   2011-11-23 02:58:44 +0400
+categories: routing
+tags: routing
+---
+
+# routemap
+ip nat inside source list 15 interface Loopback10 overload
+ip nat inside source list 12 interface Loopback11 overload
+
+
+
+
+Нащ
+access-list 15 permit 10.4.0.0 0.0.0.255
+access-list 15 permit 10.4.3.0 0.0.0.255
+access-list 15 permit 10.4.4.0 0.0.0.255
+access-list 15 permit 10.4.5.0 0.0.0.255
+access-list 15 deny   any
+
+
+
+Медиа сети
+access-list 12 permit 10.4.1.0 0.0.0.255
+access-list 12 deny   any
+
+
+
+
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1 81.20.202.109
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1 81.20.
+
+
+
+
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/1 81.20.202.102
+
+
+
+
+
+
+Схема с роут-мап
+
+interface FastEthernet0/1.1021
+ description PPTP-NAT-Server
+ encapsulation dot1Q 1021
+ ip address 192.168.200.3 255.255.255.248
+ no snmp trap link-status
+!
+
+interface Virtual-Template1
+ description # PPTP virtual template (CHAP authentication)
+ mtu 1492
+ ip unnumbered FastEthernet0/0.10
+ no ip proxy-arp
+ ip route-cache flow
+ ip policy route-map pptp-nat
+ ppp authentication ms-chap ms-chap-v2
+
+
+
+router ospf 200
+ router-id 192.168.200.3
+ log-adjacency-changes
+ redistribute connected subnets route-map redist_bras_int
+ passive-interface default
+ no passive-interface GigabitEthernet0/1.1021
+ network 192.168.200.0 0.0.0.7 area 0.0.0.1
+ distribute-list route-map dist_bras_int in
+
+
+
+access-list 30 remark NTP: access-group peer
+access-list 30 permit 81.20.192.19
+access-list 30 deny   any
+access-list 31 remark PPTP:packet redirect
+access-list 31 permit 10.4.0.0 0.0.7.255
+access-list 31 deny   any
+access-list 32 deny   any
+
+
+
+route-map pptp-nat permit 10
+ description #PPTP NAT redirection
+ match ip address 31
+ set ip next-hop 172.10.0.1 192.168.200.1
+!
+route-map redist_bras_int permit 10
+ match ip address 31
+!
+route-map dist_bras_int permit 10
+ match ip address 32

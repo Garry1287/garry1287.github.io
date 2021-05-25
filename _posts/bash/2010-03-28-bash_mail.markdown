@@ -1,0 +1,131 @@
+---
+layout: post
+title:  "bash_mail"
+date:   2010-03-28 08:12:24 +0400
+categories: bash_mail
+tags: bash_mail
+---
+
+# bash_mail
+Хочу поделиться реализацией отправки смс из-под bash-скриптов. Может, кому-то будет полезно. Я, например, таким образом сделал смс-уведомления при отключении питания.
+
+Сообщения я отправляю через email2sms шлюз провайдера. Для моего прова ссылка для настройки следующая:
+
+[http://eao.megafon.ru/services/wap_internet/mail/email2sms/](http://eao.megafon.ru/services/wap_internet/mail/email2sms/)
+
+Создал ящик, при отправки на него письма на телефон прилетает смска с текстом письма. Похожая услуга должна быть и у других провайдеров.
+
+Поглядел на несколько консольных программок для отправки e-mail, окончательный выбор остановился на ssmtp, ибо проста до ужаса. Есть в репах арча и убунты, на счет остальных дистрибутивов не знаю. Для отправки почты нужно завести какую-нибудь учетку на почтовом сервере, затем отредактировать конфиг [i]/etc/ssmtp/ssmtp.conf[i]:
+Код:
+
+root=e-mail mailhub=smtp-сервер rewriteDomain=домен e-mail'а FromLineOverride=YES authuser=имя пользователя authpass=пароль
+
+
+Отправка смс осуществляется следующим образом:
+Код:
+
+( echo "To: <e-mail, забинденный на ваш телефон>" echo "From: <e-mail-отправитель, прописанный в конфиге ssmtp>" echo "Subject: тема письма" echo " " echo "текст письма" ) | ssmtp e-mail, забинденный на ваш телефон
+
+
+Непосредственно для отслеживания перебоев в питании я использую демон apcupsd, опрашивающий мой APC Smart UPS 1000. В папке /etc/apcupsd лежат скрипты offbattery и onbattery, выполняющиеся при наступлении соответствующих событий (можно создать дополнительные скрипты на события, в документации описано). Например, скрипт onbattery выполняется при отключении питания, когда происходит переключение на питание от батареи. В скрипте по дефолту прописан код, отсылающий системное сообщение о событии. перед строкой "exit 0" я добавил блок, отправляющий смс-уведомление:
+Код:
+
+( echo "To: <*****@sms.megafondv.ru>" echo "From: <*****@joker-jar.ru>" echo "Subject: UPS message `date \"+%d.%m.%Y %H:%M:%S\"`" echo " " echo "Power failure on UPS. Running on batteries" ) | ssmtp *****@sms.megafondv.ru
+
+
+Аналогичное проделал в скрипте offbattery
+
+
+
+Отправка письма мне с логами
+#!/bin/sh
+/usr/bin/bzcat /var/log/asterisk/cdr-csv/rotated/Master.csv-`date +%Y%m%d`.bz2 | grep 540313 > /home/garry/ringlog/Master_$(date +%Y%m%d).cvs
+echo 'This is yesterday rings' | mail -s "Rings to 540313 from yesterday - `date --date="1 days ago" +%Y%m%d`" -a /home/garry/ringlog/Master_$(date +%Y%m%d).cvs  igordzu@yandex.ru
+
+
+
+
+
+
+
+
+
+
+Пример простого почтового робота, рассылающего SMS сообщения
+
+
+Данная реализация полезна в следующих случаях:
+
+    1. При обслуживании большого количества серверов
+    2. Ведении SMS рассылок
+
+
+Робот очень прост, достаточно безопасен, не имеет автоматического управления со стороны получателя, не требует дополнительного ПО и состоит всего из двух файлов
+
+    1 - файл, представляющий собой список подписчиков на SMS
+    2 - непосредственно робот, занимающийся рассылкой.
+
+
+Настройка заключается в исправлении параметров в разделе "Definitions", а также составления списка подписчиков.
+Содержимое робота:
+Код:
+$cd /home/robot
+$cat sms
+#!/bin/bash
+########################## Definitions ##################################
+FROM="-fsysadm@domain.com";#Адрес для возврата при неудачной доставке на сервер оператора
+DOSC=sysadm@domain.com;# Адрес, на который происходит дублирование сообщений
+SMSMAILER=/usr/lib/sendmail;# Почтовая программа для пересылки на сервер оператора
+MAILER=/usr/bin/mailx;# Почтовая программа для отправки дубликата сообщения
+MailList="/home/robot/sms.lst";# Список подписчиков
+PIPE=/tmp/pipe.$$# Временный файл
+##########################    Main     ##################################
+sed "s/[`;'&|]/_/g"|(
+while read d; do
+[ -z "$d" ] && HeaderEnd=true
+ if [ $HeaderEnd ]; then [ -z "$k" ] && k=0; echo $d|grep -v ^$ >>$PIPE;
+ else [ -n "`echo $d|grep 'From:'|sed 's/From://g'`" ] &&
+      export From=`echo $d|grep 'From:'|sed 's/From://g'`
+ fi
+done
+cat $MailList |egrep -v "^#|^$"|
+while read To Subject; do
+Subject=`echo $Subject |sed "s/[ ,;]/_/g"`
+$SMSMAILER $FROM  $To <<EOF
+Subject: $Subject
+`cat $PIPE`
+EOF
+done
+$MAILER -s "Alert!" $DOSC <<EOF
+From: $From
+`cat $PIPE`
+EOF
+[ -e $PIPE ] && rm $PIPE
+exit 0
+)
+##########################    End    ###################################
+
+Файл подписчиков
+Код:
+$cat sms.lst
+#To mail                  Subject
+
+79222444555@sms.ugsm.ru   Alert!
+
+admin@sms.ugsm.ru         Alert!
+
+#Coment
+sms@mailer.domain.com     55664466
+
+Подключение осуществляется стандартным образом: в файл "алиасов" вашего почтового сервера достаточно включить строчку:
+Код:
+sms@domain.com: "| /home/robot/sms"
+
+и естественно необходимо воспользоваться командой
+Код:
+newaliases
+
+
+Тестирование робота:
+Код:
+$date |mail sms@domain.com

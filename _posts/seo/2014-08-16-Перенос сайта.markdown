@@ -1,0 +1,260 @@
+---
+layout: post
+title:  "Перенос сайта"
+date:   2014-08-16 04:11:19 +0400
+categories: seo
+tags: seo
+---
+
+# Перенос сайта
+Копирование
+/bin/tar -czf /var/backup/backup/etc_emerald.tar.gz /etc
+
+/usr/bin/mysqldump -u root -p915Nyg710 --opt zazhigai_ru > /var/backup/backup/zazhigai_ru.sql
+
+
+ --default-character-set=utf8
+ utf8_general_ci
+--default-character-set=utf8
+
+
+Однако если поставить latin1, то, о чудо, русский текст показывается без проблем. 
+
+sftp
+Завести пользователя
+
+groupadd balkon1287
+useradd -d /srv/www/balkon1287 -s /bin/bash -g balkon1287 balkon1287
+
+
+Можно расширить стандартную конфигурацию, включив пользователя в дополнительные группы:
+# useradd -G users,cdrecord,dialout oleg
+
+
+useradd [опции] LOGIN
+
+Некоторые из опций:
+
+    -d домашняя директория
+    -s шелл
+    -p пароль
+    -g (главная группа пользоватлея)
+    -G (Другие группы, к которым приндадлежит пользователь)
+
+Пример
+
+useradd -g primary_grp -G admin -s /bin/shell -p xxxx -d /home/user
+
+
+mkdir public_html
+ln -s public_html www
+
+
+Добавить в  /etc/ssh/sshd_config
+Match User balkon1287
+    ChrootDirectory /srv/www/balkon1287
+    AllowTCPForwarding no
+    X11Forwarding no
+    ForceCommand internal-sftp
+
+
+
+
+
+создание файлов конфигураций
+
+cd /etc/httpd/vhosts.d/
+<VirtualHost *:8080>
+    ServerName 1.lipbalkon.ru
+  #  ServerAlias mypotolok48.ru *.mypotolok48.ru
+    DocumentRoot /srv/www/balkon1287/www/
+    ErrorLog /srv/www/balkon1287/log/apache_error.log
+    CustomLog /srv/www/balkon1287/log/apache_access.log combined
+    # Важный момент, указываем, что апач будет работать от пользователя www-data и нашей группы site1
+    AssignUserId potolok potolok
+
+
+    <Directory "/srv/www/balkon1287/www/cgi-bin/">
+        AllowOverride None
+        Options +ExecCGI -Includes -MultiViews +SymLinksIfOwnerMatch
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+
+
+    <Directory "/srv/www/balkon1287/www">
+        Options All
+        AllowOverride All
+        Order Deny,Allow
+        Allow from all
+    </Directory>
+
+
+    # open_basedir для домашней директории пользователя, можно добавить несколько директорий при необходимости, директории разделяются двоеточием «:»
+#    php_admin_value open_basedir "/srv/www/balkon1287/:."
+        # Включаем сейф-мод, я сделал это в каждом конфиге сайта для удобства отключения при необходимости.
+    #php_admin_value safe_mode «on»
+    # Определяем нашу временную директорию как основную, вместо /tmp и устанавливаем её директорией для хранения сессий.
+    php_admin_value upload_tmp_dir "/srv/www/balkon1287/tmp"
+    php_admin_value session.save_path "/srv/www/balkon1287/tmp"
+</VirtualHost>
+
+
+
+cd /etc/nginx/vhosts.d/
+server {
+   listen *:80;
+        server_name mypotolok48.ru www.mypotolok48.ru;
+        
+        error_log /srv/www/potolok/log/nginx_error.log;
+        access_log /srv/www/potolok/log/nginx_access.log;
+        location / {
+                proxy_pass [http://127.0.0.1:8080/](http://127.0.0.1:8080/);
+        }
+        location ~* \.(jpg|jpeg|gif|png|ico|css|js|txt|doc|docx|xls|xlsx|ppt|pptx)$ {
+                root /srv/www/potolok/www;
+        }
+        
+        location ~ /\.ht {
+                 deny  all;
+        }
+        
+
+}
+
+
+
+
+
+
+
+В файлах
+passwd
+usmmag:x:505:505::/srv/www/usmmag:/bin/bash
+usm-mag:x:506:506::/srv/www/usm-mag:/bin/bash
+/etc/group
+usmmag:x:505:
+usm-mag:x:506:nginx
+
+
+Разархивировать файлы
+tar xvfz *.tar.gz
+Чтобы создать файл tar:
+
+tar -cvf filename.tar /dir/file
+
+Чтобы распаковать содержимое файла tar:
+
+tar -xvf filename.tar
+
+Чтобы создать сжатый файл gzip:
+
+tar -czvf filename.tgz /dir/file
+
+Чтобы распаковать содержимое файла gzip tar:
+
+tar -xzvf filename.tgz
+
+Чтобы создать сжатый файл bzip:
+
+tar -cjvf filename.tbz /dir/file
+
+Чтобы распаковать содержимое файла bzip tar:
+
+tar -xjvf filename.tbz
+
+Для файлов, содержащих архивы tar применяются следующие расширения имён файлов:
+
+архив tar:
+
+    .tar
+
+
+архив tar, сжатый программой gzip:
+
+    .tar.gz
+    .tgz (в случае ограничений файловой системы на длину расширения)
+    .tar.gzip
+
+
+архив tar, сжатый программой bzip2:
+
+    .tar.bz2
+    .tar.bzip2
+    .tbz2
+    .tb2
+    .tbz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mysql
+        var $dbtype = 'mysql';
+        var $host = 'localhost';
+        var $user = 'lipbalkon';
+        var $db = 'lipbalkon';
+opt1287nk
+
+Create the MySQL database:
+
+shell> mysqladmin --user=root create lipbalkon
+
+Import the default cacti database:
+
+shell> mysql lipbalkon < /home/garry/lipbalkon_17.07.2014.sql
+
+	Optional: Create a MySQL username and password for Cacti.
+
+mysql --user=root -p
+GRANT ALL ON lipbalkon.* TO lipbalkon@localhost IDENTIFIED BY 'opt1287nk';
+flush privileges;
+
+Edit include/config.php and specify the database type, name, host, user and password for your Cacti configuration.
+
+$database_type = "mysql";
+$database_default = "cacti";
+$database_hostname = "localhost";
+$database_username = "cactiuser";
+$database_password = "cacti";
+
+
+
+
+Смена прав
+find www/ -type f -exec chmod 644 {} \;
+find www/ -type d -exec chmod 755 {} \;
+
+
+Полезности
+
+
+
+cat apache_access.log | grep -v -E ' "(-|http|https)'|awk '{ print $1 }'|uniq > ips 
+scp id_rsa.pub garry@quartz.sc.int:/home/garry/centos.pub
+
+
+
+
+Проблема с правами была на папку balkon1287
+
+
+
+Почему то на hosting - dump mysql получается в кодировке cp1251 (сам текстовый файл)
+
+Не помогло
+hosting:/home/garry # /usr/bin/mysqldump -u root -p915Nyg710  --opt lipbalkon > /home/garry/lipbalkon_22.07.2014.sql 
+hosting:/home/garry # iconv -f cp1251 -t UTF-8  lipbalkon_22.07.2014.sql -o lipbal.sql
+
+Сделал вручную через kate

@@ -1,0 +1,136 @@
+---
+layout: post
+title:  "ospf проблемы"
+date:   2013-09-17 04:59:21 +0400
+categories: routing
+tags: routing
+---
+
+# ospf проблемы
+Feb 17 16:44:12 81.20.192.14 1280: 001288: Feb 17 13:44:11.051: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 16:44:42 81.20.192.14 1281: 001289: Feb 17 13:44:41.628: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 16:47:07 81.20.192.14 1282: 001290: Feb 17 13:47:06.328: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 16:51:24 81.20.192.14 1283: 001291: Feb 17 13:51:23.600: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 16:52:26 81.20.192.14 1284: 001292: Feb 17 13:52:25.798: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 17:13:34 81.20.192.14 1285: 001293: Feb 17 14:13:33.161: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 17:24:11 81.20.192.14 1286: 001294: Feb 17 14:24:10.993: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 17:31:07 81.20.192.14 1287: 001295: Feb 17 14:31:06.318: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+Feb 17 17:31:37 81.20.192.14 1288: 001296: Feb 17 14:31:36.703: %BGP-4-VPNV4NH_IF: Nexthop 192.168.90.2 may not be reachable from neigbor 192.168.90.1 - not a loopback
+
+
+
+Feb 17 16:36:39 81.20.192.29 520: Feb 17 13:36:38.345: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Feb 17 17:43:09 81.20.192.29 521: Feb 17 14:43:08.224: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Feb 17 17:43:10 81.20.192.29 522: Feb 17 14:43:09.364: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Feb 17 17:43:10 81.20.192.29 523: Feb 17 14:43:09.636: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Feb 17 17:44:09 81.20.192.29 524: Feb 17 14:44:08.227: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Feb 17 17:44:10 81.20.192.29 525: Feb 17 14:44:09.367: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Feb 17 17:44:10 81.20.192.29 526: Feb 17 14:44:09.639: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Feb 17 17:44:21 81.20.192.29 527: Feb 17 14:44:20.199: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Feb 17 17:44:21 81.20.192.29 528: Feb 17 14:44:20.271: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Feb 17 17:44:30 81.20.192.29 529: Feb 17 14:44:29.180: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+
+
+
+
+Feb 18 14:52:24 81.20.192.29 635: Feb 18 11:52:23.933: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: T
+oo many retransmissions
+Feb 18 14:52:24 81.20.192.29 636: Feb 18 11:52:23.949: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: T
+oo many retransmissions
+Feb 18 14:52:26 81.20.192.29 637: Feb 18 11:52:25.609: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down:
+Too many retransmissions
+Feb 18 14:53:24 81.20.192.29 638: Feb 18 11:53:23.936: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: I
+gnore timer expired
+Feb 18 14:53:24 81.20.192.29 639: Feb 18 11:53:23.952: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: I
+gnore timer expired
+Feb 18 14:53:26 81.20.192.29 640: Feb 18 11:53:25.612: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down:
+Ignore timer expired
+Feb 18 14:53:35 81.20.192.29 641: Feb 18 11:53:34.652: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Feb 18 14:53:35 81.20.192.29 642: Feb 18 11:53:34.696: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+Feb 18 14:53:39 81.20.192.29 643: Feb 18 11:53:38.652: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from LOADING to FULL, Loading Done
+
+
+
+2010/02/18 14:53:18 OSPF: LSA[Refresh]:ospf_lsa_refresh_walker(): start
+2010/02/18 14:53:18 OSPF: LSA[Refresh]: ospf_lsa_refresh_walker(): next index 128
+2010/02/18 14:53:18 OSPF: LSA[Refresh]: ospf_lsa_refresh_walker(): refresh index 127
+2010/02/18 14:53:18 OSPF: LSA[Refresh]: ospf_lsa_refresh_walker(): end
+
+2010/02/18 14:53:33 OSPF: ospfTrapNbrStateChange trap sent: 81.20.192.29 now Init/DROther
+2010/02/18 14:53:33 OSPF: DR-Election[1st]: Backup 81.20.192.24
+2010/02/18 14:53:33 OSPF: DR-Election[1st]: DR     81.20.192.29
+
+
+
+ip route 10.1.5.0 255.255.255.0 172.19.1.253
+ip route 10.1.6.0 255.255.255.0 172.19.1.253
+ip route 10.1.7.0 255.255.255.0 172.19.1.253
+ip route 10.1.8.0 255.255.255.0 172.19.1.253
+ip route 10.1.9.0 255.255.255.0 172.19.1.253
+ip route 10.1.10.0 255.255.255.0 172.19.1.253
+ip route 10.1.11.0 255.255.255.0 172.19.1.253
+ip route 10.1.12.0 255.255.255.0 172.19.1.253
+ip route 10.1.13.0 255.255.255.0 172.19.1.253
+ip route 10.1.14.0 255.255.255.0 172.19.1.253
+ip route 10.1.15.0 255.255.255.0 172.19.1.253
+ip route 10.1.16.0 255.255.255.0 172.19.1.253
+ip route 10.1.17.0 255.255.255.0 172.19.1.253
+ip route 10.1.18.0 255.255.255.0 172.19.1.253
+ip route 10.1.19.0 255.255.255.0 172.19.1.253
+ip route 10.1.20.0 255.255.255.0 172.19.1.253
+ip route 10.1.21.0 255.255.255.0 172.19.1.253
+ip route 10.1.22.0 255.255.255.0 172.19.1.253
+ip route 10.1.23.0 255.255.255.0 172.19.1.253
+ip route 10.1.24.0 255.255.255.0 172.19.1.253
+ip route 10.1.25.0 255.255.255.0 172.19.1.253
+ip route 10.1.26.0 255.255.255.0 172.19.1.253
+ip route 10.1.27.0 255.255.255.0 172.19.1.253
+ip route 10.1.28.0 255.255.255.0 172.19.1.253
+ip route 10.1.29.0 255.255.255.0 172.19.1.253
+ip route 10.1.30.0 255.255.255.0 172.19.1.253
+ip route 91.192.61.53 255.255.255.255 172.19.1.253
+
+10.1.0.0 255.255
+
+, 16, 10, 1, 172, 20, 128, 1, 32, 91, 192, 61, 53, 172, 20, 128, 1
+
+
+
+subnet 172.20.128.0 netmask 255.255.255.224 {
+        range 172.20.128.2 172.20.128.29;
+        option subnet-mask 255.255.255.224;
+        option domain-name "prpobedy128-1.home.loc";
+        option broadcast-address 172.20.128.31;
+        option routers 172.20.128.1;
+        option domain-name-servers 81.20.192.16,81.20.195.33;
+        option ms-classless-static-routes 32, 172, 31, 3, 1, 172, 20, 128, 1, 14, 172, 20, 172, 20, 128, 1, 14, 172, 24, 172, 20, 128, 1, 19, 195, 34, 224, 1
+72, 20, 128, 1, 20, 81, 20, 192, 172, 20, 128, 1, 18, 93, 180, 0, 172, 20, 128, 1, 12, 172, 16, 172, 20, 128, 1, 17, 95, 179, 0, 172, 20, 128, 1;
+        option rfc3442-classless-static-routes 32, 172, 31, 3, 1, 172, 20, 128, 1, 14, 172, 20, 172, 20, 128, 1, 14, 172, 24, 172, 20, 128, 1, 19, 195, 34, 2
+24, 172, 20, 128, 1, 20, 81, 20, 192, 172, 20, 128, 1, 18, 93, 180, 0, 172, 20, 128, 1, 12, 172, 16, 172, 20, 128, 1, 17, 95, 179, 0, 172, 20, 128, 1;
+}20, 192, 172, 20, 128, 1, 18, 93, 180, 0, 172, 20, 128, 1, 12, 172, 16, 172, 20, 128, 1, 17, 95, 179, 0, 172, 20, 128, 1;
+
+
+Feb 27 18:42:02 81.20.192.29 905: Feb 27 15:42:01.278: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Feb 27 18:42:02 81.20.192.29 906: Feb 27 15:42:01.582: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Feb 27 18:42:02 81.20.192.29 907: Feb 27 15:42:01.626: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from FULL to DOWN, Neighbor Down: Too many retransmissions
+Feb 27 18:43:02 81.20.192.29 908: Feb 27 15:43:01.280: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.6 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Feb 27 18:43:02 81.20.192.29 909: Feb 27 15:43:01.584: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.3 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+Feb 27 18:43:02 81.20.192.29 910: Feb 27 15:43:01.628: %OSPF-5-ADJCHG: Process 110, Nbr 81.20.192.19 on FastEthernet0/0.10 from DOWN to DOWN, Neighbor Down: Ignore timer expired
+
+
+MMS сервер
+
+
+
+
+
+
+
+
+
+
+
+
+модуль SFP-1000A — 2 шт
+модуль SFP-1000B — 2 шт
+шнур оптический FС-SC 3м — 2 шт

@@ -1,0 +1,501 @@
+---
+layout: post
+title:  "snmpv3"
+date:   2011-10-07 22:32:17 +0400
+categories: snmp
+tags: snmp
+---
+
+# snmpv3
+SNMP + LLDP
+
+
+
+
+ip route add unreachable 192.0.2.0/24
+ip addr add 192.0.2.1/32 dev lo
+
+vconfig add eth0 101
+ip link set eth0.101 up
+ip route add 192.0.2.101/32 dev eth0.101 src 192.0.2.1
+
+
+
+
+SNMP v3 в cisco
+
+
+
+
+
+snmp-server group iptech v3 priv read CommunityView write CommunityView notify CommunityView access 57
+snmp-server view CommunityView iso included
+snmp-server location k9-616
+snmp-server contact iptech@sc.ru
+snmp-server system-shutdown
+
+Эту команду надо ввести, но не показывается
+snmp-server user iptech iptech v3 auth md5 915Nyg710 priv des Stone59God access 57
+
+Только
+k9-s6#sh snmp user 
+
+User name: iptech
+Engine ID: 80000009030000131AFA6281
+storage-type: nonvolatile        active access-list: 57
+Authentication Protocol: MD5
+Privacy Protocol: DES
+Group-name: iptech
+
+k9-s6#sh snmp gr   
+k9-s6#sh snmp group 
+groupname: iptech                           security model:v3 priv 
+readview : CommunityView                    writeview: CommunityView                   
+notifyview: CommunityView                   
+row status: active      access-list: 57
+
+
+
+
+Examples
+
+The following example creates a view that includes all objects in the MIB-II subtree:
+
+snmp-server view mib2 mib-2 included
+
+
+The following example creates a view that includes all objects in the MIB-II system group and all objects in the Cisco enterprise MIB:
+
+snmp-server view phred system included
+
+snmp-server view phred cisco included
+
+
+The following example creates a view that includes all objects in the MIB-II system group except for sysServices (System 7) and all objects for interface 1 in the MIB-II interfaces group:
+
+snmp-server view agon system included
+
+snmp-server view agon system.7 excluded
+
+snmp-server view agon ifEntry.*.1 included
+
+
+Related Commands
+
+
+
+
+Настройка snmp третьей версии для cisco не сложнее настроек в d-link`е. Алгоритм прост: создаем view, помещая туда что можно опрашивать, создаем группу и ассоциируем с этим view, и создаем пользователя помещая его в созданную группу. Во время создания пользователя можно использовать несколько способов его аутентификации: без аутентификации по паролю, с аутентификацией по паролю но без шифрования, с аутентификацией по паролю и с шифрованием. Настроек касаемо пользователя вы не увидите в running-config, они хранятся в энергонезависимой памяти.
+
+Ниже команды для создания:
+
+snmp-server view my-view system included
+
+snmp-server group group-snmp-v3 v3 priv read my-view access 99
+
+snmp-server user user-snmp-v3 group-snmp-v3 v3 auth md5 mypwdauth priv aes 128 mypwdpriv
+Помимо аутентификации и шифрования, добавил ещё ограничение по acl 99 с которых ip адресов это можно делать.
+ 
+Проверяем:
+[root@srv ~]# snmpwalk -v 3 -u user-snmp-v3 -l authPriv -A mypwdauth -a md5 -x aes -X mypwdpriv 192.168.1.1 sysContact.0
+SNMPv2-MIB::sysContact.0 = STRING: support@golas.ru
+ 
+Полезно в ваше view вписать и такую строчку:
+snmp-server view my-view mib-2 included
+что бы иметь возможность опрашивать интерфейсы.
+
+
+
+1. Создание вида View с включёнными MIB в 
+2. Создание группы 
+        Каждый пользователь входит в какую-то группу;
+    Группа определяет политику доступа для пользователей (доступ к каким SNMP-объектам можно получить на создание, чтение или просмотр);
+    Группа определяет список уведомлений, которые могут получать пользователи;
+    Модель безопасности и уровень безопасности определяется группой
+
+3. Создание пользователя
+
+1. View - смотреть можно всё
+2. 2 Группы (admin, user) Для user во определение группы разрешаем только смотреть (monitor, bill, iptech)
+3. Пользователь bill, iptech (dit)
+4. Аутентифицировать и шифровать
+
+bill и iptech в группе write
+monitor в группе read
+
+Контактная информация, размещение:
+
+snmp-server location Main Building, Server room #2
+snmp-server contact net@zp.domain.ua
+
+Создание вида, при помощи которого будет определяться к каким MIB-ам можно получить доступ:
+
+snmp-server view NetAdmin internet included
+snmp-server view NetAdmin system included
+snmp-server view NetAdmin interfaces included
+snmp-server view NetAdmin at included
+snmp-server view NetAdmin ip included
+snmp-server view NetAdmin icmp included
+snmp-server view NetAdmin tcp included
+snmp-server view NetAdmin udp included
+snmp-server view NetAdmin transmission included
+snmp-server view NetAdmin snmp included
+snmp-server view NetAdmin ospf included
+snmp-server view NetAdmin rmon included
+snmp-server view NetAdmin ifMIB included
+snmp-server view NetAdmin cisco included
+snmp-server view NetAdmin ciscoMgmt included
+snmp-server view NetAdmin chassis included
+
+Определение ACL для желающих работать с девайсом:
+
+no access-list 46
+access-list 46 permit  10.1.1.1
+access-list 46 permit  10.1.1.3
+access-list 46 permit  10.1.1.4
+access-list 46 permit  10.1.1.5
+access-list 46 permit  10.2.2.9
+access-list 46 permit  10.2.3.40
+access-list 46 permit  10.3.4.53
+
+Включение возможностью управления перезагрузками/выключениями питания через SNMP:
+snmp-server system-shutdown
+
+Определение группы.
+
+snmp-server group [groupname {v1 | v2c | v3{auth | noauth | priv}}] [read readview] [write writeview] [notify notifyview] [access access-list]
+
+В данном примере группа называется NetMon и определяет доступ только на чтение с адресов, указанных в ACL 46:
+
+snmp-server group NetMon v3 priv read NetAdmin access 46
+
+Определение пользователей.
+
+snmp-server user username [groupname remote ip-address [udp-port port] {v1 | v2c | v3 [encrypted] [auth {md5 | sha} auth-password [priv des56 priv password]] [access access-list]
+
+Пример:
+
+snmp-server user NetAdmin1 NetMon v3 auth md5 authpass priv des56 privpass
+
+
+
+snmp-server community public RO
+snmp-server location ATS45
+snmp-server contact woland@sc.ru
+
+
+
+
+000400a80001:000634080437e7f0
+
+2950T-24>enable
+Password: 
+2950T-24#conf t
+2950T-24(config)#snmp-server view readview internet included
+2950T-24(config)#snmp-server group readonly v3 auth read readview
+2950T-24(config)#snmp-server user richard readonly v3 auth md5 bejtlichpass 
+Adding an snmpv3 user could cause a bootup delay,
+do you wish to continue? (y/n)[confirm]y
+2950T-24(config)#exit
+2950T-24#
+
+
+I was not able to use DES encryption because the switch does not have a crypto image. This output has the clues I need to track down what image I'm using.
+
+
+orr:/home/richard$ snmpwalk -v3 -u richard -l authNoPriv -a MD5
+ -A bejtlichpass 192.168.2.2 system
+
+SNMPv2-MIB::sysDescr.0 = STRING: Cisco Internetwork Operating System Software 
+IOS (tm) C2950 Software (C2950-I6Q4L2-M), Version 12.1(13)EA1, RELEASE SOFTWARE (fc1)
+Copyright (c) 1986-2003 by cisco Systems, Inc.
+Compiled Tue 04-Mar-03 02:14 by yenanh
+SNMPv2-MIB::sysObjectID.0 = OID: SNMPv2-SMI::enterprises.9.1.359
+DISMAN-EVENT-MIB::sysUpTimeInstance = Timeticks: (128520) 0:21:25.20
+SNMPv2-MIB::sysContact.0 = STRING: 
+SNMPv2-MIB::sysName.0 = STRING: 2950T-24
+SNMPv2-MIB::sysLocation.0 = STRING: 
+SNMPv2-MIB::sysServices.0 = INTEGER: 2
+SNMPv2-MIB::sysORLastChange.0 = Timeticks: (0) 0:00:00.00
+
+
+
+
+admin
+
+
+
+
+snmpwalk -v 3 -a MD5 -u snmp-user -A user-pass -X encryption-key -l authPriv hostname .1
+
+
+
+
+
+
+
+
+
+
+
+
+Name/OID: .1.3.6.1.6.3.1.1.6.1.0; Value (Integer): 1
+
+# MANAGEMENT
+
+enable snmp traps 
+enable snmp authenticate_traps 
+enable snmp linkchange_traps                                                   
+config snmp linkchange_traps ports all enable
+config snmp system_name ushinskogo6a-111.sc.int
+config snmp system_location Ushinskogo6a
+config snmp system_contact ibd@sc.ru
+disable rmon 
+
+# SNMPv3
+
+delete snmp community public
+delete snmp community private
+delete snmp user initial
+delete snmp group initial
+delete snmp view restricted all
+delete snmp view CommunityView all
+delete snmp group public
+delete snmp group private
+delete snmp group ReadGroup
+delete snmp group WriteGroup
+
+config snmp engineID 800000ab031cbdb9649460
+create snmp view restricted 1.3.6.1.2.1.1 view_type included
+create snmp view restricted 1.3.6.1.2.1.11 view_type included
+create snmp view restricted 1.3.6.1.6.3.10.2.1 view_type included              
+create snmp view restricted 1.3.6.1.6.3.11.2.1 view_type included
+create snmp view restricted 1.3.6.1.6.3.15.1.1 view_type included
+create snmp view CommunityView 1 view_type included
+create snmp view CommunityView 1.3.6.1.6.3 view_type excluded
+create snmp view CommunityView 1.3.6.1.6.3.1 view_type included
+
+create snmp group public v1 read_view CommunityView notify_view CommunityView 
+create snmp group public v2c read_view CommunityView notify_view CommunityView 
+create snmp group initial v3  noauth_nopriv read_view restricted notify_view restricted 
+create snmp group private v1 read_view CommunityView write_view CommunityView notify_view CommunityView 
+create snmp group private v2c read_view CommunityView write_view CommunityView notify_view CommunityView 
+create snmp group ReadGroup v1 read_view CommunityView notify_view CommunityView 
+create snmp group ReadGroup v2c read_view CommunityView notify_view CommunityView 
+create snmp group WriteGroup v1 read_view CommunityView write_view CommunityView notify_view CommunityView 
+create snmp group WriteGroup v2c read_view CommunityView write_view CommunityView notify_view CommunityView 
+
+create snmp community private view CommunityView read_write                    
+create snmp community public view CommunityView read_only
+create snmp user initial initial 
+
+
+
+
+
+create snmp group iptech v3 auth_priv read_view CommunityView write_view CommunityView notify_view CommunityView
+create snmp user iptech iptech encrypted by_password auth md5 915Nyg710 priv des Stone59God
+
+
+create snmp user iptech iptech encrypted
+create snmp user iptech iptech encrypted by_key auth md5 437178d2ab56b7df9d8446fc824f5608 priv des 4086cfbe457c14c894e45ef3f762f268 
+
+
+snmpwalk -v 3 -u iptech -l authPriv -a MD5 -A 915Nyg710 -x DES -X Stone59God 192.168.120.6
+snmpwalk -v 3 -u initial -l noAuthNoPriv  192.168.120.6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Про SNMPv3
+SNMP – протокол прикладного уровня. Он предназначен для обмена информацией между сетевыми устройствами. При помощи этого протокола, сетевой администратор может производить анализ сетевого оборудования, находить и решать множество сетевых проблем. В Декабре 1997 года с выходом SNMPv3, пользователям стали доступны новые службы, такие как: ограничение доступа, защита данных и аутентификация пользователя<* см. стандарты RFC 2271-2275>. Кроме этого, стоит отметить, что SNMPv3 перенял модульную архитектуру от своих предшественников. Это обеспечивает поддержку предыдущих версий SNMPи, не смотря на то, что SNMPv1 и SNMPv2 не поддерживают аутентификацию и шифрование, у Вас будет возможность управления устройствами, которые поддерживают эти версии.
+      Для каждого сетевого устройства пароль преобразуется в некоторый уникальный ключ. Это обеспечивает дополнительную безопасность т.к. даже в том случае, если ключ будет перехвачен, злоумышленник получит доступ только к одному сетевому устройству. Для шифрования пароля используется алгоритм MD5, но разработчики видимо решили, что это не обеспечит достаточной сохранности пароля и поэтому блок данных (PDU) дважды хэшируется при помощи двух разных ключей, которые в свою очередь генерируются из закрытого ключа. Позже, первые 12 октетов используются как код аутентификации сообщения, который добавляется к сообщению. Такой же процесс приходится производить на другой стороне, но только в обратном порядке. Несмотря на всю сложность и энергоемкость процесса передачи данных между сущностями SNMP, по мнению разработчиков, алгоритм шифрования (DES) на самом деле не обеспечивает достаточной защиты информации, поэтому в дальнейшем предполагается использовать другие алгоритмы. Например, алгоритм Диффи-Хиллмана (Diffie-Hillman)
+
+           Разработчиками предусмотрено 3 уровня безопасности:
+- noAuthNoPriv – пароли передаются в открытом виде, конфиденциальность данных отсутствует.
+- authNoPriv – аутентификация без конфиденциальности. Большинство пользователейиспользует именно этот уровень т.к уровень защищенности в нем уже достаточно высок, а сетевые устройства не перегружаются шифрованием данных.
+- authPriv – аутентификация и шифрование. Максимальный уровень защищенности. Для начала нужно поставить net-snmp.
+
+Дальше я опишу, как настроить SNMP3 на разных системах и умных свитчах.
+
+FreeBSD (net-snmp)
+
+
+cd /usr/ports/net-mgmt/net-snmp
+make install clean
+
+Для запуска snmp сервиса добавляем в /etc/rc.conf:
+
+
+snmpd_enable="YES"
+snmpd_conffile="/usr/local/etc/snmp/snmpd.conf"
+
+Настройка snmpd.conf
+
+
+createUser пользователь MD5 "ПАРОЛЬ"
+rouser  пользователь
+
+Добавляем пользователя в SNMP (аутентификация без конфиденциальности) Пароль должен быть минумум 8 символов, а процесс snmpd должен быть еще выключен. Примечание: пользователь добавляется в конфиги по умолчанию, придобавлении выводит куда именно. С этого конфига можно просто перенести строчку в свой конфиг
+
+
+net-snmp-config --create-snmpv3-user -ro -x ПАРОЛЬ -a ПАРОЛЬ  имя_пользователя
+
+Тест доступности (если Вы используете в имени или в пароле спецсимволы, то заключите из в одинарные кавычки)
+
+
+snmpwalk -v 3 -u имя_пользователя -A ПАРОЛЬ -l authNoPriv хост
+
+
+Добавляем пользователя в SNMP (аутентификация и шифрование, стандартные алгоритмы)
+
+net-snmp-config --create-snmpv3-user -ro -A ПАРОЛЬ -X ПАРОЛЬ -a MD5 -x DES имя_пользователя
+
+
+Настройка snmpd.conf
+
+createUser пользователь MD5 "ПАРОЛЬ" DES ПАРОЛЬ
+rouser  пользователь
+
+
+Тест доступности
+
+snmpwalk -v 3 -a MD5 -A ПАРОЛЬ -l authPriv -u имя_пользователя -x DES -X ПАРОЛЬ хост
+
+
+
+Добавляем пользователя в SNMP (аутентификация и шифрование, использование других алгоритмов)
+
+
+net-snmp-config --create-snmpv3-user -ro -A ПАРОЛЬ -X ПАРОЛЬ -a SHA -x AES имя_пользователя
+
+
+Настройка snmpd.conf
+
+createUser пользователь SHA "ПАРОЛЬ" AES ПАРОЛЬ
+rouser  пользователь
+
+
+Тест доступности
+
+snmpwalk -v 3 -a MD5 -A ПАРОЛЬ -l authPriv -u имя_пользователя -x DES -X ПАРОЛЬ хост
+
+
+
+Foxgate (должно подходить и для CISCO) 
+Пример настройки на Foxgate s6224.
+
+
+! Включаем сервер snmp
+snmp-server enable
+! Включение контроля подключающихся ip (по умолчанию)
+snmp-server securityip enable 
+! Настройка безопасных IP-адресов, которым разрешен доступ включaя NMS
+snmp-server securityip x.x.x.x
+! Создаем список SNMP3_RO, содержащий разрешенных/запрещенных OID
+snmp-server view SNMP3_RO 1.3.6.1.2.1.1. include
+snmp-server view SNMP3_RO 1.3.6.1.2.1.2. include
+! Создаем группу SNMP3 для доступа в режиме authpriv, 
+! с доступом на чтение списка OID SNMP3_RO
+snmp-server group SNMP3 authpriv read SNMP3_RO
+! Создаем пользователя
+snmp-server user your_user SNMP3 authPriv auth md5 your_pass
+! Отключаем rmon
+no rmon enable
+
+
+Dell 6024
+
+
+! Указываем email
+snmp-server contact admin@example.com
+! Создаем группу snmp3 для доступа в режиме authpriv, 
+! с доступом на чтение списка OID Default
+snmp-server group snmp3 v3 priv context router read Default
+snmp-server group snmp3 v3 priv context oob read Default
+! Создаем пользователя 
+snmp-server user your_user snmp3 auth-md5 $your_pass
+
+
+Dlink DGS-3100
+
+
+# config snmp engineID default
+All SNMPv3 users will be deleted !
+Are you sure? (Y/N)[N] Y
+! Создаем группу snmp3 для доступа в режиме authpriv, 
+! с доступом на чтение списка OID Default
+# create snmp group snmp3 v3 auth_priv read_view Default
+! Создаем пользователя 
+# create snmp user your_user snmp3 encrypted by_password auth md5 $your_pass
+! Указываем email 
+# config snmp system_contact admin@example.com
+! указываем данные по расположению
+# config snmp system_location UA
+! указываем snmp имя для свитча
+# config snmp system_name sw-krn-dlink-3100
+
+
+Памятка - Добавить основной список OID
+iso.3.6.1.2.1.2.2.1.10.1
+
+Данная заметка будет дописываться.
+
+Полезные материалы:
+Мониторинг серверов по SNMP v3 через Zabbix
+БЕЗОПАСНОСТЬ ПРОТОКОЛА SNMPV3 
+Wikipedia SNMP
+Руководство по командам Net-SNMP (Очень хорошое руководство на Opennet) 
+Автор: hedg на 2/25/2011
+Ярлыки: Cisco, FreeBSD, SNMP, SNMPv3, мониторинг
+3 коммент.:
+
+    АнонимныйMar 25, 2011 01:06 AM
+
+        спасибо Вам за статейку! Полезная!
+
+    Ответить
+    AshandyMay 4, 2011 06:59 AM
+
+        привет, исправь ошибку
+        snmpwalk -v 3 -a MD5 -A PASSPHRASE -l authPriv -u USER -x DES -X USER HOST
+        иначе в варианте как в мане выдает ошибку, что юзер не найден, потому что ключ
+        -A PASSPHRASE set authentication protocol pass phrase
+
+    Ответить
+    hedgMay 7, 2011 10:26 AM
+
+        Ошибки нет. Команда отрабатывает именно так, как написана (Проверено на ОС FreeBSD 8.x и CentOS 5.x)
+        Вот пример команды:
+        # snmpwalk -v 3 -a MD5 -A 'password' -l authPriv -u 'user' -x DES -X 'password' ip.ad.dr.ess system
+        SNMPv2-MIB::sysDescr.0 = STRING: Ethernet Routing Switch
+        SNMPv2-MIB::sysObjectID.0 = OID: SNMPv2-SMI::enterprises.674.10895.3000
+        DISMAN-EVENT-MIB::sysUpTimeInstance = Timeticks: (191104518) 22 days, 2:50:45.18
+        SNMPv2-MIB::sysContact.0 = STRING: admin@example.com
+        SNMPv2-MIB::sysName.0 = STRING: USERS
+        SNMPv2-MIB::sysLocation.0 = STRING:
+        SNMPv2-MIB::sysServices.0 = INTEGER: 3
+        SNMPv2-MIB::sysORLastChange.0 = Timeticks: (0) 0:00:00.00
+        SNMPv2-MIB::sysORID.1 = OID: SNMPv2-SMI::enterprises.89.73
+        SNMPv2-MIB::sysORDescr.1 = STRING: RS capabilities
+        SNMPv2-MIB::sysORUpTime.1 = Timeticks: (0) 0:00:00.00
+
+        # snmpwalk -V
+        NET-SNMP version: 5.5
+
+        P.S. Какая у Вас ОС, какая версия snmpwalk ?
+
+    Ответить

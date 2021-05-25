@@ -1,0 +1,685 @@
+---
+layout: post
+title:  "k6-c0-change"
+date:   2018-07-02 12:13:07 +0300
+categories: PSI
+tags: PSI
+---
+
+# k6-c0-change
+81.20.192.121 -cde-c3 1015
+81.20.192.125 -cde-c3 1016
+
+conf t
+interface GigabitEthernet0/0.1015
+no ip address 81.20.203.1 255.255.255.252
+ip address 81.20.192.121 255.255.255.252
+
+
+interface GigabitEthernet0/0.1016
+no ip address 81.20.203.5 255.255.255.252
+ip address 81.20.192.125 255.255.255.252
+
+
+router ospf 110
+no network 81.20.203.0 0.0.0.3 area 0
+no network 81.20.203.4 0.0.0.3 area 0
+no neighbor 81.20.203.2
+no neighbor 81.20.203.6
+network 81.20.192.120 0.0.0.3 area 0
+network 81.20.192.124 0.0.0.3 area 0
+neighbor 81.20.192.126
+neighbor 81.20.192.122
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface Loopback0
+ description # Address for BGP & MPLS\IP exchanges
+ ip address 81.20.196.49 255.255.255.255
+
+
+
+interface FastEthernet0/0.1015
+ description # Uplink to CDE-C2 (MPLS/IP)
+ encapsulation dot1Q 1015
+ ip address 81.20.192.122 255.255.255.252
+ ip ospf network non-broadcast
+ ip ospf priority 0
+ no snmp trap link-status
+ mpls ip 
+
+
+
+interface FastEthernet0/0.1016
+ description # Uplink to CDE-C2 (Customer's Internet)
+ encapsulation dot1Q 1016
+ ip vrf forwarding inet
+ ip address 81.20.192.126 255.255.255.252
+ ip nat outside
+ ip ospf network non-broadcast
+ ip ospf priority 0
+ no snmp trap link-status
+ mpls netflow egress
+
+
+
+router ospf 111 vrf inet
+ router-id 81.20.192.126
+ log-adjacency-changes
+ redistribute connected metric 1 subnets
+ redistribute static metric 1 subnets
+ redistribute bgp 20866 metric 1 subnets
+ passive-interface default
+ no passive-interface FastEthernet0/0.1016
+ network 81.20.192.124 0.0.0.3 area 0
+!         
+router ospf 110
+ router-id 81.20.192.122
+ log-adjacency-changes
+ redistribute connected metric 1 subnets
+ redistribute static metric 1 subnets
+ passive-interface default
+ no passive-interface FastEthernet0/0.1015
+ no passive-interface FastEthernet0/1.10
+ network 81.20.192.120 0.0.0.3 area 0
+ distribute-list prefix no-sc-local-distribution out
+!         
+router bgp 20866
+ no bgp default ipv4-unicast
+ bgp log-neighbor-changes
+ neighbor 81.20.192.71 remote-as 20866
+ neighbor 81.20.192.71 update-source Loopback0
+ neighbor 81.20.192.74 remote-as 20866
+ neighbor 81.20.192.74 update-source Loopback0
+
+
+ip route 0.0.0.0 0.0.0.0 81.20.192.121
+ip route vrf inet 0.0.0.0 0.0.0.0 81.20.192.125
+ip route 81.20.192.74 255.255.255.255 81.20.192.121
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+81.20.192.121 -cde-c3 1015
+81.20.192.125 -cde-c3 1016
+
+
+192.168.113.254
+
+
+router ospf 110
+ no network 81.20.200.144 0.0.0.3 area 0
+ no network 81.20.200.148 0.0.0.3 area 0
+
+
+
+
+81.20.192.121 -cde-c3 1015
+81.20.192.125 -cde-c3 1016
+
+router ospf 110
+no network 81.20.203.0 0.0.0.3 area 0
+no network 81.20.203.4 0.0.0.3 area 0
+no neighbor 81.20.203.2
+no neighbor 81.20.203.6
+network 81.20.192.120 0.0.0.3 area 0
+network 81.20.192.124 0.0.0.3 area 0
+neighbor 81.20.192.126
+neighbor 81.20.192.122
+
+
+
+
+
+
+
+
+
+
+
+
+router bgp 20866
+ neighbor 81.20.192.122 remote-as 50688
+ neighbor 81.20.192.122 update-source GigabitEthernet0/0.99
+
+ address-family ipv4
+  no neighbor 81.20.192.122 activate
+  no neighbor 81.20.192.122 send-community both
+  no neighbor 81.20.192.122 weight 150
+  no neighbor 81.20.192.122 prefix-list permit_mediaseti in
+  no neighbor 81.20.192.122 prefix-list no-peering-to-lks out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface FastEthernet0/0.1015
+ description # Uplink to CDE-C2 (MPLS/IP)
+ encapsulation dot1Q 1015
+ ip address 81.20.203.2 255.255.255.252
+ ip ospf network non-broadcast
+ ip ospf priority 0
+ no snmp trap link-status
+ mpls ip
+end
+
+interface FastEthernet0/0.1016
+ description # Uplink to CDE-C2 (Customer's Internet)
+ encapsulation dot1Q 1016
+ ip vrf forwarding inet
+ ip address 81.20.203.6 255.255.255.252
+ ip nat outside
+ ip ospf network non-broadcast
+ ip ospf priority 0
+ no snmp trap link-status
+ mpls netflow egress
+end
+
+
+interface FastEthernet0/1.10
+ description # Mgmt for Bost switches
+ encapsulation dot1Q 10
+ no snmp trap link-status
+end
+
+
+interface FastEthernet0/1.1049
+ description #OOO TsentrEnergoProekt vrf cust11 #gold_555 19.07.2013
+ encapsulation dot1Q 1049
+ ip unnumbered Loopback111
+ rate-limit input 1024000 192000 384000 conform-action transmit exceed-action drop
+ rate-limit output 1024000 192000 384000 conform-action transmit exceed-action drop
+ no snmp trap link-status
+ no cdp enable
+end
+
+
+interface Loopback0
+ description # Address for BGP & MPLS\IP exchanges
+ ip address 81.20.196.49 255.255.255.255
+end
+
+
+
+
+interface Loopback111
+ description JUR NETWORK3 Krainyaya
+ ip address 81.20.204.129 255.255.255.224
+end
+
+K6-C0#sh ip bgp vpnv4 vrf inet
+BGP table version is 97, local router ID is 81.20.204.129
+
+
+
+
+203.5 - cde-c3 1016 влан
+203.1 - cde-c3 1015 влан
+
+81.20.192.71 - ctd-c3
+81.20.192.74 - cde-c2
+
+
+router ospf 111 vrf inet
+ router-id 81.20.203.6
+ log-adjacency-changes
+ redistribute connected metric 1 subnets
+ redistribute static metric 1 subnets
+ redistribute bgp 20866 metric 1 subnets
+ passive-interface default
+ no passive-interface FastEthernet0/0.1016
+ network 81.20.203.4 0.0.0.3 area 0
+!
+router ospf 110
+ router-id 81.20.203.2
+ log-adjacency-changes
+ redistribute connected metric 1 subnets
+ redistribute static metric 1 subnets
+ passive-interface default
+ no passive-interface FastEthernet0/0.1015
+ no passive-interface FastEthernet0/1.10
+ no passive-interface FastEthernet0/1.1049
+ network 81.20.203.0 0.0.0.3 area 0
+ distribute-list prefix no-sc-local-distribution out
+!
+router bgp 20866
+ no bgp default ipv4-unicast
+ bgp log-neighbor-changes
+ neighbor 81.20.192.71 remote-as 20866
+ neighbor 81.20.192.71 update-source Loopback0
+ neighbor 81.20.192.74 remote-as 20866
+ neighbor 81.20.192.74 update-source Loopback0
+ !
+ address-family vpnv4
+ neighbor 81.20.192.71 activate
+ neighbor 81.20.192.71 send-community extended
+ neighbor 81.20.192.74 activate
+ neighbor 81.20.192.74 send-community extended
+ exit-address-family
+ 
+address-family ipv4 vrf inet
+ redistribute connected
+ redistribute static
+ default-information originate
+ no auto-summary
+ no synchronization
+ exit-address-family
+ !
+
+
+
+
+ip prefix-list no-sc-local-distribution seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list no-sc-local-distribution seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list no-sc-local-distribution seq 29 permit 192.168.70.0/24 le 32
+ip prefix-list no-sc-local-distribution seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list no-sc-local-distribution seq 50 permit 0.0.0.0/0 le 32
+
+
+
+
+
+
+
+
+CDE-C3
+interface GigabitEthernet0/0.1015
+ description # K6 MPLS\IP downlink
+ encapsulation dot1Q 1015
+ ip address 81.20.203.1 255.255.255.252
+ ip flow ingress
+ ip flow egress
+ ip ospf network non-broadcast
+ mpls ip
+ no cdp enable
+!
+interface GigabitEthernet0/0.1016
+ description # K6 Customer's Inet
+ encapsulation dot1Q 1016
+ ip address 81.20.203.5 255.255.255.252
+ ip flow ingress
+ ip ospf network non-broadcast
+ mpls ip
+ no cdp enable
+
+
+
+router ospf 110
+ router-id 81.20.192.22
+ log-adjacency-changes
+ redistribute connected metric 1 subnets
+ redistribute static metric 1 metric-type 1 subnets
+ redistribute bgp 20866 metric 1 metric-type 1 subnets route-map bgp2ospf
+ passive-interface default
+ no passive-interface GigabitEthernet0/0.68
+ no passive-interface GigabitEthernet0/0.115
+ no passive-interface GigabitEthernet0/0.117
+ no passive-interface GigabitEthernet0/0.122
+ no passive-interface GigabitEthernet0/0.450
+ no passive-interface GigabitEthernet0/0.660
+ no passive-interface GigabitEthernet0/0.661
+ no passive-interface GigabitEthernet0/0.804
+ no passive-interface GigabitEthernet0/0.824
+ no passive-interface GigabitEthernet0/0.825
+ no passive-interface GigabitEthernet0/0.1015
+ no passive-interface GigabitEthernet0/0.1016
+ no passive-interface GigabitEthernet0/0.1022
+ no passive-interface GigabitEthernet0/0.3009
+ no passive-interface GigabitEthernet0/0.3046
+ no passive-interface GigabitEthernet0/2.10
+ network 81.20.192.0 0.0.0.31 area 0
+ network 81.20.192.100 0.0.0.3 area 0
+ network 81.20.192.116 0.0.0.3 area 0
+ network 81.20.193.120 0.0.0.3 area 0
+ network 81.20.193.144 0.0.0.3 area 0
+ network 81.20.196.168 0.0.0.3 area 0
+ network 81.20.196.172 0.0.0.3 area 0
+ network 81.20.196.192 0.0.0.3 area 0
+ network 81.20.196.200 0.0.0.3 area 0
+ network 81.20.196.208 0.0.0.3 area 0
+ network 81.20.197.248 0.0.0.3 area 0
+ network 81.20.197.252 0.0.0.3 area 0
+ network 81.20.202.100 0.0.0.3 area 0
+ network 81.20.203.0 0.0.0.3 area 0
+ network 81.20.203.4 0.0.0.3 area 0
+ network 172.20.0.0 0.0.3.255 area 0
+ network 172.24.0.0 0.0.3.255 area 0
+ neighbor 81.20.203.2
+ neighbor 81.20.203.6
+ neighbor 81.20.196.210
+ neighbor 81.20.193.146
+ neighbor 81.20.193.122
+ neighbor 81.20.192.118
+ neighbor 81.20.200.150
+ neighbor 81.20.200.146
+ neighbor 81.20.196.194
+ default-information originate
+ distribute-list prefix no-sc-local-distribution out
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface GigabitEthernet0/0.1015
+ description # K6 MPLS\IP downlink
+ encapsulation dot1Q 1015
+ ip address 81.20.203.1 255.255.255.252
+ ip flow ingress
+ ip flow egress
+ ip ospf network non-broadcast
+ mpls ip
+ no cdp enable
+end
+
+CDE-C3#sh run int Gi0/0.1016
+Building configuration...
+
+Current configuration : 213 bytes
+!
+interface GigabitEthernet0/0.1016
+ description # K6 Customer's Inet
+ encapsulation dot1Q 1016
+ ip address 81.20.203.5 255.255.255.252
+ ip flow ingress
+ ip ospf network non-broadcast
+ mpls ip
+ no cdp enable
+end
+
+CDE-C3#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cde-c2
+router bgp 20866
+ no synchronization
+ bgp log-neighbor-changes
+ network 192.168.12.0
+ neighbor 10.192.10.78 remote-as 3216
+ neighbor 10.192.10.78 maximum-prefix 500
+ neighbor 81.20.192.70 remote-as 20866
+ neighbor 81.20.192.70 update-source Loopback0
+ neighbor 81.20.192.71 remote-as 20866
+ neighbor 81.20.192.71 update-source Loopback0
+ neighbor 81.20.192.72 remote-as 20866
+ neighbor 81.20.192.72 update-source Loopback0
+ neighbor 81.20.192.76 remote-as 20866
+ neighbor 81.20.192.76 update-source Loopback0
+ neighbor 81.20.192.77 remote-as 20866
+ neighbor 81.20.192.77 update-source Loopback0
+ neighbor 81.20.192.78 remote-as 20866
+ neighbor 81.20.192.78 update-source Loopback0
+ neighbor 81.20.193.122 remote-as 20866
+ neighbor 81.20.193.122 update-source Loopback0
+ neighbor 192.168.90.1 remote-as 20866
+ neighbor 192.168.90.1 update-source GigabitEthernet0/0.457
+ neighbor 192.168.91.3 remote-as 20866
+ neighbor 192.168.91.3 update-source Loopback2
+ no auto-summary
+ !
+ address-family vpnv4
+ neighbor 81.20.192.70 activate
+ neighbor 81.20.192.70 send-community extended
+ neighbor 81.20.192.71 activate
+ neighbor 81.20.192.71 send-community extended
+ neighbor 81.20.192.72 activate
+ neighbor 81.20.192.72 send-community extended
+ neighbor 81.20.192.76 activate
+ neighbor 81.20.192.76 send-community extended
+ neighbor 81.20.192.77 activate
+ neighbor 81.20.192.77 send-community extended
+ neighbor 81.20.192.78 activate
+ neighbor 81.20.192.78 send-community extended
+ neighbor 81.20.193.122 activate
+ neighbor 81.20.193.122 send-community extended
+ neighbor 192.168.90.1 activate
+ neighbor 192.168.90.1 send-community both
+ neighbor 192.168.90.1 route-reflector-client
+ neighbor 192.168.91.3 activate
+ neighbor 192.168.91.3 send-community both
+ exit-address-family
+
+
+
+
+
+
+
+
+
+
+ip route 0.0.0.0 0.0.0.0 81.20.203.1
+ip route vrf inet 0.0.0.0 0.0.0.0 81.20.203.5
+
+
+S*   0.0.0.0/0 [1/0] via 81.20.203.5
+
+ip prefix-list no-sc-local-distribution seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list no-sc-local-distribution seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list no-sc-local-distribution seq 29 permit 192.168.70.0/24 le 32
+ip prefix-list no-sc-local-distribution seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list no-sc-local-distribution seq 50 permit 0.0.0.0/0 le 32
+
+
+81.20.203.1
+
+
+
+
+
+
+
+
+
+
+O*E2 0.0.0.0/0 [110/1] via 81.20.196.169, 01:13:30, FastEthernet0/0.824
+ip route vrf inet 0.0.0.0 0.0.0.0 81.20.196.173
+
+
+
+* i0.0.0.0          81.20.192.78             0    100      0 ?
+*>                  81.20.196.173            0         32768 ?
+*>i10.48.254.0/24   81.20.192.78             0    100      0 ?
+*>i10.148.254.0/30  81.20.192.78             0    100      0 ?
+*>i10.148.254.4/30  81.20.192.78             0    100      0 ?
+
+S*   0.0.0.0/0 [1/0] via 81.20.196.173
+
+
+
+
+
+
+
+
+
+Виктория
+sh ip bgp vpnv4 all summary
+BGP router identifier 81.20.204.193, local AS number 20866
+BGP table version is 1579, main routing table version 1579
+187 network entries using 25619 bytes of memory
+189 path entries using 12852 bytes of memory
+48/47 BGP path/bestpath attribute entries using 5952 bytes of memory
+2 BGP rrinfo entries using 48 bytes of memory
+43 BGP extended community entries using 1032 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 45503 total bytes of memory
+BGP activity 376/189 prefixes, 781/592 paths, scan interval 15 secs
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+81.20.192.70    4 20866       0       0        0    0    0 never    Active
+81.20.192.74    4 20866  324677  305649     1579    0    0 11w2d           0
+81.20.192.78    4 20866  328168  305777     1579    0    0 11w2d          12
+81.20.201.246   4 20866       0       0        0    0    0 never    Active
+
+
+
+Крайняя
+sh ip bgp vpnv4 all summary 
+BGP router identifier 81.20.204.129, local AS number 20866
+BGP table version is 97, main routing table version 97
+76 network entries using 10412 bytes of memory
+76 path entries using 5168 bytes of memory
+16/15 BGP path/bestpath attribute entries using 1984 bytes of memory
+15 BGP extended community entries using 376 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 17940 total bytes of memory
+BGP activity 76/0 prefixes, 76/0 paths, scan interval 15 secs
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+81.20.192.71    4 20866       0       0        0    0    0 never    Active
+81.20.192.74    4 20866       0       0        0    0    0 never    Active
+
+
+
+
+
+
+
+
+
+
+
+
+BGP не установлен между k6-c0 и другими точками
+А у victoria установлены
+
+Как должен быть настроен ibgp?
+Чтобы был обмен маршрутами необходимо настроить так, чтобы каждый с каждым обменивался маршрутами (в противном route-reflector)
+
+
+
+ neighbor 81.20.192.77 remote-as 20866
+ neighbor 81.20.192.77 ebgp-multihop 2
+ neighbor 81.20.192.77 update-source Loopback0
+
+address-family ipv4
+  neighbor 81.20.192.77 activate
+  neighbor 81.20.192.77 prefix-list deny_all in
+  neighbor 81.20.192.77 prefix-list permit_telemir out
+
+Если нам нужны vrf, то можно прописать
+
+ neighbor 81.20.192.71 remote-as 20866
+ neighbor 81.20.192.71 update-source Loopback0
+ neighbor 81.20.192.71 timers 15 45 45
+
+ address-family vpnv4
+  neighbor 81.20.192.71 activate
+  neighbor 81.20.192.71 send-community extended
+  neighbor 81.20.192.71 weight 100
+
+
+Чтобы работали и vpn и internet маршруты нужно нейбора прописывать в обоих  address-family
+
+
+
+  1 81.20.203.1 4 msec 4 msec 4 msec
+  2 lip-ctd-s1-vlan10.net.promsvyaz.ru (81.20.192.5) 4 msec 0 msec 4 msec
+  3 81.20.192.52 4 msec 4 msec 4 msec
+
+
+15 	  174 	  174 	  173 	     81.20.192.49	  -  
+16 	  173 	  174 	  174 	     81.20.192.22	 lip-cde-c3-gi0-0-10.net.promsvyaz.ru  
+17 	  174 	  175 	  174 	     81.20.203.2	  - 

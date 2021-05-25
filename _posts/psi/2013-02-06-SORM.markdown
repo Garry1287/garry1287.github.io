@@ -1,0 +1,489 @@
+---
+layout: post
+title:  "SORM"
+date:   2013-02-06 13:04:43 +0400
+categories: PSI
+tags: PSI
+---
+
+# SORM
+interface GigabitEthernet2/11
+ description #RSPAN for SORM from CTD-S1 #
+ switchport trunk allowed vlan 2000,2001
+ switchport mode trunk
+ load-interval 30
+ storm-control broadcast level 10.00
+ storm-control action shutdown
+ storm-control action trap
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+
+
+
+interface GigabitEthernet2/14
+ description #Mirror to k9 for VM HyperVisors
+ load-interval 30
+ storm-control broadcast level 10.00
+ storm-control action shutdown
+ storm-control action trap
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+end
+
+
+interface Port-channel1
+ description #CTD-S1
+ switchport
+ switchport mode trunk
+ load-interval 30
+end
+
+
+interface TenGigabitEthernet1/1
+ description SORM 10GB port 
+ load-interval 30
+ spanning-tree bpdufilter enable
+end
+
+
+monitor session 1 source interface Gi2/11 , Gi2/14
+monitor session 1 source interface Po1
+monitor session 1 destination interface Te1/1
+monitor session 1 filter packet-type good rx
+
+
+Мироринг портов в порт SORM
+
+
+
+
+
+
+
+k9-s9
+ 16       Enabled   Auto/Disabled           Link Down               Enabled    
+           Description: ast3.sc.ru  
+
+
+create mirror group_id 1                                                        
+config mirror group_id 1 target_port 16                                         
+config mirror group_id 1 state enable                                           
+config mirror group_id 1 add source ports 1 rx                                  
+config mirror group_id 1 add source ports 1 tx                                  
+enable mirror 
+
+
+Первый порт миррорим в 16
+
+Что нужно Сормить
+
+
+config address_binding dhcp_snoop max_entry ports 13 limit 1
+
+
+
+
+[http://admindoc.ru/788/spanrspan/](http://admindoc.ru/788/spanrspan/)
+
+
+На ctd-s1
+
+interface GigabitEthernet0/1
+ description # Asterisk ast.sc.ru
+
+interface GigabitEthernet0/5
+ description CTD-S6 Gi2/19 Po1
+
+interface GigabitEthernet0/20
+ description # CTD-C4 gi0/0 INET
+
+interface GigabitEthernet0/22
+ description # CTD-C4 gi0/1 USERS
+
+
+
+monitor session 1 source interface Gi0/1 , Gi0/5 , Gi0/20 , Gi0/22
+monitor session 1 destination interface Gi0/4
+
+interface GigabitEthernet0/4
+ description Mirror to CTD-C6
+ switchport trunk encapsulation dot1q
+ switchport trunk pruning vlan none
+ switchport mode trunk
+ switchport nonegotiate
+ load-interval 30
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+end
+
+
+
+
+
+
+interface GigabitEthernet0/5
+ description CTD-S6 Gi2/19 Po1
+ switchport trunk encapsulation dot1q
+ switchport trunk pruning vlan none
+ switchport mode trunk
+ switchport nonegotiate
+ load-interval 30
+ mls qos trust dscp
+ channel-protocol lacp
+ channel-group 1 mode passive
+
+
+
+
+
+
+interface GigabitEthernet2/11
+ description #RSPAN for SORM from CTD-S1 #
+
+interface GigabitEthernet2/14
+ description #Mirror to k9 for VM HyperVisors
+
+interface Port-channel1
+description #CTD-S1
+
+monitor session 1 source interface Gi2/11 , Gi2/14
+monitor session 1 source interface Po1
+monitor session 1 destination interface Te1/1
+monitor session 1 filter packet-type good rx
+
+
+
+
+
+
+
+
+
+
+create mirror group_id 1
+config mirror group_id 1 target_port 16 
+config mirror group_id 1 state enable
+config mirror group_id 1 add source ports 1 rx 
+config mirror group_id 1 add source ports 1 tx 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Настройка RSPAN на длинк
+
+enable rspan
+ create rspan vlan vlan_name v2
+config rspan vlan vlan_name v2 source add ports 2-5 rx
+
+На последнем коммутаторе отправляем в 18 порт
+ config rspan vlan vlan_name vlan2 redirect add ports 18
+
+
+
+
+
+
+create mirror group_id 1
+config mirror group_id 1 state enable
+config mirror group_id 1 add source ports 9,21-22 rx 
+config mirror group_id 1 add source ports 9,21-22 tx 
+
+
+
+RSPAN cisco
+
+Настройка Remote SPAN
+
+Необходимо в случае, если коммутатор-источник зеркалированного трафика находится через несколько коммутаторов от коммутатора-приемника.
+
+На коммутаторе-источнике создаем VLAN:
+
+vlan 900
+name RSPAN
+remote-span
+
+Затем создаем monitor session и указываем с какого порта забирать трафик:
+
+Monitor session 1 source interface FastEthernet 0/2 rx 
+
+Указываем назначение (в нашем случае это RSPAN – VLAN 902)
+
+Monitor session 1 destination remote vlan 902
+
+Номера session на одном коммутаторе должны совпадать, т.е. указываем откуда берем и куда отправляем наш трафик.
+
+Теперь на всех коммутаторах по пути от нашего коммутатора-источника до коммутатора-приемника создаем vlan 902 и помечаем его как remote-span 
+
+На коммутаторе, к которому подключен Carbon Reductor (Например, к порту Fa0/15) создаем monitor session:
+
+monitor session 1 source remote vlan 902
+monitor session 1 destination interface Fa0/15
+
+
+
+
+
+
+
+Создаем VLAN для RSPAN
+
+    ASW1(config)#vlan 100
+
+    ASW1(config-vlan)#remote-span (указываем что vlan используется для RSPAN)
+
+    ASW1(config)#exit
+
+
+
+На источнике
+Switch1(config)# monitor session 1 source interface fastEthernet0/2 rx
+Switch1(config)# monitor session 1 destination remote vlan 200
+или
+sw1(config)# monitor session 1 source interface fa 0/10
+sw1(config)# monitor session 1 destination remote vlan 100 reflector-port fa 0/1
+
+
+
+
+На приёмнике
+Switch2(config)# monitor session 1 source remote vlan 200
+Switch2(config)# monitor session 1 destination interface fastEthernet0/3
+
+
+
+
+
+
+
+
+
+******
+Вопрос один - требуется ли reflector-port указывать на источнике.
+Да требуется, если коммутатор хочет
+
+reflector порт - это порт, которые выделятеся для RSPAN на некоторых моделях коммутатора
+для организации RSPAN, Этот порт как loopback, он используется, а через него в принципе траффик никуда не идёт
+На самом деле траффик идёт через транковый порт, куда remote-vlan проброшен
+
+рефлектор порт попробуйте указать любой свободный порт на кошаке
+это такая особенность. 
+
+
+
+
+
+
+
+
+
+
+
+Схема такая на источнике
+1. Создаём rspan vlan
+2. Заворачиваем в него нужные порты
+3. Если нужно используем reflector port (выбираем неиспользуемый порт по него)
+4. Отправляем rspan vlan туда, куда надо (на uplink например)
+5. Через промежёточные коммутаторы протаскиваем как обычный влан
+6. На приёмнике rspan vlan отправляем в нужный порт
+
+
+
+
+сtd-s6 соединено с  ctd-s1 
+Gi2/11			Gi0/4
+
+ctd-s6 соединено с k9-s9
+Gi2/14 		  5 port
+
+
+ctd-s6
+
+monitor session 1 source interface Te2/7
+monitor session 1 destination interface Te1/1
+monitor session 1 filter packet-type good rx
+
+
+
+Gi2/9                          up             up       #CTD-C5 Gi0/0/2 Po3
+Gi2/13                         up             up       #CTD-C5 Gi0/0/3 Po3
+Gi2/15                         up             up       #CTD-C5 Gi0/0/4 Po3
+
+
+Gi2/14                         up             up       #Mirror to k9 for VM HyperVisors
+
+
+interface GigabitEthernet2/11
+ description #RSPAN for SORM from CTD-S1 #
+ switchport trunk allowed vlan 2000,2001
+ switchport mode trunk
+ load-interval 30
+ storm-control action shutdown
+ storm-control action trap
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+
+
+
+
+СTD-s1
+monitor session 1 source interface Gi0/1 , Gi0/20 , Gi0/22
+monitor session 1 destination interface Gi0/4
+
+Gi0/1                          up             up       # Asterisk2 ast2.sc.ru
+Gi0/20                         up             up       # CTD-C4 gi0/0 INET
+Gi0/22                         up             up       # CTD-C4 gi0/1 USERS
+
+sh run int Gi0/4 
+Building configuration...
+
+Current configuration : 300 bytes
+!
+interface GigabitEthernet0/4
+ description Mirror to CTD-C6
+ switchport trunk encapsulation dot1q
+ switchport trunk pruning vlan none
+ switchport mode trunk
+ switchport nonegotiate
+ load-interval 30
+ spanning-tree portfast trunk
+ spanning-tree bpdufilter enable
+ spanning-tree bpduguard enable
+end
+
+
+
+
+k9-s9
+ 5        Enabled   Auto/Disabled           1000M/Full/None         Enabled    
+           Description: Mirror-for-SORM  
+ 
+9        Enabled   Auto/Disabled           1000M/Full/None         Enabled    
+           Description: LPK-C01-SRV01-AP01-Eth0 
+
+
+ 21   (C) Enabled   Auto/Disabled           1000M/Full/None         Enabled     
+           Description: ast3.sc.ru
+ 22   (C) Enabled   Auto/Disabled           1000M/Full/None         Enabled     
+           Description: VMserv 
+
+
+create rspan vlan vlan_id 2034
+config rspan vlan vlan_id 2034 source add ports 9 both
+config rspan vlan vlan_id 2034 source add ports 21 both
+config rspan vlan vlan_id 2034 source add ports 22 both
+
+
+create mirror group_id 1
+config mirror group_id 1 target_port 16 
+config mirror group_id 1 state enable
+config mirror group_id 1 add source ports 1,9,21-22 rx 
+config mirror group_id 1 add source ports 1,9,21-22 tx 
+
+
+create mirror group_id 1
+config mirror group_id 1 target_port 16 
+config mirror group_id 1 state enable
+config mirror group_id 1 add source ports 1,9,21-22 rx 
+config mirror group_id 1 add source ports 1,9,21-22 tx 
+
+
+
+
+
+
+Разобраться, что к чему
+k9-s9
+create mirror group_id 1
+config mirror group_id 1 target_port 16 
+config mirror group_id 1 state enable
+config mirror group_id 1 add source ports 1 rx 
+config mirror group_id 1 add source ports 1 tx 
+enable mirror
+
+Источник 1 порт
+Назначение 16 порт
+ 1        Enabled   Auto/Disabled           Link Down               Enabled    
+           Description: CTD-S1-Gi0/12 
+ 16       Enabled   Auto/Disabled           1000M/Full/None         Enabled    
+           Description: "Lint to KR6" 
+
+
+
+
+
+Gi0/1 Asterisk2 ast2.sc.ru
+Gi0/20 CTD-C4 gi0/0 INET
+Gi0/22 CTD-C4 gi0/1 USERS
+Gi0/4 Mirror to CTD-C6
+
+monitor session 1 source interface Gi0/1 , Gi0/20 , Gi0/22
+monitor session 1 destination interface Gi0/4
+
+
+
+
+
+
+
+Te2/7 #RB 5/1 USERS
+Te1/1  SORM 10GB port
+
+Отправляем траффик узверей в сторону 10
+
+monitor session 1 source interface Te2/7
+monitor session 1 destination interface Te1/1
+monitor session 1 filter packet-type good rx
+
+
+
+
+
+
+
+Надо отправлять 
+
+
+
+1901 Влан
+host bras01
+bras01.sc.int has address 10.148.0.14
+
+
+Как отправлять с Коммунальной 9 (был отдельный порт)
+
+
+
+
+
+
+
+
+
+
+
+vlan27    Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B  
+          inet addr:192.168.121.1  Bcast:192.168.121.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:590934347 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:459317508 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:3561901956 (3396.8 Mb)  TX bytes:471402898 (449.5 Mb)
+
+
+
+
+

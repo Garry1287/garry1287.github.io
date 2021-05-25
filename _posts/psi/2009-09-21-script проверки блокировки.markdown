@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "script проверки блокировки"
+date:   2009-09-21 11:26:05 +0400
+categories: PSI
+tags: PSI
+---
+
+# script проверки блокировки
+[https://github.com/bol-van/zapret](https://github.com/bol-van/zapret)

@@ -1,0 +1,317 @@
+---
+layout: post
+title:  "dial-peer"
+date:   2014-12-27 17:33:00 +0300
+categories: voip
+tags: voip
+---
+
+# dial-peer
+Dial-peer matching
+[https://www.cisco.com/c/ru_ru/support/docs/voice/call-routing-dial-plans/14074-in-dial-peer-match.html](https://www.cisco.com/c/ru_ru/support/docs/voice/call-routing-dial-plans/14074-in-dial-peer-match.html)
+[https://www.cisco.com/c/en/us/support/docs/voice/call-routing-dial-plans/14074-in-dial-peer-match.html](https://www.cisco.com/c/en/us/support/docs/voice/call-routing-dial-plans/14074-in-dial-peer-match.html)
+[http://snakeproject.ru/rubric/article.php?art=cisco_dial_peer_undestand](http://snakeproject.ru/rubric/article.php?art=cisco_dial_peer_undestand)
+[http://clev7.blogspot.com/2016/09/dial-peer-cisco.html](http://clev7.blogspot.com/2016/09/dial-peer-cisco.html)
+[https://www.ccexpert.us/ip-telephony/example-matching-outbound-dial-peers.html](https://www.ccexpert.us/ip-telephony/example-matching-outbound-dial-peers.html)
+
+Простой пример
+[http://asterisk-support.ru/forum/topics/1391/](http://asterisk-support.ru/forum/topics/1391/)
+[http://www.anticisco.ru/forum/viewtopic.php?f=2&t=10268](http://www.anticisco.ru/forum/viewtopic.php?f=2&t=10268)
+
+
+POTS пиры матчатся в первую очередь по порту или транковой группе, далее по incoming called-number, далее по answer address, далее по destination-pattern, далее по preference. Incoming called-number это именно DNIS, answer-address это именно ANI, destination-pattern это или то или другое.
+
+Voip пиры матчатся только по incoming called-number, answer address и destination-pattern и они ловят все все voip вызовы вне зависимости от session target.
+
+Процесс выбора Dial-peer
+
+session target ras   - 
+
+
+
+Часто забывается алгоритм выбора диалпиров в зависимости от Preference.
+Чем ниже Preference Number, тем выше его приоритет.
+Т.е. побеждает более низкий Preference.
+
+The lower the preference number, the higher the priority. The highest priority is given to the dial peer with preference order 0. If the same preference is defined in multiple dial peers with the same destination pattern, a dial peer is selected randomly.
+
+
+Вызываемый абонент (DNIS) - строка набора получателя вызова и получено из DNIS сигнализации по выделенному каналу (CAS) или сообщения установки ISDN.  (Кому звоним)  called number
+Вызывающий номер (ANI) - цифровая строка, которая представляет происхождение и получена из ANI CAS или сообщения установки ISDN. ANI также называют Calling Line Identification (CLID) (идентификацией вызывающей линии). (Кто звонит) calling number
+
+Incoming called-number это именно DNIS
+answer-address это именно ANI
+Destination-pattern это или то или другое.
+
+calling number вызывающий номер
+called number вызываемый номер
+
+------------------------------------------------------------------
+Совпадение всегда считается по длинейшему префиксу(номеру)
+The longest prefix matching criteria applies while each step is performed. At each step, if multiple matches are found, the one with the longest explicit match is chosen. This example helps clarify this concept:
+
+Assume the incoming called number (DNIS) is "81690". Dial peer 2 is matched.
+
+    dial-peer voice 1 pots
+     incoming called-number 8....
+     direct-inward-dial
+    !
+
+    dial-peer voice 2 pots
+     incoming called-number 816..
+     direct-inward-dial
+
+
+
+
+-------------------------------------------------------
+Inbound dial-peer matching is prioritized as follows
+Если звонок проиход из POTS он матчится по POTS dial-peer, если из voip, то по VOIP
+Входящие POTS пиры матчатся в первую очередь по порту или транковой группе, хотя в step 4 пишется по другому
+
+
+1.If the called number (that is, the DNIS)  
+        Входящий dial-peer матчится по incoming called-number в первую очередь
+        Дальше сопоставление не происходит
+        
+        
+2. If no dial peer has been found, the calling number (that is, the ANI) is checked. If the answer-address configuration of a dial peer is matched, this dial peer will be selected, and no further matching is performed. 
+        Если совпадения по incoming called-number нет, то ищётся сопадение по answer-address
+        
+3. If the calling number (the ANI) matches with the destination-pattern configuration of a dial peer, this dial peer will be selected, and no further matching is performed. 
+            Если вызывающий номер совпал с destination-pattern, то dial peer выбирается и дальше сопоставление не происходит
+
+4.      gwy(config-dial-peer)# port port 
+        If none of the previous attempts were successful and the call is inbound on a POTS port, a dial peer with a matching voice-port configuration is searched.
+        Если ничего не сопало и звонок пришёл через POTS порт,  выполняется поиск точки вызова с соответствующей конфигурацией голосового порта.
+        
+        
+        Step 4 is not applicable to voice or dial platforms such as AS5300, AS5350, AS5400, AS5800 and AS5850. If any one of the first three steps is not used, then match dial peer 0, and the call is treated as a dial modem call. This means that customers can get modem tones as opposed to dial tones for inbound calls.
+        
+5. If still no match is found, the default dial-peer 0 is used. 
+
+        Это не желательно
+        
+        
+        
+Если настроена команда для isdn  
+       "isdn overlap-receving", то происходит сопастовление на цифрам, избежать этого можно используя T 
+     Особое примечание для isdn overlap-receiving
+
+При настройке получения с совмещением isdn overlap-receving на интерфейсах ISDN существуют последствия для согласования входящих точек вызова. После получения на уровне ISDN каждой цифры точки вызова проверяются на предмет соответствий. Если обнаруживается полное соответствие, вызов маршрутизируется (в данном случае, к приложению) немедленно, без ожидания дополнительных цифр. Для прерывания этого поцифрового сопоставления и принуждения маршрутизатора/шлюза ждать до получения всей строки набора номера может быть использован T-образный наконечник. "T" относится к таймеру ожидания следующей цифры T302 уровня ISDN, настраиваемого в последовательном интерфейсе, связанном с интерфейсом ISDN. ISDN также предоставляет другие механизмы для указания окончания цифр, например настройку отправки полных IE (информационных элементов) в информационных сообщениях Q.931.   
+        
+        
+        
+--------------------------------------------------------------------------------------        
+Matching Outbound Dial Peers
+
+Исходящий dial-peer выбирается следующим образом 
+ 
+In order to match outbound dial peers, the router or gateway uses the dial peer destination-pattern called_number command.
+
+    On POTS dial peers, the port command is then used to forward the call.
+    On Voice-Network dial peers, the session target command is then used to forward the call.
+
+Also, when outbound peers are matched, there are two cases to consider: DID case and non-DID.
+
+
+Если на incoming dial-peer настроен DID ( одноэтапным набором). 
+dial-peer voice 1 pots
+  incoming called-number 81690
+  voice-port 0:D
+  direct-inward-dial
+
+То при поиске outbound dial-peer используеся вся строка. Поэтому, если DID dial-string is "81690
+ dial-peer voice 3 voip
+ destination-pattern 816
+ session target ipv4:172.22.10.1
+!
+dial-peer voice 4 voip
+ destination-pattern 81690
+ session target ipv4:172.22.10.1
+ 
+ Выберется 4 диалпир
+ -----
+  Non-DID Case
+        Если на incoming dial-peer не настрое DID шлюз переходит в режим сбора цифровых данных (они собираются внутри полосы)
+        Outbound dial peer matching is done on a digit-by-digit basis. После того, как устройство получит все цифры, маршрутизатор/шлюз проверяет совпадения точек вызова и перенаправляет вызов, когда достигается полное совпадение. 
+        
+        Assume the dial-string is "81690". Immediately after the router receives the digit "6", the router matches dial peer 3 and routes the call (forwarding only the digits "816").
+
+    dial-peer voice 3 voip
+     destination-pattern 816
+     session target ipv4:172.22.10.1
+    !
+    dial-peer voice 4 voip
+     destination-pattern 81690
+     session target ipv4:172.22.10.1
+
+Now, assume dial peer 3 is configured for wild-card matching:
+
+    dial-peer voice 3 voip
+     destination-pattern 816..
+     session target ipv4:172.22.10.1 
+    !
+    dial-peer voice 4 voip
+     destination-pattern 81690
+     session target ipv4:172.22.10.1
+
+In this case, the longest-prefix rule applies, and dial peer 4 is matched for the outbound call leg.
+[http://snakeproject.ru/rubric/article.php?art=cisco_dial_peer_undestand_2](http://snakeproject.ru/rubric/article.php?art=cisco_dial_peer_undestand_2)
+
+--------------
+Особое примечание для планов набора номеров переменной длины
+
+Бывают ситуации, когда в ожидаемых строках набора отсутствует определенное число цифр. В таких случаях Cisco рекомендует настроить T-образный наконечник в команде точки вызова destination-pattern, чтобы использовать планы набора номеров переменной длины.
+
+Т-образный наконечник вынуждает маршрутизатор/шлюз ждать до получения всей строки набора номера. Маршрутизатор/шлюз:
+
+    Ждет установленное время ожидания следующей цифры перед тем, как маршрутизировать вызов.
+
+    Маршрутизирует вызов после получения символа завершения "#" в строке набора номера. Например, если набран номер "5551212#", знак "#" для маршрутизатора означает, что набраны все цифры и что все цифры перед этим знаком должны соответствовать одноранговому узлу.
+
+Следующий пример поясняет эту концепцию:
+
+Предположим, что маршрутизатор в этом примере получает установку вызова со строкой набора из сети "95551212". Точка вызова 2 перенаправляет цифры "5551212" в PSTN.
+
+    dial-peer voice 2 pots
+     destination-pattern 9T
+     port 2/0:23
+
+Теперь предположим, что строка набора из входящего интерфейса POTS - "81690".
+
+    dial-peer voice 3 voip
+     destination-pattern 8T
+     session target ipv4:172.22.10.1
+    !
+    dial-peer voice 4 voip
+     destination-pattern 81690T
+     session target ipv4:172.22.10.1
+
+В данном случае действует правило префикса с максимальной длиной, поэтому адресуемая точка вызова 4 соответствует ветви исходящих вызовов.
+
+Примечание: 
+
+    время ожидания между цифрами по умолчанию равно 10 секундам. Чтобы изменить это значение, введите команду голосового порта timeouts interdigit seconds.
+
+    Каждый раз при использовании "T" перед ним должны указываться точка "." или цифры (например, ".T" или "555T"). При использовании только "T" точки вызова реагируют неправильно, что влияет на обработку вызовов маршрутизатором.
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------
+         
+Dial peer добжен быть в up и выполняться одно из 3 условий
+
+1.Destination-pattern is configured and a voice-port or session target is also configured.
+2. Incoming called-number is configured.
+3. Answer-address is configured.
+---------------------------------------------------------------------------------
+
+Т-образный наконечник вынуждает маршрутизатор/шлюз ждать до получения всей строки набора номера. Маршрутизатор/шлюз:
+
+
+
+The dial peer attribute destination-pattern has different behavior when applied to inbound or outbound call legs:
+    For inbound dial peers, the destination-pattern is matched against the calling number (ANI string).                     destination-pattern для inbound диал-пир - это номер звонящего        
+    For outbound dial peers, the destination-pattern is matched against called number (DNIS string).                        destination-pattern для outound диал-пир - это номер кому звоним 
+Therefore, a dial peer with the destination-pattern attribute can work for both outbound and inbound matching.
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+Debug звонков
+         
+         
+         
+         
+         
+         
+         -------------------
+         Хороший тон иметь по одному пиру на каждое направление, масштабы направлений могут быть разными. Возможностей для этого IOS предоставляет массу - трансляции можно повесить на trunk group, voice port, voice source group, dial-peer.
+И это, Ваши трансляции можно сделать правильнее
+[https://www.voipinfo.ru/forum/viewtopic.php?p=141905](https://www.voipinfo.ru/forum/viewtopic.php?p=141905)
+            ----------------------
+            
+            
+            
+         Voice Translation Rules
+         [https://www.cisco.com/c/en/us/support/docs/voice/call-routing-dial-plans/61083-voice-transla-rules.html](https://www.cisco.com/c/en/us/support/docs/voice/call-routing-dial-plans/61083-voice-transla-rules.html)
+         [http://cisco-notes.blogspot.com/2012/01/dial-peer-destination-pattern.html](http://cisco-notes.blogspot.com/2012/01/dial-peer-destination-pattern.html)
+         [http://www.ciscomaster.ru/content/%D0%BC%D0%B0%D0%BD%D0%B8%D0%BF%D1%83%D0%BB%D1%8F%D1%86%D0%B8%D1%8F-%D0%BD%D0%BE%D0%BC%D0%B5%D1%80%D0%B0%D0%BC%D0%B8-%D0%B2-cucme-wildcards-number-translating](http://www.ciscomaster.ru/content/%D0%BC%D0%B0%D0%BD%D0%B8%D0%BF%D1%83%D0%BB%D1%8F%D1%86%D0%B8%D1%8F-%D0%BD%D0%BE%D0%BC%D0%B5%D1%80%D0%B0%D0%BC%D0%B8-%D0%B2-cucme-wildcards-number-translating)
+         [http://www.voicecerts.com/2011/04/voice-translation-rules-examples.html](http://www.voicecerts.com/2011/04/voice-translation-rules-examples.html)
+         [http://snakeproject.ru/rubric/article.php?art=cisco_translation_rule](http://snakeproject.ru/rubric/article.php?art=cisco_translation_rule)
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         ------------------------------
+         
+Команды отладки VoIP для Cisco IOS
+
+sh call history voice brief
+История звонков
+
+sh call active voice brief
+Активные звонки
+
+debug callmonitor all
+Показывает всю информацию по звонкам и соединениям, выполняющимся в настоящий момент
+
+sh voip rtp connection
+Показывает текущие RTP соединения
+
+sh voice call status
+Показывает состояние текущих голосовых соединений (звонков, совершаемых в настоящий момент)
+
+debug voip application vxml error
+Показывает ошибки в скрипте VXML IVR
+
+debug voip dialpeer
+Показывает все входящие и исходящие dial-peer, задействованные во время звонка.
+
+debug voip ccapi inout
+Команда покажет какие dial-peer совпадают на IOS шлюзе и состояние шлюза во время обработки звонка. Также полезна для отслеживания, какой кодек используется при звонке.
+
+show voice register statistics
+Команда показывает общую статистику регистрации телефонов
+
+show ephone registered
+Отображаются все зарегистрированные телефоны
+
+debug voice translation
+Команда покажет совпадение правил трансляции, которые вызываются внутри dial-peer или voice-port во время обработки вызова.
+
+debug sccp events
+Команда покажет какие ресурсы зарегистрированы на CME и используются во время обработки звонков.
+
+debug ccsip messages
+Команда показывает все SIP сообщения между CME и телефонами или провайдерами.

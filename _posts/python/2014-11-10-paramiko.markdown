@@ -1,0 +1,67 @@
+---
+layout: post
+title:  "paramiko"
+date:   2014-11-10 07:15:11 +0300
+categories: python
+tags: python
+---
+
+# paramiko
+#!/usr/local/bin/python
+
+from paramiko import SSHClient
+
+from paramiko import AutoAddPolicy
+
+ssh = SSHClient()
+
+ssh.set_missing_host_key_policy(AutoAddPolicy())
+
+ssh.connect(“192.168.4.253″, port=22, username=”user1″, password=”1q2w3e”)
+
+cmd = “/ppp secret add name=python password=python service=any profile=default local=172.16.1.1 remote=172.16.1.2″
+
+ssh.exec_command(cmd)
+
+ssh.close()
+
+
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect(hostname=IP, username=USER, key_filename='/root/.ssh/id_dsa')
+
+rule = 'ip firewall address-list add list=blockit address=18.188.142.164'
+
+client.exec_command(rule)
+
+
+
+Используем exec_command
+
+
+filenames = ['file1.txt', 'file2.txt', ...]
+with open('path/to/output/file', 'w') as outfile:
+    for fname in filenames:
+        with open(fname) as infile:
+            outfile.write(infile.read())
+            
+            
+            file_ip_resolv.txt + fileip.txt
+            file_ip_subnet.txt
+            
+            
+            
+            
+for ip in list_add[0:10]:
+    client.exec_command('ip firewall address-list add list=blockit address={}'.format(Ip2network(ip)))
+    
+    
+    
+    
+    
+    
+    
+    
+    [http://snakeproject.ru/rubric/article.php?art=python_paramiko_example](http://snakeproject.ru/rubric/article.php?art=python_paramiko_example)
+    [https://natenka.gitbooks.io/pyneng/book/19_ssh_telnet/3_paramiko.html](https://natenka.gitbooks.io/pyneng/book/19_ssh_telnet/3_paramiko.html)
+    [http://snakeproject.ru/rubric/article.php?art=python_paramiko_example](http://snakeproject.ru/rubric/article.php?art=python_paramiko_example)

@@ -1,0 +1,145 @@
+---
+layout: post
+title:  "сайты для переноса"
+date:   2017-04-06 00:16:54 +0300
+categories: PSI
+tags: PSI
+---
+
+# сайты для переноса
+cyradm.sc.ru.conf
+dobrinsky-sahzavod.ru.conf
+dokuwiki.sc.ru.conf
+gortrans.sc.ru.conf
+infodom48.ru.conf
+intelecom.ru
+lsz.sc.ru.conf
+metallurg.sc.ru.conf
+promsvyaz.ru.conf
+sc.int.conf
+umit-agro.ru.conf
+umit-agro.sc.ru.conf
+unisprint.ru.conf
+usmfed.ru.conf
+usmgarant.ru.conf
+vtormet.sc.ru.conf
+yk.sc.ru.conf
+
+
+
+
+
+
+
+
+cp -R www/* /srv/www/usmgarant/www/
+
+
+
+
+
+
+
+
+[root@host public_html]# mysqladmin -u root -p create usmgarant
+Enter password: 
+
+[root@host public_html]# mysql -u root -p usmgarant < /home/garry/usmgarant.sql 
+
+
+
+mysql> GRANT ALL ON usmgarant.* TO usmgarant@localhost IDENTIFIED BY 'Dj3kV8FsV';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> flush privileges;
+
+
+
+[root@host public_html]# groupadd usmgarant
+[root@host public_html]# useradd -g usmgarant -s /bin/bash -p hfGn9rTfc -d /srv/www/usmgarant -m usmgarant
+useradd: внимание: домашний каталог уже существует.
+Никакие файлы из каталога skel копироваться не будут.
+
+
+
+
+
+Create the MySQL database:
+
+shell> mysqladmin --user=root create cacti
+
+Import the default cacti database:
+
+shell> mysql cacti < cacti.sql
+
+Optional: Create a MySQL username and password for Cacti.
+
+shell> mysql --user=root mysql
+mysql> GRANT ALL ON cacti.* TO cactiuser@localhost IDENTIFIED BY 'somepassword';
+mysql> flush privileges;
+
+
+
+usmgarant 
+
+hfGn9rTfc
+Dj3kV8FsV
+
+usmmag:x:505:505::/srv/www/usmmag:/bin/bash
+
+
+
+Match User usmgarant
+    ChrootDirectory /srv/www/usmgarant
+    AllowTCPForwarding no
+    X11Forwarding no
+    ForceCommand internal-sftp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Обзоры фирм, цен в Липецке
+Средний чек для балкона в г.Липецк
+Средний чек для натяжного потолка в г.Липецк
+Продвижение через яндекс картинки
+
+
+
+
+[http://blog.fabrikaokon.ru/](http://blog.fabrikaokon.ru/)
+[http://vipceiling.ru/moscow/](http://vipceiling.ru/moscow/)
+
+
+
+[http://www.ssa.ru/news](http://www.ssa.ru/news)
+[http://www.ssa.ru/news/news/rss.xml](http://www.ssa.ru/news/news/rss.xml)
+[http://www.oknamedia.ru/spage-publish/section-news.html](http://www.oknamedia.ru/spage-publish/section-news.html)
+[http://www.oknamedia.ru/rss/](http://www.oknamedia.ru/rss/)
+[http://www.oknamedia.ru/spage-services/section-list.html](http://www.oknamedia.ru/spage-services/section-list.html)
+[http://best-stroy.ru/news/](http://best-stroy.ru/news/)
+[http://srpj.ru/category/news](http://srpj.ru/category/news)
+
+
+[http://www.ssa.ru/articles](http://www.ssa.ru/articles)
+[http://www.rmnt.ru/story/](http://www.rmnt.ru/story/)
+[http://www.ssa.ru/articles/page/rss.xml](http://www.ssa.ru/articles/page/rss.xml)
+[http://best-stroy.ru/articles](http://best-stroy.ru/articles)
+[http://srpj.ru/category/sovet](http://srpj.ru/category/sovet)
+[http://www.stroyka.ru/Materials/](http://www.stroyka.ru/Materials/)
+[http://blog.vashdom.ru/](http://blog.vashdom.ru/)
+[http://www.vashdom.ru/articles/](http://www.vashdom.ru/articles/)
+[http://asninfo.ru/articles](http://asninfo.ru/articles)

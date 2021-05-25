@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "CDN"
+date:   2017-01-11 16:57:19 +0300
+categories: seo
+tags: seo
+---
+
+# CDN
+времени стало создание CDN для распространения фильмов и рекламы. На создание пиратского ресурса сейчас уходит 10 — 15 минут и порядка $240, средний заработок пиратов за 1000 просмотров составляет 3 $, среднемесячный доход с крупных пиратских сайтов может достигать $10 000,
+
+Если говорить о крупной сети дистрибуции фильмов и сериалов в России, то общее количество файлов в базе только одного пиратского CDN-сервиса превышает 300 тыс., что занимает более 5 ПБайт серверного пространства. При этом стоимость ежемесячного содержания подобной инфраструктуры составляет порядка 100 тыс. долларов»
+
+
+[https://habr.com/post/245165/](https://habr.com/post/245165/)
+
+[https://www.youtube.com/watch?v=K9wIp8OnfeE](https://www.youtube.com/watch?v=K9wIp8OnfeE)
+[https://toster.ru/q/21153](https://toster.ru/q/21153)
+[http://www.highload.ru/2014/abstracts/1615.html](http://www.highload.ru/2014/abstracts/1615.html)
+[https://habr.com/company/sports_ru/blog/198598/](https://habr.com/company/sports_ru/blog/198598/)
+[https://habr.com/company/webzilla/blog/236511/](https://habr.com/company/webzilla/blog/236511/)
+[https://habr.com/company/kolesa/blog/328844/](https://habr.com/company/kolesa/blog/328844/)
+[https://www.linux.org.ru/forum/admin/9415276](https://www.linux.org.ru/forum/admin/9415276)

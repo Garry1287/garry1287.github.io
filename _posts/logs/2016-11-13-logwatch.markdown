@@ -1,0 +1,60 @@
+---
+layout: post
+title:  "logwatch"
+date:   2016-11-13 16:42:15 +0300
+categories: logs
+tags: logs
+---
+
+# logwatch
+[http://unixway.info/linux/%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B8%D1%80%D1%83%D0%B5%D0%BC-%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80-%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2-linux/](http://unixway.info/linux/%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D0%B7%D0%B8%D1%80%D1%83%D0%B5%D0%BC-%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80-%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2-linux/)
+[http://wiki.rsyslog.com/index.php/Log_Router_syslog_with_Dynamic_File_Names](http://wiki.rsyslog.com/index.php/Log_Router_syslog_with_Dynamic_File_Names)
+[http://wiki.rsyslog.com/index.php/Working_Apache_and_Rsyslog_configuration](http://wiki.rsyslog.com/index.php/Working_Apache_and_Rsyslog_configuration)
+[http://www.rsyslog.com/doc/rsyslog_conf_examples.html](http://www.rsyslog.com/doc/rsyslog_conf_examples.html)
+[http://www.ducea.com/2006/06/06/rotating-linux-log-files-part-2-logrotate/](http://www.ducea.com/2006/06/06/rotating-linux-log-files-part-2-logrotate/)
+[http://wiki.dieg.info/doku.php/logrotate](http://wiki.dieg.info/doku.php/logrotate)
+[http://www.linuxnow.ru/view.php?id=50](http://www.linuxnow.ru/view.php?id=50)
+[http://www.ashep.org/2012/monitoring-sistemy-pri-pomoshhi-logwatch/#.UuiTJVZfp5z](http://www.ashep.org/2012/monitoring-sistemy-pri-pomoshhi-logwatch/#.UuiTJVZfp5z)
+[http://pm4u.narod.ru/logwatch.htm](http://pm4u.narod.ru/logwatch.htm)
+[http://www.sysadminwiki.ru/wiki/Logwatch](http://www.sysadminwiki.ru/wiki/Logwatch)
+[http://hotfreebsd.ru/kontora-pishet-logwatch-newsyslog-i-drugie/](http://hotfreebsd.ru/kontora-pishet-logwatch-newsyslog-i-drugie/)
+[http://wiki.enchtex.info/tools/system/logwatch](http://wiki.enchtex.info/tools/system/logwatch)
+[http://www.gentoo.ru/node/17841](http://www.gentoo.ru/node/17841)
+[http://unixforum.org/index.php?showtopic=92552](http://unixforum.org/index.php?showtopic=92552)
+[http://unix-notes.ru/2011/02/18/nastrojjka-logwatch/](http://unix-notes.ru/2011/02/18/nastrojjka-logwatch/)
+[http://www.hilik.org.ua/logrotate-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0/](http://www.hilik.org.ua/logrotate-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0/)
+[http://www.linuxnow.ru/view.php?id=50](http://www.linuxnow.ru/view.php?id=50)
+[http://updatepc.ru/ustanovka-analizatora-logwatch.html](http://updatepc.ru/ustanovka-analizatora-logwatch.html)
+[http://unixa.ru/linux/logwatch-monitoring-zhurnalov-servera-linux-s-otchetom-o-sostoyanii-na-e-mail.html](http://unixa.ru/linux/logwatch-monitoring-zhurnalov-servera-linux-s-otchetom-o-sostoyanii-na-e-mail.html)
+
+logwatch
+1. Устанавливаем
+2. Копируем дефолтный конфиг, который будем править
+Как я понимаю, сначала программа смотрить в /etc/logwatch, а потом по default
+
+cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/
+cp: переписать «/etc/logwatch/conf/logwatch.conf»? y
+
+
+3.Правим файл для httpd
+Копируем default в /etc
+
+cp /usr/share/logwatch/default.conf/logfiles/http.conf /etc/logwatch/conf/logfiles/
+
+4. Добавили записей
+LogFile = /srv/www/*/logs/*access.log
+LogFile = /srv/www/*/logs/*error.log
+Archive = /srv/www/*/logs/*access_log-*.gz
+Archive = /srv/www/*/logs/*error-*.gz
+
+5. Тест 
+logwatch
+(Параметр Print = Yes для вывода на экран)
+
+[http://www.sysadminwiki.ru/wiki/Logwatch](http://www.sysadminwiki.ru/wiki/Logwatch)
+
+6. , а многие дистрибутивы автоматически добавляют запуск logwatch в ежедневное расписание планировщика. 
+Вроде CentOS тоже
+[root@host logfiles]# cd /etc/cron.daily
+[root@host cron.daily]# ls
+0logwatch  logrotate  makewhatis.cron

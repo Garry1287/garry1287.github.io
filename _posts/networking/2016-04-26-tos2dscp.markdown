@@ -1,0 +1,131 @@
+---
+layout: post
+title:  "tos2dscp"
+date:   2016-04-26 03:33:13 +0300
+categories: Networking
+tags: Networking
+---
+
+# tos2dscp
+class-map match-any SAP4BIS
+ match access-group name S4NLMK
+
+
+
+policy-map QOS-S4B
+ class SAP4BIS
+  set precedence 3
+
+
+
+interface GigabitEthernet0/0
+ description # IP MPLS Uplink via LES
+ bandwidth 10240
+ ip address 10.192.10.210 255.255.255.252
+ duplex auto
+ speed auto
+ no snmp trap link-status
+ service-policy output PLATINUM-ETH-10MB
+
+
+interface GigabitEthernet0/1
+ description Link to Dolomit ASA
+ ip address 10.210.254.1 255.255.255.252
+ duplex auto
+ speed auto
+ service-policy input QOS-S4B
+
+
+ip access-list extended S4NLMK
+ permit ip any host 172.19.7.144
+ permit ip any host 172.19.7.145
+ permit ip any host 172.19.7.146
+ permit ip any host 172.19.7.154
+ permit ip any host 172.19.7.148
+ permit ip any host 172.19.7.149
+ permit ip any host 10.98.30.121
+ permit ip any host 10.98.30.119
+ permit ip any host 10.178.7.106
+ permit ip any host 10.178.7.107
+ permit ip any host 10.29.30.27
+ permit ip any host 10.29.30.28
+ permit icmp any host 172.19.7.144
+ permit icmp any host 172.19.7.145
+ permit icmp any host 172.19.7.146
+ permit icmp any host 172.19.7.154
+ permit icmp any host 172.19.7.148
+ permit icmp any host 172.19.7.149
+ permit icmp any host 10.98.30.121
+ permit icmp any host 10.98.30.119
+ permit icmp any host 10.178.7.106
+ permit icmp any host 10.178.7.107
+ permit icmp any host 10.29.30.27
+ permit icmp any host 10.29.30.28
+
+1. Создаем для входящего трафика
+
+class-map match-any EXTERNAL-CATCH
+ match ip precedence 5
+
+policy-map INGRESS-FROM-OUTSIDE
+ class EXTERNAL-CATCH
+  set ip dscp af41
+
+
+2.Создаем для исходящего трафика
+class-map match-any SAP4BIS
+ match access-group name S4NLMK
+
+class-map match-any INTERNAL-CATCH
+ match ip dscp af41
+
+
+policy-map INGRESS-FROM-INSIDE
+ class INTERNAL-CATCH
+  set ip precedence 5
+ class SAP4BIS
+  set precedence 3
+
+3. Применение на интерфейсах 
+                Outside
+
+interface GigabitEthernet0/0
+ service-policy output PLATINUM-ETH-10MB
+ service-policy input INGRESS-FROM-OUTSIDE
+
+
+interface Gi0/1
+no service-policy input QOS-S4B
+service-policy input INGRESS-FROM-INSIDE
+
+
+
+
+1. Определить на каких устройствах будем вводить изменения
+            список ce сделать
+            список балансеров сделать (для балансеров тоже самое, только без удаления SAP4BIS и все этой херни)
+            
+    CE    vtorchermet ce
+    CE    Березовский, Ревда, Серьги, УЦ НЛМК, УЦ Ебург, Стагдок, Котельнеческая, Доломит, Сыктывкар, Новокузнецк, Металлург, Гипромез, LGEK, NTK, LGTU
+CE-lb    Калуга  нах не надо
+СE+lb  СГОК,  Алтай кокс, виз сталь, Ебург
+
+Отдельно Лесной дом, Гипромез, Металлург
+Узнать про Котел - LAN port, НТК
+
+
+qos-vpn-ce
+qos-vpn-lb
+
+10.50.254.8         10.50.253.9
+10.210.254.2
+10.74.254.7
+10.90.19.7
+10.98.98.7
+10.26.254.2
+10.170.253.1
+10.202.255.254
+
+
+ansible-playbook qos_ce-lb.yml
+ansible-playbook qos_video_all.yml

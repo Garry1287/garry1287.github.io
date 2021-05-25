@@ -1,0 +1,836 @@
+---
+layout: post
+title:  "bfd-rosch"
+date:   2009-06-22 06:46:53 +0400
+categories: routing
+tags: routing
+---
+
+# bfd-rosch
+Разговор с Рощупкиным
+1. Тест ASA и 2 CE   ecmp
+2 Тест  CE c двумя каналами к разными PE(PE1, PE2), c другой стороны другая CE с двумя каналами к разным PE (PE3,PE4)
+3. BFD
+4. ospf сходимость и как это происходить при перераспределении bgp2ospf ospf2bgp
+5. Сходимость iBGP(vpvn4 для mpls) и его зависимость от OSPF (аннонсирования loopback)
+
+
+A. Настрокий ebgp сессий
+1.BFD там где L2 канал (тест сгок), просить настроить bfd клиентов
+2.Уменьшить таймеры
+3. BGP route dampening для флапающих интерфейсов
+
+B. Настройка ibgp сессии
+1. Уменьшить OSPF сеть до минимума и сходимость до минимума
+2. После этого сделать bgp nexthop trigger delay 10 чуть больше, чем сходимость OSPF (BHT - технология)
+3. neighbor x.x.x.x advertisement-interval {0-600} (30 секунд eBGP, 5 секунд iBGP по умолчанию) Следует уменьшить, посмотреть как у других, маршрутов у нас мало, нагрузка не большая.
+        поэтому  можно уменьшать (у vpnv4 равено нулю и так)
+4.
+
+
+
+--------------------------------------------НАСТРОЙКИ---------------------------------------------------------------------------
+Настройка ibgp (сделали по 2 маршрута)
+
+router bgp 20866
+ bgp log-neighbor-changes
+ bgp bestpath as-path multipath-relax
+
+  address-family ipv4 vrf nlmk-vpn
+  maximum-paths eibgp 2
+
+     Должны быть одинаковыми атрибутами weight, local preference, AS path (весь атрибут, а не только длина), origin code, MED, метрика IGP.
+    next hop маршрутизатор для каждого маршрута должен быть разным 
+[http://xgu.ru/wiki/%D0%91%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0_%D0%B2_BGP](http://xgu.ru/wiki/%D0%91%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0_%D0%B2_BGP)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Таймеры
+[http://networkgeekstuff.com/networking/cisco-bgp-timers-re-explained/](http://networkgeekstuff.com/networking/cisco-bgp-timers-re-explained/)
+[http://network-lab.ru/taymeryi-protokola-bgp-shodimost-protokola/](http://network-lab.ru/taymeryi-protokola-bgp-shodimost-protokola/)
+[http://network-lab.ru/byistraya-shodimost-ospf-taymeryi-protokola-ospf/](http://network-lab.ru/byistraya-shodimost-ospf-taymeryi-protokola-ospf/)
+[http://sysadmins.ru/topic115732.html](http://sysadmins.ru/topic115732.html)
+
+[http://admindoc.ru/1381/bgp-fast-convergence/](http://admindoc.ru/1381/bgp-fast-convergence/)
+
+
+[https://tools.ietf.org/html/rfc5880](https://tools.ietf.org/html/rfc5880)
+
+[https://habrahabr.ru/post/156695/](https://habrahabr.ru/post/156695/)
+[http://netwild.ru/juniper-bfd/](http://netwild.ru/juniper-bfd/)
+[http://ciao-cacao.blogspot.ru/2011/12/bgp-bfd.html](http://ciao-cacao.blogspot.ru/2011/12/bgp-bfd.html)
+
+[http://www.cisco.com/c/dam/global/ru_ua/assets/expo2006/download/abessara_ps_mpls_part_1.pdf](http://www.cisco.com/c/dam/global/ru_ua/assets/expo2006/download/abessara_ps_mpls_part_1.pdf)
+
+
+
+BGP PIC (на наших девайсах не поддерживается)
+[https://supportforums.cisco.com/sites/default/files/legacy/6/1/5/15360516-nomelyan-may-21-bgp-pic-preso.pdf](https://supportforums.cisco.com/sites/default/files/legacy/6/1/5/15360516-nomelyan-may-21-bgp-pic-preso.pdf)
+[http://monsterdark.com/wp-content/uploads/Deploying-BGP-Fast-Convergence-BGP-PIC.pdf](http://monsterdark.com/wp-content/uploads/Deploying-BGP-Fast-Convergence-BGP-PIC.pdf)
+
+[http://cfn.cloudapps.cisco.com/ITDIT/CFN/jsp/by-feature-technology.jsp](http://cfn.cloudapps.cisco.com/ITDIT/CFN/jsp/by-feature-technology.jsp)
+[http://www.cisco.com/c/en/us/td/docs/switches/metro/me3600x_3800x/software/release/15-4_2_S/configuration/guide/3800x3600xscg/swiprout.html](http://www.cisco.com/c/en/us/td/docs/switches/metro/me3600x_3800x/software/release/15-4_2_S/configuration/guide/3800x3600xscg/swiprout.html)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/asr903/irg-xe-3s-asr903-book/irg-bgp-mp-pic.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/asr903/irg-xe-3s-asr903-book/irg-bgp-mp-pic.html)
+[http://www.cisco.com/c/en/us/td/docs/routers/10000/10008/configuration/guides/broadband/bba/dffsrv.html](http://www.cisco.com/c/en/us/td/docs/routers/10000/10008/configuration/guides/broadband/bba/dffsrv.html)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/15-sy/irg-15-sy-book/irg-bgp-mp-pic.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/15-sy/irg-15-sy-book/irg-bgp-mp-pic.html)
+
+
+Таймеры
+ Соответственно, не получится поднять BFD сессию для multihop eBGD или iBGP с использованием Loopback'ов.
+ Однако с версии 15.1(3)S появилась фича multihop BFD, позволяющая обойти это ограничение:
+
+
+-----------------------------------------------------------------------------ip bgp fast-external-fallover--------------------------------------------------
+Работает на директли коннектед  линках
+
+Следующая фича ip bgp fast-external-fallover
+
+AS65001(config-if)#ip bgp fast-external-fallover ?
+deny dis-allow fast fallover
+permit allow fast fallover
+
+AS65001(config-if)#ip bgp fast-external-fallover
+
+Включается на интерфейсах, которые подключены к EBGP линкам.
+
+По умолчанию значение permit. Эта опция позволяет сразу после того как пропал EBGP пир, сбросилась EBGP сессия.
+
+И последнее: neighbor 1.1.1.1 fall-over , если пир становится недоступен, то незамедлительно разрываются отношения BGP, не дожидаясь holdtime.
+
+
+Например, на соседа можно прописать, если становится недоступна определенная сетка, то мы разрываем тут же соседские отношения, делается просто через route-map:
+    neighbor 1.1.1.1 fall-over  route-map ABC
+    route-map ABC permit 10
+    match ip address prefix-list loopback
+    
+    
+    IP Event Dampening in Cisco IOS 
+
+bgp fast-external-fallover
+
+
+    Tuning BGP TCP Transport and router ingress queues to achieve faster routing information propagation.
+    Proper organization of outbound policies for achieving optimum update group construction.
+    Tuning BGP Advertisement Interval if needed to respond to fast “Down->Up” conditions
+    Activating BGP fast external fallover and possible BFD for fast external peering session deactivation.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------    
+    
+Считаю не так важно
+[http://network-lab.ru/byistraya-shodimost-ospf-taymeryi-protokola-ospf/](http://network-lab.ru/byistraya-shodimost-ospf-taymeryi-protokola-ospf/)
+
+
+
+
+
+
+ Должен совпадать со сходимость IGP, немного выше
+
+
+bgp scan-time import {5-60}  - этот таймер должен быть как можно меньше. Но он очень ресурсоёмкий, если таблица большая, то могут возникнуть проблемы
+Используется для сканирования RIB(или IGP)  таблицы и если обнаруживает отсутствие маршрута в ней, так как IGP отрабатывает быстрее, при падении сессии, то удаляет из BGP  таблицы маршрут
+ The default BGP Scanner run-time is 60 seconds, and could be changed using the command bgp scan-time. 
+
+ Background BGP scanner
+Данный параметр ответственен за сканирование таблиц BGP RIB и IP RIB маршрутизатора, а также за сортировку и удаление записей из них.
+Как известно, BGP использует только маршруты с доступным next-hop и в случае его исчезновения удаляет из таблиц. Этим и занимается backgroundscanner, он пробегает все маршруты 1 раз в 60 секунд для IPv4 и 15 секунд для VPNv4 по умолчанию. Если в нашей внутренней сети у BGP маршрутизатора нестабильно работает IGP, то в этих интервалах возможны образования петель маршрутизации.
+
+Изменить данный таймер можно следующей командой:
+
+    Router(config-router)#bgp scan-time <5-60>
+
+Стоить заметить, что командой, написанной выше, мы изменим таймер только для IPv4, настройки для VPNv4 настраиваются отдельно для каждой address-family.
+ 
+ 
+ 
+ bgp scan-time import {5-60} используется внутри vrf для сканирования, как быстро маршруты из vpnv4 family дожны попадать в ip route и распространяться дальше
+ In the following address family configuration example, the scanning interval for importing address family VPNv4 routes into IP routing tables is set to 30 seconds: 
+ 
+router bgp 150
+ address-family vpnv4 unicast
+  bgp scan-time import 30
+
+ ( От PE в СE)[http://www.cisco.com/networkers/nw04/presos/docs/RST-2606.pdf](http://www.cisco.com/networkers/nw04/presos/docs/RST-2606.pdf), как я понял
+
+ 
+ 
+Но лучше использовать фичу 
+BGP NHT
+  bgp nexthop trigger delay 10
+
+Она срабатывает так, IGP сам уведомляет BGP об исчезновении маршрута. Уведомление приходит через 10 секунд (по умолчанию 5) в нашем случае. Это время можно уменьшить, приближая к времени сходимости IGP
+
+
+
+Желательно не суммировать сети (Необходимо, чтобы они распростронялись по IGP и BGP одинаково) 
+может помочь multi-hop BFD, но он нашем оборудование не поддерживается
+
+
+----------------------------------------------------------------------------------------
+Table 12-4. Import Process Timer for VPN-IPv4 Routes
+
+1
+router bgp autonomous-system
+Enable a BGP routing process, which places you in router configuration mode
+2
+address-family vpnv4 unicast
+Enter address family configuration for VPNv4 unicast routes
+
+	
+
+Set the import timer for VPN-IPv4 unicast routes only
+In addition to the scanning and importing of routes, each PE-router needs to advertise the best routes within each VRF to all its VRF neighbors. This process will occur both on ingress into the MPLS/VPN backbone, when routes are received from CE-routers, and on egress, when routes are advertised toward CE-routers. The advertisement of these routes is different depending on whether the neighbors are eBGP neighbors (VPN clients) or iBGP neighbors (other PE-routers). By default, BGP updates are sent to eBGP neighbors every 30 seconds and to iBGP neighbors every five seconds if any update/change is available for transmission. This behavior also has an effect on convergence and can be tuned. The actual update times are controlled by the command in Example 12-2, which is the number of seconds that the router will wait between BGP update transmissions.
+Example 12-2 Tuning the Advertisement Interval of BGP Routes
+
+neighbor x.x.x.x advertisement-interval {0-600}
+
+Для нас это не надо, так как для vrf время стоит равное 0
+
+
+Время распространения маршрута
+Number_of_Hops x Advertisement_Interval
+
+[http://etutorials.org/Networking/MPLS+VPN+Architectures/Part+2+MPLS-based+Virtual+Private+Networks/Chapter+12.+Advanced+MPLS+VPN+Topics/Routing+Convergence+Within+an+MPLS-enabled+VPN+Network/](http://etutorials.org/Networking/MPLS+VPN+Architectures/Part+2+MPLS-based+Virtual+Private+Networks/Chapter+12.+Advanced+MPLS+VPN+Topics/Routing+Convergence+Within+an+MPLS-enabled+VPN+Network/)
+----------------------------------------------------------------------------------------------------------
+
+multi-hop BFD - не поддерживается
+----------------------------------------------------------------------------------------------------------
+3. Initial delay
+
+Этот параметр определяет время между установлением BGP сессии между спикерами и началом обмена префиксами. Использование init delay таймера улучшает сходимость, так как удаленный маршрутизатор использует это время с пользой. А именно определяет свои лучшие маршруты, дабы потом быстро принять верное решение. По-умолчанию равно 120 секундам,
+но если мы уверены в том, что лучшие маршруты уже в RIB, да и вообще их немного, то можем обменяться ими раньше и наоборот.
+
+Router(config-router)#bgp update-delay <1-3600>
+
+
+
+
+
+
+
+
+
+
+
+
+Улучшить таймеры OSPF до идеальных
+
+
+next-hop-self плохо, так как если падает ebgp, то внутренние ibgp узлы не знают,  что сессия упала и продолжают слать траффик.
+Это будет продолжаться пока не получить withdraw messages
+
+Если не использовать next-hop-self, то быстрая сходимость зависит только от IGP и по механизму BHT измение в BGP вносятся быстрее
+
+
+ Другой способ
+ BGP PIC Edge
+ 
+ Что за фича best-external
+ [http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-best-external.pdf](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-best-external.pdf)
+ На взгяд пойдёт для Стагдок
+ 
+ 
+ The final feature I want to mention is BGP PIC Core which protects against core links/nodes failing. If a core link or node fails, the IGP will converge and the BGP next-hop will stay the same. This means that the path has changed but the next-hop is the same so BGP does not need to converge, only the IGP.
+[http://lostintransit.se/2016/02/25/ccde-bgp-convergence/](http://lostintransit.se/2016/02/25/ccde-bgp-convergence/)
+
+
+
+-----------------------------------------------------------------------------------------------------------
+Chapter: MPLS VPN BGP Local Convergence  (ce подключенная 2 линками)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-3s/mp-l3-vpns-xe-3s-book/mp-vpn-bgp-lc.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-3s/mp-l3-vpns-xe-3s-book/mp-vpn-bgp-lc.html)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-3s/mp-l3-vpns-xe-3s-book/mp-vpn-bgp-lc.pdf](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-3s/mp-l3-vpns-xe-3s-book/mp-vpn-bgp-lc.pdf)
+
+---------------------------------------------------------------------------------------------------------
+Рассмотреть RR
+Уменьшить до минимума OSPF backbone
+1. Вынести все сервера отдельно
+2. Все удаленные узлы как Виктория сделать в отдельной системе
+3. eBGP можно также оставить во вне backbone
+
+
+Next-HopTracking на PE
+Разные RD для двух каналов
+BGP Prefix-Independent Convergence ([http://blog.globalknowledge.com/2014/09/30/how-to-use-bgp-prefix-independent-convergence/)](http://blog.globalknowledge.com/2014/09/30/how-to-use-bgp-prefix-independent-convergence/))
+
+
+
+(NHT)"
+[1]
+or similar
+features
+should
+be enabled
+on
+PE
+routers.
+
+
+
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-nexthop-track.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-nexthop-track.html)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-best-external.html](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-best-external.html)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/15-mt/irg-15-mt-book/irg-nexthop-track.pdf](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/15-mt/irg-15-mt-book/irg-nexthop-track.pdf)
+[http://admindoc.ru/1381/bgp-fast-convergence/](http://admindoc.ru/1381/bgp-fast-convergence/)
+
+interface GigabitEthernet0/0
+ description IZevsk downlink
+  ip bgp fast-external-fallover permit
+
+
+OSPF convergence
+[http://www.data.proidea.org.pl/euronog/1edycja/materialy/prezentacje/Pierre_Francois_IP_Fast_Reroute_Applicability.pdf](http://www.data.proidea.org.pl/euronog/1edycja/materialy/prezentacje/Pierre_Francois_IP_Fast_Reroute_Applicability.pdf)
+
+Design OSPF
+[http://blog.ipspace.net/2016/11/optimal-inter-as-routing-challenge.html](http://blog.ipspace.net/2016/11/optimal-inter-as-routing-challenge.html)
+[http://www.cisco.com/c/ru_ru/support/docs/multiprotocol-label-switching-mpls/mpls/118846-config-mpls-00.html](http://www.cisco.com/c/ru_ru/support/docs/multiprotocol-label-switching-mpls/mpls/118846-config-mpls-00.html)
+
+
+[http://xgu.ru/wiki/%D0%91%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0_%D0%B2_BGP](http://xgu.ru/wiki/%D0%91%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D1%82%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B0_%D0%B2_BGP)
+ipv4
+
+  maximum-paths 2
+  maximum-paths ibgp 2
+
+
+  maximum-paths eibgp 2
+  no synchronization
+
+
+
+[http://muff.kiev.ua/files/books/RFC_4271_Protocol_BGP_4.pdf](http://muff.kiev.ua/files/books/RFC_4271_Protocol_BGP_4.pdf)
+[http://lg.rtcomm.ru/](http://lg.rtcomm.ru/)
+[http://lg.gldn.net/](http://lg.gldn.net/)
+[http://lg.globus-telecom.ru/](http://lg.globus-telecom.ru/)
+[http://lg.ttk.ru/](http://lg.ttk.ru/)
+[http://subnets.ru/wrapper.php?p=1](http://subnets.ru/wrapper.php?p=1)
+[http://lg.retn.net/](http://lg.retn.net/)
+[http://lg.megafon.ru](http://lg.megafon.ru)
+
+
+
+
+-------------------------------------------------------------
+
+
+
+Когда падает линк, имеем 2 проблемы
+1) На MPLS сети маршрут остаётся до истечения bgp таймеров (решение - уменьшить таймеры, bfd, neighbor x.x.x.x advertisement-interval {0-600} уменьшить до нуля может быть)
+2) Внутри балансер схемы, необходимо перестать аннонсировать внешние маршруты внуть сети филиала(сайта)
+                Уменьшить OSPF сеть до минимума и сходимость до минимума
+                 После этого сделать bgp nexthop trigger delay 10 чуть больше, чем сходимость OSPF (BHT - технология)
+               bgp scan-time import {5-60}  - этот таймер должен быть как можно меньше. Но он очень ресурсоёмкий, если таблица большая, то могут возникнуть проблемы
+                     Этим и занимается backgroundscanner, он пробегает все маршруты 1 раз в 60 секунд для IPv4 и 15 секунд для VPNv4 по умолчанию. Если в нашей внутренней сети у BGP маршрутизатора нестабильно работает IGP, то в этих интервалах возможны образования петель маршрутизации.
+
+                Изменить данный таймер можно следующей командой:
+
+                        Router(config-router)#bgp scan-time <5-60>
+
+
+Попробовать ip sla на нейбора, вместо bfd
+Если нейбор не доступен, прекращать аннонсировать сеть, прекращать внешние сети аннонсировать 
+гасить сессию?
+
+
+ConnectRetry timer 120 c
+
+
+----------------------------------------------------------------------Решение проблемы------------------------------------------------------------------------------
+1) BGP Next-Hop-Tracking and BGP selective NHT if you have a default/summary route in your IGP.
+2)If your IGP converge in less than one second, you can decrease the BGP NHT delay from 5s (default) to 1s.
+
+
+
+Три проблемы и их решения
+1- A core link failed: Tune your IGP for fast failure detection and fast-convergence. MPLS-TE FRR is also a solution. BGP is not involved.
+
+Use LDP-IGP sync feature to avoid blackholing MPLS-VPN traffic during Down-UP event.
+
+
+2- PE failure: We don't use the global scanner (every 60s) anymore for BGP peer failure detection. We have a new mechanism which is event driven called BGP Next-Hop Tracking.
+
+[http://www.cisco.com/en/US/docs/ios/12_3t/12_3t14/feature/guide/gt_bnht.html](http://www.cisco.com/en/US/docs/ios/12_3t/12_3t14/feature/guide/gt_bnht.html)
+
+
+So now your detection time is based on the time for your IGP to converge + BGP NHT initial delay (5s by default)
+
+
+3- PE-CE link failure or CE failure for a dual attached site.
+
+Convergence is based on fast link failure detection and on BGP convergence in the backbone. To improve the BGP part:
+
+- Use one RD per vrf and per PE so the remote PEs will receive and install in their local vrf BGP RIB both routes (you bypass this way the import scanner)
+
+
+
+
+
+
+
+
+The problem is that the PE router will wait until the holdtime expiration to invalidate the routes received from the CE. 
+A solution for this case and type of access would be to change the timers to 15 45 or 10 30 or even better, configure BFD, which could detect the failure in the access in milliseconds.
+
+eBGP and iBGP in VRF: 0 seconds
+
+
+
+--------------------------------------------------------------------
+
+
+
+Настройка bgp
+[https://habrahabr.ru/post/184350/](https://habrahabr.ru/post/184350/)
+[http://admindoc.ru/1368/bgp-community-link-bandwidth/](http://admindoc.ru/1368/bgp-community-link-bandwidth/)
+[https://cciethebeginning.wordpress.com/2009/01/19/bgp-link-bw-multipath-load-balancing/](https://cciethebeginning.wordpress.com/2009/01/19/bgp-link-bw-multipath-load-balancing/)
+
+MPLS
+[https://mxssl.wordpress.com/category/mpls/](https://mxssl.wordpress.com/category/mpls/)
+
+
+Разпределение нагрузки в BGP
+[http://www.justogroup.ru/dokumentacija/cisco/marshrutiziruemye_seti/raspredelenie_nagruzki_v_bgp.pdf](http://www.justogroup.ru/dokumentacija/cisco/marshrutiziruemye_seti/raspredelenie_nagruzki_v_bgp.pdf)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ECMP + bgp
+[https://www.noction.com/blog/equal-cost-multipath-ecmp](https://www.noction.com/blog/equal-cost-multipath-ecmp)
+[http://www.cisco.com/c/en/us/support/docs/security/adaptive-security-appliance-asa-software/115986-asa-eqm-products-configuration-example.html](http://www.cisco.com/c/en/us/support/docs/security/adaptive-security-appliance-asa-software/115986-asa-eqm-products-configuration-example.html)
+[http://etutorials.org/Networking/Integrated+cisco+and+unix+network+architectures/Chapter+8.+Static+Routing+Concepts/Equal-Cost+Multi-Path+ECMP+Routing/](http://etutorials.org/Networking/Integrated+cisco+and+unix+network+architectures/Chapter+8.+Static+Routing+Concepts/Equal-Cost+Multi-Path+ECMP+Routing/)
+[https://stackoverflow.com/questions/12265485/on-cisco-routers-is-it-possible-to-have-equal-cost-multipath-static-routes](https://stackoverflow.com/questions/12265485/on-cisco-routers-is-it-possible-to-have-equal-cost-multipath-static-routes)
+[http://lib.tkk.fi/Dipl/2011/urn100416.pdf](http://lib.tkk.fi/Dipl/2011/urn100416.pdf)
+[http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-3s/asr903/mp-l3-vpns-xe-3s-asr903-book/mp-l3-vpns-xe-3s-asr903-book_chapter_0100.pdf](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/mp_l3_vpns/configuration/xe-3s/asr903/mp-l3-vpns-xe-3s-asr903-book/mp-l3-vpns-xe-3s-asr903-book_chapter_0100.pdf)
+[https://supportforums.cisco.com/discussion/10090101/ospf-equal-cost-path-selection](https://supportforums.cisco.com/discussion/10090101/ospf-equal-cost-path-selection)
+[https://supportforums.cisco.com/discussion/12985176/equal-cost-load-balancing-ospf-or-equal-cost-load-sharing-ospf-or-equal-cost](https://supportforums.cisco.com/discussion/12985176/equal-cost-load-balancing-ospf-or-equal-cost-load-sharing-ospf-or-equal-cost)
+[https://supportforums.cisco.com/discussion/12482666/ecmp-equal-cost-multi-path](https://supportforums.cisco.com/discussion/12482666/ecmp-equal-cost-multi-path)
+
+Интересно, начать с этого
+[http://mincebert.blogspot.ru/2015/06/ecmp-with-ospf-bgp-and-mpls.html](http://mincebert.blogspot.ru/2015/06/ecmp-with-ospf-bgp-and-mpls.html)
+
+
+
+[http://www.anticisco.ru/forum/viewtopic.php?p=53598](http://www.anticisco.ru/forum/viewtopic.php?p=53598)
+[http://www.cisco.com/c/en/us/td/docs/ios/12_4/ip_sla/configuration/guide/hsla_c/hsicmp.html](http://www.cisco.com/c/en/us/td/docs/ios/12_4/ip_sla/configuration/guide/hsla_c/hsicmp.html)
+[http://linkmeup.ru/blog/65.html](http://linkmeup.ru/blog/65.html)
+
+!
+track 2 ip sla 2 reachability
+ delay down 2 up 2
+!
+router bgp ASxxx
+ neighbor x.x.x.x fall-over route-map PEER_REACH_2_MAP
+!
+ip route x.x.x.x 255.255.255.255 x.x.x.y track 2
+ip prefix-list PEER_REACH_2 seq 5 permit x.x.x.x/32
+!
+ip sla 2 
+ icmp-echo x.x.x.x source-ip x.x.x.z
+ threshold 10
+ timeout 2000
+ frequency 5
+!
+route-map PEER_REACH_2_MAP permit 10
+ match ip address prefix-list PEER_REACH_2
+ 
+ 
+ The default value for the hold time suggested in the BGP specification (RFC 4271) is 90 seconds, and keepalives should be sent at intervals of one third the hold time (30 seconds). However, Cisco uses defaults of 180 and 60 seconds.
+ 
+ 
+ советую Multiplier = HOLD DOWN timer 300x3 = 900 msec / у вас 35, что значит 10сек
+ 
+ 
+ 
+ 1)BFD
+ 2)Уменьшить таймеры
+ router bgp 65065
+timers bgp 3 15
+neighbor 192.0.2.31 timers 10 32
+
+
+
+
+Lower BGP timers if BFD or similar isn't available
+neighbor x.x.x.x timers 1 3
+
+3)
+
+
+
+
+
+
+
+
+Changed the default timers with the ISP to 7 and holdtime of 21
+
+
+You could try to use BGP timers 1 and 4 seconds respectively (CAUTION depending also on your boxes)
+
+[https://supportforums.cisco.com/discussion/11490571/converging-faster-without-bfd](https://supportforums.cisco.com/discussion/11490571/converging-faster-without-bfd)
+
+
+hostname CE_1
+!
+ip sla 1
+icmp-echo ${CE_2_WAN_IP_ADDRESS} source-interface ${WAN_INTERFACE}
+threshold 100
+timeout 150
+frequency 1
+ip sla schedule 1 life forever start-time now
+!
+track 1 ip sla 1
+!
+event manager applet TRACK_DOWN
+event track 1 state down
+action 10.0 cli command "enable"
+action 20.0 cli command "configure terminal"
+action 30.0 cli command "route-map BGP_OUT permit 20"
+action 40.0 cli command "no set as-path prepend 65000 65000"
+action 41.0 syslog msg "**** DOWN DOWN DOWN DOWN ****"
+!
+event manager applet TRACK_UP
+event track 1 state up
+action 10.0 cli command "enable"
+action 20.0 cli command "configure terminal"
+action 30.0 cli command "route-map BGP_OUT permit 20"
+action 40.0 cli command "set as-path prepend 65000 65000"
+action 41.0 syslog msg "**** UP UP UP UP ****"
+
+
+
+
+
+
+and to turn off "interface keepalives" 
+
+
+
+
+
+
+
+
+
+
+
+
+Troubleshooting BGP: A Practical Guide to Understanding and Troubleshooting BGP
+
+
+
+
+
+RR + разные RD
+As you already said to bypass the import scanner it's important to have RD per VRF so remote PEs will have both routes in their VRF BGP table.
+Using On RD per vrf/pe mean that when you export routes from redundant routers, they will be propagater as 2 saparate route in your mpls backbone -> bgp will be able to use the alternate route faste
+RD is prepended to the IPv4 update to create a unique VPNv4 update.
+
+
+When two PE are connected to the same site, they will export the same IPv4 update.
+
+
+1- If they use the same RD, they will create the same VPNv4 update and the RR will select only one as best and propagate it to the remote PE.
+
+
+If the PE selected as best by the RR failed, you loose time as you need to wait for the RR to send the other update. Then on the remote PE you need to wait for the import scanner (every 15s) which will import the translated VPNv4 to IPv4 routes into the VRF.
+
+
+If you use the one RD per PE per VRF, the RR sees two different VPNv4 updates even if it's the same IPv4 prefix. Remote PEs will install both IPv4 routes into the VRF BGP table and select the best one to install into the VRF RIB.
+
+
+If the selected PE as best failed, remote PE will converge as soon as they received a withdraw from the RR of even quicker if BGP NHT is supported.
+
+
+Второй способ
+ shadow RR, shadow session or add path
+Using a shadow RR or shadow session only requires support on the RR while add path requires support on the PEs as wel
+
+
+[https://supportforums.cisco.com/discussion/10346086/pe-failure-convergence-time](https://supportforums.cisco.com/discussion/10346086/pe-failure-convergence-time)
+[http://blog.ipspace.net/2012/07/bgp-route-replication-in-mplsvpn-pe.html](http://blog.ipspace.net/2012/07/bgp-route-replication-in-mplsvpn-pe.html)
+
+
+
+
+
+
+
+
+OSPF тюннинг
+[http://wiki.nil.com/Aggressive_BGP_fall-over_behavior](http://wiki.nil.com/Aggressive_BGP_fall-over_behavior)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OSPF BGP Convergence
+[https://null.53bits.co.uk/index.php?page=ospf-ldp-bgp-convergence-tuning](https://null.53bits.co.uk/index.php?page=ospf-ldp-bgp-convergence-tuning)
+
+This is a referene of commands, this is not a config to be applied as is...
+
+conf t
+
+! Pass link-down events directly to the IGP rather than to RIB which causes a CEF update which then triggers IGP recalculation and then RIB and CEF updates again!
+
+ip routing protocol purge interface
+
+! Set the global BFD control packet tx delay to 5 seconds
+
+bfd slow-timers 5000
+
+! Enable targeted LDP sessions to the unicast address of neighbours rather than multicasts to protect LDP sessions against link failure
+
+mpls ldp session protection
+
+! Enable the acceptance of targeted LDP hello requests (default is to ignore)
+
+mpls ldp discovery targeted-hello accept
+
+! Optimise the LDP session initiation
+
+mpls ldp discovery quick-start
+
+! Limit the IGP LDP sync time (default is no limit) when IGP has re-convereged
+
+mpls ldp igp sync holddown 600000
+
+! Enabled LDP label allocation filtering - here we restrict label allocation to host routes (/32's) only
+
+mpls ldp label allocate global host-routes
+
+! Further to the above - we can also restrict the IP prefixes we allocate labels for, so we will only allocate labels to /32s in the specified IP prefix list
+
+ip prefix-list PL-Core-Loopbacks seq 10 permit 10.0.0.0/16 ge 32
+mpls ldp label allocate global prefix-list PL-Core-Loopbackps
+
+interface gi0/0
+
+! Change the interface carrier delay to 0 msec (from default 2 seconds or 10 msec for fibre?) so there is no delay between the interface being detected as down and telleing the RIB it's down
+
+carrier-delay msec 0
+! On supported platforms the up and down delay can be seperate (msec) values, so BFD can signal a link down as soon as it's detected as down but this will delay the link being seen as up again incase it is flapping
+carrier-delay down 0 up 2000
+
+! Enable interface IP event dampening to protext against rapid link flaps from the above
+
+dampening
+
+! Set the BFD send and receive delay to be 50 msec and set the dead detection to be 3x 50msex == 150msec
+
+bfd interval 50 min_rx 50 multiplier 3
+
+! Enable BFD echo mode here so we send the control packets every slow-timers interval. This is enabled by default.
+
+bfd echo
+
+! Disabel BFD echo mode (which switches to asynchronous mode) for platforms that don't support BFD hardware offload like ME3800
+
+no bfd echo
+
+! Disable DR/BDR election on point-to-point links where they aren't needed
+
+ip ospf network point-to-point
+
+isis network point-to-point
+isis bfd
+
+router isis
+ mpls ldp sync
+ set-overload-bit on-startup wait-for-bgp
+ bfd all-interfaces
+ spf-interval 5 50 200
+ prc-interval 5 50 200
+ spf-interval 5 50 200
+ sp-gen-interval 5 50 200
+ fast-flood 10 
+
+router ospf 1
+
+! Enable OSPF only where we need to
+
+passive-interface default
+
+! Enabled BFD for IGP integration
+
+bfd all-interfaces
+
+! Enable incremental SPF
+
+ispf
+
+! Thottle LSA generation
+
+timers throttle lsa 10 20 5000
+
+! Thorrtle SPF runs on received LSAs and locally triggered events
+
+timers throttle spf 50 50 5000
+
+! Group "pace" LSA flooding
+
+timers pacing flood 15
+
+! Limit LSA processing when receiving the same LSA
+
+timers lsa arrival 15
+
+! Limit LSA retransmition to be hreater than the minimum receive interval above
+
+timers pacing retransmission 45
+
+! Suppress advertisements for transit link IPs (Loopbacks and seconadry IPs are still advertised) by removing the type 3 LSAs, to reduce IGP table size
+
+prefix-suppression
+
+! Limit the number of ECMP to 1 effectively disabling ECMP (if for example the ECMPs are via different PE rather than multiple links to the same next-hop PE, this can give predictable forwarding and failover behvaiour)
+
+maximum-paths 1
+
+! Syncronise LDP and IGP convergence so that new links aren't used by the IGP until LDP is ready
+
+mpls ldp sync
+
+router bgp XXXXX
+
+! Enabled BGP slow peer detection (at least to log slow peers)
+
+neighbor x.x.x.x slow-peer detection
+
+! Enable dynamic BGP update group splitting when a slow peer is detected so that the rest of the BGP update group isn't hindered by the transmission cache is full. Unless the "permanent" keyword is given the peer will dynamically move back to it's normal update group once it "passes" the slow-peer detection again
+
+neighbor x.x.x.x slow-peer split-update-group dynamic
+
+! Lower the default update advertisement interval for BGP neighbours (default is 5 seconds for iBGP, 30 seconds for eBGP in GRT and 30 seconds for eBGP in VRF - newer IOS versions have iBGP default to 0 and eBGP in VRF default to 0)
+ 
+neighbor x.x.x.x advertisement-interval 0
+
+! Enabled BFD for directly connected iBGP neighbours (no dampening for fall-over, link flap caution!)
+
+! ! neighbor x.x.x.x fall-over bfd
+
+! We can track the next-hop address for multi-hop iBGP neighbours by removing the BFD keyword (no dampening for fall-over, loss of next hop means immediate session tear down!)
+
+! ! neighbor x.x.x.x fall-over
+
+! BGP NHT would be preferable over fall-over for stability: BGP Next-Hop Tracking is enabled by default in supporting images, lower the BGP trigger event to 1 second (default 5) to react quicker to the tunned IGP which is updating the RIB with details relating to BGP next hop address
+
+! ! bgp nexthop trigger delay 1
+
+! Lower BGP timers if BFD or similar isn't available
+
+neighbor x.x.x.x timers 1 3
+
+! For directly connected eBGP neighbours use interface tracking for session tear down (default enabled)
+
+bgp fast-external-fallover
+
+
+
+
+
+
+
+
+
+
+
+Настройка bgp
+[http://rbdoc.ufanet.ru/lzn7830011_1r3f/18_1543-CRA1191170_1-V1Uen.E.html](http://rbdoc.ufanet.ru/lzn7830011_1r3f/18_1543-CRA1191170_1-V1Uen.E.html)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bfd interval 300 min_rx 300 multiplier 3
+
+
+interface FastEthernet0/1
+ description #SGOK PSI via RosTel 10MB
+ bandwidth 30720
+ ip address 10.192.10.166 255.255.255.252
+ duplex auto
+ speed auto
+ bfd interval 300 min_rx 300 multiplier 3
+ service-policy output PLATINUM-ETH-30MB
+end
+
+
+router bgp 65013
+ neighbor 10.192.10.165 fall-over bfd
+
+no bfd echo
+
+[https://www.reddit.com/r/networking/comments/19jnz8/bfd_async_vs_echo_mode_any_quantifiable_benefit/](https://www.reddit.com/r/networking/comments/19jnz8/bfd_async_vs_echo_mode_any_quantifiable_benefit/)
+
+
+
+[https://www.cisco.com/c/en/us/td/docs/switches/metro/me3600x_3800x/software/release/15-5_1_S/chassis/configuration/guide/3600x_24cxscg/sw_bfd_bgp_multihop_client_support_ipv4.html?referring_site=RE&pos=3&page=https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-multihop-cbit.html](https://www.cisco.com/c/en/us/td/docs/switches/metro/me3600x_3800x/software/release/15-5_1_S/chassis/configuration/guide/3600x_24cxscg/sw_bfd_bgp_multihop_client_support_ipv4.html?referring_site=RE&pos=3&page=https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_bgp/configuration/xe-3s/irg-xe-3s-book/irg-multihop-cbit.html)
+[http://ciscotips.ru/cisco-ios-license-activation](http://ciscotips.ru/cisco-ios-license-activation)
+[http://siptip.ru/2012/10/05/zapusk_i_pereshivka_cisco_2911/](http://siptip.ru/2012/10/05/zapusk_i_pereshivka_cisco_2911/)
+[http://nettips.ru/article/cisco_2911_change_ios.html](http://nettips.ru/article/cisco_2911_change_ios.html)
+
+c2900-universalk9-mz.SPA.156-3.M.bin

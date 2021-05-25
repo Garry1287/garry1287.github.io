@@ -1,0 +1,23 @@
+---
+layout: post
+title:  "feincms"
+date:   2016-05-13 18:54:19 +0300
+categories: python
+tags: python
+---
+
+# feincms
+[https://www.sinyawskiy.ru/feincms.html](https://www.sinyawskiy.ru/feincms.html)
+[https://habrahabr.ru/sandbox/45045/](https://habrahabr.ru/sandbox/45045/)
+[http://feincms.org/](http://feincms.org/)
+[http://blog.djangofan.ru/2011/12/cms.html](http://blog.djangofan.ru/2011/12/cms.html)
+[http://pixxxxxel.blogspot.ru/2013/09/feincms.html](http://pixxxxxel.blogspot.ru/2013/09/feincms.html)
+[http://feincms-django-cms.readthedocs.org/en/latest/](http://feincms-django-cms.readthedocs.org/en/latest/)
+[http://django.ucoz.com/blog/feincms_podkljuchenie_novykh_modulej/2014-01-17-54](http://django.ucoz.com/blog/feincms_podkljuchenie_novykh_modulej/2014-01-17-54)
+
+Django cms
+[http://cultofdigits.com/articles/django-cms/django-cms-pristupaya-k-rabote/#vvodnaya_chast](http://cultofdigits.com/articles/django-cms/django-cms-pristupaya-k-rabote/#vvodnaya_chast)
+
+Примеры сайтов на django
+[http://python.su/forum/topic/298/?page=1#post-2857](http://python.su/forum/topic/298/?page=1#post-2857)
+[https://toster.ru/q/21702](https://toster.ru/q/21702)

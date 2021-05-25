@@ -1,0 +1,390 @@
+---
+layout: post
+title:  "BackupPC"
+date:   2016-08-17 14:49:08 +0300
+categories: BackupPC
+tags: BackupPC
+---
+
+# BackupPC
+Хорошее руководство
+[https://www.it-rem.ru/centos-7-nastroyka-backuppc.html](https://www.it-rem.ru/centos-7-nastroyka-backuppc.html)
+
+
+Чтобы с sapphire из-под root  заходить на crystal под backup
+
+Необходимо сгенерить на sapphire под root ключи и отправить ключ на crystal
+
+[root@sapphire .ssh]# ls
+id_rsa  id_rsa.pub  known_hosts
+[root@sapphire .ssh]# ssh-copy-id -i id_rsa.pub backup@crystal.sc.int
+/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+backup@crystal.sc.int's password: 
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'backup@crystal.sc.int'"
+and check to make sure that only the key(s) you wanted were added.
+
+[root@sapphire .ssh]# ssh backup@crystal.sc.int
+
+Теперь работает
+/usr/bin/rsync -avz -e ssh --delete-after /var/lib/BackupPC backup@crystal.sc.int:/var/lib/BackupPC
+[http://rus-linux.net/MyLDP/sec/generiruem-kluchi-ssh.html](http://rus-linux.net/MyLDP/sec/generiruem-kluchi-ssh.html)
+
+
+www.linuxcenter.ru/lib/articles/soft/bpc.phtml
+www.bslos.com/docs/backuppc/backuppc.html
+wiki.dieg.info/backuppc
+yakim.org.ua/articles/servers/136-backuppc.html
+webware.biz/?p=2564
+www.opennet.ru/openforum/vsluhforumID1/95680.html
+ruunix.ru/386-backup-unix-serverov-backuppc-chast1.html
+ruunix.ru/455-backup-unix-serverov-backuppc-chast2.html
+www.sysadmin.in.ua/info/index/21/29/35
+backuppc.sourceforge.net/faq/BackupPC.html#Step-6:-Running-BackupPC
+sourceforge.net/projects/backuppc/?source=typ_redirect
+sourceforge.net/projects/backuppc/
+www.opennet.ru/openforum/vsluhforumID1/86503.html
+sourceforge.net/p/backuppc/mailman/backuppc-users/thread/3E94BBA0.3060300@drdos.zapto.org/
+[https://www.digitalocean.com/community/tutorials/how-to-use-backuppc-to-create-a-backup-server-on-an-ubuntu-12-04-vps](https://www.digitalocean.com/community/tutorials/how-to-use-backuppc-to-create-a-backup-server-on-an-ubuntu-12-04-vps)
+www.pcc-services.com/sles/backuppc2.html
+[https://wiki.archlinux.org/index.php/BackupPC](https://wiki.archlinux.org/index.php/BackupPC)
+[http://www.lexpr.ru/phpBB3/viewtopic.php?p=2505](http://www.lexpr.ru/phpBB3/viewtopic.php?p=2505)
+[http://own.sap.sd/backuppc](http://own.sap.sd/backuppc)
+[http://itot.biz.ua/index.php?option=com_content&view=article&id=151:backuppc-nastrojka-sistemy-rezervnogo-kopirovaniya-debian-ubuntu-win&catid=9&Itemid=110](http://itot.biz.ua/index.php?option=com_content&view=article&id=151:backuppc-nastrojka-sistemy-rezervnogo-kopirovaniya-debian-ubuntu-win&catid=9&Itemid=110)
+[http://linux26.ru/articles/raznoe/bekap-servera-linux-po-kronu-i-kopirovanie-na-udalennyij-server.html](http://linux26.ru/articles/raznoe/bekap-servera-linux-po-kronu-i-kopirovanie-na-udalennyij-server.html)
+[http://www.pictux.org/blog/20090927/backuppc-320-beta0-install/?lang=it](http://www.pictux.org/blog/20090927/backuppc-320-beta0-install/?lang=it)
+[http://www.linuxwave.info/2008/08/installing-backuppc-in-centos-5.html](http://www.linuxwave.info/2008/08/installing-backuppc-in-centos-5.html)
+www.backupcentral.com/phpBB2/two-way-mirrors-of-external-mailing-lists-3/backuppc-21/gui-getting-error-74218/
+[http://forums.openmediavault.org/index.php/Thread/5087-BackupPC-Install-Guide/](http://forums.openmediavault.org/index.php/Thread/5087-BackupPC-Install-Guide/)
+[http://www.cyberforum.ru/linux-soft/thread85305.html](http://www.cyberforum.ru/linux-soft/thread85305.html)
+[http://amkolomna.ru/content/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-backuppc](http://amkolomna.ru/content/%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-backuppc)
+[http://guruadmin.ru/page/ustanovka-backuppc-v-centos-5](http://guruadmin.ru/page/ustanovka-backuppc-v-centos-5)
+
+http://localhost/BackupPC
+
+
+
+1.Для каждой машины необходим свой конфиг
+2. Генерим на сервере ssh ключ и pub заливаем на все клиеты.
+
+Теперь нам требуется создать ssh-ключ, про сути нам требуется создавать ключ только один раз, в дальнейшем его копировать
+ на другие машины чтобы можно было выполнять подключение по SSH к клиентским машинам, для выполнения резервного копирования
+
+Генерация ключа под пользователем backuppc
+
+ssh-keygen -t dsa -b 1024-f /var/lib/backuppc/key
+
+
+Парольную фразу не указываем, чтобы подключение осуществлялось без ввода пароля для ключа.
+Из написанного понятно что мы указываем длину ключа 1024bit, место где его сохранить /var/lib/backuppc/ и имя файла ключа key
+
+( То, есть на Sapphire cгенерирован ключ под пользователем backuppc, который копируем на новых клиентов)
+
+Копируем
+[root@sapphire BackupPC]# su backuppc
+bash-4.2$ cd
+bash-4.2$ cd .ssh
+bash-4.2$ ssh-copy-id -i id_rsa.pub backup@81.20.192.59
+
+
+
+
+4.На клиенте 
+> visudo
+
+backup ALL=(ALL) NOPASSWD:/usr/bin/rsync
+backup ALL=(ALL) NOPASSWD:/bin/tar
+
+
+5. 
+Xfer
+$sshPath -q -x -l backup $host /usr/bin/sudo $rsyncPath $argList+
+$sshPath -q -x -l backup $host /usr/bin/sudo $rsyncPath $argList+
+
+Перезапусить BackupPC на sapphire после добавления нового хоста
+
+...
+
+remuserbak      ALL=NOPASSWD: /usr/bin/tar, /usr/local/bin/rsync
+backupuser ALL=NOPASSWD:/bin/gtar,/bin/tar
+
+
+
+6.Кроме этого необходимо настроить
+#$Conf{PingPath} = undef;
+$Conf{PingPath} = '/usr/bin/ping';
+
+7.$Conf{CgiAdminUsers} 
+8. BackupPC запускается через init.d или systemd
+9. В Xfer с tar надо прописывть sudo, с rsync тоже наверно надо
+10.
+
+
+
+
+
+BackupPC: ping too slow. При возникновении этой ошибки бекап не производится. Для устранения нужно изменить параметр до 200 $Conf{PingMaxMsec} = 200;
+
+FAQ. How to purge backups for a host?
+
+Если нужно удалить полностью резервные файлы для хоста. Вам может понадобиться очистка пула. Его размер вы можете посмотреть в логе системы после перезапуска BackupPC.
+
+Очистить пулл BackupPC:
+
+su - backuppc
+$ /usr/share/backuppc/bin/BackupPC_nightly 0 255
+BackupPC_stats 0 = pool,0,0,0,0,0,0,0,0,0,0,
+...
+
+
+
+
+
+
+
+
+
+ Config.pl состоит из четырех групп настроечных значений, содержащих:
+
+    основные параметры сервера;
+
+    описание тех машин, информацию с которых нужно архивировать;
+
+    указания как часто это надо делать;
+
+    параметры CGI-интерфейса.
+
+
+
+
+Здесь написано как хранить данный на отдельном диске
+[http://jakshi.ru/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%B8_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_backuppc_3.2.0_%D0%B2_gentoo_linux](http://jakshi.ru/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%B8_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_backuppc_3.2.0_%D0%B2_gentoo_linux)
+
+
+Неплохой мануал со скринами 
+[https://www.howtoforge.com/linux_backuppc_p2](https://www.howtoforge.com/linux_backuppc_p2)
+
+
+С подробной настройкой хоста (apache) - не понадобилось
+[http://www.gentoo-wiki.info/BackupPC](http://www.gentoo-wiki.info/BackupPC)
+
+
+
+
+
+
+FullPeriod — минимальное время в днях между полными бекапами
+FullKeepCnt — сколько полных бекапов необходимо хранить
+FullKeepCntMin — минимальное количество хранимых полных бекапов
+FullAgeMax — максимальный возраст хранимого полного бекапа
+
+Инкрементальная резервная копия:
+IncrPeriod — мин. время в днях между инкрементными бекапами
+IncrKeepCnt — сколько инкрементальных бекапов необходимо хранить
+IncrKeepCntMin — минимальное количество хранимых инкрементальных бекапов
+IncrAgeMax — макс. возраст хранимого инкрементного бекапа
+IncrLevels — уровень инкрементального бекапа
+IncrFill — использовать в системе хард-линки, что бы инкрементальный бекап выглядел полным.
+
+
+
+BackupDisabled —
+
+0 — бэкапы производятся в автоматическом и ручном режиме,
+1 — бэкапы могут производится только в ручном режиме,
+2 — бэкапы отключены.
+
+
+ Config.pl состоит из четырех групп настроечных значений, содержащих:
+
+    основные параметры сервера;
+
+    описание тех машин, информацию с которых нужно архивировать;
+
+    указания как часто это надо делать;
+
+    параметры CGI-интерфейса.
+
+$Conf{WakeupShedule} - как часто сервис должен проверять были ли изменения на подлежащих архивированию компьютерах, и в случае изменений - выполнять резервирование данных. По умолчанию - каждый час, кроме полуночи.
+$Conf{MaxBackups} - максимальное число одновременных процессов архивирования.
+$Conf{DfMaxUsagePct} - при заполнении указанного в процентах объема диска, заданного для хранения данных, архивирование не производится. По умолчанию 95%.
+$Conf{SmbShareName} - имя расшаренного ресурса на Windows-машине. По умолчанию - это диск C:\, который в Win2000/XP доступен через SMB по имени "С$".
+$Conf{SmbShareUserName} - имя пользователя на Windows-машине, которому даны права на ресурс общего доступа .
+$Conf{SmbSharePasswd} - его пароль. В настоящее время он приводится в открытом виде. В следующих версиях планируется хранение в зашифрованном виде.
+
+$Conf{FullPeriod} - период в днях между полными резервными копиями.
+$Conf{IncrPeriod} - период в днях между инкрементальными резервными копиями.
+$Conf{FullKeepCnt} - максимальное число сохраняемых полных резервными копиями.
+
+$Conf{BackupFilesOnly} - список директорий которые необходимо архивировать. По умолчанию - не определено.
+$Conf{BackupFilesExclude} - тоже самое, но для директорий-исключений.
+
+$Conf{ArchivePar} - при использовании par2cmdline процент избыточных данных в архиве. По умолчанию - 0.
+$Conf{EmailAdminUserName} - почтовый адрес администратора на который будут присылаться сообщения об ошибках и предупреждениях.
+
+$Conf{CgiAdminUserGroup} и $Conf{CgiAdminUsers} - пользователи и группы, которым доступен CGI-интерфейс.
+
+Обратите внимание, что параметры, относящиеся к конкретной машине, могут быть переопределены машинно-зависимым файлом Config.pl, 
+оторый храниться в поддиректории каталога с данными /BackupPC/pc/<имя_компьютера>/. 
+Действительно, на каждой машине могут быть свои конкретные папки общего доступа, списки исключений, свой локальный пользователь с паролем, для которого установлены свои разрешения.
+
+
+
+Разьяснение ключей файла /etc/BackupPC/pc/proxy.pl:
+
+    $Conf{BackupsDisable} = 1; – Отключить регулярные backup-ы. Эта опция нужна если backup-ы хотелось бы сохранить, 
+	  но регулярные backup-ы компьютера уже без надобности. Либо вам просто временно нужно отключить backup данной машины.
+    $Conf{ClientNameAlias} = '192.168.22.254' ; – переопределяет адрес/имя хоста записанное в /etc/BackupPC/hosts.
+	  По моему скромному мнению в /etc/BackupPC/hosts лучше писать смысловые имена описывающие какой именно backup будем делать, а имя хоста определять оной переменной.
+    $Conf{BackupFilesOnly} = ['/']; – Начиная с какой директории делать backup.
+    $Conf{BackupFilesExclude} = ['/dev','/tmp']; – Какие директории исключить из backup-а.
+    $Conf{XferMethod} = 'rsync'; – метод передачи backup-а (rsync).
+    $Conf{ClientCharset} = 'koi8-r'; – Кодировка в которой хранятся имена файлов в файловой системе клиента.
+    $Conf{RsyncClientPath} = '/usr/local/bin/rsync'; – Путь к rsync, которым мы будем делать backup.
+    $Conf{RsyncClientCmd} = '$sshPath -q -x -l backup $host sudo $rsyncPath $argList+'; – команда для backup-а, обратите внимание что добавлена команда sudo.
+    $Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l backup $host sudo $rsyncPath $argList+'; – команда для восстановления из backup-а.
+    $Conf{RsyncArgsExtra} = [ '–exclude', '/proc', ]; – /proc исключается из backup-а. Почему исключение директорий выполняется двумя разными переменными? Смотрите в заметках по backuppc
+    $Conf{RsyncCsumCacheVerifyProb} = '0.01'; – выборочная проверка checksum, подробнее читайте в Документации по BackupP
+
+
+
+
+ Разьяснение ключей файла /etc/BackupPC/pc/amazonhost.pl:
+
+    $Conf{RsyncClientCmd} = '$sshPath -q -C -x -l backuppc $host /usr/bin/sudo $rsyncPath $argList+';
+	  – команда для backup-а, обратите внимание что добавлена команда sudo и опция -C включающая сжатие. Сжатие позволяет сэкономить платный трафик.
+    $Conf{RsyncClientRestoreCmd} = '$sshPath -q -C -x -l backuppc $host /usr/bin/sudo $rsyncPath $argList+'; – команда для восстановления из backup-а.
+    $Conf{FullPeriod} = '13.97'; – Как часто выполнять полный backup (в данном случае раз в две недели).
+    $Conf{FullAgeMax} = 180; – Максимальный срок хранения для старых полных backup-ов.
+    $Conf{IncrKeepCnt} = 13; – Сколько хранить инкрементальных backup-ов (на 2 недели)
+    $Conf{IncrAgeMax} = 60; – Максимальный срок хранения для старых инкрементальных backup-ов.
+    $Conf{PingMaxMsec} = 900; – Максимальное время пинга (в миллисекундах), при котором выполнять backup. 
+	      По умолчанию этот параметр равен 20, что бы не выполнять резервное копирование клиентов подключенных через медленное/отличное от локального соединение.
+		Например делать backup ноутбука когда он в локальной сети, а если он по VPN из гостиницы в другой стране подключен, backup выполнять без надобности. 
+	      Но поскольку нам как раз и нужно выполнить удаленный backup то увеличиваем этот параметр.
+
+
+
+
+Есть отличные примеры, по smb тоже
+[http://jakshi.ru/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%B8_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_backuppc_3.2.0_%D0%B2_gentoo_linux](http://jakshi.ru/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%B8_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0_backuppc_3.2.0_%D0%B2_gentoo_linux)
+
+
+Пример для win есть
+[http://yakim.org.ua/articles/servers/136-backuppc.html](http://yakim.org.ua/articles/servers/136-backuppc.html)
+
+
+Тоже пример нормальный
+[https://help.ubuntu.com/community/BackupPC](https://help.ubuntu.com/community/BackupPC)
+
+
+[http://wiki2.linuxformat.ru/index.php/LXF125:BackUpPC](http://wiki2.linuxformat.ru/index.php/LXF125:BackUpPC)
+
+
+
+
+Отличная статья
+[https://wiki.centos.org/HowTos/BackupPC](https://wiki.centos.org/HowTos/BackupPC)
+
+
+
+
+Tar делать
+
+
+/usr/share/backuppc/bin/BackupPC_tarCreate  -h s01 -n 0 -s backup -t -e utf-8 / | tar x --no-same-owner --no-same-permissions 
+
+
+
+
+
+
+
+
+
+
+Понимание RsyncShareName VS BackupFilesOnly
+
+
+So:
+
+$Conf{RsyncShareName} = '/';
+$Conf{BackupFilesOnly} = ['/opt/home2', '/opt/home4', '/opt2/home3',
+'/opt3/home5'];
+
+
+Запускается один раз
+or
+
+$Conf{RsyncShareName} = ['/opt/home2', '/opt/home4', '/opt2/home3',
+'/opt3/home5'];
+$Conf{BackupFilesOnly} = undef;
+Запускается rsync 4 раза и выглядить как отдельные 4 директории, которые нельзя восстановить за один раз
+
+
+These are roughly equivalent. The first runs rsync once, and
+backs up the indicated directories. The second runs rsync four
+times, once for each of the directories. 
+
+
+
+The appearance of the backups will be slightly different: in
+the first case each directory level will appear separately
+
+(eg: / -> /opt -> /opt/home), while in the second case there will
+be four top-level directories (/opt/home, /opt/home4, ...). In
+this latter case you cannot restore all the files at once: restores
+must be within a "share".
+
+Therefore the first form is probably the best choice. 
+
+
+
+
+
+6,97 означает недельный
+
+2, 0, 1, 0, 1
+
+2 полных недельных
+0 - двухнедельных
+1 - месячный
+0 - двухмесячных
+1 - четырёхмесячный
+
+
+Оставил
+1, 0, 1
+1 недельный
+0 двухнедельных
+1 месячный
+
+
+
+
+Can I simply delete the data/pc/<host> tree or do I need to do something
+> more elegant?
+
+That's the first step.
+To have the space reclaimed you'll need to run
+'/usr/share/backuppc/bin/BackupPC_nightly 0 255' to clean up the pool
+references.
+
+
+Two notes:
+
+1. Don't do this at a time such that the regular BackupPC_nightly might 
+overlap it.
+
+2. If you wait for BackupPC_nightly to run on its own, it will clean up the 
+files in (BackupPCNightlyPeriod) runs.
+
+So if you aren't in a hurry to reclaim disk space, just delete the entries in 
+pc/hostname, and wait.
+
+
+
+

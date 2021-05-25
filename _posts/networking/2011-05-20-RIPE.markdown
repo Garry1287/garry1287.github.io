@@ -1,0 +1,981 @@
+---
+layout: post
+title:  "RIPE"
+date:   2011-05-20 17:43:08 +0400
+categories: Networking
+tags: Networking
+---
+
+# RIPE
+
+
+07        Auto         Disable    Medium           Down
+% Information related to 'AS20866'
+
+aut-num:        AS20866
+as-name:        INTELECOM-AS
+descr:          Industrial Telecom Inc. AS
+import:         from AS8570 action pref=100; accept AS8570
+import:         from AS8744 action pref=100; accept ANY
+import:         from AS8342 action pref=100; accept ANY
+import:         from AS8570 action pref=100; accept AS44237
+import:         from AS8570 action pref=100; accept AS15672
+import:         from AS42368 action pref=100; accept AS42368
+import:         from AS12389 action pref=100; accept ANY
+export:         to AS8570 announce ANY
+export:         to AS8744 announce AS-INTELECOM
+export:         to AS8342 announce AS20866
+export:         to AS42368 announce ANY
+export:         to AS12389 announce AS-INTELECOM
+admin-c:        AYS-RIPE
+admin-c:        PVR3-RIPE
+tech-c:         AYS-RIPE
+mnt-by:         RIPE-NCC-END-MNT
+tech-c:         PVR3-RIPE
+mnt-by:         INTELECOM-MNT
+mnt-routes:     INTELECOM-MNT
+source:         RIPE # Filtered
+
+person:         Alexis Y. Skripalev
+address:        Spiridonjevskij per., 9, office 214
+address:        123104, Moscow
+address:        Russia
+phone:          +7 474 251 7121
+mnt-by:         INTELECOM-MNT
+nic-hdl:        AYS-RIPE
+source:         RIPE # Filtered
+
+person:         Paul V Roschupkin
+address:        Spiridonjevskij per., 9, office 214
+address:        123104, Moscow
+address:        Russia
+remarks:        phone:        +7 074 244 5680
+phone:          +7 474 244 5680
+mnt-by:         INTELECOM-MNT
+nic-hdl:        PVR3-RIPE
+source:         RIPE # Filtered
+remarks:        modified for Russian phone area changes
+
+% This query was served by the RIPE Database Query Service version 1.47 (WHOIS4)
+
+
+
+
+
+
+[http://www.ripe.net/db/support/db-terms-conditions.pdf](http://www.ripe.net/db/support/db-terms-conditions.pdf)
+
+% This is the RIPE Database query service.
+% The objects are in RPSL format.
+%
+% The RIPE Database is subject to Terms and Conditions.
+% See [http://www.ripe.net/db/support/db-terms-conditions.pdf](http://www.ripe.net/db/support/db-terms-conditions.pdf)
+
+% Note: this output has been filtered.
+%       To receive output for a database update, use the "-B" flag.
+
+% Information related to '81.20.192.0 - 81.20.192.255'
+
+inetnum:        81.20.192.0 - 81.20.192.255
+netname:        INTELECOM-2-NET
+descr:          Industrial Telecom Inc., Moscow
+country:        RU
+admin-c:        AYS-RIPE
+tech-c:         AYS-RIPE
+tech-c:         PVR3-RIPE
+status:         ASSIGNED PA
+mnt-by:         INTELECOM-MNT
+source:         RIPE # Filtered
+
+person:         Alexis Y. Skripalev
+address:        Spiridonjevskij per., 9, office 214
+address:        123104, Moscow
+address:        Russia
+phone:          +7 474 251 7121
+mnt-by:         INTELECOM-MNT
+nic-hdl:        AYS-RIPE
+source:         RIPE # Filtered
+
+person:         Paul V Roschupkin
+address:        Spiridonjevskij per., 9, office 214
+address:        123104, Moscow
+address:        Russia
+remarks:        phone:        +7 074 244 5680
+phone:          +7 474 244 5680
+mnt-by:         INTELECOM-MNT
+nic-hdl:        PVR3-RIPE
+source:         RIPE # Filtered
+remarks:        modified for Russian phone area changes
+
+% Information related to '81.20.192.0/20AS20866'
+
+route:          81.20.192.0/20
+descr:          RU-INTELECOM-NET
+origin:         AS20866
+mnt-by:         INTELECOM-MNT
+source:         RIPE # Filtered
+
+% This query was served by the RIPE Database Query Service version 1.47 (WHOIS2)
+
+
+
+
+organisation:   ORG-ITI1-RIPE
+org-name:       LLC Telecom-Service
+org-type:       LIR
+address:        LLC Telecom-Service Ruslan Shirokov Kommunalnaya st., 9, office 610 398059 Lipetsk Russian Federation
+phone:          +7 495 7773282
+fax-no:         +7 495 7773277
+mnt-ref:        INTELECOM-MNT
+mnt-ref:        RIPE-NCC-HM-MNT
+mnt-by:         RIPE-NCC-HM-MNT
+admin-c:        PVR3-RIPE
+admin-c:        LY10-RIPE
+admin-c:        EVK10-RIPE
+source:         RIPE #Filtered
+
+mntner:         INTELECOM-MNT
+descr:          Intustrial Telecom Inc. Maintainer
+admin-c:        AYS-RIPE
+admin-c:        PVR3-RIPE
+tech-c:         AYS-RIPE
+tech-c:         PVR3-RIPE
+upd-to:         a.skripalev@promsvyaz.ru
+upd-to:         p.roschupkin@promsvyaz.ru
+mnt-nfy:        a.skripalev@promsvyaz.ru
+mnt-nfy:        p.roschupkin@promsvyaz.ru
+auth:           MD5-PW #Filtered
+auth:           PGPKEY-C396EEA0
+notify:         a.skripalev@promsvyaz.ru
+mnt-by:         INTELECOM-MNT
+referral-by:    RIPE-DBM-MNT
+changed:        hostmaster@ripe.net 20020207
+changed:        a.skripalev@promsvyaz.ru 20061207
+source:         RIPE #Filtered
+
+
+mntner:         INTELECOM-MNT
+descr:          Intustrial Telecom Inc. Maintainer
+admin-c:        AYS-RIPE
+admin-c:        PVR3-RIPE
+tech-c:         AYS-RIPE
+tech-c:         PVR3-RIPE
+upd-to:         a.skripalev@promsvyaz.ru
+upd-to:         p.roschupkin@promsvyaz.ru
+mnt-nfy:        a.skripalev@promsvyaz.ru
+mnt-nfy:        p.roschupkin@promsvyaz.ru
+auth:           MD5-PW #Filtered
+auth:           PGPKEY-C396EEA0
+notify:         a.skripalev@promsvyaz.ru
+mnt-by:         INTELECOM-MNT
+referral-by:    RIPE-DBM-MNT
+changed:        hostmaster@ripe.net 20020207
+changed:        a.skripalev@promsvyaz.ru 20061207
+source:         RIPE #Filtered
+
+
+
+
+Only registered LIR contact person(s) can discuss the change of an LIR ownership with the RIPE NCC.
+Clarify the type of change:
+A takeover of an LIR by a non-LIR.
+
+The reason for the change of organisation.
+
+The name of the company/companies involved.
+LLC Telecom-Service and PSI
+
+The number of LIRs affected by the change
+no change (Номер лира нужен)
+
+The RegID(s) of the LIR(s) affected by the change 
+no change (RegID требуется)
+
+
+Confirmation from all parties agreeing to the change (See section 2.3).
+Подтверждение, что обе стороны согласны
+
+Updated list of contact person(s) (See section 2.4).
+Контакты людей
+
+ Updated billing e-mail contact details, including any changes to VAT number.
+Hаш юридический контакт, включая номре счёта
+
+A new service agreement, if applicable
+Новый договор об оказании услуг, если это применимо
+
+service agreement  - так как изменилось название
+LIR имя
+
+
+
+
+    LIR может получить только один блок адресов;
+    размер этого блока не может быть больше 1024 адресов (/22);
+    блок будет выдан только тем LIR, которые уже имеют блоки адресов IPv6.
+
+ru.intelecom
+ORG-ITI1-RIPE - название организации
+ООО (Общество с ограниченной ответственностью) LLC (Limited Liability Company)
+LLC Promsvyaz-Invest
+LLC Telecom-Service
+
+1. План письма
+
+
+
+
+
+RIPN.
+
+договор от 2009.
+По этому договору мы можем получать PI только для себя, но не для наших клиентов - для этого нужно допсоглашение.
+
+Nadezhda E. Laukhina
+RIPN
+tel: +7(495)737-0604
+fax: +7(499)196-4984
+АНО «РосНИИРОС»
+бухия нашла договор 2004 года
+
+
+
+
+opt1287nk			
+$1$kxuDDTLC$FQFikM/JhDzAMHGSwjOyh0
+
+
+
+
+
+nic-hdl:        PVR3-RIPE - 
+
+
+
+Сначала создаётся person
+Потом mntner 
+Лучше с помощью [https://apps.db.ripe.net/webupdates/](https://apps.db.ripe.net/webupdates/)
+а хуже - по почте auto-dbm@ripe.net
+
+
+Вносить дополнительные данные в БД
+отправить письмо с полным описанием объекта на email auto-dbm@ripe.net. 
+В ответ вам придет письмо или «SUCCESS: changes» или «FAILED: changes» с описанием ошибок которые вы допустили.
+[https://apps.db.ripe.net/webupdates/](https://apps.db.ripe.net/webupdates/)
+
+
+
+Так что дальше ?
+
+Если у вас уже есть номер атономной системы и свой блок адресов, то пора внести в БД недостающие части. Вносить изменения в можно двумя способами:
+
+    отправить письмо с полным описанием объекта на email auto-dbm@ripe.net. В ответ вам придет письмо или «SUCCESS: changes» или «FAILED: changes» с описанием ошибок которые вы допустили.
+    воспользоваться online утилитой Webupdates
+
+На вашем месте я бы сначала пользовался 2-ым способом, т.к. там есть подсказки при создании объектов.
+
+Сначала создадим объект person. Заходим на Webupdates, в разделе «Create a new object» выбираем объект person и жмем «Add object». Заполняем все необходимые поля и жмем «Submit update» и читаем создался ли объект или проишошла какая либо ошибка. Если какие либо поля вызывают сомнения то жмем «?» и читаем описание-подсказку. Поле «nic-hdl» можно выставить в AUTO-1, тогда БД сама сгенерит имя для этого объекта.
+
+Теперь создадим mntner. Опять идем в «ADD» на Webupdates и выбираем объект mntner.
+
+В поле «mntner:» пишем MNT-YOUR-PROVIDER-NAME или YOUR-PROVIDER-NAME-MNT.
+В поле «admin-c:» пишем nic-hdl (которые мы получили после создания объекта person.) — это будет использоваться для административных контактов.
+В поле «auth:» пишем MD5-PW ВАШ-ПАРОЛЬ-В-MD5
+В поле «referral-by:» пишем RIPE-DBM-MNT
+
+После создания объекта mntner можно вернуться к объекту person, но уже редактируя, т.е. раздел «Modify or delete an existing object» — вводим свой nic-hdl. 
+В радактировании добавляем поле «mnt-by» (воспользовавшись формой «Add New Field» внизу страницы), 
+в нем указываем имя которое мы писали создавая объект mntner, например MNT-YOUR-PROVIDER-NAME, 
+но теперь необходимо добавить поле «password» в котором ввести некриптованый пароль, дабы подтвердить владение объектом mntner. 
+«Подписав» объект person своим объектом mntner вы избегаете того, что кто либо изменит ваш объект person без вашего ведома, 
+т.к. теперь для любого изменения этого обекта будет требоваться пароль mntner`а.
+
+Далее необходимо создать объект inetnum.
+
+В поле «inetnum:» вписываем сеть которую мы согласовали с RIPE когда писали Address Plan. Например: 217.150.32.0 — 217.150.32.255
+
+В поле «netname:» вписываем название для своей сети так же указанную в Address Plan.
+
+В поле «status:» пишем ASSIGNED PA
+
+Что писать в поле «mnt-by:» вы уже знаете ;)
+
+Все остальные объекты создаются/редактируются по тому же принципу.
+
+Создайте объекты route, domain, as-set.
+
+В объекте domain добавте столько полей «nserver:» сколько вам необходимо. В них нужно указать DNS имена ваших DNS серверов которые будут отвечать за reverse delegation (обратный просмотр(резолв)) ваших адресов. В «zone-c:» указываем nic-hdl человека который в вашей организации будет отвечать за зоны обраного просмотра.
+
+В объекте as-set добавте поле «members:». Если ваша AS пока не транзитная, то напишите в нем ASНОМЕР_ВАШЕЙ_AS, поле «as-set:» является именем вашего будущего as-set`а. Обычно имя выглядит как AS-PROVIDER_NAME, например AS-TTK.
+
+Создать его нужно для того, что если вас спросят «По какому объекту строить фильтры ?», то вам необходимо говорить что это as-set и его имя. Это для Вашего же удобства.
+
+Важно: если вы отредактировали свой as-set (добавили/удалили что-то), то вам необходимо сообщить об этом вашим peer`ам (соседям), т.к. не у всех есть автоматический апдейт фильтров.
+
+Отредактируйте (если это необходимо) свой объект aut-num например добавив поле(я) «remarks:» или «descr:» с более подробным описанием своей сети или юр.лица которому она принадлежит, а так же, возможно, обновив свой «import:» или «export:» лист.
+
+Таким образом мы сделали все, что необходимо для запуска своей AS с собственным блоком адресов.
+
+Помним, что полное описание полей объекта можно получить выполнив в БД с ключем -v и именем объекта который нас интересует: пример.
+
+Поля, отмеченные как [mandatory] являются обязательными для заполнения, должны обязательно присутствовать в заявке.
+
+Поля, отмеченные как [single] могут присутствовать в заявке только в единственном экземпляре.
+
+Поля, отмеченные как [multiple] могут присутствовать в нескольких экземплярах (например для указания нескольких телефонных номеров).
+
+Поле «changed» должно содержать адрес электронной почты человека, который отправляет данную заявку (или вносит изменения) и дату внесения изменений в формате ГГГГММДД.
+
+Поле «source» должно содержать значение «RIPE».
+
+Поле «mnt-by» применяется для выбора способа авторизации дальнейших изменений в создаваемом объекте (см. объект «mntner«).
+
+Удаление из БД делается точно так же как и создание. Единственное отличие, то что в конце добавляется поле «delete:» в котором вы и указываете причину удаления этого объекта.
+
+Для удобства использования WebUpdates, дабы не вводить пароль от объекта mntner, можно использовать авторизацию до проведения необходимых изменений: смотреть
+
+
+
+Разные объекты используются для разных целей. Номера as и т д, кто и куда что маршрутизирует и как сделано bgp
+
+[http://old.malik.elcat.kg/ripe-nic.shtml](http://old.malik.elcat.kg/ripe-nic.shtml)
+[http://old.malik.elcat.kg/ripe.shtml](http://old.malik.elcat.kg/ripe.shtml)
+
+Форма запроса на назначение IP-адресов, выделенных провайдеру
+Перевод адресов из ALLOCATED в ASSIGNED - форма [http://www.ripe.net/ripe/docs/ripe-315](http://www.ripe.net/ripe/docs/ripe-315)
+[http://old.malik.elcat.kg/ripe-pa-assig.shtml](http://old.malik.elcat.kg/ripe-pa-assig.shtml)
+Примерно такая же заявка нужна для выделения адресного пространства для клиента (Индезит)
+
+После этого делаем заявку на обратную зону и вуаля
+[http://old.malik.elcat.kg/ripe-reverse.shtml](http://old.malik.elcat.kg/ripe-reverse.shtml)
+
+А потом уже зарегистрировать объект inetnum
+[http://old.malik.elcat.kg/ripe-inetnum.shtml](http://old.malik.elcat.kg/ripe-inetnum.shtml)
+Как ASSIGNED
+
+Я так понимаю надо сначала стать провайдером в России
+Потом стать LIR и получить адреса
+
+
+
+
+inetnum:        81.20.192.0 - 81.20.207.255
+org:            ORG-ITI1-RIPE
+netname:        RU-INTELECOM-20020205
+descr:          LLC Telecom-Service
+
+
+
+Делегировать зону меньш
+Коротко получается так - дождитесь (проверьте) пока зона не обновится на всех ДНС-серверах, 
+поддерживающих вашу зону. Затем изменить номер прибавив к нему цифру 2147483647, 
+перегрузить зону и снова дождаться её обновления на всех соответствующих ДНС-серверах. 
+После этого поставить тот номер, который вам нужен.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Для регистрации AS и PI нет необходимости становится LIR. Для этого необходимо:
+
+    Войти в контакт с LIR (например, своим провайдером или консалтером), заключить договор и оплатить определенную мзду.
+    Заполнить заявку и подать соответствующие документы (вплоть до описания структуры сети и обоснования необходимости PI).
+    Через LIR общаться с RIPE на тему аллокации адресного пространства.
+    Настроить свое входное оборудование, распределить адреса внутри компании.
+    Заключить договор с вашим провайдером (провайдерами) на анонс вашей сети.
+
+
+
+ХостингКонсалт, например, берет за регистрацию PI 8 000 руб. единоразово.
+
+Либо, стать LIR самому:
+
+Как стать LIR.
+
+    Подать заявку с обоснованием, как и зачем будет использоватся адресное пространство и статус LIR. Заявка([http://www.nic.ru/ip-reg/service/LIR/regid-template.html)](http://www.nic.ru/ip-reg/service/LIR/regid-template.html))
+    [http://www.ripe.net/ripe/docs/ripe-533](http://www.ripe.net/ripe/docs/ripe-533)
+    Получить положительное решение по заявке.
+    Заключить договор на английском языке с RIPE NCC.
+    Заплатить вступительный взнос в 2000 евро и членские взносы за остаток года.
+    Подать заявку на выделение ASN и адресного пространства.
+    После получения — настроить свое оборудование и заключить договоры с аплинками на обслуживание вашей автономной системый и анонс ваших адресов.
+
+
+Делать это можно как самостоятельно, так и через посредника (вашего ISP, консалтера (например, РосНИИРОС — nic.ru)). Консалтеры, естественно, работают не бесплатно — 5500 за регистрацию для того-же ХостингКонсалта.
+
+
+
+Заведение аккаунта в ripe
+[https://access.ripe.net/registration](https://access.ripe.net/registration)
+[http://www.ripe.net/ripe/docs/current-ripe-documents/request-forms-supporting-notes?b_start:int=0](http://www.ripe.net/ripe/docs/current-ripe-documents/request-forms-supporting-notes?b_start:int=0)
+
+Новый LIR
+[https://lirportal.ripe.net/newlir-external/newLIR.html](https://lirportal.ripe.net/newlir-external/newLIR.html)
+
+Обучение 
+[http://habrahabr.ru/company/selectel/blog/99535/](http://habrahabr.ru/company/selectel/blog/99535/)
+[http://video.yandex.ru/users/selectelru/collection/1/](http://video.yandex.ru/users/selectelru/collection/1/)
+[http://habrahabr.ru/post/128470/](http://habrahabr.ru/post/128470/)
+[https://www.ripe.net/lir-services/training/courses/lir/outline/](https://www.ripe.net/lir-services/training/courses/lir/outline/)
+
+Документация
+[https://www.nic.ru/ip-reg/](https://www.nic.ru/ip-reg/)
+[http://noc.demos.net/helps/ipv4-policies.shtml](http://noc.demos.net/helps/ipv4-policies.shtml)
+[http://www.nic.ru/ip-reg/service/AS/ripe-252.html](http://www.nic.ru/ip-reg/service/AS/ripe-252.html)
+[http://www.ripe.net/data-tools/support/documentation/doc-library](http://www.ripe.net/data-tools/support/documentation/doc-library)
+[http://subnets.ru/blog/?p=24](http://subnets.ru/blog/?p=24)
+[http://ubuntu-faq.blogspot.ru/2009/01/ripe-help.html](http://ubuntu-faq.blogspot.ru/2009/01/ripe-help.html)
+
+Обратная зона
+[http://daybook.org.ua/seti/sozdaem-obekt-reversnoj-zony-v-ripe-ncc.html](http://daybook.org.ua/seti/sozdaem-obekt-reversnoj-zony-v-ripe-ncc.html)
+
+
+
+person:         Larisa A. Yurkina
+address:        RU-CENTER
+address:        1 Kurchatov square
+address:        123182 Moscow
+address:        Russia
+phone:          +7 495 737 0604
+fax-no:         +7 495 196 4984
+nic-hdl:        LY10-RIPE
+e-mail:         ip-dbm-request@ripn.net
+e-mail:         ip-box@ripn.net
+mnt-by:         ROSNIIROS-MNT
+changed:        bon@ripn.net 19980211
+changed:        ripe-dbm@ripe.net 20051216
+changed:        ip-box@ripn.net 20120116
+source:         RIPE
+
+
+
+
+person:         Elena V. Yasnopolskaya
+address:        Russian Institute for Public Networks
+address:        1 Kurchatov square
+address:        123182 Moscow
+address:        Russia
+phone:          +7 495 737 06 04
+fax-no:         +7 495 737 06 84
+nic-hdl:        EVK10-RIPE
+e-mail:         evy@ripn.net
+e-mail:         ip-dbm-request@ripn.net
+e-mail:         ip-box@ripn.net
+e-mail:         rtip-reg@ripn.net
+notify:         evy@ripn.net
+mnt-by:         ROSNIIROS-MNT
+changed:        evy@ripn.net 19980929
+changed:        ip-dbm@ripn.net 20010213
+changed:        ripe-dbm@ripe.net 20051216
+source:         RIPE
+
+
+[http://www.nic.ru/ip-reg/service/AS/ripe-252.html](http://www.nic.ru/ip-reg/service/AS/ripe-252.html)
+
+
+
+[https://www.ripe.net/data-tools/db](https://www.ripe.net/data-tools/db)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.План письма
+2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Письмо
+Кому:lir-help@ripe.net
+Тема: Takeover of an LIR ORG-ITI1-RIPE by a non-LIR
+От кого:paul@sc.ru
+
+Dear Sir/Madam
+Non-LIR LLC Promsvyaz-Invest takeover of an LIR LLC Telecom-Service. 
+LLC Promsvyaz-Invest assumes all responsibilities of LIR LLC Telecom-Service
+We want to update information in databases 
+Our LIR name - ORG-ITI1-RIPE, RegID - ru.intelecom. We don't want to change LIR name and RegID
+
+This is our updated contact details
+
+org:LLC Promsvyaz-Invest
+
+Company registered with:
+Federal Tax service inspection in Levoberezhnyi region of Lipetsk
+
+Vat number:
+4826082163
+
+registered Office location:
+LLC Promsvyaz-Invest
+Konstantin Nosov
+9 Kommunalnaya st, office 610
+398059 Lipetsk,
+Russian Federation
+
+billing contact:
+e-mail для получения  копий счетов
+
+billing address:
+LLC Promsvyaz-Invest
+Konstantin Nosov
+9 Kommunalnaya st, office 610
+398059 Lipetsk,
+Russian Federation
+
+Country codes of service area:RU
+
+billing period:
+периодичность оплаты за услуги RIPE NCC
+Возможны 3 варианта: YEARLY, HALF YEARLY, QUARTERLY
+Рекомендуемый вариант: YEARLY
+
+Telephone number:
++7 495 7773282
+        
+Fax number:
++7 495 7773277
+
+We don't change list of contact persons.
+
++7 495 737 06 04
+
+
+
+
+
+All documents about takeover of an LIR LLC Telecom-Service by LLC Promsvyaz-Invest attached 
+Yours faithfully,
+
+Technical director of LLC Promsvyaz-Invest
+Paul V. Roschupkin
+
+
+
+
+
+
+
+
+
+
+Confirmation from all parties agreeing to the change (See section 2.3).
+Бумаги с обеих сторон о согласии
+Прикрепить документы по присоединению
+Контакты наши узнать (VAT number - ХЗ, похоже ИНН)
+
+
+
+
+JSC VolgoInform
+         Alexey Nikolayev
+         74 Gorky str,
+         443110 Samara,
+         Russian Federation
+
+Короче надо обновить всю информацию, как в заявке
+[http://www.nic.ru/ip-reg/service/LIR/regid-template.html](http://www.nic.ru/ip-reg/service/LIR/regid-template.html)
+Узнать предыдущую
+
+    A new service agreement, if applicable (See section 2.2).
+Не меняем название и id
+
+
+
+
+Overview of utilisation in all allocations (See section 2.6).
+
+
+ 
+
+
+
+
+
+
+regid:
+org:
+company registered with:
+signatory details:
+registered Office location:
+billing contact:
+billing address:
+country codes of service area:
+billing period:
+telephone number:
+fax number:
+contact details:
+subscribe to ncc-announce@ripe.net:
+
+
+
+
+
+
+[http://www.ipm.kstu.ru/internet/lec/13.php](http://www.ipm.kstu.ru/internet/lec/13.php)
+[http://rhd-uz.livejournal.com/41155.html](http://rhd-uz.livejournal.com/41155.html)
+[http://www.bog.pp.ru/work/ip_reg.html](http://www.bog.pp.ru/work/ip_reg.html)
+
+
+[http://shaman99.narod.ru/lan/rpsl.htm](http://shaman99.narod.ru/lan/rpsl.htm)
+
+
+
+
+
+Создание объекта БД RIPE
+nic-handle (в принципе это и есть персон)
+[https://apps.db.ripe.net/webupdates/select-type.html](https://apps.db.ripe.net/webupdates/select-type.html)
+
+
+mntner - объект БД для защиты других БД (аля пароль) - вообще-то он и есть пароль, но присутствуют и другие поля
+
+[http://subnets.ru/blog/?p=24](http://subnets.ru/blog/?p=24)
+[http://www.plus.ru/contact_registration](http://www.plus.ru/contact_registration)
+
+Ещё ссылки
+[http://www.ripn.net/nic/IP-reg/routing.html](http://www.ripn.net/nic/IP-reg/routing.html)
+
+PVR3-RIPE
+Надо создать role для abuse с nic-hdl PVR3-RIPE
+и для role указать "abuse-mailbox:" abuse@promsvyaz.ru
+
+INTELECOM-MNT
+
+mntner:         INTELECOM-MNT
+descr:          Intustrial Telecom Inc. Maintainer
+admin-c:        AYS-RIPE
+admin-c:        PVR3-RIPE
+tech-c:         AYS-RIPE
+tech-c:         PVR3-RIPE
+auth:           MD5-PW # Filtered
+auth:           PGPKEY-C396EEA0
+mnt-by:         INTELECOM-MNT
+referral-by:    RIPE-DBM-MNT
+source:         RIPE # Filtered
+
+
+
+
+
+
+
+
+Сначала создаётся объект mntner, защищённый этим же mntner
+Затем создаётся объект person, защищённый mntner или другие объекты
+
+
+
+
+Пример зарегистрированного объекта "mntner"
+
+mntner:          BARTELECOM-MNT
+descr:           Bartelecom Corp. mntner
+admin-c:         IB1031-RIPE
+upd-to:          noc@bartelecom.ru
+auth:            MD5-PW $1$LhqHG22m$8qDho8NvjLQLo7cmtkEzG/
+auth:            PGPKEY-C396EEA0
+mnt-by:          BARTELECOM-MNT
+referral-by:     RIPE-DBM-MNT
+changed:         noc@bartelecom.ru 20090506
+source:          RIPE
+
+
+
+
+nic-hdl:
+    Междунаpодный пеpсональный код (nic-handle)
+    Фоpмат: стандаpтный фоpмат NIC'а
+    Пpимеp:
+    nic-hdl: II77
+    Указание nic-handle необязательно, но кpайне желательно для тех, кто его имеет.
+
+
+organisation: Уникальный идентификатор организации в базе данных RIPE. 
+При создании объекта в поле "organisation:" указать "AUTO-1" или "AUTO-1 (от 2 до 4 букв).
+ Идентификатор присваивается автоматически при регистрации. 
+
+
+
+
+
+
+
+
+Начинать надо с 
+[https://apps.db.ripe.net/startup/](https://apps.db.ripe.net/startup/)
+Создаётся person c nic-hnd и mntner
+
+
+
+
+
+
+
+[http://www.nic.ru/ip-reg/service/zayav_o.html](http://www.nic.ru/ip-reg/service/zayav_o.html)
+[http://www.ripn.net/nic/IP-reg/routing.html](http://www.ripn.net/nic/IP-reg/routing.html)
+
+
+
+
+route:          81.20.192.0/20
+descr:          RU-INTELECOM-NET
+origin:         AS20866
+mnt-by:         INTELECOM-MNT
+source:         RIPE #Filtered
+
+
+videint0
+In15PsiMn
+
+
+AS-INTELECOM
+as-set:         AS-INTELECOM
+descr:          Industiral Telecom
+members:        AS20866
+members:        AS8570
+members:        AS50688
+members:        AS49919
+members:        AS42368
+members:        AS48146
+members:        AS49394
+members:        AS60833
+tech-c:         AYS-RIPE
+tech-c:         AYS-RIPE
+admin-c:        AYS-RIPE
+admin-c:        AYS-RIPE
+mnt-by:         INTELECOM-MNT
+source:         RIPE #Filtered
+
+
+
+Создание фильтров из базы RIPE
+
+Наши route object
+whois -h whois.ripe.net -i origin -r AS20866
+
+[http://muff.kiev.ua/content/bgpq-avtomatizatsiya-postroeniya-prefix-list](http://muff.kiev.ua/content/bgpq-avtomatizatsiya-postroeniya-prefix-list)
+[http://forum.nag.ru/forum/index.php?showtopic=51806](http://forum.nag.ru/forum/index.php?showtopic=51806)
+
+
+
+
+
+
+RFC по BGP
+[http://rfc2.ru/5292.rfc](http://rfc2.ru/5292.rfc)
+[http://www.cisco.com/web/RU/learning/le3/current_exams/642-661.html](http://www.cisco.com/web/RU/learning/le3/current_exams/642-661.html)
+[http://rfc2.ru/4277.rfc](http://rfc2.ru/4277.rfc)
+
+
+
+Looking glass для просмотра информации о bgp
+
+[http://lg.starttelecom.ru/](http://lg.starttelecom.ru/)
+[http://lg.retn.net/](http://lg.retn.net/)
+
+AUT-NUM	AS20866
+
+AS-SET - AS-INTELECOM
+
+
+
+
+
+role:            INTELECOM ABUSE
+abuse-mailbox:   abuse@promsvyaz.ru
+address:         6, st. Kraynaya, Lipetsk,Russia
+e-mail:          iptech@sc.ru
+nic-hdl:         IA3269-RIPE
+mnt-by:          INTELECOM-MNT
+changed:         iptech@sc.ru 20130429
+source:          RIPE
+
+
+
+
+
+
+
+
+
+
+Otto80FutL
+
+person: Igor B. Dzuin
+address: 6,st. Krayanay, Lipetsk
+phone: +7 4742 517141
+e-mail: i.dzuin@promsvyaz.ru
+nic-hdl: IBD-RIPE
+mnt-by: IBD-MNT
+changed: i.dzuin@promsvyaz.ru 20130418
+source: RIPE
+
+[http://subnets.ru/wrapper.php?p=4](http://subnets.ru/wrapper.php?p=4)
+
+
+
+
+Это вся наша сеть
+Она ALLOCATED PA  - выделена
+
+inetnum:        81.20.192.0 - 81.20.207.255
+netname:        RU-INTELECOM-20020205
+descr:          LLC Promsvyaz-Invest
+country:        RU
+org:            ORG-ITI1-RIPE
+admin-c:        PVR3-RIPE
+tech-c:         PVR3-RIPE
+status:         ALLOCATED PA
+mnt-by:         RIPE-NCC-HM-MNT
+mnt-lower:      INTELECOM-MNT
+mnt-routes:     INTELECOM-MNT
+source:         RIPE # Filtered
+
+Нужно делать её ASSIGNED, как
+inetnum:         81.20.193.0 - 81.20.193.255
+netname:         INTELECOM-1-DIALUP
+descr:           Industrial Telecom Dial-up
+country:         RU
+admin-c:         AYS-RIPE
+tech-c:          AYS-RIPE
+tech-c:          PVR3-RIPE
+status:          ASSIGNED PA
+mnt-by:          INTELECOM-MNT
+changed:         a.skripalev@promsvyaz.ru 20070418
+source:          RIPE
+
+Делается всё через LIR портал
+
+
+
+[http://www.bog.pp.ru/work/ip_reg.html](http://www.bog.pp.ru/work/ip_reg.html)
+
+ALLOCATED PA
+
+
+81.20.192.0/24
+MNGT
+81.20.193.0/24
+Ur
+81.20.194.0/24
+NLMK
+81.20.195.0/24
+Ur
+81.20.196.0/24
+81.20.197.0/24
+81.20.198.0/24
+
+Phys
+81.20.199.0/24
+
+Ur
+81.20.200.0/24
+81.20.201.0/24
+81.20.202.0/24
+81.20.203.0/24
+81.20.204.0/24
+
+Ur Nat
+81.20.205.0/24
+
+
+whois -h whois.ripe.net 91.190.64.0/20AS20866
+% This is the RIPE Database query service.
+% The objects are in RPSL format.
+%
+% The RIPE Database is subject to Terms and Conditions.
+% See [http://www.ripe.net/db/support/db-terms-conditions.pdf](http://www.ripe.net/db/support/db-terms-conditions.pdf)
+
+% Note: this output has been filtered.
+%       To receive output for a database update, use the "-B" flag.
+
+% Information related to '91.190.64.0/20AS20866'
+
+route:          91.190.64.0/20
+descr:          RU-INTELECOM-PHYS-POOL
+origin:         AS20866
+mnt-by:         INTELECOM-MNT
+created:        2016-08-30T08:40:46Z
+last-modified:  2016-08-30T08:40:46Z
+source:         RIPE
+
+% This query was served by the RIPE Database Query Service version 1.87.4 (BLAARKOP)
+
+
+
+
+
+
+inetnum:        87.229.223.0 - 87.229.223.255
+netname:        RU-SOVINTEL-Foratec-p2p-static-IP-Pool-NET
+
+
+inetnum:        87.229.222.0 - 87.229.222.255
+netname:        RU-GOLDENTELECOM-Client-Static-IP-Pool-NET
+descr:          111250 Russia SOVINTEL/EDN et GoldenTeleCOm
+descr:          p2p and static IP pool for (xEthr, xDSL, Wi-Fi .. )
+
+
+
+
+inetnum:        87.229.220.0 - 87.229.220.255
+netname:        RU-SOVINTEL-Wi-Fi-clients-IPv4-pool-NET
+descr:          111250 Russia EDN/SOVINTEL
+descr:          p2p and static IP pool for (xEthr, xDSL, Wi-Fi .. )
+status:         ASSIGNED PA
+country:        RU
+admin-c:        SVNT1-RIPE
+tech-c:         SVNT2-RIPE
+mnt-by:         SOVINTEL-MNT
+remarks:        +-------------------------------------------+
+remarks:        | Please send abuse to abuse@b2b.beeline.ru |
+remarks:        +-------------------------------------------+
+source:         RIPE # Filtered
+
+
+
+
+
+inetnum:        87.229.192.0 - 87.229.192.255
+netname:        RU-SOVINTEL-xDSL-links-IPv4-pool-NET
+descr:          111250 Russia EDN/SOVINTEL
+descr:          p2p and static IP pool for (xEthr, xDSL, Wi-Fi .. )
+
+
+[http://www.opennet.ru/openforum/vsluhforumID6/711.html](http://www.opennet.ru/openforum/vsluhforumID6/711.html)

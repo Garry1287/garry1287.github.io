@@ -1,0 +1,47 @@
+---
+layout: post
+title:  "ldap-nis"
+date:   2016-03-28 02:43:33 +0300
+categories: Networking
+tags: Networking
+---
+
+# ldap-nis
+циска умеет радиус или такакс,
+лдап должен быть бэкэндом к радиусу.
+
+[http://www.cisco.com/en/US/docs/ios/sec_user_services/configuration/guide/sec_cfg_ldap.html](http://www.cisco.com/en/US/docs/ios/sec_user_services/configuration/guide/sec_cfg_ldap.html)
+[http://www.ibm.com/developerworks/ru/edu/l-lpic3305/section4.html](http://www.ibm.com/developerworks/ru/edu/l-lpic3305/section4.html)
+[http://www.lissyara.su/articles/freebsd/programms/ldap_backbones/](http://www.lissyara.su/articles/freebsd/programms/ldap_backbones/)
+
+dlink+ldap+radius
+
+1.Создание пользователей
+2.Распределение пользователей (все, поддержка, биллинг, iptech)
+3.Права и доступы к оборудованию
+4.Все - это только почта, поддержка - урезанные права без wheel для доступа на серверы и девайсы только для просмотра,
+  биллинг - чуть более широкие права чем у поддержки, iptech рулят
+
+[http://www.splunk.com/](http://www.splunk.com/)
+zabbix
+zenoss
+cacti
+nagios
+
+Анализатор траффика (виды и типы)
+ntop
+
+
+syslog-ng php-syslog-ng (Logzilla) или Loganalyzer, graylog2
+LogWatch
+								  
+syslog-ng + Loganalyzer
+Хранить в mysql
+																				  
+один server syslog-ng
+у него есть источники - сетевые с ip адреса такого-то, протокол такой-то и т.д.
+и dest, куда 
+
+
+
+

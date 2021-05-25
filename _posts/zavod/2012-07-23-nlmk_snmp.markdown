@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "nlmk_snmp"
+date:   2012-07-23 04:10:13 +0400
+categories: zavod
+tags: zavod
+---
+
+# nlmk_snmp
+NLMK
+172.19.4.0/22
+Прописать новое
+Snmp community Fv8Ya64PQ
+

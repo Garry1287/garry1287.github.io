@@ -1,0 +1,30 @@
+---
+layout: post
+title:  "Redback"
+date:   2017-08-31 20:52:31 +0300
+categories: Networking
+tags: Networking
+---
+
+# Redback
+[http://shop.nag.ru/article/kak-zablokirovat-youtube-blokirovka-trafika-na-youtubecom-cherez-http-redirect-na-erricsson-smartedge-](http://shop.nag.ru/article/kak-zablokirovat-youtube-blokirovka-trafika-na-youtubecom-cherez-http-redirect-na-erricsson-smartedge-)
+[http://wiki.bitel.ru/index.php/RedBack_CLIPS](http://wiki.bitel.ru/index.php/RedBack_CLIPS)
+
+сначала conf
+потом сontext internet 
+Потом настройка
+
+
+[internet]LPK-C01-BRAS01#conf 
+Enter configuration commands, one per line, 'end' to exit
+[internet]LPK-C01-BRAS01(config)#context internet
+[internet]LPK-C01-BRAS01(config-ctx)#policy access-list filter-blocked
+[internet]LPK-C01-BRAS01(config-access-list)# no seq 65 permit tcp 172.20.64.0 0.0.63.255 81.16.114.0 0.0.0.255 eq 443 class WEB
+[internet]LPK-C01-BRAS01(config-access-list)# no seq 70 permit tcp 172.20.64.0 0.0.63.255 81.16.114.0 0.0.0.255 eq www class WEB
+[internet]LPK-C01-BRAS01(config-access-list)# no seq 80 permit tcp 81.20.199.0 0.0.0.255 81.16.114.0 0.0.0.255 eq 443 class WEB
+[internet]LPK-C01-BRAS01(config-access-list)# no seq 85 permit tcp 81.20.199.0 0.0.0.255 81.16.114.0 0.0.0.255 eq www class WEB
+[internet]LPK-C01-BRAS01(config-access-list)#  seq 65 permit tcp 172.20.64.0 0.0.63.255 80.75.128.0 0.0.3.255 eq 443 class WEB
+[internet]LPK-C01-BRAS01(config-access-list)#  seq 70 permit tcp 172.20.64.0 0.0.63.255 80.75.128.0 0.0.3.255 eq www class WEB
+[internet]LPK-C01-BRAS01(config-access-list)#  seq 80 permit tcp 81.20.199.0 0.0.0.255 80.75.128.0 0.0.3.255 eq 443 class WEB
+[internet]LPK-C01-BRAS01(config-access-list)#  seq 85 permit tcp 81.20.199.0 0.0.0.255 80.75.128.0 0.0.3.255 eq www class WEB
+[internet]LPK-C01-BRAS01(config-access-list)#exit

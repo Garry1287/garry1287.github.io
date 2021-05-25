@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "rest-soap"
+date:   2016-01-02 03:49:18 +0300
+categories: programming
+tags: programming
+---
+
+# rest-soap
+SOAP может работать через ftp, http, smtp  и т д, формат данных - xml. Это жестко прописанный протокол
+
+REST - стиль, работает на уровне http (http post, http get и т д) REST поддерживает различные форматы text, json, xml
+
+
+аким образом, у меня все свелось к тому, что использовать SOAP надо там, где он поддерживается, в противном случае использовать REST

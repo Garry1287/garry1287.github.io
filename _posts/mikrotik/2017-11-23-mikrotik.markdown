@@ -1,0 +1,116 @@
+---
+layout: post
+title:  "mikrotik"
+date:   2017-11-23 21:29:20 +0300
+categories: mikrotik
+tags: mikrotik
+---
+
+# mikrotik
+[http://forum.ixbt.com/topic.cgi?id=14:51525](http://forum.ixbt.com/topic.cgi?id=14:51525)
+[http://wiki.mikrotik.com/wiki/MikroTik_RouterOS](http://wiki.mikrotik.com/wiki/MikroTik_RouterOS)
+[http://wiki.mikrotik.com/wiki/Manual:User_Manager](http://wiki.mikrotik.com/wiki/Manual:User_Manager)
+[http://mikrotik.ru/files/instrukcii-po-nastrojke-mikrotik](http://mikrotik.ru/files/instrukcii-po-nastrojke-mikrotik)
+[http://simferopol.in/topic/1058-router-mikrotik-rb750g/](http://simferopol.in/topic/1058-router-mikrotik-rb750g/)
+[http://spw.ru/solutions/new_user/](http://spw.ru/solutions/new_user/)
+[http://forum.ru-board.com/topic.cgi?forum=8&topic=38493&start=2000](http://forum.ru-board.com/topic.cgi?forum=8&topic=38493&start=2000)
+
+loopback в mikrotik
+[http://forum.mikrotik.com/viewtopic.php?t=56329](http://forum.mikrotik.com/viewtopic.php?t=56329)
+
+
+Первоначальная настройка
+[http://spw.ru/solutions/new_user/](http://spw.ru/solutions/new_user/)
+
+
+vlan
+[http://wiki.mikrotik.com/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0:%D0%92%D0%BE%D0%B7%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D0%B8_%D1%87%D0%B8%D0%BF%D0%B0_%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%86%D0%B8%D0%B8](http://wiki.mikrotik.com/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0:%D0%92%D0%BE%D0%B7%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D0%B8_%D1%87%D0%B8%D0%BF%D0%B0_%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%86%D0%B8%D0%B8)
+
+QOS очень интересно
+[http://wiki.mikrotik.com/wiki/%D0%97%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B5%D0%B9_%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8](http://wiki.mikrotik.com/wiki/%D0%97%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B5%D0%B9_%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0_%D1%81%D0%B2%D1%8F%D0%B7%D0%B8)
+
+
+
+mpls ldp set enabled=yes transport-address=81.20.192.68 lsr-id=81.20.192.68 
+mpls ldp interface add interface=ether1-gateway
+
+
+MikroTik RouterOS 6.28 (c) 1999-2015       [http://www.mikrotik.com/](http://www.mikrotik.com/)
+
+
+
+
+EoIP
+[http://bg.valec.ru/?p=8](http://bg.valec.ru/?p=8)
+[http://habrahabr.ru/post/220685/](http://habrahabr.ru/post/220685/)
+
+
+
+Восстановление 
+[http://www.wmd.ru/articles/rukovodstva/vosstanovlenie-ustrojstv-mikrotik.html](http://www.wmd.ru/articles/rukovodstva/vosstanovlenie-ustrojstv-mikrotik.html)
+[http://ixnfo.com/vosstanovlenie-mikrotik-routeros-s-pomoshhyu-netinstall.html](http://ixnfo.com/vosstanovlenie-mikrotik-routeros-s-pomoshhyu-netinstall.html)
+[http://www.wmd.ru/articles/rukovodstva/vosstanovlenie-ustrojstv-mikrotik.html](http://www.wmd.ru/articles/rukovodstva/vosstanovlenie-ustrojstv-mikrotik.html)
+[http://www.mikc.ru/files/docs/refman2.9/testdocs/ros/2.9/guide/netinstall.php.htm](http://www.mikc.ru/files/docs/refman2.9/testdocs/ros/2.9/guide/netinstall.php.htm)
+[http://wiki.mikrotik.com/wiki/Manual:Netinstall](http://wiki.mikrotik.com/wiki/Manual:Netinstall)
+
+Не забыть вбить ip address при восстановлении
+
+
+Reset
+[http://pk-help.com/network/reset-mikrotik-rb750-rb751-rb951/](http://pk-help.com/network/reset-mikrotik-rb750-rb751-rb951/)
+[http://forum.mikrotik.com/viewtopic.php?t=34724](http://forum.mikrotik.com/viewtopic.php?t=34724)
+[http://wiki.mikrotik.com/wiki/Manual:Password_reset](http://wiki.mikrotik.com/wiki/Manual:Password_reset)
+
+
+
+Firewall
+[http://habrahabr.ru/post/182166/](http://habrahabr.ru/post/182166/)
+[http://wiki.mikrotik.com/wiki/Manual:IP/Firewall/NAT](http://wiki.mikrotik.com/wiki/Manual:IP/Firewall/NAT)
+
+Проблема с VRF
+[http://net-labs.in/2014/07/19/vrf-l3vpn-%D0%B2-mikrotik-routeros-defective-by-design/](http://net-labs.in/2014/07/19/vrf-l3vpn-%D0%B2-mikrotik-routeros-defective-by-design/)
+
+
+
+MBGP не работает
+
+
+OSPF
+[http://wiki.mikrotik.com/wiki/Manual:OSPF_Case_Studies](http://wiki.mikrotik.com/wiki/Manual:OSPF_Case_Studies)
+[http://wiki.mikrotik.com/wiki/Manual:OSPF_Forwarding_Address](http://wiki.mikrotik.com/wiki/Manual:OSPF_Forwarding_Address)
+[http://wiki.mikrotik.com/wiki/Manual:Routing/OSPF](http://wiki.mikrotik.com/wiki/Manual:Routing/OSPF)
+[http://wiki.mikrotik.com/wiki/Russian/OSPF](http://wiki.mikrotik.com/wiki/Russian/OSPF)
+[http://wiki.mikrotik.com/wiki/Russian/%D0%A1%D1%83%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%B8_%D0%BF%D0%B5%D1%80%D0%B5%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%BE%D0%B2_OSPF](http://wiki.mikrotik.com/wiki/Russian/%D0%A1%D1%83%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%B8_%D0%BF%D0%B5%D1%80%D0%B5%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%BE%D0%B2_OSPF)
+[http://habrahabr.ru/post/201042/](http://habrahabr.ru/post/201042/)
+
+
+[http://wiki.mikrotik.com/wiki/Manual:MPLS/LDP](http://wiki.mikrotik.com/wiki/Manual:MPLS/LDP)
+[http://wiki.mikrotik.com/wiki/Manual:Layer-3_MPLS_VPN_example](http://wiki.mikrotik.com/wiki/Manual:Layer-3_MPLS_VPN_example)
+[http://wiki.mikrotik.com/wiki/Manual:Internet_access_from_VRF_with_NAT](http://wiki.mikrotik.com/wiki/Manual:Internet_access_from_VRF_with_NAT)
+[http://wiki.mikrotik.com/wiki/VRF_Route_Leaking](http://wiki.mikrotik.com/wiki/VRF_Route_Leaking)
+[http://wiki.mikrotik.com/wiki/Manual:EBGP_as_PE-CE_routing_protocol](http://wiki.mikrotik.com/wiki/Manual:EBGP_as_PE-CE_routing_protocol)
+[http://forum.mikrotik.com/viewtopic.php?t=73820](http://forum.mikrotik.com/viewtopic.php?t=73820)
+
+
+Резервные копии
+[http://ingrid.net.ru/blog/44](http://ingrid.net.ru/blog/44)
+[http://wiki.mikrotik.com/wiki/Manual:Configuration_Management](http://wiki.mikrotik.com/wiki/Manual:Configuration_Management)
+[http://www.technotrade.com.ua/Articles/beckup_config_mikrotik.php](http://www.technotrade.com.ua/Articles/beckup_config_mikrotik.php)
+[http://pcrouter.ru/ipb/?showtopic=52](http://pcrouter.ru/ipb/?showtopic=52)
+
+
+
+
+[http://wiki.mikrotik.com/wiki/Manual:OSPF_as_PE-CE_routing_protocol](http://wiki.mikrotik.com/wiki/Manual:OSPF_as_PE-CE_routing_protocol)
+ospf vrf перераспределяется в bgp
+
+
+
+
+switch
+[http://wiki.mikrotik.com/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0:%D0%92%D0%BE%D0%B7%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D0%B8_%D1%87%D0%B8%D0%BF%D0%B0_%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%86%D0%B8%D0%B8](http://wiki.mikrotik.com/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0:%D0%92%D0%BE%D0%B7%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D0%B8_%D1%87%D0%B8%D0%BF%D0%B0_%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%86%D0%B8%D0%B8)
+[http://wiki.mikrotik.com/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0:%D0%9F%D1%80%D0%BE%D1%85%D0%BE%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%B2_%D1%87%D0%B5%D1%80%D0%B5%D0%B7_%D1%87%D0%B8%D0%BF_%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%86%D0%B8%D0%B8_Atheros_8316](http://wiki.mikrotik.com/wiki/%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%B0:%D0%9F%D1%80%D0%BE%D1%85%D0%BE%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%B2_%D1%87%D0%B5%D1%80%D0%B5%D0%B7_%D1%87%D0%B8%D0%BF_%D0%BA%D0%BE%D0%BC%D0%BC%D1%83%D1%82%D0%B0%D1%86%D0%B8%D0%B8_Atheros_8316)
+
+
+
+

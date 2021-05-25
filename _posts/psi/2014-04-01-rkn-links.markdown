@@ -1,0 +1,20 @@
+---
+layout: post
+title:  "rkn-links"
+date:   2014-04-01 02:42:30 +0400
+categories: PSI
+tags: PSI
+---
+
+# rkn-links
+[https://rkn.gov.ru/treatments/p459/p460/](https://rkn.gov.ru/treatments/p459/p460/)
+[https://vigruzki.rkn.gov.ru/](https://vigruzki.rkn.gov.ru/)
+[http://eais.rkn.gov.ru/tooperators/](http://eais.rkn.gov.ru/tooperators/)
+eais.rkn.gov.ru/docs/requirements.pdf
+[https://habr.com/ru/post/282087/](https://habr.com/ru/post/282087/)
+[https://nag.ru/articles/article/30436/tehnicheskie-sredstva-kontrolya-za-operatorom-obnovleno-.html](https://nag.ru/articles/article/30436/tehnicheskie-sredstva-kontrolya-za-operatorom-obnovleno-.html)
+[https://github.com/vvl-rulez/auditor-faq](https://github.com/vvl-rulez/auditor-faq)
+[http://www.rkn.gov.ru/press/conference/conf17.htm](http://www.rkn.gov.ru/press/conference/conf17.htm)
+[http://www.rkn.gov.ru/press/conference/conf19.htm](http://www.rkn.gov.ru/press/conference/conf19.htm)
+[https://github.com/ircop/nfq_filter](https://github.com/ircop/nfq_filter)
+[https://www.carbonsoft.ru/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%BE%D0%B2-%D1%81%D0%B2%D1%8F%D0%B7%D0%B8-%D0%B0%D1%81-%D1%80%D0%B5%D0%B2%D0%B8%D0%B7%D0%BE%D1%80/](https://www.carbonsoft.ru/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%BE%D0%B2-%D1%81%D0%B2%D1%8F%D0%B7%D0%B8-%D0%B0%D1%81-%D1%80%D0%B5%D0%B2%D0%B8%D0%B7%D0%BE%D1%80/)

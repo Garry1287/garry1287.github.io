@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "sed-вставка-после-строки"
+date:   2010-07-07 06:56:17 +0400
+categories: sed-вставка-после-строки
+tags: sed-вставка-после-строки
+---
+
+# sed-вставка-после-строки
+ sed '/bad_guys/ a \qqq' fire.wall > xc

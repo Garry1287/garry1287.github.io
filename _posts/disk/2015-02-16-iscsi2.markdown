@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "iscsi2"
+date:   2015-02-16 20:27:45 +0300
+categories: iscsi2
+tags: disk
+---
+
+# iscsi2
+ты в свое время просил ссылками поделиться...
+
+[http://ru.intel.com/business/community/?automodule=blog&blogid=44433&showentry=2449](http://ru.intel.com/business/community/?automodule=blog&blogid=44433&showentry=2449)
+
+плюс запрет IPv6
+[http://wiki.debian.org/DebianIPv6](http://wiki.debian.org/DebianIPv6)
+
+кроме того
+[http://scst.sourceforge.net/](http://scst.sourceforge.net/)
+
+Но совсем по инструкции не получилось - ядро собирал из ванильных 
+сорсов. Найду заметки по подходящим версиям ядра - тоже скину.
