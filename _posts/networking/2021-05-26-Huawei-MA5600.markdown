@@ -1,0 +1,912 @@
+# Huawei SmartAX MA5608T
+
+
+## Платы - их название и назначение
+
+```
+hg0-hmel-yel>display board 0
+  -------------------------------------------------------------------------
+  SlotID  BoardName  Status          SubType0 SubType1    Online/Offline
+  -------------------------------------------------------------------------
+  0       H807GPBH   Normal                           
+  1       H807GPBH   Normal                           
+  2       H801MCUD1  Active_normal   CPCB             
+  3       H801MCUD1  Standby_normal  CPCB             
+  4       H801MPWC   Normal                           
+  5     
+  -------------------------------------------------------------------------
+
+```
+
+* Двойная основная плата управления MCUD
+* Плата питания переменного и постоянного тока MPWD
+* двойная плата питания постоянного тока MPWC
+* GPBD (Модули расширения GPON для OLT Huawei)
+* GPFD ()
+* EPBD (Модули расширения EPON для OLT Huawei)
+* EPFD 
+
+[http://ic-line.ru/product/gpon-olt-huawei/](http://ic-line.ru/product/gpon-olt-huawei/)
+
+
+H801SCUH    Плата блока суперуправления
+H801SCUV    Плата блока суперуправления
+H801SCUN    Плата блока суперуправления
+H801MCUD    Плата блока управления (GE Uplink)
+H801MCUD1   Плата блока управления (Восходящий канал GE / 10GE)
+H801SCUK    Плата блока суперуправления
+H806GPBH    8-порт Advanced GPON OLT Интерфейсная плата
+H807GPBH    8-порт Advanced GPON OLT Интерфейсная плата
+H801GPMD    8-порт Advanced GPON OLT Интерфейсная плата
+H805GPFD    16-порт GPON OLT Интерфейсная плата
+H801XGBD    8-порт XG-PON OLT Интерфейсная плата
+H802XGBC    4-порт Интерфейсная плата XG-PON OLT
+H801SPUF    Многофункциональная плата процесса обслуживания
+H801ETHB    Плата доступа к услугам Ethernet
+H801PRTA    Плата передачи мощности
+H801PRTE    Плата передачи мощности
+H801PRTG    Плата передачи мощности
+H831FCBB0   Кассета вентиляторов MA5608T
+[https://www.ycict.net/ru/products/huawei-smartax-ma5608t-olt/](https://www.ycict.net/ru/products/huawei-smartax-ma5608t-olt/)
+
+Получается 8 портов gpon на которые можно посадить по 128 пользователей (это не точно). Вывод показывает всё ont 
+
+```
+hg0-hmel-yel>display board 0/0
+
+  ---------------------------------------                
+  Board Name          : H807GPBH                    
+  Board Status        : Normal                       
+  ---------------------------------------
+
+  ------------------------------------------------------------------------------
+  Power Status      Power-off cause                    Power-off Time
+  ------------------------------------------------------------------------------
+  POWER-ON          -                                  -
+  ------------------------------------------------------------------------------
+  -------------------------------------------------------------
+    Port   Port   min-distance   max-distance   Optical-module
+           type       (km)           (km)           status
+  -------------------------------------------------------------
+    0     GPON        0              20             Online
+    1     GPON        0              20             Online
+    2     GPON        0              20             Online
+    3     GPON        0              20             Online
+    4     GPON        0              20             Online
+    5     GPON        0              20             Online
+    6     GPON        0              20             Online
+    7     GPON        0              20             Online
+  -------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/0    0  53434F4D1A0679DE  active      online   normal   mismatch no 
+  0/ 0/0    1  53434F4D1A067A4A  active      online   normal   mismatch no 
+  0/ 0/0    2  53434F4D1A06782E  active      online   normal   mismatch no 
+  0/ 0/0    4  53434F4D1A067E7E  active      online   normal   mismatch no 
+  0/ 0/0    5  53434F4D1A0679FE  active      online   normal   mismatch no 
+  0/ 0/0    6  53434F4D1A067E74  active      online   normal   mismatch no 
+  0/ 0/0    7  53434F4D1A067DAC  active      offline  initial  initial  no 
+  0/ 0/0    8  53434F4D1A06E030  active      offline  initial  initial  no 
+  0/ 0/0   10  53434F4D1A06E5CB  active      online   normal   mismatch no 
+  0/ 0/0   11  53434F4D1A06ED15  active      online   normal   mismatch no 
+  0/ 0/0   12  53434F4D1A06E0B6  active      online   normal   mismatch no 
+  0/ 0/0   13  53434F4D1A06E0F9  active      online   normal   mismatch no 
+  0/ 0/0   14  53434F4D1A06E0B7  active      online   normal   mismatch no 
+  0/ 0/0   16  5A544547C8994D29  active      online   normal   mismatch no 
+  0/ 0/0   17  53434F4D1A0785FE  active      online   normal   mismatch no 
+  0/ 0/0   18  5A544547C89828CF  active      online   normal   mismatch no 
+  0/ 0/0   19  5A544547C88D1050  active      online   normal   mismatch no 
+  0/ 0/0   20  5A544547C899655C  active      online   normal   mismatch no 
+  0/ 0/0   21  5A544547C8982981  active      offline  initial  initial  no 
+  0/ 0/0   22  5A544547C8ACE152  active      offline  initial  initial  no 
+  0/ 0/0   23  5A544547C8ACE72F  active      online   normal   mismatch no 
+  0/ 0/0   24  53434F4D1A08AFD8  active      online   normal   mismatch no 
+  0/ 0/0   25  53434F4D1A08A30D  active      online   normal   mismatch no 
+  0/ 0/0   26  49534B54612A83D0  active      online   normal   mismatch no 
+  0/ 0/0   27  49534B54612AE978  active      online   normal   mismatch no 
+  0/ 0/0   28  49534B54612AAC00  active      online   normal   mismatch no 
+  0/ 0/0   29  49534B54612EFFF8  active      offline  initial  initial  no 
+  0/ 0/0   30  49534B54612EF588  active      online   normal   mismatch no 
+  0/ 0/0   31  53434F4D1A06E40A  active      online   normal   mismatch no 
+  0/ 0/0   32  49534B546179B1A8  active      online   normal   mismatch no 
+  0/ 0/0   33  49534B546184DDB8  active      offline  initial  initial  no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/0       0   4740719915
+  0/ 0/0       1   4740719906
+  0/ 0/0       2   4740719961
+  0/ 0/0       4   4740731011
+  0/ 0/0       5   4740719848
+  0/ 0/0       6   4740719965
+  0/ 0/0       7   4740719939
+  0/ 0/0       8   4740719999
+  0/ 0/0      10   4740731171
+  0/ 0/0      11   4740731211        
+  0/ 0/0      12   4740726228
+  0/ 0/0      13   4740726243
+  0/ 0/0      14   4740726218
+  0/ 0/0      16   4740726488
+  0/ 0/0      17   4740726293
+  0/ 0/0      18   4740731321
+  0/ 0/0      19   4740726720
+  0/ 0/0      20   4740726888
+  0/ 0/0      21   4740726970
+  0/ 0/0      22   4740731399
+  0/ 0/0      23   4740731431
+  0/ 0/0      24   4740739289
+  0/ 0/0      25   4740739324
+  0/ 0/0      26   4740739691
+  0/ 0/0      27   4740739762
+  0/ 0/0      28   4740739747
+  0/ 0/0      29   4740739773
+  0/ 0/0      30   4740731460
+  0/ 0/0      31   4740751213
+  0/ 0/0      32   4740751417
+  0/ 0/0      33   4740751525
+  -----------------------------------------------------------------------------
+  In port 0/ 0/0 , the total of ONTs are: 31, online: 25
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/1    0  53434F4D1A06E2B4  active      online   normal   mismatch no 
+  0/ 0/1    1  53434F4D1A067A79  active      online   normal   mismatch no 
+  0/ 0/1    2  53434F4D1A0678F3  active      online   normal   mismatch no 
+  0/ 0/1    3  53434F4D1A067CD1  active      online   normal   mismatch no 
+  0/ 0/1    4  53434F4D1A0678CA  active      online   normal   mismatch no 
+  0/ 0/1    5  53434F4D1A06785A  active      online   normal   mismatch no 
+  0/ 0/1    6  53434F4D1A067A8C  active      online   normal   mismatch no 
+  0/ 0/1    7  53434F4D1A06E141  active      online   normal   mismatch no 
+  0/ 0/1    8  53434F4D1A0679BF  active      online   normal   mismatch no 
+  0/ 0/1    9  53434F4D1A06E125  active      online   normal   mismatch no 
+  0/ 0/1   10  53434F4D1A06DFA7  active      online   normal   mismatch no 
+  0/ 0/1   11  53434F4D1A06E12C  active      online   normal   mismatch no 
+  0/ 0/1   12  53434F4D1A06DFB5  active      online   normal   mismatch no 
+  0/ 0/1   13  53434F4D1A06E386  active      online   normal   mismatch no 
+  0/ 0/1   14  53434F4D1A06F027  active      online   normal   mismatch no 
+  0/ 0/1   15  53434F4D1A06E32B  active      offline  initial  initial  no 
+  0/ 0/1   16  53434F4D1A06E5E8  active      online   normal   mismatch no 
+  0/ 0/1   17  53434F4D1A06EE6C  active      online   normal   mismatch no 
+  0/ 0/1   18  53434F4D1A06E0F1  active      online   normal   mismatch no 
+  0/ 0/1   19  49534B54617A9B80  active      online   normal   mismatch no 
+  0/ 0/1   20  5A544547C8994DE5  active      online   normal   mismatch no 
+  0/ 0/1   21  5A544547C899593C  active      online   normal   mismatch no 
+  0/ 0/1   22  5A544547C88D1A6E  active      online   normal   mismatch no 
+  0/ 0/1   23  5A544547C88D0EA9  active      online   normal   mismatch no 
+  0/ 0/1   24  5A544547C8992CFE  active      online   normal   mismatch no 
+  0/ 0/1   25  5A544547C88D32FA  active      online   normal   mismatch no 
+  0/ 0/1   26  49534B546122C220  active      online   normal   mismatch no 
+  0/ 0/1   27  49534B546121AEB8  active      online   normal   mismatch no 
+  0/ 0/1   28  53434F4D1A08A6B0  active      offline  initial  initial  no 
+  0/ 0/1   29  53434F4D1A08A71D  active      online   normal   mismatch no 
+  0/ 0/1   30  49534B546184C0A8  active      online   normal   mismatch no 
+  0/ 0/1   31  485754433C1C9FA3  active      online   normal   match    no 
+  0/ 0/1   32  49534B54612EFD80  active      online   normal   mismatch no 
+  0/ 0/1   33  49534B54617A23C8  active      online   normal   mismatch no 
+  0/ 0/1   34  49534B5461856A98  active      online   normal   mismatch no 
+  0/ 0/1   35  49534B54617AA0E8  active      online   normal   mismatch no 
+  0/ 0/1   37  49534B546184A250  active      online   normal   mismatch no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/1       0   4740719914
+  0/ 0/1       1   4740719947
+  0/ 0/1       2   4740719816
+  0/ 0/1       3   4740719935
+  0/ 0/1       4   4740719875        
+  0/ 0/1       5   4740719938
+  0/ 0/1       6   4740719943
+  0/ 0/1       7   4740719991
+  0/ 0/1       8   4740731001
+  0/ 0/1       9   4740731045
+  0/ 0/1      10   4740731058
+  0/ 0/1      11   4740731061
+  0/ 0/1      12   4740731065
+  0/ 0/1      13   4740731103
+  0/ 0/1      14   4740731219
+  0/ 0/1      15   4740703625
+  0/ 0/1      16   4740731237
+  0/ 0/1      17   4740726078
+  0/ 0/1      18   4740726222
+  0/ 0/1      19   4740751170
+  0/ 0/1      20   4740726457
+  0/ 0/1      21   4740726702
+  0/ 0/1      22   4740726695
+  0/ 0/1      23   4740726706
+  0/ 0/1      24   4740726726
+  0/ 0/1      25   4740726714
+  0/ 0/1      26   272068013
+  0/ 0/1      27   4740726846
+  0/ 0/1      28   4740739461        
+  0/ 0/1      29   4740739510
+  0/ 0/1      30   4740739728
+  0/ 0/1      31   4740751250
+  0/ 0/1      32   4740751036
+  0/ 0/1      33   4740751479
+  0/ 0/1      34   4740751512
+  0/ 0/1      35   4740751550
+  0/ 0/1      37   4740751583
+  -----------------------------------------------------------------------------
+  In port 0/ 0/1 , the total of ONTs are: 37, online: 35
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/2    0  49534B546184AA60  active      online   normal   mismatch no 
+  0/ 0/2    1  53434F4D1A06E2AE  active      offline  initial  initial  no 
+  0/ 0/2    2  53434F4D1A0679A8  active      online   normal   mismatch no 
+  0/ 0/2    3  53434F4D1A06E046  active      online   normal   mismatch no 
+  0/ 0/2    4  49534B546178F900  active      online   normal   mismatch no 
+  0/ 0/2    5  53434F4D1A068368  active      online   normal   mismatch no 
+  0/ 0/2    6  53434F4D1A067A27  active      online   normal   mismatch no 
+  0/ 0/2    7  53434F4D1A067C27  active      online   normal   mismatch no 
+  0/ 0/2    8  53434F4D1A06E419  active      online   normal   mismatch no 
+  0/ 0/2    9  53434F4D1A06E42D  active      online   normal   mismatch no 
+  0/ 0/2   10  53434F4D1A06E0E1  active      online   normal   mismatch no 
+  0/ 0/2   11  53434F4D1A06E425  active      offline  initial  initial  no 
+  0/ 0/2   12  53434F4D1A06E192  active      offline  initial  initial  no 
+  0/ 0/2   13  53434F4D1A06ED39  active      online   normal   mismatch no 
+  0/ 0/2   14  53434F4D1A06F029  active      online   normal   mismatch no 
+  0/ 0/2   15  53434F4D1A0679D0  active      online   normal   mismatch no 
+  0/ 0/2   16  53434F4D1A06DEE6  active      online   normal   mismatch no 
+  0/ 0/2   17  53434F4D1A06EEF7  active      online   normal   mismatch no 
+  0/ 0/2   18  49534B54617F6908  active      online   normal   mismatch no 
+  0/ 0/2   19  53434F4D1A0790AF  active      online   normal   mismatch no 
+  0/ 0/2   20  53434F4D1A078086  active      online   normal   mismatch no 
+  0/ 0/2   21  53434F4D1A07807D  active      online   normal   mismatch no 
+  0/ 0/2   23  5A544547C88D33F0  active      online   normal   mismatch no 
+  0/ 0/2   24  5A544547C88D0E87  active      online   normal   mismatch no 
+  0/ 0/2   25  5A544547C88D332F  active      online   normal   mismatch no 
+  0/ 0/2   26  5A544547C8982A3D  active      online   normal   mismatch no 
+  0/ 0/2   27  5A544547C8982901  active      online   normal   mismatch no 
+  0/ 0/2   28  53434F4D1A08AFCC  active      online   normal   mismatch no 
+  0/ 0/2   29  49534B546124EE20  active      online   normal   mismatch no 
+  0/ 0/2   30  53434F4D1A0ADB5D  active      online   normal   mismatch no 
+  0/ 0/2   31  49534B54612AA680  active      online   normal   mismatch no 
+  0/ 0/2   32  49534B54612EE948  active      online   normal   mismatch no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description       
+  -----------------------------------------------------------------------------
+  0/ 0/2       0   4740719896
+  0/ 0/2       1   4740719903
+  0/ 0/2       2   4740719907
+  0/ 0/2       3   4740719912
+  0/ 0/2       4   4740719872
+  0/ 0/2       5   4740719854
+  0/ 0/2       6   4740719913
+  0/ 0/2       7   4740719968
+  0/ 0/2       8   4740719970
+  0/ 0/2       9   4740719993
+  0/ 0/2      10   4740719997
+  0/ 0/2      11   4740719971
+  0/ 0/2      12   4740731087
+  0/ 0/2      13   4740731283
+  0/ 0/2      14   4740726030
+  0/ 0/2      15   4740719884
+  0/ 0/2      16   4740726014
+  0/ 0/2      17   4740726073
+  0/ 0/2      18   4740751595
+  0/ 0/2      19   4740726272
+  0/ 0/2      20   4740726353
+  0/ 0/2      21   4740726408
+  0/ 0/2      23   4740726563        
+  0/ 0/2      24   4740726588
+  0/ 0/2      25   4740726679
+  0/ 0/2      26   4740726904
+  0/ 0/2      27   4740719057
+  0/ 0/2      28   272068420
+  0/ 0/2      29   4740739398
+  0/ 0/2      30   4740739550
+  0/ 0/2      31   4740739721
+  0/ 0/2      32   4740751053
+  -----------------------------------------------------------------------------
+  In port 0/ 0/2 , the total of ONTs are: 32, online: 29
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/3    0  53434F4D1A067C2A  active      online   normal   mismatch no 
+  0/ 0/3    1  53434F4D1A067A7F  active      online   normal   mismatch no 
+  0/ 0/3    2  53434F4D1A067D7F  active      online   normal   mismatch no 
+  0/ 0/3    3  53434F4D1A067D12  active      online   normal   mismatch no 
+  0/ 0/3    4  53434F4D1A08A39C  active      online   normal   mismatch no 
+  0/ 0/3    5  53434F4D1A06E407  active      online   normal   mismatch no 
+  0/ 0/3    6  53434F4D1A067A53  active      online   normal   mismatch no 
+  0/ 0/3    7  53434F4D1A067F29  active      online   normal   mismatch no 
+  0/ 0/3    8  53434F4D1A06E2AD  active      online   normal   mismatch no 
+  0/ 0/3    9  53434F4D1A06E468  active      online   normal   mismatch no 
+  0/ 0/3   12  53434F4D1A06F046  active      online   normal   mismatch no 
+  0/ 0/3   13  53434F4D1A06ED91  active      online   normal   mismatch no 
+  0/ 0/3   14  53434F4D1A06DED0  active      online   normal   mismatch no 
+  0/ 0/3   15  53434F4D1A0678C9  active      online   normal   mismatch no 
+  0/ 0/3   16  53434F4D1A06EB8B  active      online   normal   mismatch no 
+  0/ 0/3   17  53434F4D1A06DF03  active      offline  initial  initial  no 
+  0/ 0/3   18  53434F4D1A06F045  active      online   normal   mismatch no 
+  0/ 0/3   19  53434F4D1A06DE9D  active      online   normal   mismatch no 
+  0/ 0/3   20  53434F4D1A06EF49  active      online   normal   mismatch no 
+  0/ 0/3   21  53434F4D1A06F05C  active      online   normal   mismatch no 
+  0/ 0/3   22  53434F4D1A0785FD  active      online   normal   mismatch no 
+  0/ 0/3   23  5A544547C8994DCE  active      online   normal   mismatch no 
+  0/ 0/3   24  5A544547C8994DB5  active      online   normal   mismatch no 
+  0/ 0/3   25  49534B5461862750  active      online   normal   mismatch no 
+  0/ 0/3   26  5A544547C8AE016E  active      online   normal   mismatch no 
+  0/ 0/3   27  49534B546121CAB0  active      online   normal   mismatch no 
+  0/ 0/3   28  49534B54612B1168  active      online   normal   mismatch no 
+  0/ 0/3   29  49534B546178B808  active      online   normal   mismatch no 
+  0/ 0/3   30  49534B54617FF9C8  active      offline  initial  initial  no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/3       0   4740719839        
+  0/ 0/3       1   4740719876
+  0/ 0/3       2   4740719886
+  0/ 0/3       3   4740719926
+  0/ 0/3       4   4740719860
+  0/ 0/3       5   4740731009
+  0/ 0/3       6   4740719813
+  0/ 0/3       7   4740719941
+  0/ 0/3       8   4740719843
+  0/ 0/3       9   4740731093
+  0/ 0/3      12   4740731225
+  0/ 0/3      13   4740731226
+  0/ 0/3      14   4740731234
+  0/ 0/3      15   4740719855
+  0/ 0/3      16   4740731266
+  0/ 0/3      17   4740726096
+  0/ 0/3      18   4740726104
+  0/ 0/3      19   4740726114
+  0/ 0/3      20   4740726136
+  0/ 0/3      21   4740726229
+  0/ 0/3      22   4740726332
+  0/ 0/3      23   4740726444
+  0/ 0/3      24   4740726464
+  0/ 0/3      25   4740751505
+  0/ 0/3      26   4740731586        
+  0/ 0/3      27   4740731745
+  0/ 0/3      28   4740739746
+  0/ 0/3      29   4740751424
+  0/ 0/3      30   4740751569
+  -----------------------------------------------------------------------------
+  In port 0/ 0/3 , the total of ONTs are: 29, online: 27
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/4    0  53434F4D1A067A65  active      online   normal   mismatch no 
+  0/ 0/4    1  53434F4D1A067FC3  active      online   normal   mismatch no 
+  0/ 0/4    2  53434F4D1A0679BB  active      online   normal   mismatch no 
+  0/ 0/4    3  53434F4D1A067F01  active      online   normal   mismatch no 
+  0/ 0/4    4  53434F4D1A067A01  active      online   normal   mismatch no 
+  0/ 0/4    5  53434F4D1A067EFF  active      online   normal   mismatch no 
+  0/ 0/4    6  53434F4D1A06E662  active      offline  initial  initial  no 
+  0/ 0/4    7  53434F4D1A067A74  active      online   normal   mismatch no 
+  0/ 0/4    8  53434F4D1A067F2B  active      online   normal   mismatch no 
+  0/ 0/4    9  53434F4D1A0679B8  active      online   normal   mismatch no 
+  0/ 0/4   10  53434F4D1A067CE2  active      online   normal   mismatch no 
+  0/ 0/4   11  48575443159E88A3  active      online   normal   match    no 
+  0/ 0/4   12  53434F4D1A06E1A5  active      offline  initial  initial  no 
+  0/ 0/4   13  53434F4D1A067D5B  active      online   normal   mismatch no 
+  0/ 0/4   14  53434F4D1A06E0C8  active      online   normal   mismatch no 
+  0/ 0/4   15  53434F4D1A06E40C  active      online   normal   mismatch no 
+  0/ 0/4   16  53434F4D1A0679C3  active      online   normal   mismatch no 
+  0/ 0/4   17  53434F4D1A067A10  active      online   normal   mismatch no 
+  0/ 0/4   18  53434F4D1A06E627  active      online   normal   mismatch no 
+  0/ 0/4   19  53434F4D1A06E2CD  active      online   normal   mismatch no 
+  0/ 0/4   20  53434F4D1A06E2B5  active      offline  initial  initial  no 
+  0/ 0/4   21  53434F4D1A06E2DA  active      online   normal   mismatch no 
+  0/ 0/4   22  53434F4D1A06E722  active      online   normal   mismatch no 
+  0/ 0/4   23  53434F4D1A06ECD2  active      online   normal   mismatch no 
+  0/ 0/4   24  53434F4D1A06EEFF  active      online   normal   mismatch no 
+  0/ 0/4   25  49534B54612B18F0  active      online   normal   mismatch no 
+  0/ 0/4   26  5A544547C8A30E5A  active      online   normal   mismatch no 
+  0/ 0/4   27  5A544547C8B3B677  active      online   normal   mismatch no 
+  0/ 0/4   28  5A544547C8983871  active      offline  initial  initial  no 
+  0/ 0/4   29  5A544547C8A30C6F  active      online   normal   mismatch no 
+  0/ 0/4   30  5A544547C8ADFFCD  active      offline  initial  initial  no 
+  0/ 0/4   31  5A544547C8B3B711  active      online   normal   mismatch no 
+  0/ 0/4   32  49534B54617F5848  active      online   normal   mismatch no 
+  0/ 0/4   33  485754433C1D7AA3  active      offline  initial  initial  no 
+  0/ 0/4   34  49534B54617925D0  active      online   normal   mismatch no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/4       0   4740719856
+  0/ 0/4       1   4740719823
+  0/ 0/4       2   4740719255
+  0/ 0/4       3   4740719873
+  0/ 0/4       4   4740719874
+  0/ 0/4       5   4740719882
+  0/ 0/4       6   4740719893
+  0/ 0/4       7   4740719897
+  0/ 0/4       8   4740719904
+  0/ 0/4       9   4740719908
+  0/ 0/4      10   4740719918
+  0/ 0/4      11   4740751333
+  0/ 0/4      12   4740719949
+  0/ 0/4      13   4740719995
+  0/ 0/4      14   4740703267
+  0/ 0/4      15   4740719899
+  0/ 0/4      16   4740731013
+  0/ 0/4      17   4740731019
+  0/ 0/4      18   4740731028
+  0/ 0/4      19   4740731038
+  0/ 0/4      20   4740731068
+  0/ 0/4      21   4740731088
+  0/ 0/4      22   4740731089
+  0/ 0/4      23   4740731205        
+  0/ 0/4      24   4740726068
+  0/ 0/4      25   4740739748
+  0/ 0/4      26   4740731302
+  0/ 0/4      27   4740731730
+  0/ 0/4      28   4740726762
+  0/ 0/4      29   4740726983
+  0/ 0/4      30   4740731645
+  0/ 0/4      31   4740731704
+  0/ 0/4      32   4740751642
+  0/ 0/4      33   4740751218
+  0/ 0/4      34   4740751410
+  -----------------------------------------------------------------------------
+  In port 0/ 0/4 , the total of ONTs are: 35, online: 29
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/5    0  53434F4D1A06795E  active      online   normal   mismatch no 
+  0/ 0/5    1  53434F4D1A0683DB  active      online   normal   mismatch no 
+  0/ 0/5    2  53434F4D1A0679C8  active      online   normal   mismatch no 
+  0/ 0/5    3  53434F4D1A067A7B  active      online   normal   mismatch no 
+  0/ 0/5    4  53434F4D1A0679FA  active      online   normal   mismatch no 
+  0/ 0/5    5  53434F4D1A0683F8  active      online   normal   mismatch no 
+  0/ 0/5    6  5A544547C8ADFAD5  active      online   normal   mismatch no 
+  0/ 0/5    7  53434F4D1A07907F  active      online   normal   mismatch no 
+  0/ 0/5    8  53434F4D1A067A60  active      online   normal   mismatch no 
+  0/ 0/5    9  53434F4D1A067A56  active      online   normal   mismatch no 
+  0/ 0/5   10  53434F4D1A067A50  active      online   normal   mismatch no 
+  0/ 0/5   11  53434F4D1A06E1EE  active      online   normal   mismatch no 
+  0/ 0/5   12  53434F4D1A0679EB  active      online   normal   mismatch no 
+  0/ 0/5   13  53434F4D1A06E21D  active      online   normal   mismatch no 
+  0/ 0/5   14  53434F4D1A06E06A  active      online   normal   mismatch no 
+  0/ 0/5   15  53434F4D1A06E115  active      online   normal   mismatch no 
+  0/ 0/5   17  53434F4D1A06781E  active      offline  initial  initial  no 
+  0/ 0/5   18  53434F4D1A06E437  active      online   normal   mismatch no 
+  0/ 0/5   19  53434F4D1A067F03  active      online   normal   mismatch no 
+  0/ 0/5   20  53434F4D1A06E2D3  active      online   normal   mismatch no 
+  0/ 0/5   21  53434F4D1A06EEED  active      online   normal   mismatch no 
+  0/ 0/5   22  53434F4D1A06E59D  active      offline  initial  initial  no 
+  0/ 0/5   23  53434F4D1A06EFE5  active      online   normal   mismatch no 
+  0/ 0/5   24  53434F4D1A06F04D  active      online   normal   mismatch no 
+  0/ 0/5   25  53434F4D1A0785F6  active      online   normal   mismatch no 
+  0/ 0/5   26  53434F4D1A0780C4  active      online   normal   mismatch no 
+  0/ 0/5   27  5A544547C8ACE1D5  active      online   normal   mismatch no 
+  0/ 0/5   28  5A544547C8A663D4  active      online   normal   mismatch no 
+  0/ 0/5   29  53434F4D1A08AF6D  active      online   normal   mismatch no 
+  0/ 0/5   30  53434F4D1A08A603  active      online   normal   mismatch no 
+  0/ 0/5   31  49534B54612C7EE0  active      online   normal   mismatch no 
+  0/ 0/5   32  485754433C2C5BA3  active      online   normal   match    no 
+  0/ 0/5   33  49534B54617A9980  active      online   normal   mismatch no 
+  0/ 0/5   34  53434F4D1A068663  active      online   normal   mismatch no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/5       0   4740719815
+  0/ 0/5       1   4740719847
+  0/ 0/5       2   4740719849
+  0/ 0/5       3   4740719826
+  0/ 0/5       4   4740719850
+  0/ 0/5       5   4740719858
+  0/ 0/5       6   4740731614
+  0/ 0/5       7   4740726386
+  0/ 0/5       8   4740719869
+  0/ 0/5       9   4740719868
+  0/ 0/5      10   4740719888
+  0/ 0/5      11   4740719891
+  0/ 0/5      12   4740719892
+  0/ 0/5      13   4740719894
+  0/ 0/5      14   4740719902
+  0/ 0/5      15   4740719942
+  0/ 0/5      17   4740719984
+  0/ 0/5      18   4740731023        
+  0/ 0/5      19   4740731029
+  0/ 0/5      20   4740731069
+  0/ 0/5      21   4740731284
+  0/ 0/5      22   4740726069
+  0/ 0/5      23   4740726110
+  0/ 0/5      24   4740726219
+  0/ 0/5      25   4740726365
+  0/ 0/5      26   4740726397
+  0/ 0/5      27   4740731360
+  0/ 0/5      28   4740731415
+  0/ 0/5      29   4740739252
+  0/ 0/5      30   4740739494
+  0/ 0/5      31   4740739826
+  0/ 0/5      32   4740731693
+  0/ 0/5      33   4740751457
+  0/ 0/5      34   4740731503
+  -----------------------------------------------------------------------------
+  In port 0/ 0/5 , the total of ONTs are: 34, online: 32
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/6    0  53434F4D1A06EE71  active      offline  initial  initial  no 
+  0/ 0/6    2  53434F4D1A067A63  active      online   normal   mismatch no 
+  0/ 0/6    3  5A544547C89949CA  active      online   normal   mismatch no 
+  0/ 0/6    4  5A544547C89949D9  active      offline  initial  initial  no 
+  0/ 0/6    5  5A544547C8994408  active      online   normal   mismatch no 
+  0/ 0/6    6  49534B54612A16C8  active      online   normal   mismatch no 
+  0/ 0/6    7  5A544547C8AE1030  active      offline  initial  initial  no 
+  0/ 0/6    8  49534B5461236418  active      online   normal   mismatch no 
+  0/ 0/6    9  49534B5461224BA0  active      online   normal   mismatch no 
+  0/ 0/6   10  49534B5461224968  active      online   normal   mismatch no 
+  0/ 0/6   11  53434F4D1A08A5E0  active      online   normal   mismatch no 
+  0/ 0/6   12  49534B54612F1FB8  active      online   normal   mismatch no 
+  0/ 0/6   13  49534B54612DF118  active      online   normal   mismatch no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/6       0   4740726051
+  0/ 0/6       2   4740719865
+  0/ 0/6       3   4740726682
+  0/ 0/6       4   4740726620
+  0/ 0/6       5   4740726905
+  0/ 0/6       6   4740739715
+  0/ 0/6       7   4740731552
+  0/ 0/6       8   4740731786
+  0/ 0/6       9   4740731819
+  0/ 0/6      10   4740703415        
+  0/ 0/6      11   4740739345
+  0/ 0/6      12   4740739520
+  0/ 0/6      13   4740739934
+  -----------------------------------------------------------------------------
+  In port 0/ 0/6 , the total of ONTs are: 13, online: 10
+  -----------------------------------------------------------------------------
+  F/S/P   ONT         SN         Control     Run      Config   Match    Protect
+          ID                     flag        state    state    state    side 
+  -----------------------------------------------------------------------------
+  0/ 0/7    0  53434F4D1A06E0FF  active      offline  initial  initial  no 
+  0/ 0/7    1  53434F4D1A06EF2C  active      online   normal   mismatch no 
+  0/ 0/7    2  53434F4D1A06E2D8  active      online   normal   mismatch no 
+  0/ 0/7    3  53434F4D1A078537  active      online   normal   mismatch no 
+  0/ 0/7    4  53434F4D1A06ED8C  active      online   normal   mismatch no 
+  0/ 0/7    5  53434F4D1A06F028  active      online   normal   mismatch no 
+  0/ 0/7    6  5A544547C88D33A3  active      online   normal   mismatch no 
+  0/ 0/7    7  49534B54612C8818  active      online   normal   mismatch no 
+  0/ 0/7    8  53434F4D1A0AD5A3  active      online   normal   mismatch no 
+  0/ 0/7    9  49534B54617A7F40  active      online   normal   mismatch no 
+  0/ 0/7   12  49534B54612C98D8  active      online   normal   mismatch no 
+  0/ 0/7   13  49534B54612CA040  active      online   normal   mismatch no 
+  -----------------------------------------------------------------------------
+  F/S/P   ONT-ID   Description
+  -----------------------------------------------------------------------------
+  0/ 0/7       0   4740719955
+  0/ 0/7       1   4740726221
+  0/ 0/7       2   4740731050
+  0/ 0/7       3   4740726303
+  0/ 0/7       4   4740726216
+  0/ 0/7       5   4740726108
+  0/ 0/7       6   4740726465
+  0/ 0/7       7   4740726492
+  0/ 0/7       8   272068339
+  0/ 0/7       9   4740751123
+  0/ 0/7      12   4740739781
+  0/ 0/7      13   4740739850
+  -----------------------------------------------------------------------------
+  In port 0/ 0/7 , the total of ONTs are: 12, online: 11
+
+```
+
+
+
+## Основы GPON
+* [https://xakinfo.ru/network_administration/fundamentals-gpon/](https://xakinfo.ru/network_administration/fundamentals-gpon/)
+* [https://www.cisco.com/c/en/us/support/docs/switches/catalyst-pon-series/216230-understand-gpon-technology.html](https://www.cisco.com/c/en/us/support/docs/switches/catalyst-pon-series/216230-understand-gpon-technology.html)
+
+ONU-ID — это 8-битный идентификатор, который OLT назначает ONU во время активации ONU через сообщения PLOAM. ONU-ID уникален для PON и остается до тех пор, пока ONU не отключится или не отключится OLT.
+
+ALLOC_ID — это 12-разрядное число, которое OLT назначает ONU для определения несущего трафик объекта, который является получателем распределений пропускной способности восходящего канала в этом ONU. Этот транспортный объект также называется T-CONT.
+
+Каждому ONU присваивается идентификатор ALLOC_ID по умолчанию, который равен ONU-ID ONU, и ему могут быть назначены дополнительные ALLOC_ID по усмотрению OLT.
+
+
+>Получается ALLOC_ID идентифицирует тайм-слот, а ONU-ID - onu(ont)
+
+## Первичная настройка и концепция
+
+
+Для первичной настройки соединения необходимо создать три основных профиля (DBA profile, ont line profile, ont service profile), а так же создать для каждого сервиса(связка "vlan-port ONT" свой  сервисный порт(service-port)
+
+    DBA Profile (Dynamic Bandwidth Allocation). Алгоритм динамического распределения полосы пропускания (DBA) представляет собой механизм для быстрого перераспределения полосы пропускания на основании требований службы текущего пользователя. Позволяет задать скорость для исходящего от пользователя трафика.
+    ONT Line Profile Позволяет задать TCONT контейнеры, привязать к нему GEM порты  и задать сопоставление vlan и GEM портов.
+    ONU service Profile  Предназначен для определения параметров ONT (количество и тип портов, привязка VLAN к портам ONT(Назначить VLAN в порты ONT можно отдельно из раздела interface GPON
+
+
+
+
+
+Поиск абонента
+`hg1-dbk#display ont info 0 2 7 1`  
+## 
+
+
+dba-profile add profile-id 10 profile-name "PPPoE" type4 max 1000000
+dba-profile add profile-id 20 profile-name "VoIP" type2 assure 256
+
+gpon dba bandwidth-assignment-mode max-bandwidth-usage
+ ont-srvprofile gpon profile-id 10 profile-name "HW"
+  ont-port pots 2 eth 4 
+  multicast-forward untag
+  port vlan iphost translation 10 user-vlan 10
+  port vlan iphost translation 20 user-vlan 20
+  commit
+ ont-lineprofile gpon profile-id 0 profile-name "line-profile_default_0"
+  tcont 0 dba-profile-id 2
+  tcont 1 dba-profile-id 0
+  commit
+  quit
+ ont-lineprofile gpon profile-id 10 profile-name "HW"
+  tcont 1 dba-profile-id 10
+  tcont 2 dba-profile-id 20
+  gem add 10 eth tcont 1             
+  gem add 20 eth tcont 2
+  gem mapping 10 0 vlan 10
+  gem mapping 20 0 vlan 20
+  commit
+  quit
+
+
+[vlan-config]                        
+  <vlan-config>                      
+ vlan 42 standard                    
+ vlan 50 standard                    
+ vlan 2565 smart                     
+ vlan 2765 smart                     
+ vlan 4050 smart                     
+ port vlan 42 0/2 0                  
+ port vlan 42 0/2 2                  
+ port vlan 50 0/2 2                  
+ port vlan 2565 0/2 2                
+ port vlan 2765 0/2 2                
+ port vlan 4050 0/2 2  
+
+
+
+          display vlan all standard 
+  -----------------------------------------------------------------------
+  VLAN   Type      Attribute  STND-Port NUM   SERV-Port NUM  VLAN-Con NUM
+  -----------------------------------------------------------------------
+    42   standard  common                 2               0             -
+    50   standard  common                 1               0             -
+  -----------------------------------------------------------------------
+  Total: 2
+  Note : STND-Port--standard port, SERV-Port--service virtual port,
+         VLAN-Con--vlan-connect
+
+hg0-hmel-yel#display vlan all smart   
+{ <cr>|vlanattr<K> }:
+
+  Command:
+          display vlan all smart 
+  -----------------------------------------------------------------------
+  VLAN   Type      Attribute  STND-Port NUM   SERV-Port NUM  VLAN-Con NUM
+  -----------------------------------------------------------------------
+     1   smart     common                 4               0             -
+  2565   smart     common                 1             383             -
+  2765   smart     common                 1              19             -
+  4050   smart     common                 1               0             -
+  -----------------------------------------------------------------------
+  Total: 4
+  Note : STND-Port--standard port, SERV-Port--service virtual port,
+         VLAN-Con--vlan-connect
+
+
+
+
+
+ gem
+
+ [prevlanif]
+  <prevlanif>
+ interface vlanif42
+ interface vlanif50
+#
+[vlanif]
+  <vlanif42>
+interface vlanif42
+ ip address 192.168.206.172 255.255.255.224
+#
+  <vlanif50>
+interface vlanif50
+ ip address 198.18.34.2 255.255.255.240
+#
+[meth]
+  <meth0>
+interface meth0
+ ip address 10.11.104.2 255.255.255.0
+
+## Vlan
+В Huawei OLT существует несколько типов VLAN, кратко опишу их:
+
+- 1) Standard VLAN
+Ethernet порты в Standard VLAN видят друг друга, Ethernet порты разных VLAN изолированы друг от друга.
+
+- 2) Smart VLAN
+Smart VLAN может иметь много service ports, которые в одном VLAN изолированы друг от друга, service ports в разных VLAN также изолированы друг от друга. Этот тип я обычно и использую при настройке Huawei OLT.
+
+- 3) MUX VLAN
+Один MUX VLAN может содержать только один service port. service ports в разных MUX VLAN изолированы друг от друга.
+
+- 4) Super VLAN
+Super VLAN основан на 3 уровне, содержит подвланы (mux или smart), которые могут взаимодействовать через arp-proxy.
+
+ Smart отличается от standard'а функцией изоляции абонентов внутри свитча (говоря д-линковским языком - trafic segmentation)
+
+
+
+```
+ Держите конфиг влан 500 управление, влан 2254 абонентский, добавляете еще абонентские вланы и сажаете их на порты
+
+номерация портов начинается с eth 0/1/1
+
+ 
+
+[sysmode]
+#
+
+[device-config]
+  <device-config>
+ port port-index 0/0/1 port-type GPON-PORT
+
+#
+[vlan-config]
+  <vlan-config>
+ vlan 500 smart
+ vlan 2254 smart
+ protocol-8021p-pri 0 vlan 500
+ port vlan 500 0/0 1
+ port vlan 2254 0/0 1
+
+#
+[gponnni]
+  <gponnni-0/0/1>
+ interface gponnni 0/0/1
+ password "%5L3_.^M^.9I\5<V@WN#JI1!!B#A8&)VAB']]F;U$19'2_1!!B#A8&)VAB']]F;U$19' 2_1!!%"
+ loid "%VL*&O__.3U3;RaK'0`"NPQ!!,DWUN(I=,'UZ_`@1RI<=WQ!!%"
+ checkcode "%L9;7+FT2-[LX3NU/Va@a]Q!!%"
+#
+[bbs-config]
+  <bbs-config>
+ service-port 0 vlan 2254 eth 0/1/1 multi-service user-vlan untagged
+#
+[prevlanif]
+  <prevlanif>
+ interface vlanif500
+#
+[vlanif]
+  <vlanif500>
+interface vlanif500
+ ip address 10.90.88.55 255.255.248.0
+#
+[meth]
+  <meth0>
+interface meth0
+ ip address 10.11.104.2 255.255.255.0
+#
+[null]
+  <null0>
+interface null0
+#
+[aaa]
+  <aaa>
+aaa
+ authentication-scheme "default"
+ #
+ authorization-scheme "default"
+ #
+ accounting-scheme "default"
+ #
+ domain "default"
+ #
+return 
+```
+
+```
+
+
+да на самой MA5626
+
+на олт прописывать так
+
+ 
+
+[global-config]
+  <global-config>
+ dba-profile add profile-id 10 profile-name "DBA_100M" type3 assure 102400 max 102400
+ ont-srvprofile gpon profile-id 10 profile-name "srv-profile_10"
+  ont-port eth 1
+  port vlan eth 1 translation 500 user-vlan 500
+  port vlan eth 1 translation 2254 user-vlan 2254
+  commit
+ ont-lineprofile gpon profile-id 10 profile-name "line-profile_10"
+  tcont 4 dba-profile-id 10
+  gem add 1 eth tcont 4
+  gem add 2 eth tcont 4
+  gem mapping 1 0 vlan 500
+  gem mapping 2 0 vlan 2254
+  commit
+#
+[vlan-config]
+  <vlan-config>
+ vlan 500 smart
+ vlan 2254 smart
+ port vlan 500 0/17 0
+ port vlan 2254 0/17 0
+#
+[gpon]
+  <gpon-0/9>
+ interface gpon 0/9
+ port 0 ont-auto-find enable
+ ont add 0 5 sn-auth "4857544387FFDC3D" snmp ont-lineprofile-id 10 desc "test5"
+ ont ipconfig 0 5 static ip-address 10.90.88.55 mask 255.255.248.0 vlan 500 priority 0 gateway 10.90.88.33
+#
+[bbs-config]
+  <bbs-config>
+ service-port 5 vlan 500 gpon 0/9/0 ont 5 gemport 1 multi-service user-vlan 500 tag-transform translate
+ service-port 6 vlan 2254 gpon 0/9/0 ont 5 gemport 2 multi-service user-vlan 2254 tag-transform translate
+
+#
+[abs-config]
+  <abs-config>
+ config
+#
+[config]
+  <config>
+ mpls label start 8192
+#
+[prevlanif]
+  <prevlanif>
+ interface vlanif500
+ interface vlanif2254
+#
+[vlanif]
+  <vlanif500>
+interface vlanif500
+ ip address 10.90.88.33 255.255.248.0
+ arp proxy enable
+#
+  <vlanif2254>
+interface vlanif2254
+ arp proxy enable
+#
+[meth]
+  <meth0>
+interface meth0
+ ip address 10.90.80.33 255.255.248.0
+#
+[null]
+  <null0>
+interface null0
+#
+[aaa]
+  <aaa>
+aaa
+ authentication-scheme "default"
+ #
+ authorization-scheme "default"
+ #
+ accounting-scheme "default"
+ #
+ domain "default"
+ #
+[post-system]
+  <post-system>
+ ssh user huawei authentication-type password
+ arp proxy enable
+#
+return
+```
+
+
+[https://www.newnets.ru/knowledge/21926/](https://www.newnets.ru/knowledge/21926/)
