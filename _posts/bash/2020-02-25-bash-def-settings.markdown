@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Setting default value for a BASH variable
+title:  "Setting default value for a BASH variable"
 date: 2020-02-25 10:24:11 +0300
 categories: bash
 ---
