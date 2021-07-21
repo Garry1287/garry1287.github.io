@@ -2,8 +2,8 @@
 layout: post
 title:  "cryptosetup+loop"
 date:   2013-07-21 10:14:59 +0400
-categories: cryptosetup+loop
-tags: cryptosetup+loop
+categories: crypt backup
+tags: backup
 ---
 
 # cryptosetup+loop

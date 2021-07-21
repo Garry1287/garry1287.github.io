@@ -2,8 +2,8 @@
 layout: post
 title:  "backup-bgp-ipvpn-stk"
 date:   2009-05-04 21:54:23 +0400
-categories: backup-bgp-ipvpn-stk
-tags: backup-bgp-ipvpn-stk
+categories: backup
+tags: backup bgp
 ---
 
 # backup-bgp-ipvpn-stk

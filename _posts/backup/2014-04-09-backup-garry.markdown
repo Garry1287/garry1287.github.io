@@ -2,8 +2,8 @@
 layout: post
 title:  "backup-garry"
 date:   2014-04-09 13:18:04 +0400
-categories: backup-garry
-tags: backup-garry
+categories: backup linux
+tags: backup
 ---
 
 # backup-garry

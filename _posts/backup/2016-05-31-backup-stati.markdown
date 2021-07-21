@@ -2,8 +2,8 @@
 layout: post
 title:  "backup-stati"
 date:   2016-05-31 17:27:38 +0300
-categories: backup-stati
-tags: backup-stati
+categories: backup
+tags: backup
 ---
 
 # backup-stati

@@ -2,8 +2,8 @@
 layout: post
 title:  "backup-via-crontab"
 date:   2010-01-21 13:22:48 +0300
-categories: backup-via-crontab
-tags: backup-via-crontab
+categories: backup linux
+tags: backup crontab
 ---
 
 # backup-via-crontab

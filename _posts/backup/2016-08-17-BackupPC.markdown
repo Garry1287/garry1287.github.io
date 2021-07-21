@@ -2,8 +2,8 @@
 layout: post
 title:  "BackupPC"
 date:   2016-08-17 14:49:08 +0300
-categories: BackupPC
-tags: BackupPC
+categories: backup
+tags: backup
 ---
 
 # BackupPC

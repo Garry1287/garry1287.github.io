@@ -2,8 +2,8 @@
 layout: post
 title:  "automysqlbackup"
 date:   2012-02-18 23:04:49 +0400
-categories: automysqlbackup
-tags: automysqlbackup
+categories: backup
+tags: backup automysqlbackup
 ---
 
 # automysqlbackup

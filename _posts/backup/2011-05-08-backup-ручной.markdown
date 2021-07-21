@@ -2,8 +2,8 @@
 layout: post
 title:  "backup-ручной"
 date:   2011-05-08 03:28:04 +0400
-categories: backup-ручной
-tags: backup-ручной
+categories: backup linux
+tags: backup linux tar
 ---
 
 # backup-ручной

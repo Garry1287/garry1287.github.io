@@ -2,8 +2,8 @@
 layout: post
 title:  "cryptsetup-backup"
 date:   2011-10-14 04:54:42 +0400
-categories: cryptsetup-backup
-tags: cryptsetup-backup
+categories: backup crypt
+tags: cryptsetup backup
 ---
 
 # cryptsetup-backup

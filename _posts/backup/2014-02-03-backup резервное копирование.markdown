@@ -2,8 +2,8 @@
 layout: post
 title:  "backup резервное копирование"
 date:   2014-02-03 04:35:13 +0400
-categories: backup резервное копирование
-tags: backup резервное копирование
+categories: backup
+tags: backup
 ---
 
 # backup резервное копирование

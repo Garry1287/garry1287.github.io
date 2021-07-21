@@ -2,8 +2,8 @@
 layout: post
 title:  "backup_cisco"
 date:   2016-05-21 09:03:18 +0300
-categories: backup_cisco
-tags: backup_cisco
+categories: backup cisco
+tags: backup cisco
 ---
 
 # backup_cisco

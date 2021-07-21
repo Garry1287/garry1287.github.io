@@ -2,12 +2,12 @@
 layout: post
 title:  "backup_linux"
 date:   2011-08-03 16:07:09 +0400
-categories: backup_linux
-tags: backup_linux
+categories: backup linux
+tags: backup linux tar mysqldump
 ---
 
 # backup_linux
-/usr/bin/mysqldump -u root -p915Nyg710 --opt zazhigai_ru > /var/backup/backup/zazhigai_ru.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt zazhigai_ru > /var/backup/backup/zazhigai_ru.sql
 
 /bin/tar -czf /var/backup/backup/etc_emerald.tar.gz /etc
 
@@ -30,9 +30,9 @@ opennet.ru/fsbackup
 [http://ilab.me/howto/bash-tar-vps-backup/](http://ilab.me/howto/bash-tar-vps-backup/)
 
 
-/usr/bin/mysqldump -u root -p915Nyg710 --opt lipbalkon > /home/garry/backup/lipbalkon.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt lipbalkon > /home/garry/backup/lipbalkon.sql
 /bin/tar -czf /home/garry/backup/lipbalkon.tar.gz /home/lipbalkon/
-/usr/bin/mysqldump -u root -p915Nyg710 --opt um > /home/garry/backup/um.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt um > /home/garry/backup/um.sql
 /bin/tar -czf /home/garry/backup/um.tar.gz /var/home/umit-agro.sc.ru/
 /bin/chown garry:users /home/garry/backup/*
 

@@ -2,8 +2,8 @@
 layout: post
 title:  "fsbackup"
 date:   2015-04-26 10:53:11 +0300
-categories: fsbackup
-tags: fsbackup
+categories: backup
+tags: backup
 ---
 
 # fsbackup

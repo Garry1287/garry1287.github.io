@@ -123,15 +123,15 @@ find /home/backup/backup/backup -ctime +30 -delete
 mysqldump --all-databases > all_databases.sql
 
 #!/bin/sh
-/usr/bin/mysqldump -u root -p915Nyg710 --opt cyradm > /home/backup/backup/cyradm.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt gortrans > /home/backup/backup/gortrans.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt lgek > /home/backup/backup/lgek.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt mail > /home/backup/backup/mail.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt metallurg  > /home/backup/backup/metallurg.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt modx > /home/backup/backup/modx.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt onigiri > /home/backup/backup/onigiri.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt seotchet_DB > /home/backup/backup/seotchet_DB.sql
-/usr/bin/mysqldump -u root -p915Nyg710 --opt zazhigai_ru > /home/backup/backup/zazhigai_ru.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt cyradm > /home/backup/backup/cyradm.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt gortrans > /home/backup/backup/gortrans.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt lgek > /home/backup/backup/lgek.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt mail > /home/backup/backup/mail.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt metallurg  > /home/backup/backup/metallurg.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt modx > /home/backup/backup/modx.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt onigiri > /home/backup/backup/onigiri.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt seotchet_DB > /home/backup/backup/seotchet_DB.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt zazhigai_ru > /home/backup/backup/zazhigai_ru.sql
 /bin/tar -czf /home/backup/backup/userdb_emerald.tar.gz /home/backup/backup/*.sql
 /bin/tar -czf /home/backup/backup/home_emerald.tar.gz /home
 /bin/tar -czf /home/backup/backup/etc_emerald.tar.gz /etc
@@ -164,7 +164,7 @@ emerald
 
 
 #!/bin/sh
-/usr/bin/mysqldump -u root -p915Nyg710 --opt --all-databases > /home/backup/backup/all_databases.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt --all-databases > /home/backup/backup/all_databases.sql
 /bin/tar -czf /home/backup/backup/userdb_ruby.tar.gz /home/backup/backup/all_databases.sql
 /bin/tar -czf /home/backup/backup/etc_ruby.tar.gz /etc
 /bin/tar -czf /home/backup/backup/root_ruby.tar.gz /root
@@ -197,7 +197,7 @@ postman
 | test 
 
 #!/bin/sh
-/usr/bin/mysqldump -u root -p915Nyg710 --opt --all-databases > /home/backup/backup/all_databases.sql
+/usr/bin/mysqldump -u root -p915xxx710 --opt --all-databases > /home/backup/backup/all_databases.sql
 /bin/tar -czf /home/backup/backup/userdb_sapphire.tgz /home/backup/backup/all_databases.sql
 /bin/tar -czf /home/backup/backup/etc_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz /etc
 /bin/tar -czf /home/backup/backup/tftpboot.tar.gz /tftpboot

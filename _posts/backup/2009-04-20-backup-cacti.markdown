@@ -2,8 +2,8 @@
 layout: post
 title:  "backup-cacti"
 date:   2009-04-20 17:16:06 +0400
-categories: backup-cacti
-tags: backup-cacti
+categories: backup cacti
+tags: backup cacti
 ---
 
 # backup-cacti
