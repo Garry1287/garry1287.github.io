@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Setting default value for a BASH variable
+title:  "Вытащил ip адреса из файла зоны bind"
 date: 2021-07-08 14:25:11 +0300
 categories: bash ros
 ---

@@ -1,0 +1,374 @@
+layout: post
+title:  "Rcfw, set -e and demin firewall"
+date: 2021-07-15 19:29:11 +0300
+categories: bash ros
+---
+
+
+# Разбираемся с rcfw
+garry@strontium:~$  sudo service --status-all
+[sudo] password for garry: 
+ [ + ]  acpi-fakekey
+ [ - ]  acpi-support
+ [ + ]  acpid
+ [ ? ]  alsa-utils
+ [ - ]  anacron
+ [ - ]  apparmor
+ [ + ]  atd
+ [ - ]  avahi-daemon
+ [ ? ]  binfmt-support
+ [ - ]  bootlogd
+ [ - ]  bootlogs
+ [ - ]  bootmisc.sh
+ [ + ]  brightness
+ [ + ]  cgroupfs-mount
+ [ - ]  checkfs.sh
+ [ - ]  checkroot-bootclean.sh
+ [ - ]  checkroot.sh
+ [ - ]  clamav-freshclam
+ [ ? ]  conntrackd
+ [ - ]  console-setup.sh
+ [ + ]  cron
+ [ + ]  cups
+ [ - ]  cups-browsed
+ [ + ]  dbus
+ [ - ]  dnsmasq
+ [ + ]  elogind
+ [ + ]  eudev
+ [ + ]  haveged
+ [ - ]  hostname.sh
+ [ ? ]  hwclock.sh
+ [ + ]  isc-dhcp-server
+ [ - ]  keyboard-setup.sh
+ [ - ]  killprocs
+ [ ? ]  kmod
+ [ - ]  lttng-sessiond
+ [ - ]  lvm2
+ [ - ]  lvm2-lvmpolld
+ [ - ]  mdadm
+ [ - ]  mdadm-waitidle
+ [ - ]  mongodb
+ [ ? ]  mount-configfs
+ [ - ]  mountall-bootclean.sh
+ [ - ]  mountall.sh
+ [ - ]  mountdevsubfs.sh
+ [ - ]  mountkernfs.sh
+ [ - ]  mountnfs-bootclean.sh
+ [ - ]  mountnfs.sh
+ [ + ]  named
+ [ ? ]  networking
+ [ + ]  nfs-common
+ [ - ]  nftables
+ [ - ]  nmbd
+ [ + ]  ntpsec
+ [ - ]  postgresql
+ [ - ]  pound
+ [ + ]  privoxy
+ [ - ]  procps
+ [ - ]  pulseaudio-enable-autospawn
+ [ - ]  quota
+ [ - ]  quotarpc
+ [ - ]  rc.local
+ [ + ]  rcfw
+ [ + ]  redsocks
+ [ - ]  rmnologin
+ [ + ]  rpcbind
+ [ - ]  rsync
+ [ + ]  rsyslog
+ [ - ]  samba-ad-dc
+ [ - ]  schroot
+ [ - ]  screen-cleanup
+ [ + ]  sddm
+ [ - ]  sendsigs
+ [ ? ]  setkey
+ [ + ]  smartmontools
+ [ + ]  smbd
+ [ + ]  ssh
+ [ - ]  stop-bootlogd
+ [ - ]  stop-bootlogd-single
+ [ - ]  sudo
+ [ - ]  sysfsutils
+ [ - ]  sysstat
+ [ - ]  tftpd-hpa
+ [ + ]  tor
+ [ - ]  ulogd2
+ [ - ]  umountfs
+ [ - ]  umountnfs.sh
+ [ - ]  umountroot
+ [ - ]  urandom
+ [ + ]  vmtouch
+ [ + ]  vsftpd
+ [ + ]  watchdog
+ [ - ]  wd_keepalive
+ [ - ]  winbind
+ [ - ]  x11-common
+ [ + ]  x2goserver
+
+
+garry@strontium:/etc/rcfw$ cat /etc/init.d/rcfw 
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          rcfw
+# Required-Start:    $network $local_fs
+# Required-Stop:     $network $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Simple and trivial ipset/iptables solution
+### END INIT INFO
+
+set -e
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+case "$1" in
+start|reload|force-reload|stop|restart|load|save|status)
+  exec /usr/sbin/rcfw "$@"
+;;
+*)
+  exec 1>&2
+  echo "Usage:"
+  echo "  $0 [start|restart|force-reload|stop|load|save]"
+  exit 3
+;;
+esac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+garry@strontium:/etc/rcfw$  cat /usr/sbin/rcfw
+#!/bin/sh
+
+C='/etc/default/rcfw'
+if [ -s "$C" ]; then . "$C"; fi; unset C
+
+MOD_DIR='/usr/lib/rcfw'
+MOD_ORDER='ipset iptables'
+MOD_ORDER_INV=$(echo ${MOD_ORDER} | xargs -r -n 1 | tac | xargs -r)
+readonly MOD_DIR MOD_ORDER MOD_ORDER_INV
+
+unset ACT
+if [ $# -ne 0 ]; then
+  ACT=$1
+  shift
+else
+  ACT='help'
+fi
+
+case "${ACT}" in
+start|load|save)
+  case $# in
+  0)
+    if [ "${ACT}" = 'start' ]; then
+      if [ -n "${KERNEL_MODULES}" ]; then
+        for i in ${KERNEL_MODULES}; do
+          modprobe "$i" || true
+        done
+      fi
+    fi
+
+    for m in ${MOD_ORDER}; do
+      s=${MOD_DIR}'/'$m
+      if ! [ -x "$s" ]; then
+        echo "Error: module '$m' isn't found" 1>&2
+        exit 1
+      fi
+      "$s" "${ACT}" || true
+    done
+  ;;
+  *)
+    ## verify parameters and build launch queue
+    ORDER_TMP=''
+    for p; do
+      case "$p" in
+      ipset|iptables)
+        ORDER_TMP=${ORDER_TMP}${ORDER_TMP:+' '}$p
+      ;;
+      *)
+        echo "Error: argument '$p' isn't supported" 1>&2
+        exit 1
+      ;;
+      esac
+    done
+
+    ## reorder launch queue
+    ORDER=''
+    for i in ${MOD_ORDER}; do
+      if echo "${ORDER_TMP}" | xargs -r -n 1 | grep -Eq "^$i\$"; then
+        ORDER=${ORDER}${ORDER:+' '}$i
+      fi
+    done
+
+    for m in ${ORDER}; do
+      s=${MOD_DIR}'/'$m
+      if ! [ -x "$s" ]; then
+        echo "Error: module '$m' isn't found" 1>&2
+        exit 1
+      fi
+      "$s" "${ACT}" || true
+    done
+  ;;
+  esac
+;;
+stop)
+  case $# in
+  0)
+    if [ -n "${KERNEL_MODULES}" ]; then
+      for i in ${KERNEL_MODULES}; do
+        modprobe "$i" || true
+      done
+    fi
+
+    for m in ${MOD_ORDER_INV}; do
+      s=${MOD_DIR}'/'$m
+      if ! [ -x "$s" ]; then
+        echo "Error: module '$m' isn't found" 1>&2
+        exit 1
+      fi
+      "$s" "${ACT}" || true
+    done
+  ;;
+  *)
+    ## verify parameters and build launch queue
+    ORDER_TMP=''
+    for p; do
+      case "$p" in
+      ipset|iptables)
+        ORDER_TMP=${ORDER_TMP}${ORDER_TMP:+' '}$p
+      ;;
+      *)
+        echo "Error: argument '$p' isn't supported" 1>&2
+        exit 1
+      ;;
+      esac
+    done
+
+    ## reorder launch queue
+    ORDER=''
+    for i in ${MOD_ORDER_INV}; do
+      if echo "${ORDER_TMP}" | xargs -r -n 1 | grep -Eq "^$i\$"; then
+        ORDER=${ORDER}${ORDER:+' '}$i
+      fi
+    done
+
+    for m in ${ORDER}; do
+      s=${MOD_DIR}'/'$m
+      if ! [ -x "$s" ]; then
+        echo "Error: module '$m' isn't found" 1>&2
+        exit 1
+      fi
+      "$s" "${ACT}" || true
+    done
+  ;;
+  esac
+;;
+restart|force-reload)
+  "$0" stop "$@"
+  sleep 1
+  "$0" start "$@"
+;;
+status)
+  echo "Warning: argument '${ACT}' isn't supported yet" 1>&2
+;;
+reload)
+  echo "Error: argument '${ACT}' isn't supported" 1>&2
+  exit 1
+;;
+*)
+  exec 1>&2
+  echo "Usage:"
+  echo "  $0 [start|restart|force-reload|stop|load|save]"
+  exit 3
+;;
+esac
+exit 0
+
+
+
+
+
+garry@strontium:/etc/rcfw$ cat /etc/default/rcfw
+## sourced by /bin/sh
+# KERNEL_MODULES='iptable_nat ip6table_nat'
+KERNEL_MODULES='iptable_filter iptable_mangle iptable_nat iptable_raw ip6table_filter ip6table_mangle ip6table_nat ip6table_raw'
+
+IPTABLES_RESTORE_AFTER_START=n
+IPTABLES_SAVE_BEFORE_STOP=n
+
+IPTABLES_PERSISTENCE_INCLUDE=''
+IPTABLES_PERSISTENCE_EXCLUDE=''
+
+IPSET_RESTORE_AFTER_START=n
+IPSET_SAVE_BEFORE_STOP=y
+
+IPSET_PERSISTENCE_INCLUDE='roskomsvoboda.'
+IPSET_PERSISTENCE_EXCLUDE=''
+
+
+
+
+And -o nounset is another way to write -u. They are equivalent.
+
+set -o nounset
+
+set -u
+ прекращает выполнять скрипт и показывает ошибку если переменной не существует
+
+
+And -o xtrace is the another way to write -x.
+
+set -o xtrace
+
+set -x - выводит промежуточные результаты выполнения
+
+
+
+
+выражение_1&&выражение_2
+
+Сначала выполняется выражение, стоящее слева, если оно истинно, выполняется выражение, стоящее справа. Если выражение_1 возвращает ЛОЖЬ, то выражение_2 не будет выполнено. Если оба выражения возвращают ИСТИНУ, выполняется следующий набор команд. 
+
+ Логическое И/ИЛИ
+
+Для управления последовательностью выполнения нескольких выражений могут быть использованы операторы && (логическое И) и || (логическое ИЛИ).
+
+Примеры использования
+
+# выражение1 && выражение2          - выполнение выражение2 только если выражение1 вернуло ИСТИНА (0)
+# выражение1 || выражение2          - выполнение выражение2 только если выражение1 вернуло ЛОЖЬ (не 0)
+
+
+Успешная команда возвращает 0 
+
+
+command || exit 1
+
+Означает, если команда срабатывает успешно, то скрипт продолжает работать ("0 или 1" - это истина)
+Если команда не срабатывает, то код возврата не равен 0 и скрипт прерывается 
+
+
+"exit 1" - это истинное выражение, означает выход с кодом 1.
+command - может завершиться как успешно, так и с ошибкой
+
+https://www.tutorialdocs.com/article/set-command-in-bash.html
+
+
+set -e прерывает скрипт при ошибке
+Если в процессе выполнения скрипта команды возвращают не нулевое значение (и это нормальное поведение), то можно отключить set +e и потом включить заново set -e
+
+```
+set +e
+command1
+command2
+set -e
+```
