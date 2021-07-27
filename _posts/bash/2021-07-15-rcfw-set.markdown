@@ -6,6 +6,7 @@ categories: bash ros
 
 
 # Разбираемся с rcfw
+```
 garry@strontium:~$  sudo service --status-all
 [sudo] password for garry: 
  [ + ]  acpi-fakekey
@@ -103,8 +104,8 @@ garry@strontium:~$  sudo service --status-all
  [ - ]  winbind
  [ - ]  x11-common
  [ + ]  x2goserver
-
-
+```
+```
 garry@strontium:/etc/rcfw$ cat /etc/init.d/rcfw 
 #!/bin/sh
 ### BEGIN INIT INFO
@@ -132,6 +133,7 @@ start|reload|force-reload|stop|restart|load|save|status)
   exit 3
 ;;
 esac
+```
 
 
 
@@ -144,8 +146,7 @@ esac
 
 
 
-
-
+```
 garry@strontium:/etc/rcfw$  cat /usr/sbin/rcfw
 #!/bin/sh
 
@@ -292,11 +293,11 @@ reload)
 ;;
 esac
 exit 0
+```
 
 
 
-
-
+```
 garry@strontium:/etc/rcfw$ cat /etc/default/rcfw
 ## sourced by /bin/sh
 # KERNEL_MODULES='iptable_nat ip6table_nat'
@@ -313,7 +314,7 @@ IPSET_SAVE_BEFORE_STOP=y
 
 IPSET_PERSISTENCE_INCLUDE='roskomsvoboda.'
 IPSET_PERSISTENCE_EXCLUDE=''
-
+```
 
 
 
