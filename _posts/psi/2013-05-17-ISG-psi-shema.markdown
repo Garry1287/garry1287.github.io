@@ -7,7 +7,7 @@ tags: PSI
 ---
 
 # ISG-psi-shema
-
+{% raw %}
 
 34-08-04-37-E7-10
 
@@ -2419,7 +2419,4 @@ Oct  5 11:43:50.216: SVM ERROR: unknown handle 59000604
 Oct  5 11:43:50.216: SVM [9C000603/30720]: destroy
 Oct  5 11:43:50.216: SVM ERROR: unknown handle 9C000603
 
-
-
-
-  
+{% endraw %}

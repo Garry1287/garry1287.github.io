@@ -292,7 +292,7 @@ post-auth {
 
 
 
-
+{% raw %}
 
 
 
@@ -924,7 +924,7 @@ radius-server vsa send authentication
         #  like below:
         #
 
-
+{% endraw %}
 
 
 
