@@ -2,8 +2,8 @@
 layout: post
 title:  "bash-uchebniki"
 date:   2009-02-06 09:40:14 +0300
-categories: bash-uchebniki
-tags: bash-uchebniki
+categories: bash
+tags: bash
 ---
 
 # bash-uchebniki

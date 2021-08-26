@@ -2,8 +2,8 @@
 layout: post
 title:  "du-sh"
 date:   2015-03-19 08:43:12 +0300
-categories: du-sh
-tags: du-sh
+categories: bash
+tags: bash
 ---
 
 # du-sh

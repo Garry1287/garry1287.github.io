@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "sed"
+title:  "Sed"
 date:   2011-02-24 18:51:02 +0300
 categories: sed
-tags: sed
+tags: sed bash
 ---
 
 # sed
@@ -58,14 +58,14 @@ access-list 61 deny   any
 access-list 62 remark NTP: access-group serve-only
 access-list 62 permit 10.0.0.0 0.255.255.255
 access-list 62 deny   any
-snmp-server community Sh73ah91Kld RW 57
-snmp-server community Fv8Ya64PQ RO 56
+snmp-server community Sd RW 57
+snmp-server community FQ RO 56
 snmp-server ifindex persist
 snmp-server location VIS_Steel-CE0
 snmp-server contact iptech@sc.ru
 snmp-server file-transfer access-group 57 protocol tftp
 
-radius-server host 10.192.10.190 auth-port 2012 acct-port 2013 key 7 061038117D6D19372001231306060D0E351B102D36
+radius-server host 10.192.10.190 auth-port 2012 acct-port 2013 key 7 061038117D6D1937200123134534345234536
 
 line vty 0 4
  access-class 23 in

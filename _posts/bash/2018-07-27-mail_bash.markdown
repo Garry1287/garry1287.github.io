@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "mail_bash"
+title:  "Mail bash"
 date:   2018-07-27 11:20:13 +0300
-categories: mail_bash
-tags: mail_bash
+categories: bash
+tags: bash
 ---
 
-# mail_bash
+# Mail bash
 #!/bin/sh
 /usr/bin/bzcat /var/log/asterisk/cdr-csv/rotated/Master.csv-`date +%Y%m%d`.bz2 | grep 540313 > /home/garry/ringlog/Master_$(date +%Y%m%d).cvs
 echo 'This is yesterday rings' | mail -s "Rings to 540313 from yesterday - `date --date="1 days ago" +%Y%m%d`" -a /home/garry/ringlog/Master_$(date +%Y%m%d).cvs  igordzu@yandex.ru

@@ -2,8 +2,8 @@
 layout: post
 title:  "gen-zt-config"
 date:   2011-04-07 02:02:47 +0400
-categories: gen-zt-config
-tags: gen-zt-config
+categories: bash
+tags: bash sed
 ---
 
 # gen-zt-config

@@ -2,8 +2,8 @@
 layout: post
 title:  "join"
 date:   2011-07-06 15:06:08 +0400
-categories: join
-tags: join
+categories: bash
+tags: bash
 ---
 
 # join

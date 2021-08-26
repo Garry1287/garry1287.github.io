@@ -2,8 +2,8 @@
 layout: post
 title:  "new-user-hosting"
 date:   2014-01-21 20:27:16 +0400
-categories: new-user-hosting
-tags: new-user-hosting
+categories: bash
+tags: bash
 ---
 
 # new-user-hosting
@@ -77,4 +77,3 @@ GRANT ALL ON usmmag.* TO usmmag@localhost IDENTIFIED BY 'Edv83Hdv';
 flush privileges;
 GRANT ALL ON usmmag2.* TO usmmag2@localhost IDENTIFIED BY 'Edv83Hdv';
 flush privileges;
-Rad35Gdv

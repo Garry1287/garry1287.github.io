@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "php-hosting"
+title:  "tcp-session ESTABLISHED"
 date:   2009-07-03 22:51:39 +0400
-categories: php-hosting
-tags: php-hosting
+categories: Networking
+tags: Установленные tcp-сессии
 ---
 
 # php-hosting
@@ -13,6 +13,5 @@ netstat -lantp | grep ESTABLISHED |awk '{print $5}' | awk -F: '{print $1}' | sor
 top
 
 
-fast_cgi попробовать
 
 

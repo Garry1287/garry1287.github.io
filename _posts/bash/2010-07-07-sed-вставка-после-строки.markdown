@@ -2,8 +2,8 @@
 layout: post
 title:  "sed-вставка-после-строки"
 date:   2010-07-07 06:56:17 +0400
-categories: sed-вставка-после-строки
-tags: sed-вставка-после-строки
+categories: bash
+tags: sed bash
 ---
 
 # sed-вставка-после-строки

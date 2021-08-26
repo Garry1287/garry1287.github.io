@@ -2,8 +2,8 @@
 layout: post
 title:  "pdf2fb2"
 date:   2012-01-24 12:32:19 +0400
-categories: pdf2fb2
-tags: pdf2fb2
+categories: bash
+tags: bash
 ---
 
 # pdf2fb2

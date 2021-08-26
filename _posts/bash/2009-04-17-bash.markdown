@@ -6,7 +6,7 @@ categories: bash
 tags: bash
 ---
 
-# bash
+# bash links
 [http://www.k-max.name/linux/peremennye-intepretatora-bash/](http://www.k-max.name/linux/peremennye-intepretatora-bash/)
 [http://snowarch.blogspot.ru/2011/06/bash.html](http://snowarch.blogspot.ru/2011/06/bash.html)
 [http://www.opennet.ru/docs/RUS/bash_scripting_guide/c2792.html](http://www.opennet.ru/docs/RUS/bash_scripting_guide/c2792.html)
