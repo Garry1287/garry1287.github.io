@@ -7,6 +7,8 @@ tags: radius
 ---
 
 # radtest
+
+{% raw %}
 interface GigabitEthernet0/0.3079
  description #EuropackAutsorsing #garry 05.07.2011
  encapsulation dot1Q 3079
@@ -3482,3 +3484,4 @@ vlan
 
 -A input_ext -s 192.168.200.12/30 -j ACCEPT
 -A input_ext -s 192.168.200.8/30 -j ACCEPT
+{% endraw %}

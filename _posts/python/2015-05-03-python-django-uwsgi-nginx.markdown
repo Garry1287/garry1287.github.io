@@ -7,6 +7,7 @@ tags: python
 ---
 
 # python-django-uwsgi-nginx
+{% raw %}
 virtualenv -p python3 venv
 source venv/bin/activate
 
@@ -104,3 +105,4 @@ Make sure you followed the extra note about editing /etc/uwsgi.ini earlier and r
 
 systemctl enable nginx uwsgi
 systemctl start nginx uwsgi
+{% endraw %}
