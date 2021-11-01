@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "backup-ручной"
+title:  "Ручной backup"
 date:   2011-05-08 03:28:04 +0400
 categories: backup linux
 tags: backup linux tar
 ---
 
-# backup-ручной
+# Ручной backup
+```
 /var/lib/named
 +
 /var/lib/named/etc
@@ -19,21 +20,22 @@ tags: backup linux tar
 /var/lib/named/dyn
 /var/lib/named/log
 /var/lib/named/proc
-
+```
 
 
 
 
 
 Emerald
-
+```
 /bin/tar -cpzf /home/backup/emerald/named/backup_named_emerald_$(date +%Y%m%d-%H%M%S).tar.gz /var/lib/named  --atime-preserve --same-owner --numeric-owner --exclude=/var/lib/named/named.run --exclude=/var/lib/named/dev --exclude=/var/lib/named/dyn --exclude=/var/lib/named/lib --exclude=/var/lib/named/log --exclude=/var/lib/named/proc --exclude=/var/lib/named/var 
 /bin/tar -cpzf /home/backup/emerald/etc/backup_etc_emerald_$(date +%Y%m%d-%H%M%S).tar.gz /etc --same-owner  --atime-preserve --numeric-owner
 /bin/tar -cpzf /home/backup/emerald/cron/backup_cron_emerald_$(date +%Y%m%d-%H%M%S).tar.gz /var/spool/cron --same-owner  --atime-preserve --numeric-owner
 /bin/tar -cpzf /home/backup/emerald/boot/backup_cron_emerald_$(date +%Y%m%d-%H%M%S).tar.gz /boot --same-owner  --atime-preserve --numeric-owner
-
+```
 
 Сменить права
+```
 /bin/chown backup:backup /home/backup/*
 
 
@@ -41,15 +43,15 @@ rsync -avz -e ssh --delete-after /home/backup/emerald/  backup@crystal.sc.int:/h
 
 
 01      17,19   *       *       *       crontab -l > /var/home/smithy/root-crontab.sav
+```
 
-
-
-
+Добавить пользователя
+```
 useradd -g backup -s /bin/bash -d /home/backup -m backup
+```
 
 
-
-
+```
 iptables-save
 ip route show
 netstat -lnpt
@@ -58,43 +60,41 @@ ip addr show
 /boot
 mbr
 grub
-
+```
 
 
 
 
 
 Sapphire
-
+```
 /bin/tar -czf /home/backup/backup/etc_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz /etc
 /bin/tar -czf /home/backup/backup/tftpboot.tar.gz /var/tftpboot
 /bin/chown backup /home/backup/backup/*
 /bin/chgrp users /home/backup/backup/*
+```
 
 
-
-
+```
 mkdir /home/backup/sapphire
 mkdir /home/backup/sapphire/named/
 mkdir /home/backup/sapphire/etc/
 mkdir /home/backup/sapphire/tftp/
 mkdir /home/backup/sapphire/boot/
 mkdir /home/backup/sapphire/cron/
+```
 
-
-
+```
 /usr/bin/rsync --server --sender --numeric-ids --perms --owner --group -D --links --hard-links --times --block-size=2048 --recursive --ignore-times . /etc/
 
 
+```
 file_count=`/usr/bin/ls -al /home/backup/sapphire/boot/ | /usr/bin/wc -l`
 echo $file_count;
 if [ "$file_count">30 ]
 then
   find /home/backup/sapphire/boot/ -type f -mtime +30;
 fi
-
-
-
 
 /bin/tar -cpzf /home/backup/sapphire/named/backup_named_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz /var/named  --atime-preserve --same-owner --numeric-owner --exclude=/var/named/data --exclude=/var/named/chroot 
 file_count=`/usr/bin/ls -al /home/backup/sapphire/named/ | /usr/bin/wc -l`
@@ -143,11 +143,11 @@ fi
 /sbin/ifconfig > /home/backup/sapphire/file/ifconfig
 /bin/ps aucx > /home/backup/sapphire/file/ps
 /bin/chown backup:backup /home/backup/sapphire/*
+```
 
 
 
-
-
+```
 
 30      6       *       *       *      /usr/bin/rsync -avz -e ssh --delete-after /home/backup/  backup@crystal.sc.int:/home/backup/sapphire
 
@@ -159,10 +159,10 @@ fi
 /bin/ip addr show >> /home/backup/sapphire/file/ipaddr
 /sbin/ifconfig >> /home/backup/sapphire/file/ifconfig
 /bin/ps aucx >> /home/backup/sapphire/file/ps
+```
 
 
-
-
+```
 IPROUTE =/bin/ip route show >> /home/backup/sapphire/file/iproute_$(date +%Y%m%d-%H%M%S)"
 NETSTAT_TCP = /bin/netstat -lnpt >> /home/backup/sapphire/file/netstat_tcp_$(date +%Y%m%d-%H%M%S)
 NETSTAT_UDP = /bin/netstat -lnpu >> /home/backup/sapphire/file/netstat_udp_$(date +%Y%m%d-%H%M%S)
@@ -180,7 +180,7 @@ PSAUCX=`/bin/ps aucx`
 /bin/tar -cpzf /home/backup/sapphire/file/file_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz  $IPROUTE $NETSTAT_TCP $NETSTAT_UDP $IPADDR $IFCONFIG $PSAUCX
 
 /bin/tar -cpzf /home/backup/sapphire/file/file_sapphire_$(date +%Y%m%d-%H%M%S).tar.gz  /home/backup/sapphire/file/*
-
+```
 
 
 
@@ -188,18 +188,19 @@ PSAUCX=`/bin/ps aucx`
 
 
 ROCK
-
+```
 /bin/tar -cpzf /home/backup/rock/etc/backup_etc_root_$(date +%Y%m%d-%H%M%S).tar.gz /etc --same-owner  --atime-preserve --numeric-owner
 /bin/tar -cpzf /home/backup/rock/spool/backup_cron_rock_$(date +%Y%m%d-%H%M%S).tar.gz /var/spool/cron --same-owner  --atime-preserve --numeric-owner
 /bin/tar -cpzf /home/backup/rock/root/backup_root_rock_$(date +%Y%m%d-%H%M%S).tar.gz /root --same-owner  --atime-preserve --numeric-owner
 /bin/chown -R backup:backup /home/backup/rock/*
-
+```
 
 
 
 
 
 MAILMAN
+```
 /bin/tar -cpzf /home/backup/mailman/etc/backup_etc_mailman_$(date +%Y%m%d-%H%M%S).tar.gz /etc --same-owner  --atime-preserve --numeric-owner
 
 mysql
@@ -229,44 +230,9 @@ cyrus
 /bin/tar -cpzf /home/backup/mailman/cyrus/backup_spool_imap_mailman_$(date +%Y%m%d-%H%M%S).tar.gz /var/spool/imap --same-owner  --atime-preserve --numeric-owner 
 /bin/tar -cpzf /home/backup/mailman/cyrus/backup_lib_imap_mailman_$(date +%Y%m%d-%H%M%S).tar.gz /var/lib/imap --same-owner  --atime-preserve --numeric-owner 
 /bin/tar -cpzf /home/backup/mailman/cyrus/backup_lib_sieve_mailman_$(date +%Y%m%d-%H%M%S).tar.gz /var/lib/sieve --same-owner  --atime-preserve --numeric-owner 
+```
 
-
-Когда дохера мелких файлов может проще юзать rsync
-
-
-
-
-
-
-HOSTING
-
-RADIUM
-
-KVMHOST
-
-CACTI
-
-CENTOS.HOST
-
-CRYSTAL
-
-AST1
-
-AST2
-
-PEARL
-
-Elastix
-посмотреть штатные скрипты
-
-
-
-
-
-
-
-
-
+Когда много мелких файлов может проще юзать rsync
 
 
 
@@ -279,23 +245,20 @@ Elastix
 
 
 
-
-
-
-
-
-
+```
 /var/spool/cron
 exclude={"/proc","/sys","/tmp","/home","/var/spool/squid","/var/log","/var/cache/apt/archives"
+```
 
 Надо ifconfig в развёрнутом виде
 и таблицу маршуртизации
+```
 date > $CMDREPLY
 echo "== iptables =============" >> $CMDREPLY
 /sbin/iptables -t nat -L >> $CMDREPLY
 echo "== route ================" >> $CMDREPLY
 /sbin/route >> $CMDREPLY
-
+```
 
 
 2 простых скрипта

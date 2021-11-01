@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "backup2"
+title:  "Скрипты для backup"
 date:   2016-09-09 10:54:22 +0300
 categories: backup
 tags: backup dar tar rsync
@@ -119,7 +119,7 @@ mtime -- The mtime--modify time--is the time when the actual contents of a file 
 
 
 
-Дифференцируемый
+## Дифференцируемый
 Чем дальше по времени отстоит дифференциальный бэкап от своего полного бэкапа, тем он «тяжелее»,
  и даже может превысить размер полного бэкапа. Решение здесь то же, что и при инкрементном подходе, — 
 разбавляйте ваши дифференциальные бэкапы полными. 
@@ -133,7 +133,6 @@ mtime -- The mtime--modify time--is the time when the actual contents of a file 
 
 
 
-По неделе?
 
 Продумать схему, опробовать, но не применять
 создавать новый полный бэкап после нескольких инкрементных, скажем, после четырех или пяти. 
@@ -165,7 +164,7 @@ tar (bzip)
 копирование по ssh
 логирование (сохранял бы в каком-нибудь виде протокол его работы)
 
-
+```
 /var/lib/named/127.0.0.zone
 /var/lib/named/arpa
 /var/lib/named/etc
@@ -183,9 +182,9 @@ tar (bzip)
 /var/lib/named/log
 /var/lib/named/named.run
 /var/lib/named/proc
+```
 
-
-Сравнить скрипты
+## Сравнить скрипты
 1.backup_linuxsrv.sh
 TAR -cjpf, копирование по scp, логирование действий
 2.Мои tar
@@ -205,12 +204,12 @@ tar czvf ${SAVENAME}.tar.gz $TARPAR > ${SAVENAME}.log 2>&1
 tar -czvf + ssh
 
 
-
+```
 #!/bin/bash
 cd /backups
 sudo tar cvpzf backup_`date +%Y.%m.%d_%H_%M`.tar.gz /
 find . -mtime +10 -exec rm {} \;
-
+```
 
 
 
@@ -236,33 +235,35 @@ find . -mtime +10 -exec rm {} \;
 
 
 [http://www.halfgaar.net/backing-up-unix](http://www.halfgaar.net/backing-up-unix)
-
+```
 #!/bin/sh
 tar -zcf /backup/home.tar.gz /home
 tar -zcf /backup/etc.tar.gz /etc
 
 tar -cvzpf /mnt/backup/ubuntu-sda1.tar.gz /mnt/root
-
+```
 Создание файловой системы
+```
 sudo mkfs.ext2 -L "boot" /dev/sdXY
 sudo mkfs.ext4 -L "home" /dev/sdXY
-
+```
 Некоторые файловые системы поддерживают задание UUID при форматировании. Это дает возможность создать ФС с таким же UUID, 
 как у старой, что позволит избежать необходимости править fstab.
 
 Для ext2/3/4 UUID задается с помощью ключа -U, а еще больше упростить задачу можно командой вида
-
+```
 sudo mkfs.ext4 -L "label" -U "$(sudo blkid -o value -s UUID /dev/sda1)" /dev/sda1
-
+```
 
  Смонтируйте свежесозданные ФС
-
+```
 sudo mount /dev/sdXY /mnt/root
 sudo mount /dev/sdXY /mnt/root/home
-
+```
 Теперь можно распаковать содержимое архива на место
-
+```
 sudo tar --same-owner -xvpf /mnt/backup/ubuntu-2010-10-07.tar.bz2 -C /
+```
 (ключ -C задает каталог, в который нужно распаковать файлы. ключ --same-owner сохраняет владельцев файлов при распаковке)
 
 
@@ -317,14 +318,14 @@ sudo tar --same-owner -xvpf /mnt/backup/ubuntu-2010-10-07.tar.bz2 -C /
 # Backup all files on remote serv2
 #
 # Pavel Malakhov 2005.03.03
-
+```
 ssh 10.0.0.4 "cd /; tar cvzf - . --exclude ./home/pm/backup --exclude ./home/pm/app --exclude ./usr/local/squid/var --exclude ./proc" > /home/pavel/backup/serv2_backup_all.tar.gz
-
+```
 Для выполнения этого скрипта нужно, чтоб на удалённом сервере был разрешён вход пользователю root по протоколу ssh, 
 т.е. в /etc/ssh/sshd_config:
-
+```
 PermitRootLogin yes
-
+```
 Если создать сертификат на сервер, то можно будет входить и без пароля, 
 а тогда скрипт можно будет включить в /etc/crontab (см. соответствующую статью). 
 Без этого придётся вводить пароль и, соответственно, автоматического бэкапа не получится. 
@@ -336,14 +337,14 @@ PermitRootLogin yes
 
 
 
-
+```
 tar -zcvpf /backups/fullbackup.tar.gz --directory=/ --exclude=proc
 --exclude=sys --exclude=dev/pts --exclude=backups .
-
+```
 Likewise, our untar-ing command becomes:
-
+```
 tar -zxvpf /fullbackup.tar.gz 
-
+```
 
 3. tar для этого дела хорош, но не совсем удобен. Если во время содания архива какой-то файл изменился, 
 tar честно доделает работу, но вернёт код ошибки. Это усложнит тебе автоматизацию работы. 
@@ -382,7 +383,7 @@ mysqldump работает медленно и блокирует таблицы
 — База, в нашем случае MySQL. Лучший способ прозрачного резервного копирования — снятие копий с клиента репликации
 
 
-
+```
 #!/bin/sh
 # Описываем базовые директории
 BACKUP="/srv/backup/"
@@ -416,6 +417,7 @@ cd $TEMP
 tar -czvf /srv/backup/data/$PREFIX.tar.gz *
 # Очищаем папку temp
 rm -rf $TEMP
+```
 
 Не занудства ради, а исключительно для изложения моих мыслей на эту тему лично я бы еще как минимум:
 1) d-m-y заменил бы на y-m-d для удобства сортировки в файловой системе;
@@ -505,6 +507,7 @@ rdiff-backup — фактически система контроля верси
 
 
 А я делаю так:
+```
 #!/bin/bash
 
 cd /home/Backup
@@ -516,12 +519,17 @@ tar -cvvzf /home/Backup/back-`date '+%m_%d_%Y'`.tar.bz2 \
 /var/log/ \
 /root/ \
 --exclude=/home/Backup > ./last.log
+```
 
 # Стираем файлы бэкапа старше 30 дней
+```
 find . -mtime +30 -exec rm '{}' \;
-# Стираем старые логи
-find /var/log/ -type f -name *\.gz -exec rm '{}' \;
+```
 
+# Стираем старые логи
+```
+find /var/log/ -type f -name *\.gz -exec rm '{}' \;
+```
 
 
 
@@ -536,46 +544,20 @@ RSYNC
 
 
 Мой бекап
-
+```
 mysqldump -u root -p iptech48 > /srv/www/iptech48.sql
 tar -czvpf iptech48_3.12.13.tar.gz iptech48/
-
+```
+```
 scp -P 2222 *.sql garry@192.168.1.141:/home/garry/seo
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Шифрование
+## Шифрование
 [http://avz.org.ua/wp/2012/02/15/creating-encrypted-backup-with-fsbackup/](http://avz.org.ua/wp/2012/02/15/creating-encrypted-backup-with-fsbackup/)
-
-
-
-
-
-
-
 
 [http://www.opennet.ru/openforum/vsluhforumID1/79571.html](http://www.opennet.ru/openforum/vsluhforumID1/79571.html)
 
-
+```
 fsbackup
 /srv/www
 !/srv/www
@@ -583,13 +565,13 @@ d~/srv/www/iptech48
 d~/srv/www/potolok
 d~/srv/www/usmmag
 d~/srv/www/usm-mag
+```
 
 
 
 
 
-
-
+```
 __DATA__
 /srv/www    #архивировть эту директорию, (директория от которые остальные шаблоны отталкиваются)
 !/srv/www       #не архивировать эту директорию
@@ -599,23 +581,16 @@ d~/srv/www/usmmag
 d~/srv/www/usm-mag
 f!.*\.tar\.gz           #не архивировать эти файлы
 f!.*\.gz                #не архивировать эти файлы
+```
 
 
-
-
-
-
-
-
-
-
-
+```
 groupadd backup
 useradd -G backup backup
 usermod -G backup backup
 useradd -d /home/backup -G backup backup
 useradd -d /home/backup -g backup backup
-
+```
 
 
 
@@ -639,8 +614,6 @@ rsnapshot
 
 12 типичных ошибок backup
 [http://habrahabr.ru/post/267881/](http://habrahabr.ru/post/267881/)
-
-
 
 
 Можно присмотреться и к этой системе

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "cryptsetup-backup"
+title:  "Организация backup c помощью cryptsetup"
 date:   2011-10-14 04:54:42 +0400
 categories: backup crypt
 tags: cryptsetup backup
@@ -81,19 +81,20 @@ III. EncFs (ENCrypted File System)
 (Нажмите, чтобы показать/скрыть)
    1. Все отключено.
    2. Увеличим развер файла-контейнера (на 50M)
-dd if=/dev/urandom bs=1M count=50 >> /home/user/.private/container.crt
+`dd if=/dev/urandom bs=1M count=50 >> /home/user/.private/container.crt`
    3. открываем
 (Нажмите, чтобы показать/скрыть)
-sudo cryptsetup luksOpen /home/user/.private/container.crt -d /home/user/keys/container.key container
+`sudo cryptsetup luksOpen /home/user/.private/container.crt -d /home/user/keys/container.key container`
       увеличиваем размер контейнера (на все добавленное место)
-sudo cryptsetup resize container
+`sudo cryptsetup resize container`
    4. проверка ФС
-sudo e2fsck -f /dev/mapper/container
+`sudo e2fsck -f /dev/mapper/container`
    5. увеличение размера ФС (на все добавленное место)
-sudo resize2fs -p /dev/mapper/container
+`sudo resize2fs -p /dev/mapper/container`
 (Нажмите, чтобы показать/скрыть)
 
 Вывод примерно такой:
+```
 user@user:~$ sudo e2fsck -f /dev/mapper/container
 e2fsck 1.42 (29-Nov-2011)
 Проход 1: Проверка inodes, блокs, а также размеров
@@ -115,7 +116,7 @@ sudo mount /dev/mapper/container /home/user/private
 df -h дает
 Файл.система           Размер Использовано  Дост Использовано% Cмонтировано в
 /dev/mapper/container     91M         1,2M   88M            2% /home/user/private
-
+```
 
 
 
@@ -155,7 +156,7 @@ noauto
 
 Продумать
 
-
+```
 sudo /usr/sbin/cryptsetup luksOpen /dev/disk/by-id/ata-WDC_WD2500AAJS-22VTA0_WD-WMART2037954-part2 cr_ata-WDC_WD2500AAJS-22VTA0_WD-WMART2037954-part2
 sudo mount /dev/mapper/cr_ata-WDC_WD2500AAJS-22VTA0_WD-WMART2037954-part2 /virt
-
+```

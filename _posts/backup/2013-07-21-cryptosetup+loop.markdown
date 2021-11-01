@@ -24,33 +24,37 @@ cryptsetup - manage plain dm-crypt and LUKS encrypted volumes
 
 
 Создаем файл 12
+```
 dd if=/dev/urandom of=12 bs=512K count=40
 cryptsetup luksFormat 12
+```
 Вводи YES и пароль 2 раза
 
 Представляем файл 12 в виде блочного устройства
-losetup /dev/loop0 /home/garry/12
+`losetup /dev/loop0 /home/garry/12`
 
 Открываем контейнер
-cryptsetup luksOpen /dev/loop0 12_dev
+`cryptsetup luksOpen /dev/loop0 12_dev`
 
 Создаем файловую систему
-mkfs.ext4 /dev/mapper/12_dev
+`mkfs.ext4 /dev/mapper/12_dev`
 
 Создаём папку для монтирования
-mkdir /home/garry/12dir
+`mkdir /home/garry/12dir`
 
 Монтируем
+```
 mount /dev/mapper/12_dev /home/garry/12dir/
 
 chown garry:users 12dir
+```
 Заводим файл, в этой папке и т д, например файл с паролями 11 или 12
 
 Отмонтируем
-umount /dev/mapper/12_dev
+`umount /dev/mapper/12_dev`
 
 Извлекаем контейнер
-cryptsetup luksClose /dev/mapper/12_dev
+`cryptsetup luksClose /dev/mapper/12_dev`
 
 Чтобы пользоваться - необходимо открыть контейнер, монтировать, записывать, отмонтировать, закрывать контейнер
 
@@ -69,20 +73,20 @@ cryptsetup luksClose /dev/mapper/12_dev
 
 
 Представляем файл 12 в виде блочного устройства
-losetup /dev/loop0 /home/garry/12
+`losetup /dev/loop0 /home/garry/12`
 
 Открываем контейнер
-cryptsetup luksOpen /dev/loop0 12_dev
+`cryptsetup luksOpen /dev/loop0 12_dev`
 
 
 Монтируем
-mount /dev/mapper/12_dev /home/garry/12dir/
+`mount /dev/mapper/12_dev /home/garry/12dir/`
 
 Отмонтируем
-umount /dev/mapper/12_dev
+`umount /dev/mapper/12_dev`
 
 Извлекаем контейнер
-cryptsetup luksClose /dev/mapper/12_dev
+`cryptsetup luksClose /dev/mapper/12_dev`
 
 
 
@@ -101,7 +105,7 @@ cryptsetup luksClose /dev/mapper/12_dev
 [https://cryptopunks.org/article/awesome%2Btruecrypt%2Balternative%2Bfor%2Blinux/](https://cryptopunks.org/article/awesome%2Btruecrypt%2Balternative%2Bfor%2Blinux/)
 [https://pastebin.com/QJdPCqbU](https://pastebin.com/QJdPCqbU)
 
-
+```
 cr_virt         /dev/disk/by-id/ata-WDC_WD2500AAJS-22VTA0_WD-WMART2037954-part2 none       none
 
 openvpn --config /home/garry/MyDocs/mngt-garry.ovpn
@@ -113,3 +117,4 @@ Creating filesystem with 767488 4k blocks and 192000 inodes
 Filesystem UUID: ebfa7a82-3931-4579-bf25-2a7a4113d2ab
 Superblock backups stored on blocks: 
         32768, 98304, 163840, 229376, 294912
+```

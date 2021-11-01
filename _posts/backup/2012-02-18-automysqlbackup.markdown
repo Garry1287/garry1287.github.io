@@ -1,19 +1,20 @@
 ---
 layout: post
-title:  "automysqlbackup"
+title:  "Использование automysqlbackup"
 date:   2012-02-18 23:04:49 +0400
 categories: backup
 tags: backup automysqlbackup
 ---
 
-# automysqlbackup
+# Automysqlbackup
 [http://www.ekzorchik.ru/wordpress/2015/10/backup-all-databases/](http://www.ekzorchik.ru/wordpress/2015/10/backup-all-databases/)
 [https://www.a2hosting.com/kb/developer-corner/mysql/mysql-database-backups-using-automysqlbackup](https://www.a2hosting.com/kb/developer-corner/mysql/mysql-database-backups-using-automysqlbackup)
 
 
 Запускать  DumpPreUserCmd
+```
 $sshPath -q -x -l root $host /usr/local/bin/mysql_hostname_dump
-
+```
 
 
 
@@ -33,6 +34,7 @@ $sshPath -q -x -l root $host /usr/local/bin/mysql_hostname_dump
 создать /var/backup/db
 
 Сделать скипт
+```
 [root@host cron.daily]# cat runmysqlbackup 
 #!/bin/sh
 
@@ -41,7 +43,9 @@ $sshPath -q -x -l root $host /usr/local/bin/mysql_hostname_dump
 chown backup.backup /var/backup/db* -R
 find /var/backup/db* -type f -exec chmod 400 {} \;
 find /var/backup/db* -type d -exec chmod 700 {} \;
-
+```
 
 В исключения добавить
+```
 CONFIG_db_exclude=( 'information_schema' 'performance_schema' )
+```

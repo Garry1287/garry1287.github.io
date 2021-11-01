@@ -15,6 +15,7 @@ tags: backup
 
 Необходимо сгенерить на sapphire под root ключи и отправить ключ на crystal
 
+```
 [root@sapphire .ssh]# ls
 id_rsa  id_rsa.pub  known_hosts
 [root@sapphire .ssh]# ssh-copy-id -i id_rsa.pub backup@crystal.sc.int
@@ -28,9 +29,12 @@ Now try logging into the machine, with:   "ssh 'backup@crystal.sc.int'"
 and check to make sure that only the key(s) you wanted were added.
 
 [root@sapphire .ssh]# ssh backup@crystal.sc.int
+```
 
 Теперь работает
+```
 /usr/bin/rsync -avz -e ssh --delete-after /var/lib/BackupPC backup@crystal.sc.int:/var/lib/BackupPC
+```
 [http://rus-linux.net/MyLDP/sec/generiruem-kluchi-ssh.html](http://rus-linux.net/MyLDP/sec/generiruem-kluchi-ssh.html)
 
 
@@ -74,9 +78,9 @@ http://localhost/BackupPC
  на другие машины чтобы можно было выполнять подключение по SSH к клиентским машинам, для выполнения резервного копирования
 
 Генерация ключа под пользователем backuppc
-
+```
 ssh-keygen -t dsa -b 1024-f /var/lib/backuppc/key
-
+```
 
 Парольную фразу не указываем, чтобы подключение осуществлялось без ввода пароля для ключа.
 Из написанного понятно что мы указываем длину ключа 1024bit, место где его сохранить /var/lib/backuppc/ и имя файла ключа key
@@ -84,43 +88,47 @@ ssh-keygen -t dsa -b 1024-f /var/lib/backuppc/key
 ( То, есть на Sapphire cгенерирован ключ под пользователем backuppc, который копируем на новых клиентов)
 
 Копируем
+```
 [root@sapphire BackupPC]# su backuppc
 bash-4.2$ cd
 bash-4.2$ cd .ssh
 bash-4.2$ ssh-copy-id -i id_rsa.pub backup@81.20.192.59
+```
 
 
 
-
-4.На клиенте 
+4.На клиенте
+``` 
 > visudo
 
 backup ALL=(ALL) NOPASSWD:/usr/bin/rsync
 backup ALL=(ALL) NOPASSWD:/bin/tar
+```
 
-
-5. 
+5.
+```
 Xfer
 $sshPath -q -x -l backup $host /usr/bin/sudo $rsyncPath $argList+
 $sshPath -q -x -l backup $host /usr/bin/sudo $rsyncPath $argList+
+```
 
 Перезапусить BackupPC на sapphire после добавления нового хоста
 
 ...
-
+```
 remuserbak      ALL=NOPASSWD: /usr/bin/tar, /usr/local/bin/rsync
 backupuser ALL=NOPASSWD:/bin/gtar,/bin/tar
-
+```
 
 
 6.Кроме этого необходимо настроить
+```
 #$Conf{PingPath} = undef;
 $Conf{PingPath} = '/usr/bin/ping';
-
+```
 7.$Conf{CgiAdminUsers} 
 8. BackupPC запускается через init.d или systemd
 9. В Xfer с tar надо прописывть sudo, с rsync тоже наверно надо
-10.
 
 
 
@@ -133,12 +141,12 @@ FAQ. How to purge backups for a host?
 Если нужно удалить полностью резервные файлы для хоста. Вам может понадобиться очистка пула. Его размер вы можете посмотреть в логе системы после перезапуска BackupPC.
 
 Очистить пулл BackupPC:
-
+```
 su - backuppc
 $ /usr/share/backuppc/bin/BackupPC_nightly 0 255
 BackupPC_stats 0 = pool,0,0,0,0,0,0,0,0,0,0,
 ...
-
+```
 
 
 
@@ -293,10 +301,9 @@ $Conf{CgiAdminUserGroup} и $Conf{CgiAdminUsers} - пользователи и �
 
 
 Tar делать
-
-
+```
 /usr/share/backuppc/bin/BackupPC_tarCreate  -h s01 -n 0 -s backup -t -e utf-8 / | tar x --no-same-owner --no-same-permissions 
-
+```
 
 
 
@@ -310,18 +317,19 @@ Tar делать
 
 
 So:
-
+```
 $Conf{RsyncShareName} = '/';
 $Conf{BackupFilesOnly} = ['/opt/home2', '/opt/home4', '/opt2/home3',
 '/opt3/home5'];
-
+```
 
 Запускается один раз
 or
-
+```
 $Conf{RsyncShareName} = ['/opt/home2', '/opt/home4', '/opt2/home3',
 '/opt3/home5'];
 $Conf{BackupFilesOnly} = undef;
+```
 Запускается rsync 4 раза и выглядить как отдельные 4 директории, которые нельзя восстановить за один раз
 
 

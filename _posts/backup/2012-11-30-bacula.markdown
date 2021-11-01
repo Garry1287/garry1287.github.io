@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "bacula"
+title:  "Bacula"
 date:   2012-11-30 13:26:31 +0400
 categories: backup
 tags: backup

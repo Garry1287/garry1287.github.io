@@ -1,11 +1,13 @@
 ---
 layout: post
-title:  "backup-bgp-ipvpn-stk"
+title:  "Резервирование каналов средствами BGP"
 date:   2009-05-04 21:54:23 +0400
 categories: backup
 tags: backup bgp
 ---
 
+
+```
 # backup-bgp-ipvpn-stk
 class-map match-any CHK-PRE
  match ip precedence 3 
@@ -38,17 +40,11 @@ interface GigabitEthernet0/0.291
  no cdp enable
  service-policy output CHK-QOS
 end
-
-
-461
-
-
-
-
+```
 
 
 Стагдок
-
+```
 class-map match-any STANDARD
  match ip precedence 0  1 
 class-map match-any REAL-TIME
@@ -126,7 +122,7 @@ ip prefix-list rumelco_net seq 30 deny 0.0.0.0/0 le 32
 
 route-map prep-out-equant permit 60
  set as-path prepend 65017 65017 65017 65017 65017 65017 65017 65017
-
+```
 
 
 
@@ -134,58 +130,7 @@ route-map prep-out-equant permit 60
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Убрать с 10 и поставить на 9
-h323-gateway voip interface
-
-
-class-map match-any REAL-TIME
- match ip precedence 5 
-class-map match-any PREMIUM
- match ip precedence 3 
-!
-!
-policy-map PLATINUM
- class REAL-TIME
-  priority percent 50
- class PREMIUM
-  bandwidth percent 20
- class class-default
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bgp резервирование
+### Bgp резервирование
 weight 32768 по умолчанию для маршрутов, которые объявляет маршрутизатор, для внешних 0.
 Чтобы больше weight у внешних, тем они приоритетьнее, поэтому для того, чтобы исходящий траффик шёл
 через нужный аплинк, то этому нейбору надо предоставить больший weight
@@ -193,7 +138,7 @@ weight 32768 по умолчанию для маршрутов, которые �
 Это входящего траффика нужны препенды, чем больше препендов, тем длинее путь, тем хуже канал и входящий траффик идёт через другой
 Один линк
 
-
+```
 router bgp 65015
  bgp router-id 10.192.10.198
  bgp log-neighbor-changes
@@ -233,18 +178,7 @@ ip prefix-list stagdok_net seq 20 permit 10.194.1.0/24 le 30
 ip prefix-list stagdok_net seq 25 permit 10.194.4.0/24 le 30
 ip prefix-list stagdok_net seq 30 permit 10.194.10.0/24 le 30
 ip prefix-list stagdok_net seq 35 deny 0.0.0.0/0 le 32
-
-
-
-
-
-
-
-csim start 70500
-
-
-
- h323-gateway voip interface
+```
 
 
 

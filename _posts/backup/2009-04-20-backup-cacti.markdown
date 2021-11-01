@@ -35,11 +35,11 @@ Now itâ€™s time to stop the Cacti poller. Go to Console->Settings then hit the â
 Copy RRD files
 
 Now that the poller is stoped, we can copy the RRD files.
-
+```
 mv  /var/www/html/cacti/rra/* /var/www/html/cacti-0.8.8a/rra/
 
 
 
 
-
 --_traffic_in_870.rrd
+```

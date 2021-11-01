@@ -1,22 +1,19 @@
 ---
 layout: post
-title:  "backup_linux"
+title:  "Backup linux сервера"
 date:   2011-08-03 16:07:09 +0400
 categories: backup linux
 tags: backup linux tar mysqldump
 ---
 
-# backup_linux
+# Backup_linux
+```
 /usr/bin/mysqldump -u root -p915xxx710 --opt zazhigai_ru > /var/backup/backup/zazhigai_ru.sql
 
 /bin/tar -czf /var/backup/backup/etc_emerald.tar.gz /etc
 
-
-
-
-
 /# tar cvpzf backup.tgz –-exclude=/proc –-exclude=/lost+found –-exclude=/backup.tgz –-exclude=/mnt –-exclude=/sys
-
+```
 
 
 opennet.ru/fsbackup
@@ -29,15 +26,17 @@ opennet.ru/fsbackup
 [http://www.ibm.com/developerworks/ru/library/l-Backup_4/](http://www.ibm.com/developerworks/ru/library/l-Backup_4/)
 [http://ilab.me/howto/bash-tar-vps-backup/](http://ilab.me/howto/bash-tar-vps-backup/)
 
-
+```
 /usr/bin/mysqldump -u root -p915xxx710 --opt lipbalkon > /home/garry/backup/lipbalkon.sql
 /bin/tar -czf /home/garry/backup/lipbalkon.tar.gz /home/lipbalkon/
 /usr/bin/mysqldump -u root -p915xxx710 --opt um > /home/garry/backup/um.sql
 /bin/tar -czf /home/garry/backup/um.tar.gz /var/home/umit-agro.sc.ru/
 /bin/chown garry:users /home/garry/backup/*
-
+```
 На моем компе
+```
 scp  garry@hosting.sc.ru:/home/garry/backup/um.sql /home/garry/backup
+```
 
 
 
@@ -53,13 +52,12 @@ scp  garry@hosting.sc.ru:/home/garry/backup/um.sql /home/garry/backup
 
 
 
-
-
+```
 export LC_CTYPE="ru_RU.UTF8"
-
+```
 
 Так как в системе нет собранной локали cp1251, для её сборки следует выполнить следующее:
-
+```
 gzip -d /usr/share/i18n/charmaps/CP1251.gz
 
 localedef -c -f /usr/share/i18n/charmaps/CP1251 \
@@ -67,9 +65,9 @@ localedef -c -f /usr/share/i18n/charmaps/CP1251 \
 > /usr/lib/locale/ru_RU.CP1251
 
 ln -s /usr/lib/locale/ru_RU.CP1251 /usr/lib/locale/ru_RU.cp-1251
-
+```
 отредактировать следующие системные файлы:
-
+```
 /etc/sysconfig/language
 
 RC_LANG="ru_RU.CP1251"
@@ -77,7 +75,7 @@ RC_LANG="ru_RU.CP1251"
 /etc/sysconfig/console
 
 CONSOLE_ENCODING="CP1251"
-
+```
 
 
 

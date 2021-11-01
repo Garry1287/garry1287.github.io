@@ -1,20 +1,21 @@
 ---
 layout: post
-title:  "backup-garry"
+title:  "Backup разделов рабочего компьютера"
 date:   2014-04-09 13:18:04 +0400
 categories: backup linux
 tags: backup
 ---
 
+
 # backup-garry
-30      6       *       *       *      
+`30      6       *       *       *`      
 
-
-
+```
 /usr/bin/rsync -avz -e ssh --delete-after /home/backup/  backup@crystal.sc.int:/home/backup/sapphire
 /usr/bin/rsync -avz -e ssh --delete-after /home/berg/  backup@crystal.sc.int:/var/backup-berg
+```
 
-
+```
 /usr/bin/rsync -avz --delete-after 
 
 /home/garry/Documents
@@ -27,9 +28,4 @@ tags: backup
 /home/garry/.thunderbird
 /home/garry/.firefox
 /home/garry/books
-
-
- backup@crystal.sc.int:/home/backup/sapphire
-
-
---delete-after
+```
