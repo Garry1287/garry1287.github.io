@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "cacti"
+title:  "Сacti"
 date:   2012-05-15 01:29:49 +0400
 categories: cacti
 tags: cacti
 ---
 
-# cacti
+# Сacti
 
 Cacti HowTo (график на основе скрипта)
 
@@ -37,8 +37,9 @@ UPS графики
 
 Добавить завтра
 [http://cacti2.sc.ru/data_sources.php?action=ds_edit&id=938](http://cacti2.sc.ru/data_sources.php?action=ds_edit&id=938)
+```
 DEF:a='/srv/www/cacti/rra/lipka-s0_traffic_in_938.rrd':'traffic_in':AVERAGE \
 DEF:b='/srv/www/cacti/rra/lipka-s0_traffic_in_938.rrd':'traffic_out':AVERAGE \
-
+```
 
 lipka-s0_traffic_in_938.rrd

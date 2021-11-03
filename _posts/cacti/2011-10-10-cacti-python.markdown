@@ -1,19 +1,22 @@
 ---
 layout: post
-title:  "cacti-python"
+title:  "Добавление хостов и папок в cacti средствами python"
 date:   2011-10-10 20:20:50 +0400
-categories: cacti-python
-tags: cacti
+categories: cacti python
+tags: cacti python
 ---
 
-# cacti-python
+# Добавление хостов и папок в cacti средствами python
+```
 GRANT ALL ON cacti3.* TO cacti@localhost IDENTIFIED BY '4QDrBrp4uCUuuEQ5';
 flush privileges;
+```
 
-
-
+```
 GRANT ALL ON cacti3.* TO cacti@localhost IDENTIFIED BY '4QDrBrp4uCUuuEQ5';
+```
 
+```
 id   graph_tree_id local_graph_id rra_id    title                                     host_id                       order_key                                                                                                                                                                  host_grouping_type  sort_children_type
 | 3703 |             1 |           3654 |      1 |                                                 |       0 | 037007020017000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  0 |                  0 |
 | 3704 |             1 |           3655 |      1 |                                                 |       0 | 037007020018000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  0 |                  0 |
@@ -42,19 +45,19 @@ id   graph_tree_id local_graph_id rra_id    title                               
 | 3590 |             1 |              0 |      0 | Other                                           |       0 | 037007020000000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |          
 | 3591 |             1 |           3541 |      1 |                                                 |       0 | 037007004001000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  0 |                  0 |
 
+```
 
 
-
-
+```
 LOCK TABLES `graph_tree` WRITE;
 /*!40000 ALTER TABLE `graph_tree` DISABLE KEYS */;
 INSERT INTO `graph_tree` VALUES (1,1,'Default Tree'),(5,1,'quicktree'),(6,1,'multicast-tree'),(7,1,'ping'),(8,1,'Regard'),(9,1,'Phys-Nodes');
 /*!40000 ALTER TABLE `graph_tree` ENABLE KEYS */;
 UNLOCK TABLES;
+```
 
 
-
-
+```
 DROP TABLE IF EXISTS `graph_tree_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -75,11 +78,11 @@ CREATE TABLE `graph_tree_items` (
   KEY `order_key` (`order_key`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3705 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+```
 
 
 
-
-
+```
 | 3730 |             1 |              0 |      0 | subdistrict1                                    |       0 | 037003010000000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |                  1 |
 | 3731 |             1 |              0 |      0 | subdistrict2                                    |       0 | 037003011000000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |                  1 |
 | 3732 |             1 |              0 |      0 | subdistrict3                                    |       0 | 037003012000000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |                  1 |
@@ -103,8 +106,9 @@ CREATE TABLE `graph_tree_items` (
 | 3750 |             1 |           3698 |      1 |                                                 |       0 | 005004010011014000000000000000000000000000000000000000000000000000000000000000000000000000 |                  0 |                  0 |
 | 3751 |             1 |              0 |      0 | Ring05                                          |       0 | 037003010005000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |                  1 |
 
+```
 
-
+```
 MariaDB [cacti3]> select * from graph_tree_items where title="16d";
 +------+---------------+----------------+--------+-------+---------+--------------------------------------------------------------------------------------------+--------------------+--------------------+
 | id   | graph_tree_id | local_graph_id | rra_id | title | host_id | order_key                                                                                  | host_grouping_type | sort_children_type |
@@ -112,7 +116,7 @@ MariaDB [cacti3]> select * from graph_tree_items where title="16d";
 | 1078 |             1 |              0 |      0 | 16d   |       0 | 037003000000000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |                  1 |
 +------+---------------+----------------+--------+-------+---------+--------------------------------------------------------------------------------------------+--------------------+--------------------+
 1 row in set (0.00 sec)
-
+```
 
 Just don't provide the name of the column, it will default to a the next auto_increment value.
 
@@ -122,13 +126,14 @@ As a side note, I generally recommend against 2-letter generic column names like
 
 
 
-
+```
  subdistrict1                                    |       0 | 03700301
 Ring01                                          |       0 | 037003010001
 
 
 subdistrict2                                    |       0 | 037003011000
  Ring01                                          |       0 | 037003011001
+ ```
  
  
  
@@ -136,20 +141,19 @@ subdistrict2                                    |       0 | 037003011000
  
  
  
- 
- 
+ ```
  select * from graph_tree_items where title="subdistrict1";
-
+```
  
  
  
- 
+ ```
  db = MySQLdb.connect(host="localhost", user="cacti", passwd="4QDrBrp4uCUuuEQ5", db="cacti3")
 cursor = db.cursor()
 result = cursor.fetchall()
- 
+ ```
  37003010004
- 
+ ```
  for i in 
  
  
@@ -163,14 +167,14 @@ result = cursor.fetchall()
  (f for f in result if os.stat(f).st_size > 6000)
  
  [f for f in glob.glob('*.py') if os.stat(f).st_size > 6000]
+ ```
  
  
  
  
  
  
- 
- 
+ ```
  spisok = [0,10,20,30,40,50,60,70,80,90]
  i = 0
  for element in spisok:
@@ -179,19 +183,9 @@ result = cursor.fetchall()
  
  spisok
 [2, 12, 22, 32, 42, 52, 62, 72, 82, 92]
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
+```
 print(result[0][6][1:12])
 print(result[0][6][1:10])
 
@@ -227,17 +221,19 @@ Ring10
 a = (4, 5, 6, 7, 8, 9, 10)
 a = xrange (4, 10)
 for a in xrange (4:28)
+```
 
 
 
-
-
+```
 for element in range(len(index_list)):
     a_list.append((1,0,0,'Ring{number:02}'.format(number=element),0,'037003010000000000000000000000000000000000000000000000000000000000000000000000000000000000',1,1))
 for element in range(len(index_list)):
     a_list.append((1,0,0,'Ring{number:02}'.format(number=element),0,'037003010000000000000000000000000000000000000000000000000000000000000000000000000000000000',1,1))
-
+```
    
+
+```
 stroka= "0"+result[0][6][1:10]+'{number:02}'.format(number=1)+"0000000000000000000000000000000000000000000000000000000000000000000000000000000"
 
 In [126]: stroka
@@ -276,16 +272,17 @@ for element in range(6,26)):
    ....:     
 
 Out[45]: ['Ring04', 'Ring05', 'Ring06', 'Ring07', 'Ring08', 'Ring09', 'Ring10']
-    
+```  
     
     
 
     
-    
+  ```  
  a_tuple = (graph_tree_id, local_graph_id, rra_id, TITLE, host_id, ORDER_KEY, host_grouping_type, sort_children_type)
  a_tuple
  a_list=list(a_tuple)
-
+```
+```
  Сработало
  cursor.executemany( """INSERT INTO graph_tree_items (graph_tree_id, local_graph_id, rra_id, title, host_id, order_key, host_grouping_type, sort_children_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", a_list)
  
@@ -335,13 +332,14 @@ Out[99]:
 ...
 
 >>> print res
-
+```
 
 В общем-то, полученный результат - целиком нас устраивает всем, кроме длинной записи. тут-то на помощь и придет наш "сахарок". В самом простом виде, он обычно
-
+```
 >>> res = [x for x in xrange(1, 25, 2)]
 
 >>> print res
  
  
   3730 |             1 |              0 |      0 | subdistrict1                                    |       0 | 037003010000000000000000000000000000000000000000000000000000000000000000000000000000000000 |                  1 |                  1 |
+  ```

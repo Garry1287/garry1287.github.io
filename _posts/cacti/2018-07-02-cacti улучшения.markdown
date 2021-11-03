@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "cacti улучшения"
+title:  "Улучшения в cacti"
 date:   2018-07-02 11:40:28 +0300
-categories: cacti улучшения
+categories: cacti
 tags: cacti
 ---
 
-# cacti улучшения
+# Улучшения в cacti
 Установка
 [http://drach.pro/blog/item/33-centos-7-web-server](http://drach.pro/blog/item/33-centos-7-web-server)
 

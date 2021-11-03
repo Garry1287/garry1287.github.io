@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "cacti-poller"
+title:  "Poller cacti"
 date:   2015-12-06 21:31:30 +0300
-categories: cacti-poller
+categories: cacti
 tags: cacti
 ---
 
-# cacti-poller
+# Poller cacti
 Poller раз в минуту
 
 [http://www.tolaris.com/2013/07/09/cacti-and-1-minute-polling/](http://www.tolaris.com/2013/07/09/cacti-and-1-minute-polling/)
@@ -49,11 +49,11 @@ acti and 1 (each) minute polling
     
 Установка нового spine    
     [https://www.ibm.com/support/knowledgecenter/en/SSVMSD_9.1.4/RTM_faq/rtm_installing_spine_poller.html](https://www.ibm.com/support/knowledgecenter/en/SSVMSD_9.1.4/RTM_faq/rtm_installing_spine_poller.html)
-    
+```
     ./bootstrap
   ./configure
   make
   make install
   chown root:root /usr/local/spine/bin/spine
   chmod +s /usr/local/spine/bin/spine
-
+```

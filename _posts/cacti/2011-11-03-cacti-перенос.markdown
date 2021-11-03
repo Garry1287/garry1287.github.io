@@ -1,32 +1,35 @@
 ---
 layout: post
-title:  "cacti-перенос"
+title:  "Перенос cacti"
 date:   2011-11-03 05:12:09 +0400
-categories: cacti-перенос
+categories: cacti
 tags: cacti
 ---
 
-# cacti-перенос
+# Перенос cacti на другой сервер.
+```
 rsync -avz -e "ssh -l garry -p22" --delete --exclude="*.rrd" --exclude="*traffic_in_870*"  /home/garry/rrd-xml crystal.sc.int:"/home/garry/rra"
+```
 
 
-
+```
 for i in `ls *.xml`; do rrdtool restore $i /usr/share/cacti/rra/`echo $i |sed s/.xml//g`; done
+```
 
 
-
-
+```
 lrwxrwxrwx    1 root root    15 Dec  9 10:50 log -> /var/log/cacti/
 lrwxrwxrwx    1 root root    18 Dec  9 10:50 rra -> /var/lib/cacti/rra
 lrwxrwxrwx    1 root root    22 Dec  9 10:50 scripts -> /var/lib/cacti/scripts
 cli -> /var/lib/cacti/cli
+```
 
 
 
+`rsync -avz -e "ssh -l garry -p22" --delete --exclude="*.rrd"  /home/garry/rrd-xml crystal.sc.int:"/home/garry/rra"`
 
-rsync -avz -e "ssh -l garry -p22" --delete --exclude="*.rrd"  /home/garry/rrd-xml crystal.sc.int:"/home/garry/rra"
 
-
+```
 /srv/www/cacti/rra
 
 $database_type = "mysql";
@@ -38,30 +41,13 @@ $database_port = "3306";
 $database_ssl = false;
 
 $plugins[] = "weathermap";
+```
 
-
-
-
-
-
-
-
-
-
-
-
+```
 svn -r 7452 co svn://svn.cacti.net/cacti/cacti/branches/0.8.8/
-
+```
 
 Скачал определённую версию cacit из svn хранилища
-
-
-
-
-
-
-
-
 
 chown cacti:cacti `ls | egrep -v 870.rrd`
 
@@ -76,45 +62,27 @@ Cacti (rrdtool) переход с 32bit на 64bit OS
 
 На 32-bit машине, выполняем экспорт БД в XML:
 
-	
+```
 #!/bin/sh
 for i in `ls *. rrd`
 do rrdtool dump $i > $i.xml
 done
+```
 
 На 64-bit машине восстанавливаем БД из XML файлов:
 
-	
+```	
 #!/bin/sh
 for i in `ls *.xml`
 do
 /usr/bin/rrdtool restore $i `echo $i |sed s/.xml//g`;
 done
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
 for i in `ls *.xml`; do rrdtool restore $i /home/garry/rra/`echo $i |sed s/.xml//g`; done
 mv /home/garry/rra/* /var/lib/cacti/rra
-
-
-
-
+```
 
 Установка
 [http://sysadminfaq.ru/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE/](http://sysadminfaq.ru/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE/)
@@ -127,32 +95,17 @@ mv /home/garry/rra/* /var/lib/cacti/rra
 [https://github.com/andyceo/documentation/wiki/cacti](https://github.com/andyceo/documentation/wiki/cacti)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 cacti.sc.int
-
+```
 cd /srv/www/cacti/rra/
 ls -al | grep sh
 cat rrd.sh
 sh rrd.sh
 rsync -avz -e "ssh -l garry -p22" --delete --exclude="*.rrd" --exclude="*traffic_in_870*"  /home/garry/rrd-xml crystal.sc.int:"/home/garry/"
-
+```
 
 crystal.sc.int
-
+```
 for i in `ls *.xml`; do rrdtool restore $i /home/garry/rra/`echo $i |sed s/.xml//g`; done
 
 
@@ -161,7 +114,7 @@ mysqldump -u root -p cacti > /home/garry/cacti14_01_2015.sql
 
 mysql -u cacti -p cacti3 < cacti14_01_2015.sql
 
-
+```
 
 
 Сначала устанавливаем Extendet interface_x.xml, а потом rrd файлы перетягиваем. Почему-то не рисует при другой последовательности
