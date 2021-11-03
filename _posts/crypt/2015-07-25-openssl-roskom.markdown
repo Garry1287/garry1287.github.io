@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "openssl-roskom"
+title:  "Openssl для Роскомнадзора"
 date:   2015-07-25 16:19:39 +0300
-categories: openssl-roskom
+categories: crypt
 tags: crypt
 ---
 
-# openssl-roskom
+# Openssl для Роскомнадзора
 
 
 OPENSSL

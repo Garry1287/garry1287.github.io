@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "kpartx losetup"
+title:  "Kpartx и losetup"
 date:   2009-11-07 10:14:15 +0300
-categories: kpartx losetup
+categories: crypt
 tags: crypt
 ---
 
-# kpartx losetup
+# Kpartx и losetup
 kpartx losetup
 
 [http://www.stableit.ru/2011/05/losetup.html](http://www.stableit.ru/2011/05/losetup.html)
