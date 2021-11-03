@@ -1,64 +1,62 @@
 ---
 layout: post
-title:  "centos-hosting"
+title:  "Хостинг на centos"
 date:   2012-01-19 05:27:10 +0400
-categories: centos-hosting
+categories: centos
 tags: centos
 ---
 
-# centos-hosting
+# Хостинг на centos
 1. Установка и обновление пакетов yum
+```
   yum install mc
-  
+```  
   команда
-
+```
 # yum update php-eaccelerator
-
+```
 
 обновит лишь пакет php-eaccelerator.
 
-
-Удаление пакетов
+## Удаление пакетов
 
 Удаление пакетов осуществляется с помощью команды remove. Например, команда
-
+```
 # yum remove php-eaccelerator
-
+```
 
   
-2. Обновление системы
-
+## 2. Обновление системы
+```
   yum clean all
   yum -y update
   cat /etc/redhat-release
   reboot
-
+```
 [http://www.centos.org/docs/5/html/yum/sn-updating-your-system.html](http://www.centos.org/docs/5/html/yum/sn-updating-your-system.html)
 
-4. Учётные записи и безопасность системы
-    useradd garry -m
+## 3. Учётные записи и безопасность системы
+    `useradd garry -m`
 
 [http://lostop.ru/page/42/](http://lostop.ru/page/42/)
 [http://slyweb.ru/linux-vps/centos-root-sudo/](http://slyweb.ru/linux-vps/centos-root-sudo/)
+```
 [root@host ~]# usermod -a -G wheel smithy
 [root@host ~]# vi /etc/pam.d/su
 auth            required        pam_wheel.so use_uid
+```
 
-
-
-
-
-5. Руками посмотреть на LVM
+## 4. Руками посмотреть на LVM
   [http://www.altlinux.org/LVM](http://www.altlinux.org/LVM)
   [http://youngblog.hoster-ok.com/hello-world/](http://youngblog.hoster-ok.com/hello-world/)
 
-6. Панель для хостинга
+## 5. Панель для хостинга
 
       2 недельный тест
       [http://ispsystem.com/ru/software/ispmanager](http://ispsystem.com/ru/software/ispmanager)
       [http://moonback.ru/page/free-hosting-panel](http://moonback.ru/page/free-hosting-panel)
       
-7. Работа с репозиториями
+## 6. Работа с репозиториями
 
 [http://gnu.su/gnu-%D1%80%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%B8-%D1%86%D0%B5%D0%BD%D1%82%D0%BE%D1%81-6.html](http://gnu.su/gnu-%D1%80%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%B8-%D1%86%D0%B5%D0%BD%D1%82%D0%BE%D1%81-6.html)
 [http://centos.alt.ru/?p=18](http://centos.alt.ru/?p=18)
@@ -96,21 +94,13 @@ Nginx + apache
     4. Iptables
 
 
-
-
-
-
 А еще симлинк /var/log/apache/site.com можно сделать в папку юзера, и тогда да, удалит симлинк — его проблемы, логи не увидит. 
 
 Если же нужно защитить только одну папку (например, logs), можно поступить следующим образом:
-
+```
 touch /home/hostuser/vhosts/sitename.ru/logs/.keep
 chattr +i /home/hostuser/vhosts/sitename.ru/logs/.keep
-
-
-
-
-
+```
 
 Установка nginx
 [http://ru.ispdoc.com/index.php/%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_Nginx_%D0%B2_CentOS_Linux](http://ru.ispdoc.com/index.php/%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_Nginx_%D0%B2_CentOS_Linux)
@@ -162,7 +152,6 @@ mysql
 Мы сами определяем max размер запроса к серверу
 
 
-
 1Г выделяет на nginx    (4096x256k)        
 	Рассчитываем на 4096 соединений
 	256k - это 32 x 8 server buffer
@@ -181,9 +170,6 @@ mysql
     4. Iptables
 
 
-
-
-
 Мониторинг
     процессор
     память
@@ -196,17 +182,17 @@ mysql
 4. Найти сайт который создает нагрузку
 
 
-
-
 Бэкап базы
+```
 mysqldump -u root -p -f name_database > C:\mydb_backup_name_database.txt
 mysql -u root -p -f name_database < C:\mydb_backup_name_database.txt
+```
 [http://info-linux.ru/article/78](http://info-linux.ru/article/78)
 
 Erlan Esnazarov, так если вы хотите дамп на другой сервак залить, а не создать вам нужна другая команда:
-
+```
 mysql -h db.host.kz -uroot -ppassword BD < BD.sql
-
+```
 
 
 
@@ -227,21 +213,15 @@ http://сеоша.рф/%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D1%8B-%D0%B8-%D1%85%D0%BE%
 [http://i-notes.org/centos-nginx-apache-mod_rpaf/](http://i-notes.org/centos-nginx-apache-mod_rpaf/)
 
 
-
-
-
-
-
-
-
 Заглушка для default хоста
+```
 # default virtual host
 server {
 listen 80 default;
 server_name localhost;
 deny all;
 }
-
+```
 
 
 
@@ -249,24 +229,24 @@ deny all;
 Bad buffering/timeout configuration.
 
 
-
+```
 find . -type f | wc -l
-
 
 find . -type d -exec
 
 find . -type f -exec
 
 find /path -type d | xargs chmod 0755
+```
 
 Однако, директории с именами, содержащими пробелы, методом перенаправления через xargs обработаны не будут, поэтому следует использовать первый вариант, дополненный:
 
-find /path -type d -exec chmod 0755 "{}" \;
+`find /path -type d -exec chmod 0755 "{}" \;`
 
 Указанную выше команду find можно заменить следующим образом:
-
+```
 find options | xargs [commands_to_execute_on_found_files]
-
+```
 Команда xargs создает из стандартного входного потока командные строки и их выполняет. 
 Преимущество в том, что командная строка заолняется до тех пор, пока не будет достигнут предел, определенный системой.
  Только после этого команда будет вызвана на исполнение; в приведенном выше примере это команда rm. 
@@ -275,35 +255,12 @@ find options | xargs [commands_to_execute_on_found_files]
  но в этом случае команда будет выполняться для найденных файлов каждый раз, когда будет найден очередной файл.
  Следовательно, команда xargs значительно увеличит скорость работы вашего скрипта и повысит производительность вашей машины.
 
-
-
-
-
-
-
-
-
-
-
-
-
 php-eaccelerator.x86_64       - настройка
-
-
-
-
-
-
-
 
 Тест сайта
 [http://tsung.erlang-projects.org/](http://tsung.erlang-projects.org/)
 [http://jokerov.com/testirovanie/nagruzochnoe-testirovanie-sajta-apache-benchmark/](http://jokerov.com/testirovanie/nagruzochnoe-testirovanie-sajta-apache-benchmark/)
 [http://debian-help.ru/web-servers/ab-apache-benchmark-test-proizvoditelnosti-servera/](http://debian-help.ru/web-servers/ab-apache-benchmark-test-proizvoditelnosti-servera/)
-
-
-
-
 
 Полезности
 [http://it-notepad.ru/](http://it-notepad.ru/)

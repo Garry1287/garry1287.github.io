@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "timezone-centos"
+title:  "Настройка timezone в centos"
 date:   2008-12-18 00:54:15 +0300
-categories: timezone-centos
-tags: centos
+categories: centos linux
+tags: centos linux
 ---
 
-# timezone-centos
+# Настройка timezone в centos
 
 timezone
 [https://www.centosblog.com/how-to-change-your-centos-server-timezone/](https://www.centosblog.com/how-to-change-your-centos-server-timezone/)
@@ -14,29 +14,31 @@ timezone
 
 
 Example 1: set time zone to Melbourne, Australia
-
+```
 cp /usr/share/zoneinfo/Australia/Melbourne /etc/localtime
-
+```
 Example 2: set time zone to UTC
-
+```
 cp /usr/share/zoneinfo/UTC /etc/localtime
-
+```
 To confirm the time set on your system, run the date command, example:
-
+```
 date
 Thu Jul 26 09:53:11 EST 2012
-
+```
 If you want to sync this time to your hardware (BIOS) clock, run the following command:
-
+```
 hwclock --systohc
-
+```
 
 
 
 ИЛИ
 
- show the list of timezones
+ `show the list of timezones`
 
+
+```
 [root@dlp ~]#
 timedatectl list-timezones
 
@@ -57,13 +59,20 @@ Pacific/Tarawa
 Pacific/Tongatapu
 Pacific/Wake
 Pacific/Wallis
+```
 
-# set timezone
 
+`set timezone`
+
+
+```
 [root@dlp ~]#
 timedatectl set-timezone Asia/Tokyo
 # show status
+```
 
+
+```
 [root@dlp ~]#
 timedatectl
 
@@ -75,4 +84,4 @@ timedatectl
 NTP synchronized: yes
  RTC in local TZ: no
       DST active: n/a
-
+```

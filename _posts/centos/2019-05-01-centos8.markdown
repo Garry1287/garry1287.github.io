@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "centos8"
-date:   2010-05-01 05:18:22 +0400
-categories: centos8
+title:  "Сentos 8"
+date:   2019-05-01 05:18:22 +0400
+categories: centos
 tags: centos
 ---
 
-# centos8
+# Сentos 8
 [https://serveradmin.ru/centos-nastroyka-servera/](https://serveradmin.ru/centos-nastroyka-servera/)

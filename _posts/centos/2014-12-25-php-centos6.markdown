@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "php-centos6"
+title:  "Php и centos 6"
 date:   2014-12-25 14:04:57 +0300
-categories: php-centos6
-tags: centos
+categories: centos
+tags: centos php
 ---
 
-# php-centos6
+# Php и centos 6
  
 Обновление php
 Устанавливаем remi
