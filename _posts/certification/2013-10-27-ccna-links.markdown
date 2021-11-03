@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "ccna-links"
+title:  "Ccna - полезные ссылки"
 date:   2013-10-27 03:58:25 +0400
-categories: ccna-links
+categories: certification
 tags: certification
 ---
 
-# ccna-links
+# Ccna links
 [http://www.ciscolab.ru/forum/index.php/topic/399-oshibka-v-teste-na-ccna/page__pid__5071#entry5071](http://www.ciscolab.ru/forum/index.php/topic/399-oshibka-v-teste-na-ccna/page__pid__5071#entry5071)
 [http://ccnaanswers.com/ccna-1-final-exam-answers-2011/](http://ccnaanswers.com/ccna-1-final-exam-answers-2011/)
 www.selftestengine.com/200-101.html
