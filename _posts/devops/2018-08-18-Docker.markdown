@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "Мастер-класс по Docker для python разработчиков"
+date:   2018-08-18 17:20:11 +0300
+categories: devops 
+tags: devops docker
+---
+
+# Docker
+[https://www.youtube.com/watch?v=5LuHkG3fiFY](https://www.youtube.com/watch?v=5LuHkG3fiFY)
+[https://habrahabr.ru/post/316054/](https://habrahabr.ru/post/316054/)               Автоматическое развёртывание Django из GitLab

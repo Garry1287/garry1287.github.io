@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "docker-dev"
-date:   2014-02-07 20:20:59 +0400
+title:  "Окружение dev stage prod"
+date:   2017-02-07 20:20:59 +0400
 categories: docker-dev
 tags: devops
 ---

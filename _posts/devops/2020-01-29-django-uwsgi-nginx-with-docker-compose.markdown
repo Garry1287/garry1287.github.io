@@ -2,7 +2,8 @@
 layout: post
 title:  "Запуск Django вместе с postgres, uwsgi, nginx в docker-compose"
 date:   2020-01-29 14:02:10 +0300
-categories: jekyll posts
+categories: devops
+tags: devops django postgresql docker
 ---
 
 
@@ -127,7 +128,8 @@ volumes:
 Была 500-а ошибка так как в настройке БД - был 127.0.0.1:5432, как поменяли на projectname_postgres:5432 в setting.py, 
 
 3. 400 ошибка была связана с настройками ALLOWED_HOSTS = ['*']
-[https://stackoverflow.com/questions/24192283/django-uwsgi-nginx-bad-request-400](https://stackoverflow.com/questions/24192283/django-uwsgi-nginx-bad-request-400) 
+[https://stackoverflow.com/questions/24192283/django-uwsgi-nginx-bad-request-400](https://stackoverflow.com/questions/24192283/django-uwsgi-nginx-bad-request-400)
+
 
 [https://fooobar.com/questions/15110394/getting-400-bad-request-error-frequently-when-trying-to-use-flask-socket-with-uwsgi-and-nginx](https://fooobar.com/questions/15110394/getting-400-bad-request-error-frequently-when-trying-to-use-flask-socket-with-uwsgi-and-nginx) 
 
@@ -159,12 +161,6 @@ volumes:
 
 
 
-
-
-
-
-
-
 Версии compose файла зависят от версии docker
 [https://docs.docker.com/compose/compose-file/](https://docs.docker.com/compose/compose-file/) 
 
@@ -178,9 +174,6 @@ volumes:
 
 Пример с SSL
 [https://hashedin.com/blog/deployment-with-docker-compose/](https://hashedin.com/blog/deployment-with-docker-compose/) 
-
-
-
 
 Можно так compose запускать (web - это служба)
 `docker-compose -f docker-compose.prod.yml run web python manage.py migrate`

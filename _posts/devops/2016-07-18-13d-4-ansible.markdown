@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "13d-4-ansible"
+title:  "Пример инвентори - 13d-4-ansible"
 date:   2016-07-18 14:30:07 +0300
-categories: 13d-4-ansible
-tags: devops
+categories: devops
+tags: devops ansible
 ---
 
 # 13d-4-ansible

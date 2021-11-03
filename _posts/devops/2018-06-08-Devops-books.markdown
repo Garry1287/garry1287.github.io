@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Devops-books"
-date:   2010-06-08 09:59:11 +0400
-categories: Devops-books
+date:   2018-06-08 09:59:11 +0400
+categories: devops
 tags: devops
 ---
 
@@ -75,7 +75,7 @@ Terraform.
 
     Git;
     Ansible;
-    Prometheus.([https://habr.com/company/selectel/blog/275803/)](https://habr.com/company/selectel/blog/275803/))
+    Prometheus.[https://habr.com/company/selectel/blog/275803/](https://habr.com/company/selectel/blog/275803/)
     
     
 [https://selectel.ru/?ref_code=D94d3Y99XKBM&utm_source=slurm.io&utm_medium=link&utm_campaign=slurm_1018](https://selectel.ru/?ref_code=D94d3Y99XKBM&utm_source=slurm.io&utm_medium=link&utm_campaign=slurm_1018)

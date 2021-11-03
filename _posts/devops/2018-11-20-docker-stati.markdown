@@ -1,22 +1,22 @@
 ---
 layout: post
-title:  "docker-stati"
-date:   2010-11-20 22:24:37 +0300
-categories: docker-stati
-tags: devops
+title:  "Статьи о docker"
+date:   2018-11-20 22:24:37 +0300
+categories:  devops
+tags: devops docker
 ---
 
-# docker-stati
+# Docker
 [https://eax.me/docker/](https://eax.me/docker/)
 [https://habr.com/ru/post/310460/](https://habr.com/ru/post/310460/)
 [https://blog.maddevs.io/docker-for-beginners-a2c9c73e7d3d](https://blog.maddevs.io/docker-for-beginners-a2c9c73e7d3d)
 [https://tproger.ru/translations/how-to-start-using-docker/](https://tproger.ru/translations/how-to-start-using-docker/)
 [https://docker.crank.ru/docs/docker-engine/get-started-with-docker/build-your-own-image/](https://docker.crank.ru/docs/docker-engine/get-started-with-docker/build-your-own-image/)
 
-Namespaces
+## Namespaces
 [https://habr.com/ru/post/458462/](https://habr.com/ru/post/458462/)
 
-network
+## Network
 [https://habr.com/ru/post/458622/](https://habr.com/ru/post/458622/)
 
 

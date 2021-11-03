@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "ansible"
+title:  "Немного об ansible"
 date:   2016-07-01 13:45:26 +0300
-categories: ansible
-tags: devops
+categories: devops
+tags: devops ansible
 ---
 
-# ansible
+# Немного об ansible
 Как написать модуль (ansible)
 
 [http://docs.ansible.com/ansible/dev_guide/developing_modules.html](http://docs.ansible.com/ansible/dev_guide/developing_modules.html)
@@ -63,12 +63,13 @@ At times, we may need to override default parameters specified inside vars or th
 default directory of a role, for example, running web servers on port 8080 instead
 of 80. In such cases, we can also pass parameters to roles in the preceding playbook,
 as follows:
+```
 ---
 #www.yml : playbook for web servers
 - hosts: www
 roles:
 - { role: nginx, port: 8080 }
-
+```
 
 
 
@@ -81,8 +82,7 @@ disables clipaging
 
 
 
-
+```
 ansible-playbook qos_vchm_all.yml --limit 192.168.100.1
 ansible-playbook 2048_vchm_all.yml --limit ':!10.192.11.6'
-
-
+```

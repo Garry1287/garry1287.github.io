@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "git-стратегия"
+title:  "Git-стратегия (как я делал)"
 date:   2018-03-29 07:43:19 +0300
-categories: git-стратегия
-tags: devops
+categories: devops
+tags: devops git
 ---
 
 # git-стратегия
@@ -13,10 +13,10 @@ tags: devops
 git и ssh
 [http://apricode.blogspot.ru/2013/04/git.html](http://apricode.blogspot.ru/2013/04/git.html)
 
-
+```
 [garry@centos7py conf]$ sudo git config --global user.name "Garry V.Z"
 [garry@centos7py conf]$ sudo git config --global user.email "ibd@sc.ru"
-
+```
 
 Использую git по принципу master/devel. В master идут только крупные изменения вроде новых версий, которые помечаются тегами. В devel идут только принимаемые изменения (никаких ошибок). Для каждого нового процесса создаётся ветвь, которая вливается в devel, когда полностью завершена. А вот ветвь процесса может быть одна или ветвиться дальше.
 
@@ -30,8 +30,9 @@ git и ssh
  Так, ребята юзающие git! Мы тоже уязвимы в случае, если корень репозитория доступен из веба.
 
 Причем исходники сливаются очень красиво, не надо писать никаких парсеров:
+```
 git clone example.com/.git/
-
+```
 К счастью, в большинстве случаев корень репа, а значит и папка .git закрыты извне.
 
 ПС: Кто-нибудь, переведите эту статью на английский!
@@ -41,11 +42,13 @@ git clone example.com/.git/
 
 Для git предлагаю вот такие сниппеты экспорта:
 1. Если репозитарий на продакшн сервере. Из корня репозитария:
+```
 git checkout-index -a -f --prefix=<destination e.g. /var/www>
-
+```
 2. Если репозитарий на удаленном сервере. Из корня вебсервера:
+```
 git-archive --format=tar --remote=ssh://:/<repo_path> master | tar -xf - 
-
+```
 
 
 
@@ -74,14 +77,7 @@ git-archive --format=tar --remote=ssh://:/<repo_path> master | tar -xf -
     
 
 
-    
-    
-    
-    
-    
-
-    
-    		
+# Bare репозиторий
 bare репозиторий - такой же репозиторий как обычный, с ветвлением, но хранит только данные, без рабочего каталога. Рабочий каталог - это те файлы которые мы правим
     
     bare -- "чистый" репозиторий без рабочий копии. Хранит массив последовательных снимков (снапшотов) (link is external) файловой иерархии, но без рабочей копии, которую непосредственно правит программист, когда работает с системой контроля версий. 
@@ -121,37 +117,33 @@ bare репозиторий - такой же репозиторий как об
     
 
     я в отличие от автора с двумя репами, сделал один реп с бранчами мастер (в который пушу) и продакшн (который чекаутнут на сервере). далее deploy.sh:
+```
 git checkout master
 git merge newfeature
 git merge bugfix
 git push server master
 ssh xxx@librapost.ru "cd /xxx/xxx/librapost && git merge master"
-
+```
 а сколько строк в вашем капистрано-конфиге? 
     
     
     Откатите продакшен на 1 версию назад находясь на рабочей машине. Через git деплоить хорошо, да, но не так как это сделал автор, зачем второй репозиторий? Делать экспорт прямо из bare в нужный каталог.
-    
-    git-archive --format=tar --remote=ssh://remote_server/remote_repository master | tar -xf — в пост-апдейт хук и все.
+   
+``` 
+    git-archive --format=tar --remote=ssh://remote_server/remote_repository master | tar -xf
+``` — в пост-апдейт хук и все.
 
+```
 > deploy.sh:
 git checkout master
 git merge newfeature
 git merge bugfix
 git push server master
-
+```
 git алисы вы не осилили, ога. 
 
 
-
-
-
-
-
-
-
-
-
+```
 #!/bin/bash
 
 txtrst='\e[0m' # Text Reset
@@ -186,6 +178,7 @@ echo "NO UPDATES FOR $1"
 esac
 done
 echo "========================================"
+```
 
 вот мой post-receive hook на девелоперском сервере.
 принцип работы: есть две ветки — master и dev. изменения в ветке dev checkout'ятся в DOCUMENT_ROOT девелопеского сервера. А изменения в ветке master push'атся в bare-репозиторий на продакшн-сервере, а оттуда уже аналогичным образом chekout'ятся в его DOCUMENT_ROOT 
@@ -208,9 +201,6 @@ echo "========================================"
 
  Прошу при первом упоминании слова bare, упомянуть в скобочках, что это «репозиторий без собственной рабочей копии»
 
-    Nashev 29 августа 2011 в 15:21
-    0
-
 и фразу «Одно из основных правил при работе с Git — никогда не делайте push в репозтирий, у которого есть рабочая копия.» куда-нибудь во вступление бы поместить, ибо она — ключевая.  
 
 
@@ -231,28 +221,34 @@ echo "========================================"
 
 
 я в отличие от автора с двумя репами, сделал один реп с бранчами мастер (в который пушу) и продакшн (который чекаутнут на сервере). далее deploy.sh:
+```
 git checkout master
 git merge newfeature
 git merge bugfix
 git push server master
 ssh xxx@librapost.ru "cd /xxx/xxx/librapost && git merge master"
-
+```
 
 
 
 на мой вкус я бы при ините добавил shared,
 если предполагается, что пушить в bare будут несколько человек:
+```
 git --bare init --shared
-
+```
 или даже сделать так после init:
+```
 cd ..
 sudo chown -R www-data:www-data site_hub.git
 sudo chmod -R g+wX,o= site_hub.git
 sudo find site_hub.git -type d -exec chmod g+s '{}' ';'
+```
 
 еще обновить server-info лучше сразу после первого пуша руками так:
-git update-server-info
+`git update-server-info`
+
 а в post-receive делать так:
+```
 cd /home/okertanov/public_html/html-templates.espectrale.com/public || exit
 #unset GIT_DIR
 #unset GIT_WORK_TREE
@@ -260,18 +256,14 @@ env -i git pull origin #or whatever
 env -i git update-server-info
 env -i git submodule init
 env -i git submodule update
+```
 
 
-
-
-
-
-1
-	
 Репозиторий Git и тестовый сайт находится на одном хосте. Хочется сделать так: чтобы при пуше в репозиторий, автоматически пулился тестовый сайт. Репозиторий Gitа на gitosis
 
 Использую post-update hook:
 Все из-за переменной окружения GIT_DIR
+```
 #!/bin/sh
 
 PATH=/bin:/usr/bin:/usr/lib:/usr/local/bin
@@ -284,12 +276,12 @@ echo "start $PROJECT_NAME $PROJECT_ENV pulling:$GIT_WORK_TREE"
 cd $PROJECT_DIR
 unset GIT_DIR
 git pull origin $PROJECT_ENV
-
+```
 
 
 Добавляем хук, реализующий авто-pull, при коммите разработчика, в тестовый сайт. Предположим, что наш тестовый сайт располагается по адресу: ~/domains/dev.my-site.ru, тогда
 Bash
-
+```
     cd ~/git/my-site.ru.git/hooks
     nano post-update
     #!/bin/sh
@@ -297,7 +289,7 @@ Bash
     unset GIT_DIR
     git pull origin master
     exec git update-server-info
-
+```
 [http://mbaev.com/content/sozdanie-git-repozitoria](http://mbaev.com/content/sozdanie-git-repozitoria)
 
 
@@ -306,10 +298,10 @@ Bash
 
 
 
-\\\\\\\\\\\\\\\\\\\\\\\\\ Моя стратегия \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\[https://habrahabr.ru/post/127213/](https://habrahabr.ru/post/127213/)
+# Моя стратегия 
+[https://habrahabr.ru/post/127213/](https://habrahabr.ru/post/127213/)
 
 Есть рабочая папка и .git папка, рабочая содержит файлы, .git служебный
-
 
 med-hub - это bare репозиторий, в который делаем push из домашнего. Med-hub просто хранить всю историю изменений. Из него можно скопировать всё.
 Кроме самого репозитория есть ещё и workspace, где хранятся файлы с которыми вы работаете. Именно в этой папке лежит сам репозиторий (папка .git ). На серверах рабочие файлы не нужны, поэтому там хранятся только голые репозитории (bare-repo).
@@ -317,20 +309,21 @@ post-update hook отправляет данные в prime репозитори
 
 
 1. Создаем bare репозиторий на сервере в хомяке например.(Он отличается тем, что в папке с этим репозиторием нет рабочих файлов и подпапки .git — все ее привычное содержимое как раз и находится в этом репозитории)
-
+```
 (envmed) [root@centos7py med]# cd med-hub.git/
 (envmed) [root@centos7py med-hub.git]# ls
 (envmed) [root@centos7py med-hub.git]# git --bare init
 Initialized empty Git repository in /srv/med/med-hub.git/
-
+```
 
 
 
 2. Создаем non-bare репозиторий в папке проекта с work-tree типом, получается .git папка в одном месте, а рабочая в /srv/med/www, настраиваем gitignore
+```
 git init --separate-git-dir=/home/med-user/med-prime.git
-
+```
 Создаём gitignore
-
+```
 (envmed) [root@centos7py www]# ls -al
 итого 8
 drwxr-xr-x 6 med  med  82 окт 21 13:36 .
@@ -341,23 +334,30 @@ drwxr-xr-x 5 med  med  77 окт  7 14:16 envmed
 -rw-r--r-- 1 root root 22 окт 21 13:36 .gitignore
 drwxr-xr-x 2 med  med  71 сен 27 15:45 log
 drwxr-xr-x 4 med  med  64 окт  7 16:09 project
-
+```
+```
 (envmed) [root@centos7py www]# cat .gitignore 
 conf/*
 envmed/*
 log/*
+```
+```
 (envmed) [root@centos7py www]# cat .git
 gitdir: /home/med-user/med-prime.git
-
+```
 Подключаем med-hub как удалённый к med-prime
+```
 (envmed) [root@centos7py www]# git remote remove med-hub       
 (envmed) [root@centos7py www]# git remote add med-hub /srv/med/med-hub.git
 (envmed) [root@centos7py www]# git remote show         
 med-hub
 (envmed) [root@centos7py www]# git push med-hub master 
+```
 
 3. local репозиторий у себя на сайта
+```
  git clone ssh://med@192.168.1.128:2222/srv/med/med-hub.git /home/garry/med-project
+```
 origin - теперь у нас это med-hub
 
 
@@ -373,7 +373,7 @@ master--- master
 
 
 5. post-update hook, который из делает pull в prime репозиторий проекта
-
+```
 cat /srv/med/med-hub.git/hooks/post-update
 #!/bin/sh
 #
@@ -392,7 +392,7 @@ git pull med-hub master
 
 
 exec git update-server-info
-
+```
 
 
 
@@ -402,7 +402,7 @@ exec git update-server-info
 
 На локальной делаем вот так
 
-
+```
 (env3)garry@garry:~/med-project> cat "README NOW 8.08.2017" > project/README 
 (env3)garry@garry:~/med-project> git add project/README 
 (env3)garry@garry:~/med-project> git commit -m "Commit README"
@@ -426,11 +426,12 @@ remote:  1 file changed, 1 insertion(+), 1 deletion(-)
 To ssh://med@192.168.1.128:2222/srv/med/med-hub.git
    08b2397..49086e5  master -> master
 (env3)garry@garry:~/med-project> 
-
+```
 На удалённой видим следующее
+```
 [garry@centos7py project]$ cat README 
 README NOW 8.08.2017
-
+```
 
 
 Красота схемы в том, что мы может внести измение на сайте, сделать push в med-hub, а оттуда подтянуть к себе в локальный.

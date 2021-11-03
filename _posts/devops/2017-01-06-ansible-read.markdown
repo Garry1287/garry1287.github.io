@@ -1,21 +1,12 @@
 ---
 layout: post
-title:  "ansible-read"
+title:  "Полезные ссылки - ansible"
 date:   2017-01-06 00:34:31 +0300
-categories: ansible-read
-tags: devops
+categories: devops
+tags: devops ansible
 ---
 
-# ansible-read
-ctd-c6
-GI0/0/3.3292
-ip 81.20.197.42
-mask 255.255.255.224
-gw 81.20.197.33
-dns1 81.20.192.16
-dns2 81.20.192.17
-24 порт
-
+# Полезные ссылки - ansible
 
 [https://habrahabr.ru/post/304732/](https://habrahabr.ru/post/304732/)
 [https://natenka.gitbooks.io/pyneng/content/book/12_ssh_telnet/2_telnetlib.html](https://natenka.gitbooks.io/pyneng/content/book/12_ssh_telnet/2_telnetlib.html)
@@ -55,7 +46,7 @@ dns2 81.20.192.17
 SUMMARY
 
 Expect module should have an expected_results option that would have the same structure of the responses options ( dict of lists). Every response to a pattern would have a correspondent expected_result, like in the example below:
-
+```
 - name: "Expected results example"
   delegate_to: localhost
   register: result
@@ -76,7 +67,7 @@ Expect module should have an expected_results option that would have the same st
         - 'command1'
         - 'command2'
         - 'command3'
-        
+ ```       
 [https://habrahabr.ru/post/328486/](https://habrahabr.ru/post/328486/)
 [http://stackoverflow.com/questions/38393343/how-to-use-ansible-expect-module-for-multiple-different-responses](http://stackoverflow.com/questions/38393343/how-to-use-ansible-expect-module-for-multiple-different-responses)
 [http://docs.ansible.com/ansible/expect_module.html](http://docs.ansible.com/ansible/expect_module.html)
@@ -89,12 +80,11 @@ Expect module should have an expected_results option that would have the same st
 
 
 
-
-
+```
 SNMPv2-MIB::sysDescr.0 = STRING: DES-3200-28/C1 Fast Ethernet Switch
 when: ansible_sysdescr == "D-Link DES-3200-28 Fast Ethernet Switch"
 SNMPv2-MIB::sysDescr.0 = STRING: DES-3526 Fast-Ethernet Switch
-
+```
 
 
 В коментах полно о разделениее production/dev/

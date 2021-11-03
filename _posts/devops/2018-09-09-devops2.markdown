@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "devops2"
-date:   2010-09-09 23:57:04 +0400
-categories: devops2
+title:  "Devops инструменты"
+date:   2018-09-09 23:57:04 +0400
+categories: devops
 tags: devops
 ---
 
-# devops2
+# Devops инструменты
 Чтобы понизить сложность задачи, инструменты можно условно разделить на группы:
 
     Репозитории — Git, Mercurial, Perforce, Github, Bitbucket, Nexus, Artifactory …
@@ -37,7 +37,7 @@ tags: devops
 
 
 
-Network
+## Network
 [https://webcache.googleusercontent.com/search?q=cache:1tRTAi99KGQJ:https://cloud.croc.ru/blog/byt-v-teme/docker-virtualizatsiya-seti-part1/+&cd=1&hl=ru&ct=clnk&gl=ru](https://webcache.googleusercontent.com/search?q=cache:1tRTAi99KGQJ:https://cloud.croc.ru/blog/byt-v-teme/docker-virtualizatsiya-seti-part1/+&cd=1&hl=ru&ct=clnk&gl=ru)
 [https://cloud.croc.ru/blog/byt-v-teme/docker-virtualizatsiya-seti-part3/](https://cloud.croc.ru/blog/byt-v-teme/docker-virtualizatsiya-seti-part3/)
 [https://cloud.croc.ru/blog/](https://cloud.croc.ru/blog/)

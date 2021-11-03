@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "AWS.amazon"
-date:   2009-04-24 22:15:57 +0400
-categories: AWS.amazon
-tags: devops
+title:  "AWS amazon"
+date:   2019-04-24 22:15:57 +0400
+categories: devops
+tags: devops aws
 ---
 
-# AWS.amazon
+# AWS ссылки
 xgu.ru/wiki/Amazon_EC2
 [https://habrahabr.ru/post/62362/](https://habrahabr.ru/post/62362/)
 [https://aws.amazon.com/ru/ec2/getting-started/#tutorials](https://aws.amazon.com/ru/ec2/getting-started/#tutorials)
