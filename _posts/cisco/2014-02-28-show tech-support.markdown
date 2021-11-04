@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "show tech-support"
+title:  "Вывод tech-support на cisco ASR"
 date:   2014-02-28 13:19:04 +0400
-categories: show tech-support
+categories: cisco
 tags: cisco
 ---
 
-# show tech-support
+# Show tech-support
+```
 CTD-C5# show tech-support 
 
 ------------------ show clock ------------------
@@ -12994,3 +12995,4 @@ Oct  1 13:41:29: %CLEAR-5-COUNTERS: Clear counter on interface TenGigabitEtherne
 sh environment temperature
 
 ------------------ show hw-module subslot all sensors ----------
+```

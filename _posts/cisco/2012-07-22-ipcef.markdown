@@ -1,34 +1,43 @@
 ---
 layout: post
-title:  "ipcef"
+title:  "Ipcef cisco"
 date:   2012-07-22 22:35:06 +0400
-categories: ipcef
+categories: cisco
 tags: cisco
 ---
 
 # ipcef
  
-proccess switching
+* proccess switching
+* fast-switching
 
-
-fast-switching
  В таком режиме работы маршрутизатор запоминает маршрут
    в кеше и на следующий пакет в маршруте время уже не затрачивается.
 
  Включается fast switching командой на интерфейсе, где включен policy
    routing:
-
+```
    nnz-cisco#conf t
    nnz-cisco(config)#in e0/0
    nnz-cisco(config-if)# ip route-cache 
-
+```
 
 Возможно необходимо включить все эти режимы
+```
  ip route-cache cef
    ip route-cache flow
    ip route-cache policy
    ip route-cache same-interfaces
+```
 
+`flow switching`
 
-flow switching
-ip cef
+`ip cef`
+
+[http://www.akvilona.ru/serv/cisco/a_reg.htm](http://www.akvilona.ru/serv/cisco/a_reg.htm)
+
+[http://www.cisco.com/en/US/products/hw/routers/ps167/products_tech_note09186a00801e1dc2.shtml](http://www.cisco.com/en/US/products/hw/routers/ps167/products_tech_note09186a00801e1dc2.shtml)
+
+[https://sites.google.com/site/smkuzmin/home/cisco](https://sites.google.com/site/smkuzmin/home/cisco)
+
+[http://routing-bits.com/2009/06/02/understanding-cef/](http://routing-bits.com/2009/06/02/understanding-cef/)

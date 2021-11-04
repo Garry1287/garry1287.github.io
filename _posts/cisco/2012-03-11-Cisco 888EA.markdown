@@ -2,12 +2,12 @@
 layout: post
 title:  "Cisco 888EA"
 date:   2012-03-11 22:40:19 +0400
-categories: Cisco 888EA
+categories: cisco
 tags: cisco
 ---
 
 # Cisco 888EA
-880 Series 	
+
 
     Recommended for remote workers, small offices, and branch locations with up to 20 users
 
@@ -19,37 +19,26 @@ Multimode G.SHDSL (EFM/ATM)
 WAN порт   1 x G.SHDSL
 4-port 10-/100-Mbps managed switch
 	
-Cisco 888EA
-	
 
-Data
-	
-
-Advanced Security
-	
-
-15.2(2)T
-
-
-C888-K9
-	
-
-Data
-	
-
-Advanced Security
-	
-
-15.4(2)T
 
 [http://www.cisco.com/c/en/us/support/routers/c888ea-integrated-services-router-isr/model.html#solutionstocommonproblems](http://www.cisco.com/c/en/us/support/routers/c888ea-integrated-services-router-isr/model.html#solutionstocommonproblems)
+
 [http://www.cisco.com/c/en/us/td/docs/ios/12_2/12_2x/12_2xl/feature/guide/ft_gdsl4.html](http://www.cisco.com/c/en/us/td/docs/ios/12_2/12_2x/12_2xl/feature/guide/ft_gdsl4.html)
+
 [http://www.cisco.com/c/en/us/products/collateral/routers/888-integrated-services-router-isr/qa_c67-532551.html](http://www.cisco.com/c/en/us/products/collateral/routers/888-integrated-services-router-isr/qa_c67-532551.html)
+
 [http://www.cisco.com/c/en/us/products/collateral/routers/888-integrated-services-router-isr/qa_c67-532551.html](http://www.cisco.com/c/en/us/products/collateral/routers/888-integrated-services-router-isr/qa_c67-532551.html)
+
 [http://www.cisco.com/c/en/us/products/collateral/interfaces-modules/high-speed-wan-interface-cards/qa_c67-599767.html](http://www.cisco.com/c/en/us/products/collateral/interfaces-modules/high-speed-wan-interface-cards/qa_c67-599767.html)
+
 [http://www.cisco.com/c/en/us/products/collateral/routers/800-series-routers/white_paper_c11_499859.html](http://www.cisco.com/c/en/us/products/collateral/routers/800-series-routers/white_paper_c11_499859.html)
+
 [http://www.cisco.com/c/en/us/products/routers/800-series-routers/models-comparison.html](http://www.cisco.com/c/en/us/products/routers/800-series-routers/models-comparison.html)
+
 [http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/software/feature/guide/shdslfm.html](http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/software/feature/guide/shdslfm.html)
+
 [http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/software/feature/guide/GSHDSL_EFM_HWICS.html](http://www.cisco.com/c/en/us/td/docs/routers/access/interfaces/software/feature/guide/GSHDSL_EFM_HWICS.html)
+
 [http://www.cisco.com/c/en/us/products/collateral/routers/888-integrated-services-router-isr/qa_c67-532551.pdf](http://www.cisco.com/c/en/us/products/collateral/routers/888-integrated-services-router-isr/qa_c67-532551.pdf)
+
 [http://www.cisco.com/c/en/us/products/collateral/interfaces-modules/high-speed-wan-interface-cards/data_sheet_c78-599774.html](http://www.cisco.com/c/en/us/products/collateral/interfaces-modules/high-speed-wan-interface-cards/data_sheet_c78-599774.html)

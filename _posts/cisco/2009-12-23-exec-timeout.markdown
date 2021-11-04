@@ -1,18 +1,18 @@
 ---
 layout: post
-title:  "exec-timeout"
+title:  "Правильный exec-timeout в cisco"
 date:   2009-12-23 12:17:13 +0300
-categories: exec-timeout
+categories: cisco
 tags: cisco
 ---
 
 # exec-timeout
-exec-timeout 480 0
 
 
+```
 line vty 0 4
   exec-timeout 480 0
  exit
 line vty 5 15
   exec-timeout 480 0
- 
+``` 

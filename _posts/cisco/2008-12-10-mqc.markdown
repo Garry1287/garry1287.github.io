@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "mqc"
+title:  "Mqc"
 date:   2008-12-10 09:37:43 +0300
-categories: mqc
-tags: cisco
+categories: cisco
+tags: cisco qos
 ---
 
-# mqc
+# Mqc
+```
 GW2921-1#ping 10.29.1.1 repeat 100
 
 Type escape sequence to abort.
@@ -27,9 +28,9 @@ Sending 100, 100-byte ICMP Echos to 10.10.120.3, timeout is 2 seconds:
 !!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
 !.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
 Success rate is 84 percent (84/100), round-trip min/avg/max = 1/1/1 ms
+```
 
-
-
+```
 GW2921-2#ping 10.29.1.1 repeat 100
 
 Type escape sequence to abort.
@@ -44,12 +45,12 @@ Sending 100, 100-byte ICMP Echos to 10.10.120.3, timeout is 2 seconds:
 !!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
 !.!!!!!.!!!!!.!!!!!.!!!!!.!!!!
 Success rate is 84 percent (84/100), round-trip min/avg/max = 1/1/4 ms
-
+```
 
 Ошибок нет
-
+```
 ip icmp rate-limit unreachable 1000
-
+```
 
 
 
@@ -58,7 +59,7 @@ ip icmp rate-limit unreachable 1000
 
 
 cde-c3
-
+```
 class-map match-any STANDARD
  match ip precedence 0  1 
 class-map match-any REAL-TIME
@@ -172,10 +173,10 @@ interface Serial0/2/0:0
  frame-relay traffic-shaping
  frame-relay lmi-type ansi
 !
+```
 
 
-
-
+```
 RUMELCO-CE0#show policy-map interface Serial0/2/0:0.16
  Serial0/2/0:0.16: DLCI 16 -
 
@@ -227,19 +228,20 @@ RUMELCO-CE0#show policy-map interface Serial0/2/0:0.16
       1182828874 packets, 779229037318 bytes
       30 second offered rate 243000 bps, drop rate 0 bps
       Match: any 
+```
 
 
 
 
 
- max-reserved-bandwidth 98
+`max-reserved-bandwidth 98`
 
 
 
 
 
 
-
+```
 telnet 10.192.10.90
 !
 hostname Viz-Sov-Ce0
@@ -272,7 +274,7 @@ map-class frame-relay EQ-FR
  frame-relay cir 2048000
  frame-relay mincir 2048000
  service-policy output PLATINUM
-
+```
 
 [http://www.mianet.ru/index.php/sysadmin/cisco/197-cisco-qos--](http://www.mianet.ru/index.php/sysadmin/cisco/197-cisco-qos--)
 [http://habrahabr.ru/post/62831/](http://habrahabr.ru/post/62831/)
@@ -292,7 +294,7 @@ Cos выставленные приоритеты на 2 или 3  уровне
 
 
 Стандартно настроенный qos для VPN NLMK
-
+```
 class-map match-any REAL-TIME
  match ip precedence 5 
 class-map match-any PREMIUM
@@ -306,25 +308,20 @@ policy-map PLATINUM
   bandwidth percent 35
   random-detect
  class class-default
-
+```
 
 На интерфейс
+```
 service-policy output PLATINUM
 bandwidth 2048
+```
 (например)
 
 
 
 
 
-
-
-
-
-
-
-
-
+```
 class-map match-any STANDARD
  match ip precedence 0  1 
 class-map match-any REAL-TIME
@@ -485,3 +482,4 @@ policy-map PLATINUM-ETH-10MB
  class class-default
     shape average 10240000
   service-policy PLATINUM
+```

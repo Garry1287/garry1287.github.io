@@ -1,75 +1,54 @@
 ---
 layout: post
-title:  "aaa_cisco"
+title:  "Aaa cisco"
 date:   2011-12-25 02:31:33 +0400
-categories: aaa_cisco
+categories: cisco
 tags: cisco
 ---
 
-# aaa_cisco
-На типичном «клиентском» порту коммутатора:
-interface range FastEthernet 0/1 — 24
-desc HOST
-switchport access vlan XXX
-switchport mode access
-switchport nonegotiate
-flowcontrol receive off
-spanning-tree bpduguard enable
-storm-control broadcast level 1.00
-storm-control multicast level 1.00
-storm-control unicast level 90.10
-storm-control action trap
-spanning-tree portfast
-no snmp trap link-status
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Aaa cisco
 
 Cisco base
+
 [http://www.opennet.ru/docs/RUS/cisco_basic/](http://www.opennet.ru/docs/RUS/cisco_basic/)
+
 [http://habrahabr.ru/post/87680/](http://habrahabr.ru/post/87680/)
 
-аутентификация  сопоставление персоны (запроса) существующей учётной записи в системе безопасности. Осуществляется по логину, паролю, сертификату, смарт-карте и т. д.
+Аутентификация  сопоставление персоны (запроса) существующей учётной записи в системе безопасности. Осуществляется по логину, паролю, сертификату, смарт-карте и т. д.
 
-авторизация  (авторизация, проверка полномочий, проверка уровня доступа) — сопоставление учётной записи в системе (и персоны, прошедшей аутентификацию) и определённых полномочий (или запрета на доступ). 
+Авторизация  (авторизация, проверка полномочий, проверка уровня доступа) — сопоставление учётной записи в системе (и персоны, прошедшей аутентификацию) и определённых полномочий (или запрета на доступ). 
 В общем случае авторизация может быть «негативной» (пользователю А запрещён доступ к серверам компании)
 
-аккаунтинг (подсчёт и контроль) слежение за потреблением ресурсов (преимущественно сетевых) пользователем.
+Аккаунтинг (подсчёт и контроль) слежение за потреблением ресурсов (преимущественно сетевых) пользователем.
 
 [http://blog.ptsecurity.ru/2013/09/cisco-ios.html](http://blog.ptsecurity.ru/2013/09/cisco-ios.html)
+
 [http://www.faq-cisco.ru/articles/obshhie-svedeniya/nastroyka-aaa-na-cisco-kratkiy-obzor](http://www.faq-cisco.ru/articles/obshhie-svedeniya/nastroyka-aaa-na-cisco-kratkiy-obzor)
+
 [http://my.safaribooksonline.com/book/networking/routers/0596001665/passwords-and-privilege-levels/hardcisco-chp-4-sect-7](http://my.safaribooksonline.com/book/networking/routers/0596001665/passwords-and-privilege-levels/hardcisco-chp-4-sect-7)
+
 [http://my.safaribooksonline.com/book/networking/routers/0596001665](http://my.safaribooksonline.com/book/networking/routers/0596001665)
 
 
 1. Это без использования aaa new-model
 
 Настройка на виртуальном терминале одного пароля
+```
 Router(config)#line vty 0 4 
 Router(config)#password your_password
-
+```
 
 Настройка на консоли одного пароля
+```
 Router(config)#line console 0 
 Router(config)#password your_password
-
+```
 
 
 При данных настройках (login local) используется локальная база. Происходит 
 использование логина и пароля из локальной базы данных (способ аутентификации “local”). 
-
+```
 no aaa new-model
-
 username nws privilege 15 secret 4 GTqQrtp9ANDCMVjxtkackUfTnuNH8YUW/cFuwk/nVw6
 username NLMK privilege 15 secret 4 ck91gZHwN3sk8v/1a7qGnpzQPGAgc14NFHjytjflocM
 
@@ -79,18 +58,14 @@ line vty 0 4
  exec-timeout 300 0
  login local
  transport input ssh
-
+```
 
 
 2.
+```
 aaa authentication login default local
 aaa authorization default local 
-
-
-
-privilege 15
-
-
+```
 
 
 4.7. Privilege Levels
@@ -100,6 +75,7 @@ By default, Cisco routers have three levels of privilege—zero, user, and privi
 
 Displaying your current privilege level is done with the show privilege command, and changing privilege levels can be done using the enable and disable commands. Without any arguments, enable will attempt to change to level 15 and disable will change to level 1. Both commands take a single argument that specifies the level you want to change to. The enable command is used to gain more access by moving up levels:
 
+```
 Router>show privilege
 Current privilege level is 1
 Router>enable 5
@@ -107,23 +83,25 @@ Password: level-5-password
 Router#show privilege
 Current privilege level is 5
 Router#
-
+```
 
 The disable command is used to give up access by moving down levels:
 
+```
 Router#show privilege
 Current privilege level is 5
 Router#disable 2
 Router#show privilege
 Current privilege level is 2
 Router#
-
+```
 
 Notice that a password is required to gain more access; no password is required when lowering your level of access. The router requires reauthentication every time you attempt to gain more privileges, but nothing is needed to give up privileges.
 4.7.2. Default Privilege Levels
 
 The bottom and least privileged level is level 0. This is the only other level besides 1 and 15 that is configured by default on Cisco routers. This level has only five commands that allow you to log out or attempt to enter a higher level:
 
+```
 Router#disable 0
 Router>?
 Exec commands:
@@ -133,19 +111,20 @@ Exec commands:
   help     Description of the interactive help system
   logout   Exit from the EXEC
 Router>
-
+```
 
 Next is level 1, the default user level. This level provides the user with many more commands that allow the user to display router information, telnet to other systems, and test network connectivity with ping and traceroute. Level 2, which is not enabled by default, adds a few additional show and clear commands, but provides no opportunity for a user to reconfigure the router. Finally, level 15 allows full access to all router commands.
 4.7.3. Privilege-Level Passwords
 
 To use the enable command to access a privilege level, a password must be set for that level. If you try to enter a level with no password, you get the error message No password set. Setting privilege-level passwords can be done with the enable secret level command. The following example enables and sets a password for privilege level 5:
 
+```
 Router#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#enable secret level 5 level5-password
 Router(config)#^Z
 Router#
-
+```
 
 Now we can enter level 5 with the enable 5 command.
 
@@ -158,46 +137,50 @@ Just as default passwords can be set with either the enable secret or the enable
 
 Lines (CON, AUX, VTY) default to level 1 privileges. This can be changed using the privilege level command under each line. To change the default privilege level of the AUX port, you would type the following:
 
+```
 Router#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#line aux 0
 Router(config-line)#privilege level 4
 Router(config-line)#^Z
 Router#
-
+```
 
 Or, to change the default privilege level of all VTY access to level 12:
 
+```
 Router#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#line vty 0 4
 Router(config-line)#privilege level 12
 Router(config-line)#^Z
 Router#
-
+```
 
 4.7.5. Username Privilege Levels
 
 Finally, a username can have a privilege level associated with it. This is useful when you want specific users to default to higher privileges. The username privilege command is used to set the privilege level for a user:
 
+```
 Router#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#username jdoe privilege 5
 Router(config)#username rsmith privilege 12
 Router(config)#^Z
 Router#
-
+```
 
 4.7.6. Changing Command Privilege Levels
 
 By default, all router commands fall under levels 1 or 15. Creating additional privilege levels isn't very useful unless the default privilege level of some router commands is also changed. Once the default privilege level of a command is changed, only those who have that level access or above are allowed to run that command. These changes are made with the privilege command. The following example changes the default level of the telnet command to level 2:
 
+```
 Router#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#privilege exec level 2 telnet
 Router(config)#^Z
 Router#
-
+```
 
 Now no one with user-level (level 1) access can run the telnet command. Level 2 access is required.
 4.7.7. Privilege Mode Example
@@ -208,6 +191,7 @@ Assume that the organization has a few highly paid network administrators, a few
 
 The highly paid administrators will have complete level 15 access. A level 10 will be created for the junior administrators to give them access to the debug and telnet commands. Finally, a level 2 will be created for the operations center to give them access to the clear line command, but not the telnet command:
 
+```
 Router#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#username admin-joe privilege 15 password joes-password
@@ -221,7 +205,7 @@ Router(config)#privilege exec level 10 debug
 Router(config)#privilege exec level 2 clear line
 Router(config)#^Z
 Router#
-
+```
 
 4.7.8. Recommended Privilege-Level Changes
 
@@ -229,6 +213,7 @@ The NSA guide to Cisco router security recommends that the following commands be
 
 To change the privilege level of these commands, you would:
 
+```
 RouterOne#config terminal
 Enter configuration commands, one per line.  End with CNTL/Z.
 RouterOne(config)#privilege exec level 15 connect
@@ -239,7 +224,5 @@ RouterOne(config)#privilege exec level 15 show access-lists
 RouterOne(config)#privilege exec level 15 show logging     
 RouterOne(config)#privilege exec level 1 show ip      
 RouterOne(config)#^Z
-
-
-The final privilege exec level 1 show ip returns the show and show ip commands to level 1, enabling all other default level 1 commands to still function.
+```
 

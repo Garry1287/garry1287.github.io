@@ -1,14 +1,16 @@
 ---
 layout: post
-title:  "cisco_ios"
+title:  "Об сisco ios"
 date:   2016-12-26 15:16:28 +0300
 categories: cisco_ios
 tags: cisco
 ---
 
-# cisco_ios
+# Cisco ios
 [http://www.rusnoc.ru/index.php?option=com_content&view=article&id=67:kak-vybrat-cisco-ios&catid=4:cisco](http://www.rusnoc.ru/index.php?option=com_content&view=article&id=67:kak-vybrat-cisco-ios&catid=4:cisco)
+
 [http://tools.cisco.com/ITDIT/CFN/jsp/index.jsp](http://tools.cisco.com/ITDIT/CFN/jsp/index.jsp)
+
 [http://www.faq-cisco.ru/articles/obshhie-svedeniya/vvedenie-v-oboznacheniya-cisco-ios](http://www.faq-cisco.ru/articles/obshhie-svedeniya/vvedenie-v-oboznacheniya-cisco-ios)
 
 IP Base — начальный уровень функциональности, включается во все другие feature sets. Обеспечивает базовый роутинг, т.е. статик роуты, RIP, OSPF, EIGRP, только на IPv4. Включает вланы (802.1q и ISL), которые ранее были доступны только в «IP Plus». Также включает NAT.
@@ -18,15 +20,9 @@ IP Services (для L3 свичей) — протоколы динамическ
  
 IP Voice — добавляет функциональность VoIP and VoFR.
 
- 
-
 
 Advanced Security — Добавляется IOS/Firewall, IDS, SSH, и IPSec (DES, 3DES, and AES).
-
-
 Service Provider Services — Добавляется IPv6, Netflow, SSH, BGP, ATM, и VoATM.
-
- 
 
 
 Enterprise Base — Добавляется поддержка «унаследованных» L3 протоколов, таких как IPX и Appletalk. Также включаются IBM features типа DLSw+, STUN/BSTUN, и RSRB.
@@ -34,7 +30,6 @@ Enterprise Base — Добавляется поддержка «унаследо
 
 Advanced IP Services — Добавляется поддержка IPv6
 
- 
 
 Так же можно воспользоватся автоматизированными система поиска и подбора необходимого функционала  для вашей модели оборудования и система вас сама подскажет какой IOS вам лучше поставить см. тут
 
@@ -42,9 +37,9 @@ Advanced IP Services — Добавляется поддержка IPv6
 
 Установка IOS занимает намного меньше времени чем вам кажется , достаточно :
 
-
+```
 archive download-sw /overwrite ftp://X.X.X.X/soft/Firmwares/CISCO/c2960XXXX.tar
-
+```
 
 После чего все установится , вам необходимо будет только перезагрузкить оборудование и все .
 
@@ -53,17 +48,17 @@ archive download-sw /overwrite ftp://X.X.X.X/soft/Firmwares/CISCO/c2960XXXX.tar
 
 Существуют разные компоновки IOS отличающиеся функционалом, так называемые feature sets. Их примерные отличия:
 
-    IP Base — начальный уровень функциональности, включается во все другие feature sets. Обеспечивает базовый роутинг, то есть статические маршруты, RIP, OSPF, EIGRP, только на IPv4. Включает VLAN (802.1Q и ISL), которые ранее были доступны только в «IP Plus». Также включает NAT.
-    IP Services (для L3 свитчей) — протоколы динамической маршрутизации, NAT, IP SLA.
-    Advanced IP Services — добавляется поддержка IPv6.
-    IP Voice — добавляет функциональность VoIP и VoFR.
-    Advanced Security — добавляется IOS/Firewall, IDS, SCTP, SSH и IPSec (DES, 3DES и AES).
-    Service Provider Services — добавляется IPv6, Netflow, SSH, BGP, ATM и VoATM.
-    Enterprise Base — добавляется поддержка «унаследованных» L3 протоколов, таких как IPX и AppleTalk. Также включаются IBM features типа DLSw+, STUN/BSTUN и RSRB.
+*    IP Base — начальный уровень функциональности, включается во все другие feature sets. Обеспечивает базовый роутинг, то есть статические маршруты, RIP, OSPF, EIGRP, только на IPv4. Включает VLAN (802.1Q и ISL), которые ранее были доступны только в «IP Plus». Также включает NAT.
+*    IP Services (для L3 свитчей) — протоколы динамической маршрутизации, NAT, IP SLA.
+*    Advanced IP Services — добавляется поддержка IPv6.
+*    IP Voice — добавляет функциональность VoIP и VoFR.
+*    Advanced Security — добавляется IOS/Firewall, IDS, SCTP, SSH и IPSec (DES, 3DES и AES).
+*    Service Provider Services — добавляется IPv6, Netflow, SSH, BGP, ATM и VoATM.
+*    Enterprise Base — добавляется поддержка «унаследованных» L3 протоколов, таких как IPX и AppleTalk. Также включаются IBM features типа DLSw+, STUN/BSTUN и RSRB.
 
 
 
 
-15ios
+## Об 15 ios
 
 [http://www.faq-cisco.ru/articles/obshhie-svedeniya/cisco-ios-15-pervoe-znakomstvo](http://www.faq-cisco.ru/articles/obshhie-svedeniya/cisco-ios-15-pervoe-znakomstvo)

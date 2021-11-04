@@ -1,16 +1,19 @@
 ---
 layout: post
-title:  "cisco_ios2"
+title:  "Лицензирование для маршрутизаторов второго поколения ISR G2"
 date:   2009-05-21 10:50:04 +0400
-categories: cisco_ios2
+categories: cisco
 tags: cisco
 ---
 
-# cisco_ios2
+# Сisco ios2
+```
 crypto key generate rsa
 
  ip address 10.98.99.9 255.255.255.248 standby 10.98.99.10 
+```
 
+---
 
 IOS XE is for the ASR1000 aggregation services routers
 IOS XE is primarly for the ASR router. Which is the top of the line cisco router designed for carrier class services. XE is modulated so different proccesses are ran from different modules. So if one module fails it does not effect the whole router unlike traditional IOS which everything runs from the single IOS software.
@@ -24,7 +27,7 @@ IOS is for everything else.
 
 NX-OS is a network operating system for the Nexus-series Ethernet switches and MDS-series Fibre Channel storage area network switches made by Cisco Systems
 
-
+---
 
 До семейства 15.0 были доступные следующие варианты лицензирования:
 
@@ -70,6 +73,7 @@ c2900-universalk9-mz.SPA.156-3.M.bin
 
 
 [http://siptip.ru/2012/10/05/zapusk_i_pereshivka_cisco_2911/](http://siptip.ru/2012/10/05/zapusk_i_pereshivka_cisco_2911/)
+
 [http://www.akvilona.ru/serv/cisco/a_ios.htm](http://www.akvilona.ru/serv/cisco/a_ios.htm)
 
 

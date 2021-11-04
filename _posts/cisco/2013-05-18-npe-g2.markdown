@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "npe-g2"
+title:  "Npe-g2"
 date:   2013-05-18 23:29:57 +0400
-categories: npe-g2
+categories: cisco
 tags: cisco
 ---
 
-# npe-g2
+# Npe-g2
 [http://www.cisco.com/c/en/us/td/docs/routers/7200/install_and_upgrade/network_process_engine_install_config/npense/4448o6.html#wpxref30477](http://www.cisco.com/c/en/us/td/docs/routers/7200/install_and_upgrade/network_process_engine_install_config/npense/4448o6.html#wpxref30477)
 
 The NPE-G2 has its own Cisco IOS software image with the prefix "c7200p-" in the software images filenames, including the boot image. The NPE-G2 does not boot up with a software image with the prefix "c7200-". Previous network processing engines, or the network services engine, do not boot up with the "c7200p-" boot image. They use the prefix "c7200-".

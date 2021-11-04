@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "ats45-c0"
+title:  "PPTP на ats45-c0"
 date:   2016-08-15 10:27:31 +0300
-categories: ats45-c0
+categories: cisco
 tags: cisco
 ---
 
-# ats45-c0
+# PPTP на ats45-c0
+```
 interface Virtual-Template1
  description #PPTP virtual template (CHAP authentication)
  mtu 1492
@@ -29,3 +30,4 @@ interface Virtual-Template1
  ip policy route-map pptp-nat
  ppp authentication ms-chap ms-chap-v2
 end
+```

@@ -1,25 +1,29 @@
 ---
 layout: post
-title:  "ASA-eburg-peredelka"
+title:  "Переделака cisco ASA в eburg'e"
 date:   2008-12-06 15:27:56 +0300
-categories: ASA-eburg-peredelka
-tags: cisco
+categories: cisco
+tags: cisco asa
 ---
 
-# ASA-eburg-peredelka
+# Переделака cisco ASA в eburg'e
+
 MAC address 2c54.2d0c.98b7 -не active
 
     Соединить везде прямыми линками asa-шки?  Перекроссировки
+    
     Statefull Failover Link сделать? есть
+    
     virtual mac?
     Решение failover mac address phy_if active_mac standby_mac
-
+    
+```
 failover mac address new-link 2c54.2d0c.98b7 2c54.2d0c.98c1
 
 failover mac address Ethernet0/3 2c54.2d0c.98b7 2c54.2d0c.98c1
+```
 
 Или наоборот
-
 
 
     1.Тест как есть, рубануть по питанию стойку
@@ -32,13 +36,10 @@ failover mac address Ethernet0/3 2c54.2d0c.98b7 2c54.2d0c.98c1
 
 
 Активна ASA совинтеловская 
+```
 Sov
-   6    2c54.2d0c.98b7    DYNAMIC     Gi1/0/4
-
-
-
-
-
+ 2c54.2d0c.98b7    DYNAMIC     Gi1/0/4
+```
 
 
 
@@ -50,9 +51,7 @@ Sov
 2c54.2d0c.98b7
 
 
-
-
-
+```
 Maxi-ASA#  sh failover
 Failover On 
 Failover unit Primary
@@ -96,15 +95,16 @@ Stateful Failover Logical Update Statistics
    4    2c54.2d0c.98b3    DYNAMIC     Gi1/0/23
 
    5    2c54.2d0c.98b4    DYNAMIC     Gi1/0/3
-
+```
 
 
 
 Понять какая Активна
 Sov switch
+```
   4    2c54.2d0c.98b3    DYNAMIC     Gi1/0/23
 2c54.2d0c.98b3
-
+```
 10.98.98.7
 
 
@@ -115,6 +115,7 @@ Mega
 2c54.2d0c.98bd
 10.98.98.8
 
+```
 Maxi-ASA#   sh failover
 Failover On 
 Failover unit Secondary
@@ -148,4 +149,4 @@ Last Failover at: 10:52:46 MSK Dec 4 2015
                   Interface vlan72 (0.0.0.0): Normal (Not-Monitored)
                   Interface vlan100 (0.0.0.0): Normal (Not-Monitored)
                   Interface management (10.98.98.7): Normal 
-
+```
