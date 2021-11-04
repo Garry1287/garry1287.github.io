@@ -1,12 +1,14 @@
 ---
 layout: post
-title:  "access-list-bras"
+title:  "Access-list на bras"
 date:   2018-11-27 07:56:46 +0300
-categories: access-list-bras
+categories: cisco
 tags: cisco
 ---
 
-# access-list-bras
+# Access-list на bras
+
+```
 ip route 10.1.5.0 255.255.255.0 172.19.1.253
 ip route 10.1.6.0 255.255.255.0 172.19.1.253
 ip route 10.1.7.0 255.255.255.0 172.19.1.253
@@ -34,10 +36,6 @@ ip route 10.1.28.0 255.255.255.0 172.19.1.253
 ip route 10.1.29.0 255.255.255.0 172.19.1.253
 ip route 10.1.30.0 255.255.255.0 172.19.1.253
 ip route 91.192.61.53 255.255.255.255 172.19.1.253
-
-
-
-
 
 
 access-list 100 permit tcp 10.1.5.0 0.0.0.255 host 172.31.3.1 eq 1723
@@ -78,17 +76,6 @@ access-list 100 deny   tcp any host 81.20.196.124 eq 1723
 access-list 100 permit ip any any
 
 
-
-
-
-
-
-
-
-
-
-
-
 access-list 100 permit tcp 10.1.5.0 0.0.0.255 host 172.31.3.1 eq 1723
 access-list 100 permit tcp 10.1.6.0 0.0.0.255 host 172.31.3.1 eq 1723
 access-list 100 permit tcp 10.1.7.0 0.0.0.255 host 172.31.3.1 eq 1723
@@ -125,4 +112,4 @@ access-list 100 deny   tcp any host 81.20.192.15 eq 1723
 access-list 100 deny   tcp any host 81.20.200.253 eq 1723
 access-list 100 deny   tcp any host 81.20.200.254 eq 1723
 access-list 100 permit ip any any
-
+```
