@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "iscsi2"
+title:  "Iscsi 2"
 date:   2015-02-16 20:27:45 +0300
-categories: iscsi2
+categories: disk
 tags: disk
 ---
 
-# iscsi2
+# Iscsi 2
 ты в свое время просил ссылками поделиться...
 
 [http://ru.intel.com/business/community/?automodule=blog&blogid=44433&showentry=2449](http://ru.intel.com/business/community/?automodule=blog&blogid=44433&showentry=2449)

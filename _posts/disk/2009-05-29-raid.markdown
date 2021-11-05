@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "raid"
+title:  "Raid на intel сервере"
 date:   2009-05-29 07:49:13 +0400
-categories: raid
+categories: disk
 tags: disk
 ---
 
-# raid
+# Raid на intel сервере
 Доброго времени суток!
 
 1. Собрать RAID в INTEL-Utility

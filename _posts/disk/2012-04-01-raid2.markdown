@@ -1,20 +1,22 @@
 ---
 layout: post
-title:  "raid2"
+title:  "О рейде raid 2"
 date:   2012-04-01 20:53:03 +0400
-categories: raid2
+categories: disk
 tags: disk
 ---
 
-# raid2
+# О рейде - raid 2
 О рейде
 
 [http://linux.yaroslavl.ru/docs/howto/Software-RAID-HOWTO/Software-RAID-HOWTO-4.html](http://linux.yaroslavl.ru/docs/howto/Software-RAID-HOWTO/Software-RAID-HOWTO-4.html)
+
 [http://www.zdnet.com/blog/storage/chunks-the-hidden-key-to-raid-performance/130](http://www.zdnet.com/blog/storage/chunks-the-hidden-key-to-raid-performance/130)
 
-LVM+raid
+## LVM+raid
 wiki.tldp.org/LVM-on-RAID0
 [https://wiki.archlinux.org/index.php/Software_RAID_and_LVM](https://wiki.archlinux.org/index.php/Software_RAID_and_LVM)
+
 [http://blog.nuclex-games.com/2009/12/aligning-an-ssd-on-linux/](http://blog.nuclex-games.com/2009/12/aligning-an-ssd-on-linux/)
 
 
@@ -60,14 +62,15 @@ Stripe Size - это chunk-size
 
 
 
-chunk size = block size * stride
+`chunk size = block size * stride`
 
 Калькулятор [http://busybox.net/~aldot/mkfs_stride.html](http://busybox.net/~aldot/mkfs_stride.html)
 
-
+```
 mkfs.ext3 -b 4096 -E stride=16,stripe-width=48
 4 дискаб 5 raid
 RAID chunk size (in KiB) 64
+```
 
 
 
@@ -94,8 +97,10 @@ big I/Os = small chunks; small I/Os = big chunks
 
 Вот результаты теста скорости raid
 [http://www.tldp.org/HOWTO/Software-RAID-HOWTO-9.html](http://www.tldp.org/HOWTO/Software-RAID-HOWTO-9.html)
-Тесты рейда
+
+### Тесты рейда
 [http://forums.overclockers.ru/viewtopic.php?f=31&t=260582&sid=7b365b962a751475cf5ebb7d5f125835](http://forums.overclockers.ru/viewtopic.php?f=31&t=260582&sid=7b365b962a751475cf5ebb7d5f125835)
+
 [http://www.zdnet.com/blog/ou/comprehensive-raid-performance-report/484](http://www.zdnet.com/blog/ou/comprehensive-raid-performance-report/484)
 
 4.9 Опции mke2fs
@@ -107,7 +112,7 @@ big I/Os = small chunks; small I/Os = big chunks
  Если Вы хотите создать ext2 файловую систему с размером блока в 4 Кб, Вы сделаете так, что будет восемь блоков файловой системы в одном куске.
  Мы можем указать эту информацию для утилиты mke2fs, при создании файловой системы:
 
-  mke2fs -b 4096 -R stride=8 /dev/md0
+ ` mke2fs -b 4096 -R stride=8 /dev/md0`
 
 Производительность RAID-{4,5} строго зависит от этой опции. 
 Я не уверен как опция stride будет воздействовать на другие уровни RAID.
@@ -116,21 +121,6 @@ big I/Os = small chunks; small I/Os = big chunks
 Размер блока ext2fs строго определяет производительность файловой системы. 
 Вы всегда должны использовать размер блока 4Кб на любой файловой системе более чем нескольких сот мегабайт, 
 если Вы не помещаете очень большое число маленьких файлов на нее. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -154,35 +144,21 @@ A raid10 (1+0) with n disks is actually a raid 0 of n/2 raid1 subarrays with 2 d
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 Быстродействие soft raid массива
 [http://romanrm.ru/mdadm-raid](http://romanrm.ru/mdadm-raid)
 
 
 
 [http://xgu.ru/wiki/%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D1%8B%D0%B9_RAID_%D0%B2_Linux](http://xgu.ru/wiki/%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D1%8B%D0%B9_RAID_%D0%B2_Linux)
+
 [http://linux.yaroslavl.ru/docs/howto/Software-RAID-HOWTO/Software-RAID-HOWTO-4.html](http://linux.yaroslavl.ru/docs/howto/Software-RAID-HOWTO/Software-RAID-HOWTO-4.html)
+
 [http://hilli.dk/howtos/lvm2-and-software-raid-in-linux/](http://hilli.dk/howtos/lvm2-and-software-raid-in-linux/)
 
 
-
 [http://rhcelinuxguide.wordpress.com/category/lvm/](http://rhcelinuxguide.wordpress.com/category/lvm/)
+
 [http://www.linux-mag.com/id/7582/](http://www.linux-mag.com/id/7582/)
-
-
-
-
 
 [http://wiki.keyweb.ru/index.php?_m=knowledgebase&_a=viewarticle&kbarticleid=299](http://wiki.keyweb.ru/index.php?_m=knowledgebase&_a=viewarticle&kbarticleid=299)
 
@@ -197,11 +173,11 @@ A raid10 (1+0) with n disks is actually a raid 0 of n/2 raid1 subarrays with 2 d
 # 1 GB - swap 1 GB - swap
 
 Остальная часть диска - раздел для физического тома LVM на программном RAID5
-
+```
 $ mdadm --create /dev/md0 --chunk=128 --level=1 --raid-devices=3 /dev/sd[abc]1
 
 $ mdadm --create /dev/md1 --chunk=128 --level=5 --raid-devices=3 /dev/sd[abc]3
-
+```
  
 
 --chunk (Chunk size) Задаётся при создании массива. Изменить в уже работающем массиве – крайне долгая, и вероятно не вполне безопасная операция, требующая, к тому же, самой свежей версии mdadm (3.1) и достаточно нового ядра (2.6.31+)1).
@@ -217,8 +193,7 @@ $ mdadm --create /dev/md1 --chunk=128 --level=5 --raid-devices=3 /dev/sd[abc]3
 
 Разделы для Boot и swap
 
- 
-
+```
 $ mke2fs /dev/md0
 
 $ swapon -v -p 1 /dev/sda2
@@ -228,18 +203,18 @@ $ swapon -v -p 1 /dev/sdb2
 $ swapon -v -p 1 /dev/sdc2
 
 $ cat /proc/swaps
-
+```
  
 
 -р 1 обеспечивает работу разделов подкачки с одинаковым приоритетом и заставит ядро использовать их в циклическом режиме, как стрипинг в RAID0.
 Создание LVM томов:
-
+```
 $ pvcreate /dev/md1
 
 $ vgcreate --physicalextentsize 128M main /dev/md1
 
 $ lvcreate --size 300G --name media main
-
+```
 Повторите последнюю команду для каждого тома, для /home и /media и т.д.
 
  
@@ -247,7 +222,7 @@ $ lvcreate --size 300G --name media main
 
  
 
-$ mkfs.xfs -d su=128k -d sw=2 -l su=128k /dev/main/media
+`$ mkfs.xfs -d su=128k -d sw=2 -l su=128k /dev/main/media`
 
 Значение опций:
 
@@ -257,9 +232,9 @@ $ mkfs.xfs -d su=128k -d sw=2 -l su=128k /dev/main/media
 
  
 Создание EXT3
-
+```
 $ mke2fs -b 4096 -j -O sparse_super -E stride=32,stripe-width=64 /dev/main/name
-
+```
 Есть простой калькулятор для вычисления оптимальных параметров для RAID.   Размер Stride должен быть равен размеру RAID strip разделеному на размер блока.  Ширина stripe будет равна stride умноженному на количество дисков с данными.
 Прочие настройки RAID
 
@@ -275,7 +250,7 @@ $ mke2fs -b 4096 -j -O sparse_super -E stride=32,stripe-width=64 /dev/main/name
 
 Если есть превышение, увеличьте значение stripe_cache_size и проверьте снова.
 
-$ echo 8192 > /sys/block/mdX/md/stripe_cache_size
+`$ echo 8192 > /sys/block/mdX/md/stripe_cache_size`
 
 Write Intent Bitmap
 
@@ -286,7 +261,7 @@ Write Intent Bitmap
  Эффект можно уменьшить, использовав большее значение параметра mdadm -–bitmap-chunk (см. man mdadm), например 131072. Можно также практически полностью исключить его, использовав bitmap во внешнем файле – на диске, не входящем в массив. Для раздела, где файл с bitmap будет храниться, в документации рекомендуется файловая система ext2 или ext3, однако с размещением его на XFS проблем не возникло.
 
  
-Отдельный носитель для журнала
+### Отдельный носитель для журнала
 
 Журналирование можно значительно ускорить, если разместить журнал на отдельном носителе. Такой журнал называется внешним (external). Подключить его можно командой "tune2fs -J device=external_journal" (где external_journal - имя раздела соответствующего устройства), причем внешний журнал должен быть предварительно создан командой "mke2fs -O journal_dev external_journal". Команда "tune2fs -J size=journal_size" управляет размером журнала. Чем меньше размер журнала, тем ниже производительность. Предельно допустимый размер составляет 102.400 блоков или ~25 Мбайт (точное значение зависит от размера блока).
 Параметры файловой системы EXT3
@@ -298,9 +273,10 @@ ext2fs и ext3fs, 16 Кбайт для UFS и 64 Кбайта для XFS, фай
 
 Проверьте список активных возможностей вашей файловой системы
 
-
+```
 tune2fs -l  /dev/<ваш раздел> | grep features
 Filesystem features:      has_journal resize_inode dir_index filetype needs_recovery sparse_super large_file
+```
 
 Посредством включения тех или иных опций можно существенно увеличить производительность
 Включение режима Writeback
@@ -323,13 +299,13 @@ Filesystem features:      has_journal resize_inode dir_index filetype needs_reco
 Если вы попытаетесь выполнить оптимизацию одного из разделов в то время, когда файловая система смонтирована, то этот раздел может быть серьезно поврежден. Вначале вы должны размонтировать раздел.
 
 Включить режим Writeback mode:
-
+```
 tune2fs -O has_journal -o journal_data_writeback /dev/<ваш раздел>
-
+```
 Включить режим Journaled mode:
-
+```
 tune2fs -O has_journal -o journal_data /dev/<ваш раздел>
-
+```
 Включение индексирования директорий (Enabling Directory Indexing)
 
 Для ускорения работы с директориями, содержащими большое количество файлов и подкаталогов, директория должна быть организована в виде двоичного дерева. В ext2fs и ext3fs это осуществляется командой включения индексирования "mke2fs -O dir_index", а в ReiserFS переключением режима хэширования - "mkreiserfs -h HASH", где HASH - один из следующих типов хэш-таблицы: r5, rupasov или tea. По умолчанию выбирается r5, который наилучшим образом подходит для большинства файловых операций, тем не менее некоторые приложения (например Squid Web Proxy-сервер) настоятельно рекомендуют использовать rupasov-хэш, в противном случае за быстродействие никто не ручается. С другой стороны, r5 и rupasov очень медленно работают с директориями, содержащими несколько миллионов файлов и здесь лучше подходит tea, а на директориях из нескольких десятков файлов все три алгоритма хеширования проигрывают стандартному нехешируемому plain-алгоритму. К сожалению, опция хеширования носит глобальный характер - нельзя одни директории хешировать, 
@@ -338,39 +314,40 @@ tune2fs -O has_journal -o journal_data /dev/<ваш раздел>
 Индексирование директорий заметно увеличивает скорость чтения и записи в и из директорий вашего жесткого диска. Поскольку они предварительно индексированы (pre-indexed), скорость чтения должна заметно возрасти. Включение директивной индексации безопасно, и рекомендовано.
 
 Выполните команду, чтобы изменить режим журналирования:
-
+```
 tune2fs -O dir_index /dev/<ваш раздел>
-
+```
 Выполните команду, чтобы включить индексацию директорий для существующих каталогов:
-
+```
 e2fsck -D /dev/<ваш раздел>
-
+```
  Выполнение команды e2fsck может занять немного времени, это зависит от размера вашего раздела и количества директорий в нем.
 
  
-Параметры монтирования
-noatime
+## Параметры монтирования
+### noatime
 
 Эта опция монтирования является одной из самых простых и быстрых способов поднять показатели скорости. Она дает задание не обновлять индексные дескрипторы каждый раз. Это хороший вариант для веб-серверов, серверов-новостей и других ресурсов с высоким уровнем доступа к файловой системе. Пример:
-
+```
 /dev/VolGroup00/LogVol00 /                       ext3    defaults,noatime        1 1
-
-commit
+```
+### commit
 
 Эта опция монтирования контролирует, как часто файловая система синхронизирует данные и метаданные. Значение по умолчанию 5 секунд, но вы можете использовть эту настройку для оптимизации. Отицательный момент заключается в том, что вы можете потерять свои ценные данные из-за отключения питания или аварии системы. Производительность системы зависит целиком от того, какие значения вы установите.
-
+```
 /dev/VolGroup00/LogVol00 /                       ext3    defaults,commit=120     1 1
+```
 
-data
+### data
 
 Этот метод имеет 3 отдельных варианта на ваш выбор: data=writeback, data=ordered и data=journal.
 
     Режим data=writeback→файловая система ext3 не производит какого либо журналирования данных. При неожиданных перезагрузках системы это может вызвать потерю данных в обновляемых файлах. Данный режим обеспечивает самую высокую производительность ext3.
 
  
-
+```
 /dev/VolGroup00/LogVol00 /home                   ext3    defaults,data=writeback  1 1
-
+```
 
  
 
@@ -381,15 +358,15 @@ data
 
 
 
-
-
+---
 
 
 Создание raid, для raid1 требуется ещё размер chunk
+```
 $ mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/hd[a,b]3
 
 mdadm --create --help -справка
-
+```
 
 
 
@@ -398,30 +375,15 @@ mdadm - и потому к этой опции мы возвращаться н�
 А вот опция -C этот суперблок учреждает - и ею определяется вся сила программы mdadm.
 
 
-
-
-
-
-
-
-
-
-
 Попытка автосборки массива через
-
+```
 mdadm --assemble --scan
+```
 
 [http://habrahabr.ru/post/125596/](http://habrahabr.ru/post/125596/)
 
 
-
-
-
-
-
-
-
-The Persistent Superblock
+## The Persistent Superblock
 
 Вернемся в ``Старые Добрые Времена'' (TM), raidtools читали Ваш read /etc/raidtab файл и затем инициализировали массив. Однако, это требовало наличия файловой системы та том, на чем был смонтирован /etc/raidtab. Это не подходило для загрузки с RAID.
 
@@ -446,13 +408,9 @@ Sub-Version	Superblock Position on Device
 
 
 
-
-
-
-
 RAID-массив создан. Перезагружаемся и проверяем, все ли в порядке:
 
-cat /proc/mdstat
+`cat /proc/mdstat`
 
 
 Для автоматического монтирования рейда нужно добавить соответствующую запись в /etc/fstab .
@@ -460,27 +418,23 @@ cat /proc/mdstat
 
 Состояние всех компонент массива смотрим так:
 
-
+```
 sudo mdadm -E /dev/sdb1
-
-
 sudo mdadm -E /dev/sdd1
-
+```
 
 Для остановки массива:
 
 
-sudo mdadm -S /dev/md/md404
+`sudo mdadm -S /dev/md/md404`
 
 
 И очищаем суперблоки RAID на разделах, из которых собран массив, после его остановки:
 
-
+```
 sudo mdadm --zero-superblock /dev/sdb1
-
-
 sudo mdadm --zero-superblock /dev/sdd1
-
+```
 
 
 
@@ -491,10 +445,14 @@ sudo mdadm --zero-superblock /dev/sdd1
 
 Рейд
 [http://www.thomas-krenn.com/en/wiki/Linux_Software_RAID](http://www.thomas-krenn.com/en/wiki/Linux_Software_RAID)
+
 [https://raid.wiki.kernel.org/index.php/Linux_Raid](https://raid.wiki.kernel.org/index.php/Linux_Raid)
+
 [http://tldp.org/HOWTO/Software-RAID-HOWTO.html](http://tldp.org/HOWTO/Software-RAID-HOWTO.html)
+
 [http://neil.brown.name/blog/20110216044002](http://neil.brown.name/blog/20110216044002)
 [http://ru.wikipedia.org/wiki/Mdadm](http://ru.wikipedia.org/wiki/Mdadm)
+
 [http://nnm.ru/blogs/qqwweerreewwqq/sozdanie_programmnogo_raid_v_linux/](http://nnm.ru/blogs/qqwweerreewwqq/sozdanie_programmnogo_raid_v_linux/)
 
 
@@ -502,6 +460,7 @@ sudo mdadm --zero-superblock /dev/sdd1
 
 Рейд по шагам
 [http://www.tecchannel.de/_misc/galleries/detail.cfm?pk=33085&fk=2140767&resize=true](http://www.tecchannel.de/_misc/galleries/detail.cfm?pk=33085&fk=2140767&resize=true)
+
 [http://www.linuxhomenetworking.com/wiki/index.php/Quick_HOWTO_:_Ch26_:_Linux_Software_RAID#.UZ8a6FK3lo0](http://www.linuxhomenetworking.com/wiki/index.php/Quick_HOWTO_:_Ch26_:_Linux_Software_RAID#.UZ8a6FK3lo0)
 
 
@@ -509,19 +468,19 @@ sudo mdadm --zero-superblock /dev/sdd1
 [http://linuxguru.ru/administration/vosstanovlenie-soft-raid1-v-debian/](http://linuxguru.ru/administration/vosstanovlenie-soft-raid1-v-debian/)
 
 Удаляем и добавляем диск
+```
 mdadm /dev/md2 -r /dev/sda3
 mdadm /dev/md2 -a /dev/sda3
-
+```
 
 
 Дожидаемся завершения ребилдинга и радуемся.
 
 Принудительно пометить диск что он сбойный можно ключиком -f
+```
 mdadm /dev/md2 -f /dev/sda3
-
-	
 mdadm /dev/md2 -f /dev/sda3
-
+```
 
 
 
@@ -542,47 +501,46 @@ Opensuse
 
 
 
-Шпора по mdadm
+## Шпора по mdadm
 
 Восстановление raid
 [http://askubuntu.com/questions/69086/mdadm-superblock-recovery](http://askubuntu.com/questions/69086/mdadm-superblock-recovery)
+
 [http://arstechnica.com/civis/viewtopic.php?f=16&t=121767](http://arstechnica.com/civis/viewtopic.php?f=16&t=121767)
+
 [http://darkstar.spb.ru/2013/04/recovery-mdadm-raid5/](http://darkstar.spb.ru/2013/04/recovery-mdadm-raid5/)
+
 [http://askubuntu.com/questions/69086/mdadm-superblock-recovery](http://askubuntu.com/questions/69086/mdadm-superblock-recovery)
+
 [http://anders.com/cms/411/Linux/Software.RAID/inactive/mdadm](http://anders.com/cms/411/Linux/Software.RAID/inactive/mdadm)
 
-Замена диска в raid
+## Замена диска в raid
 [http://teis.org.ua/opensuse-services/rabota-s-rayd-mdadmin/](http://teis.org.ua/opensuse-services/rabota-s-rayd-mdadmin/)
 
-Raid 1 grub 2 debian
+## Raid 1 grub 2 debian
 [http://info-linux.ru/article/66](http://info-linux.ru/article/66)
 
 
-Создание soft raid (хорошая статья)
+## Создание soft raid (хорошая статья)
 [http://www.ibm.com/developerworks/ru/library/l-soft-raid/](http://www.ibm.com/developerworks/ru/library/l-soft-raid/)
+
 [http://linux.mkrovlya.ru/book/%D0%BE%D1%81%D0%BE%D0%B1%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%BF%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B5%D0%BD%D0%B8%D0%B5-soft-raid-1-%D0%B2-linux](http://linux.mkrovlya.ru/book/%D0%BE%D1%81%D0%BE%D0%B1%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%BF%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B5%D0%BD%D0%B8%D0%B5-soft-raid-1-%D0%B2-linux)
+
 [http://www.qdesnic.ru/page/soft-raid-v2.html](http://www.qdesnic.ru/page/soft-raid-v2.html)
+
 [http://rlab.ru/doc/4k_hdd_for_linux.html](http://rlab.ru/doc/4k_hdd_for_linux.html)
 
 
 
-hdd recovery
+## hdd recovery
 [http://rlab.ru/doc/linuxharddatarecovery.html](http://rlab.ru/doc/linuxharddatarecovery.html)
+
 [http://rus-linux.net/MyLDP/admin/Linux_file_recovery.html](http://rus-linux.net/MyLDP/admin/Linux_file_recovery.html)
+
 [http://rus-linux.net/MyLDP/file-sys/vosstanovlenie-failov-v-Linux.html](http://rus-linux.net/MyLDP/file-sys/vosstanovlenie-failov-v-Linux.html)
 
 
-
-
-
-
-
-
-
-
-
-
-
+```
 smithy@sapphire:~/ast_etc> cat fstab 
 /dev/md3 swap swap defaults 0 0
 /dev/md1 / ext4 acl,user_xattr 1 1
@@ -595,19 +553,9 @@ sysfs /sys sysfs noauto 0 0
 debugfs /sys/kernel/debug debugfs noauto 0 0
 usbfs /proc/bus/usb usbfs noauto 0 0
 devpts /dev/pts devpts mode=0620,gid=5 0 0 
+```
 
-
-
-
-
-
-
-
-
-
-
-
- 
+``` 
 md122 : active (auto-read-only) raid1 sda5[1]
       4200896 blocks [2/1] [_U]							swap
       
@@ -636,18 +584,15 @@ md127 : inactive sda7[1](S)
 /dev/sda7        29591793    33800759     2104483+  fd  Linux raid autodetect
 /dev/sda8        33800823    35905274     1052226   fd  Linux raid autodetect
 /dev/sda9        35905338   156280319    60187491   fd  Linux raid autodetect
+```
 
-
-badblock
+## badblock
 [http://i-adept.ru/bedbloki-i-ikh-remont-v-linux-linux-lechim-bitye-sektory/](http://i-adept.ru/bedbloki-i-ikh-remont-v-linux-linux-lechim-bitye-sektory/)
+
 [http://romantelychko.com/blog/805/](http://romantelychko.com/blog/805/)
 
 
-
-
-
-watch -n 1 cat /proc/mdstat
-
+`watch -n 1 cat /proc/mdstat`
 
 
 Ещё о софт рейде

@@ -2,35 +2,43 @@
 layout: post
 title:  "iscsi"
 date:   2014-05-21 09:13:17 +0400
-categories: iscsi
+categories: disk
 tags: disk
 ---
 
-# iscsi
+# Iscsi
 
 [http://www.ibm.com/developerworks/ru/library/l-virt/](http://www.ibm.com/developerworks/ru/library/l-virt/)
 
-
-
 [http://www.video-ip.ru/support/article-iscsi-4.htm](http://www.video-ip.ru/support/article-iscsi-4.htm)
+
 [http://www.opennet.ru/tips/info/2037.shtml](http://www.opennet.ru/tips/info/2037.shtml)
 [http://xgu.ru/wiki/iSCSI](http://xgu.ru/wiki/iSCSI)
+
 [http://www.nixp.ru/news/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B-Open-iSCSI-%D0%B8-Linux-iSCSI-%D0%BE%D0%B1%D1%8A%D0%B5%D0%B4%D0%B8%D0%BD%D1%8F%D1%8E%D1%82%D1%81%D1%8F.html](http://www.nixp.ru/news/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%8B-Open-iSCSI-%D0%B8-Linux-iSCSI-%D0%BE%D0%B1%D1%8A%D0%B5%D0%B4%D0%B8%D0%BD%D1%8F%D1%8E%D1%82%D1%81%D1%8F.html)
+
 [http://www.bog.pp.ru/hard/scsi.html](http://www.bog.pp.ru/hard/scsi.html)
+
 [http://www.opennet.ru/base/sys/iscsi_fedora.txt.html](http://www.opennet.ru/base/sys/iscsi_fedora.txt.html)
+
 [http://armanenshaft-linux.blogspot.ru/2009/04/iscsi-ubuntu-linux.html](http://armanenshaft-linux.blogspot.ru/2009/04/iscsi-ubuntu-linux.html)
+
 [http://udatov.blogspot.ru/2010_05_01_archive.html](http://udatov.blogspot.ru/2010_05_01_archive.html)
+
 [http://www.cuddletech.com/articles/iscsi/index.html](http://www.cuddletech.com/articles/iscsi/index.html)
+
 [http://habrahabr.ru/post/97529/](http://habrahabr.ru/post/97529/)
-storusint.com/articles/ipsan_iscsi.htm
+
+[http://storusint.com/articles/ipsan_iscsi.htm](http://storusint.com/articles/ipsan_iscsi.htm)
 
 
-192.168.1.44	Сервер для управления esxi, c которого цепляемся на 192.168.200.200 (esxi) 
+192.168.1.44	 Сервер для управления esxi, c которого цепляемся на 192.168.200.200 (esxi) 
 192.168.200.200(esxi)-192.168.200.201(debian) это сеть для iscsi
 
 На самом дебиане сделан raid из 2 дисков по ТБ, рейд не программный, а железный
 Контроллер для рейда интеловский
 
+```
 root@NAS1:/proc/sys/dev/scsi# cat /etc/scst.conf
 #HANDLER vdisk_blockio {
 #       DEVICE disk01 {
@@ -57,13 +65,14 @@ TARGET_DRIVER iscsi {
                 enabled 1
         }
 }
-
+```
 
 Получается iqn.2006-10.net.vlnb:tgt  - это IQN для хранилища
 LUN 0 - это раздел /dev/sda4, на котором развёрнут lvm
 Только в этом lvm нихрена нету. Никаких pv и vg и lv
 Во всяком случае 
 
+```
 fdisk -l /dev/sda
 
 Disk /dev/sda: 999.0 GB, 998999326720 bytes
@@ -87,7 +96,7 @@ Partition 3 does not end on cylinder boundary.
 
 tcp        0      0 0.0.0.0:3260            0.0.0.0:*               LISTEN      1489/iscsi-scstd
 tcp6       0      0 :::3260                 :::*                    LISTEN      1489/iscsi-scstd
-
+```
 
 
 
@@ -162,10 +171,7 @@ iSCSI Initiator — это тот сервер, который подключа�
 
 
 
-
-
-
-Iscsi multipath
+## Iscsi multipath
 
 [http://ivirt-it.ru/2013/08/multipath-io-iscsi/](http://ivirt-it.ru/2013/08/multipath-io-iscsi/)
 

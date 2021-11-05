@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "grub"
+title:  "Смена grub2 на grub"
 date:   2017-11-01 06:07:27 +0300
-categories: grub
-tags: disk
+categories: disk
+tags: disk grub
 ---
 
-# grub
+# Cмена grub2 на grub
  При смене grub2 на grub, файл с меню оказался чистым
 
 
@@ -22,22 +22,39 @@ dd if=/dev/vg_kvmhost1/lv_suse_monit-copy of=/dev/vg_kvmhost1/lv_suse_monit
 ```
 
 [http://www.modx.cc/linux/konfiguracziya-grub/](http://www.modx.cc/linux/konfiguracziya-grub/)
+
 [http://help.ubuntu.ru/wiki/grub_legacy](http://help.ubuntu.ru/wiki/grub_legacy)
+
 [http://www.gnu.org/software/grub/manual/grub.html#boot](http://www.gnu.org/software/grub/manual/grub.html#boot)
+
 [http://rus-linux.net/MyLDP/boot/vernem-grub-legacy.html](http://rus-linux.net/MyLDP/boot/vernem-grub-legacy.html)
+
 [http://www.ibm.com/developerworks/ru/library/l-lpic1-v3-102-2/index.html](http://www.ibm.com/developerworks/ru/library/l-lpic1-v3-102-2/index.html)
+
 [https://wiki.archlinux.org/index.php/GRUB_Legacy_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29](https://wiki.archlinux.org/index.php/GRUB_Legacy_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29)
+
 [http://help.ubuntu.ru/wiki/%D0%B2%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_grub_legacy](http://help.ubuntu.ru/wiki/%D0%B2%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_grub_legacy)
+
 [http://www.helplinux.ru/wiki/kb:grub1](http://www.helplinux.ru/wiki/kb:grub1)
+
 [https://wiki.gentoo.org/wiki/GRUB_Error_Reference](https://wiki.gentoo.org/wiki/GRUB_Error_Reference)
+
 [http://sysadmins.ru/post9049557.html](http://sysadmins.ru/post9049557.html)
+
 [http://wiki.unixforum.org/wiki/%D0%9D%D0%B5%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D0%B5_%D1%87%D0%B0%D1%81%D1%82%D0%BE_%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B0%D1%8E%D1%89%D0%B8%D0%B5%D1%81%D1%8F_%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B8_GRUB](http://wiki.unixforum.org/wiki/%D0%9D%D0%B5%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D0%B5_%D1%87%D0%B0%D1%81%D1%82%D0%BE_%D0%B2%D1%81%D1%82%D1%80%D0%B5%D1%87%D0%B0%D1%8E%D1%89%D0%B8%D0%B5%D1%81%D1%8F_%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B8_GRUB)
+
 [http://www.supergrubdisk.org/wiki/Howto_Fix_Grub](http://www.supergrubdisk.org/wiki/Howto_Fix_Grub)
+
 [http://rus-linux.net/MyLDP/boot/GRUB-bootloader-Full-tutorial.html](http://rus-linux.net/MyLDP/boot/GRUB-bootloader-Full-tutorial.html)
+
 [http://forum.puppyrus.org/index.php?topic=1510.0](http://forum.puppyrus.org/index.php?topic=1510.0)
+
 [http://www.lexpr.ru/node/353](http://www.lexpr.ru/node/353)
+
 [http://xgu.ru/wiki/GRUB](http://xgu.ru/wiki/GRUB)
+
 [https://wiki.archlinux.org/index.php/GRUB_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29](https://wiki.archlinux.org/index.php/GRUB_%28%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%29)
+
 
 Для упражненьица загрузим Slackware. Введите следующие команды в приглашение командной строки GRUB:
 ```
@@ -45,15 +62,6 @@ grub> root (hd0,1)
 grub> kernel /vmlinuz root=/dev/sda2 ro vga=791
 grub> boot
 ```
-
-
-
-
-
-
-
-
-
 
 
 
@@ -83,7 +91,6 @@ load_video
 
 
 ```
-
 ###Don't change this comment - YaST2 identifier: Original name: linux###
 title GNU GRUB 2 -- openSUSE 12.2 - GNU GRUB 2
     kernel (hd0,0)/grub2/core.img root=/dev/disk/by-id/md-uuid-e6ca1254:f43049f4:b7baf1e0:f3e26580 apm=off acpi=off mce=off barrier=off ide=nodma idewait=50 i8042.nomux psmouse.proto=bare irqpoll pci=nommconf resume=/dev/md1 splash=silent quiet showopts vga=0x314
@@ -101,6 +108,8 @@ title Failsafe -- openSUSE 12.2 - 3.4.11-2.16
     initrd /initrd-3.4.11-2.16-default
 ```
 
+
+```
 kernel /vmlinuz-3.7.10-1.40-desktop
 initrd /boot/initrd-3.7.10-1.40-desktop
 
@@ -109,48 +118,29 @@ System.map-3.7.10-1.36-desktop  boot.readme                 grub2               
 System.map-3.7.10-1.40-desktop  config-3.7.10-1.36-desktop  grub2-efi                   symvers-3.7.10-1.36-desktop.gz   vmlinux-3.7.10-1.36-desktop.gz   vmlinuz-3.7.10-1.40-desktop
 backup_mbr                      config-3.7.10-1.40-desktop  initrd                      symvers-3.7.10-1.40-desktop.gz   vmlinux-3.7.10-1.40-desktop.gz
 boot                            grub                        initrd-3.7.10-1.36-desktop  sysctl.conf-3.7.10-1.36-desktop  vmlinuz
+```
 
 
 
 
-
-
+```
 /dev/vda1       swap                 swap       defaults              0 0
 /dev/vda2       /                    ext4       acl,user_xattr        1 1
 
 
 /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001-part1 swap                 swap       defaults              0 0
 /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001-part2 /                    ext4       acl,user_xattr        1 1
+```
+
+
+
+`root=UUID=7860e68b-a70c-49a0-92a3-a5201e865f56  console=tty0 console=ttyS0,9600n8 `
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-root=UUID=7860e68b-a70c-49a0-92a3-a5201e865f56  console=tty0 console=ttyS0,9600n8 
-
-
-
-
-
-
-
-
-
-
-
+```
 ### BEGIN /etc/grub.d/10_linux ###
 menuentry 'openSUSE 12.3' --class 'opensuse-12-3' --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-7860e68b-a70c-49a0-92a3-a5201e865f56' {
         load_video
@@ -243,8 +233,4 @@ t x11failsafe
                 initrd  /boot/initrd-3.7.10-1.36-desktop
         }
 }
-
-
-
-
-
+```

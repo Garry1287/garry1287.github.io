@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "grub2"
+title:  "Grub 2"
 date:   2016-07-20 06:38:03 +0300
-categories: grub2
+categories: disk
 tags: disk
 ---
 
-# grub2
-
+# Grub 2
+```
 Установка grub2
 mount /dev/vda2 /mnt
 mount --bind /dev /mnt/dev
@@ -15,42 +15,43 @@ mount --bind /proc /mnt/proc
 chroot /mnt
 export PS1="(chroot) $PS1"
 grub2-install /dev/vda
+```
 
-
-
+```
 cacti:/mnt # umount /mnt/sys
 cacti:/mnt # umount /mnt/dev
 cacti:/mnt # umount /mnt/sys
+```
 
-
-
-
-
-
-
-
-grub2-mkconfig -o /boot/grub2/grub.cfg
+`grub2-mkconfig -o /boot/grub2/grub.cfg`
 
 
 
 
 help.ubuntu.ru/wiki/grub
 [https://ru.wikibooks.org/wiki/Grub_2](https://ru.wikibooks.org/wiki/Grub_2)
+
 [http://rus-linux.net/MyLDP/boot/GRUB2-full-tutorial.html](http://rus-linux.net/MyLDP/boot/GRUB2-full-tutorial.html)
+
 [http://linux.nedze.com/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-grub2/](http://linux.nedze.com/%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-grub2/)
+
 [https://ru.wikibooks.org/wiki/Grub_2](https://ru.wikibooks.org/wiki/Grub_2)
+
 [http://open-suse.ru/content/vsstanovlenie-grub2](http://open-suse.ru/content/vsstanovlenie-grub2)
+
 [http://habrahabr.ru/post/141320/](http://habrahabr.ru/post/141320/)
 
 
-Восстановление
+## Восстановление
 [http://wiki.ayac.ru/ubuntu/vosstanovlenie-grub2-s-livecd](http://wiki.ayac.ru/ubuntu/vosstanovlenie-grub2-s-livecd)
+
 [http://startubuntu.ru/?p=95](http://startubuntu.ru/?p=95)
+
 Обратить внимание на монтирование /dev
 
 [https://www.centos.org/forums/viewtopic.php?t=28942](https://www.centos.org/forums/viewtopic.php?t=28942)
 
-
+```
 /dev/vda2: x86 boot sector; GRand Unified Bootloader, stage1 version 0x3, LBA flag 0x1, 1st sector stage2 0x1a69700, GRUB version 0.97, code offset 0x48
 (hd0)   /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001
 
@@ -68,11 +69,11 @@ help.ubuntu.ru/wiki/grub
 /dev/sda: x86 boot sector; GRand Unified Bootloader, stage1 version 0x3, boot drive 0x80, 1st sector stage2 0x849f8, GRUB version 0.94; partition 1: ID=0x83, active, starthead 32, startsector 2048, 1024000 sectors; partition 2: ID=0x8e, starthead 221, startsector 1026048, 103831552 sectors, code offset 0x48
 [root@host grub]# file -s /dev/vda
 /dev/vda: x86 boot sector; partition 1: ID=0x82, starthead 32, startsector 2048, 2103296 sectors; partition 2: ID=0x83, active, starthead 13, startsector 2105344, 39837696 sectors, code offset 0xc0
+```
 
+`(hd0)   /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001`
 
-(hd0)   /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001
-
-
+```
 # BEGIN /etc/grub.d/10_linux ###
 menuentry 'openSUSE 12.3' --class 'opensuse-12-3' --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-7860e68b-a70c-49a0-92a3-a5201e865f56' {
         load_video
@@ -162,6 +163,7 @@ submenu 'Advanced options for openSUSE 12.3' $menuentry_id_option 'gnulinux-adva
         }
 }
 
+```
 
 
 
@@ -174,8 +176,7 @@ submenu 'Advanced options for openSUSE 12.3' $menuentry_id_option 'gnulinux-adva
 
 
 
-
-
+```
 #
 # /etc/fstab
 # Created by anaconda on Sat Sep 21 18:56:57 2013
@@ -190,18 +191,11 @@ tmpfs                   /dev/shm                tmpfs   defaults        0 0
 devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
 sysfs                   /sys                    sysfs   defaults        0 0
 proc                    /proc                   proc    defaults        0 0
+```
 
 
 
-
-
-
-
-
-
-
-
-
+```
 /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001-part1 swap                 swap       defaults              0 0
 /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001-part2 /                    ext4       acl,user_xattr        1 1
 proc                 /proc                proc       defaults              0 0
@@ -209,17 +203,9 @@ sysfs                /sys                 sysfs      noauto                0 0
 debugfs              /sys/kernel/debug    debugfs    noauto                0 0
 usbfs                /proc/bus/usb        usbfs      noauto                0 0
 devpts               /dev/pts             devpts     mode=0620,gid=5       0 0
+```
 
-
-
-
-
-
-
-
-
-
-
+```
 serial --speed=9600 --unit=0 --word=8 --parity=no --stop=1
 terminal_input serial
 terminal_output serial
@@ -229,7 +215,9 @@ elif sleep --interruptible 0 ; then
   set timeout=8
 fi
 ### END /etc/grub.d/00_header ###
+```
 
+```
 ### BEGIN /etc/grub.d/10_linux ###
 menuentry 'openSUSE 12.3' --class 'opensuse-12-3' --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-7860e68b-a70c-49a0-92a3-a5201e865f56' {
         load_video
@@ -322,7 +310,7 @@ a0-92a3-a5201e865f56' {
 }
 
 ### END /etc/grub.d/10_linux ###
-
+```
 
 
 

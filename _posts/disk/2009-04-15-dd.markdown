@@ -1,13 +1,15 @@
 ---
 layout: post
-title:  "dd"
+title:  "Утилита dd"
 date:   2009-04-15 17:09:22 +0400
-categories: dd
+categories: disk
 tags: disk
 ---
 
-# dd
-# dd if=/dev/sda of=/dev/sdb bs=4096
+# Утилита dd
+```
+ dd if=/dev/sda of=/dev/sdb bs=4096
+```
 
 В ядре Linux есть merging операций. В HDD есть свой многомегабайтный буфер операций и своя микропрограмма на этот счёт. Так что разницы практически никакой.
 

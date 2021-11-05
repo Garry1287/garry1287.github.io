@@ -1,37 +1,52 @@
 ---
 layout: post
-title:  "iscsi3"
+title:  "Подборка ссылок об iscsi"
 date:   2014-04-21 02:01:28 +0400
-categories: iscsi3
+categories: disk
 tags: disk
 ---
 
-# iscsi3
-основные команды для управления iscsi таргетом scst
+# Подборка ссылок об iscsi
+
+Основные команды для управления iscsi таргетом scst
+
 [http://www.colobridge.net/wiki/%D1%81%D0%B5%D1%82%D0%B8/%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%BD%D1%8B%D0%B5_%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B_%D0%B4%D0%BB%D1%8F_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_iscsi_%D1%82%D0%B0%D1%80%D0%B3%D0%B5%D1%82%D0%BE%D0%BC_scst](http://www.colobridge.net/wiki/%D1%81%D0%B5%D1%82%D0%B8/%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%BD%D1%8B%D0%B5_%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B_%D0%B4%D0%BB%D1%8F_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_iscsi_%D1%82%D0%B0%D1%80%D0%B3%D0%B5%D1%82%D0%BE%D0%BC_scst)
+
 [http://www.vmgu.ru/search/ISCSI](http://www.vmgu.ru/search/ISCSI)
+
 [http://xaxatyxa.ru/_vmware/podklyuchaem-iscsi-freenas-k-esxi.html](http://xaxatyxa.ru/_vmware/podklyuchaem-iscsi-freenas-k-esxi.html)
+
 [http://bsdadmin.ru/index.php/vmware/316-freenas-iscsi-vmware-esxi4](http://bsdadmin.ru/index.php/vmware/316-freenas-iscsi-vmware-esxi4)
+
 [http://dalas.ru/archive/index.php?t-17679.html&s=9582caca9b130540fb48c2872ece993e](http://dalas.ru/archive/index.php?t-17679.html&s=9582caca9b130540fb48c2872ece993e)
+
 [https://forums.openfiler.com/index.php?/topic/4810-scst-unable-to-start/](https://forums.openfiler.com/index.php?/topic/4810-scst-unable-to-start/)
+
 [https://ru.intel.com/business/community/?automodule=blog&blogid=44433&showentry=2449](https://ru.intel.com/business/community/?automodule=blog&blogid=44433&showentry=2449)
+
 [http://forum.kamenev.su/index.php?PHPSESSID=n2499v3un7ibm8vsbdosr7mbm6&topic=17.0](http://forum.kamenev.su/index.php?PHPSESSID=n2499v3un7ibm8vsbdosr7mbm6&topic=17.0)
+
 [http://www.itmobility.ru/index.php/Iscsi_%D0%B2_linux_-_%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0](http://www.itmobility.ru/index.php/Iscsi_%D0%B2_linux_-_%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0)
+
 [http://habrahabr.ru/post/97529/](http://habrahabr.ru/post/97529/)
+
 [http://habrahabr.ru/post/98463/](http://habrahabr.ru/post/98463/)
+
 [https://forums.openfiler.com/index.php?/topic/4810-scst-unable-to-start/](https://forums.openfiler.com/index.php?/topic/4810-scst-unable-to-start/)
+
 [http://wiki.alpinelinux.org/wiki/High_performance_SCST_iSCSI_Target_on_Linux_software_Raid](http://wiki.alpinelinux.org/wiki/High_performance_SCST_iSCSI_Target_on_Linux_software_Raid)
+
 [http://linux-iscsi.org/wiki/ISCSI](http://linux-iscsi.org/wiki/ISCSI)
 
-копирование машины
+### Копирование машины
 [http://gnu.su/plugins/forum/forum_viewtopic.php?633](http://gnu.su/plugins/forum/forum_viewtopic.php?633)
 
 
-Бекап с esxi
+### Бекап с esxi
 [http://forum.ru-board.com/topic.cgi?forum=8&topic=44361](http://forum.ru-board.com/topic.cgi?forum=8&topic=44361)
 
 
-esxi ssh cli
+### esxi ssh cli
 [http://xeon.at.ua/publ/spravochnye_materialy/esxi_ssh_cli/6-1-0-359](http://xeon.at.ua/publ/spravochnye_materialy/esxi_ssh_cli/6-1-0-359)
 
 
@@ -39,10 +54,13 @@ esxi ssh cli
 [http://scst.sourceforge.net/iscsi-scst-howto.txt](http://scst.sourceforge.net/iscsi-scst-howto.txt)
 
 
-iscsi подключение esxi
-[http://www.osp.ru/win2000/2010/12/13007864/](http://www.osp.ru/win2000/2010/12/13007864/)
-[http://www.vmgu.ru/articles/vmware-esx-storages](http://www.vmgu.ru/articles/vmware-esx-storages)
-awmstor.blogspot.ru/2010/02/iscsi-storage-vmware-esx.html
 
-iscsi подключение kvm
+### Iscsi подключение esxi
+[http://www.osp.ru/win2000/2010/12/13007864/](http://www.osp.ru/win2000/2010/12/13007864/)
+
+[http://www.vmgu.ru/articles/vmware-esx-storages](http://www.vmgu.ru/articles/vmware-esx-storages)
+
+[http://awmstor.blogspot.ru/2010/02/iscsi-storage-vmware-esx.html](http://awmstor.blogspot.ru/2010/02/iscsi-storage-vmware-esx.html)
+
+### Iscsi подключение kvm
 [http://ivirt-it.ru/2013/01/openfiler-part-3-connect-to-kvm-host/](http://ivirt-it.ru/2013/01/openfiler-part-3-connect-to-kvm-host/)

@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "fdisk"
+title:  "Утилита fdisk"
 date:   2014-01-06 16:44:18 +0400
-categories: fdisk
+categories: disk
 tags: disk
 ---
 
@@ -51,38 +51,28 @@ Command action
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-0x83 - linux
-0x82 - swap
-0x8E - LVM
-0xFD - Raid
-0x0C - Fat32
-0x07 - NTFS
-0x0A - Hibernation
+- 0x83 - linux
+- 0x82 - swap
+- 0x8E - LVM
+- 0xFD - Raid
+- 0x0C - Fat32
+- 0x07 - NTFS
+- 0x0A - Hibernation
 
 [http://www.oldnix.org/fdisk-linux/](http://www.oldnix.org/fdisk-linux/)
+
 [http://vds-admin.ru/unix-commands/fdisk](http://vds-admin.ru/unix-commands/fdisk)
 
 
 Создадим место под «/var».
-
+```
 Command (m for help): n
 All primary partitions are in use
 Adding logical partition 6
 First sector (125194608-488397167): 125194608
 Last sector, +sectors or +size{K,M,G} (125194608-488397167, default 488397167): +8G
 Partition 6 of type Linux and of size 8 GiB is set
-
+```
 
 На этом операции с fdisk-ом не закончены. Нам нужно установить флаг загрузочного раздела.
 
@@ -90,13 +80,13 @@ Command (m for help): a
 Partition number (1-6): 1
 
 Далее, нам нужно изменить метку типа раздела, для «swap». Во время выбора, fdisk нам предложит напомнить типы известных разделов, для этого после вывода <Hex code (type L list codes): > введите большую «L» и найдите цифру нужного раздела.
-
+```
 Command (m for help): t
 Partition number (1-6): 2
 Hex code (type L list codes): 82
-
+```
 Потом, выводим наши созданные разделы на экран, убеждаемся, что все в порядке.
-
+```
 Command (m for help): pDisk /dev/sda: 250.1 GB, 250059350016 bytes, 488397168 sectors
 Units = sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
@@ -113,14 +103,14 @@ Device	Boot	Start	End	Blocks	Id	System
 /dev/sda7	 	140825853	144729584	1951866	83	Linux
 /dev/sda8	 	144729648	203318639	29294496	83	Linux
 /dev/sda9	 	203318703	488397167	142539232+	83	Linux
-
+```
 Сохраняемся, на этом все, с fdisk закончили.
-
+```
 Command (m for help): w
 The partition table has been altered!
 Calling ioctl() to re-read partition table.
 Syncing disks.
-
+```
 
 
 
