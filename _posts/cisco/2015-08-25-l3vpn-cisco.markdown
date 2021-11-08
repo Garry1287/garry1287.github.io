@@ -1,0 +1,110 @@
+---
+layout: post
+title:  "Пример настройки L3VPN"
+date:   2015-08-25 12:09:23 +0400
+categories: cisco
+tags: cisco
+---
+
+# Пример настройки L3VPN
+
+```
+ip vrf euroset-pl.mira4
+ description #Euroset-PL.Mira4
+ rd 20866:416
+ route-target export 20866:4160
+ route-target import 20866:4160
+ maximum routes 500 100
+
+
+interface GigabitEthernet0/0.813
+ description #IPVPN Euroset-PL.Mira4  #garry 5.04.2012
+ encapsulation dot1Q 813
+ ip vrf forwarding euroset-pl.mira4
+ ip address 172.16.15.221 255.255.255.252
+ no cdp enable
+
+ address-family ipv4 vrf euroset-pl.mira4
+ redistribute connected
+ redistribute static
+ no synchronization
+ exit-address-family
+
+
+ip route vrf euroset-pl.mira4 0.0.0.0 0.0.0.0 172.16.15.222
+```
+
+
+Euroset-pl.mira4-client
+
+```
+ip vrf euroset-pl.mira4
+ description #Euroset-PL.Mira4
+ rd 20866:416
+ route-target export 20866:4160
+ route-target import 20866:4160
+ maximum routes 500 100
+
+
+interface Fa0/0.2005
+ description #IPVPN Client-side Euroset-PL.Mira4  #garry 5.04.2012
+ encapsulation dot1Q 2005
+ ip vrf forwarding euroset-pl.mira4
+ ip address 172.16.15.225 255.255.255.252
+ no cdp enable
+
+ip route vrf euroset-pl.mira4 10.168.94.80 255.255.255.240 172.16.15.226
+ip route vrf euroset-pl.mira4 10.77.55.16 255.255.255.240 172.16.15.226
+ip route vrf euroset-pl.mira4 10.0.98.136 255.255.255.252 172.16.15.226
+ip route vrf euroset-pl.mira4 172.23.48.21 255.255.255.255 172.16.15.226
+
+
+
+
+
+ address-family ipv4 vrf euroset-pl.mira4
+ redistribute connected
+ redistribute static
+ default-information originate
+```
+
+
+
+```
+iptables -I forward_int 1 -s 192.168.66.2/32 -i vlan1021 -o vlan10 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
+
+iptables -I FORWARD 2 -s 192.168.66.2/32 -i vlan1021 -o vlan10 -j ACCEPT
+```
+
+```
+ip policy route-map test-nat
+
+
+access-list 37 permit 192.168.66.2 0.0.0.1
+access-list 37 deny any
+
+route-map test-nat permit 10
+ description #Test NAT redirection
+ match ip address 37
+ set ip next-hop 192.168.200.1
+```
+
+
+
+
+
+
+```
+CDE-C2#ping vrf euroset-pl.mira4 172.16.15.226
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.15.226, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 44/46/48 ms
+CDE-C2#ping vrf euroset-pl.mira4 172.16.15.226 repeat 100 
+
+Type escape sequence to abort.
+Sending 100, 100-byte ICMP Echos to 172.16.15.226, timeout is 2 seconds:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+```

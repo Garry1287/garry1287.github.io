@@ -2,7 +2,7 @@
 layout: post
 title:  "Об сisco ios"
 date:   2016-12-26 15:16:28 +0300
-categories: cisco_ios
+categories: cisco
 tags: cisco
 ---
 
