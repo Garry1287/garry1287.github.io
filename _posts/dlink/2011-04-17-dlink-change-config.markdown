@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "dlink-change-config"
+title:  "Изменения конфига dlink"
 date:   2011-04-17 23:13:39 +0400
 categories: dlink
 tags: dlink
 ---
 
 # dlink-change-config
-
+```
 enable loopdetect
 config loopdetect recover_timer 60
 config loopdetect interval 10
@@ -79,15 +79,6 @@ config snmp system_location rudnik-vchm
 config snmp system_contact iptech@sc.ru
 
 
-
-
-
-
-
-
-
-
-
 config traffic control_trap both
 config traffic control 1-24 broadcast enable multicast enable unicast disable action drop threshold 64 countdown 5 time_interval 5
 config traffic control 25-28 broadcast disable multicast disable unicast disable action drop threshold 64 countdown 0 time_interval 5
@@ -139,3 +130,4 @@ create snmp group WriteGroup v2c read_view CommunityView write_view CommunityVie
 create snmp community HKeGeUfo view CommunityView read_write
 create snmp community SFgJZAc2 view CommunityView read_only
 create snmp user initial initial 
+```

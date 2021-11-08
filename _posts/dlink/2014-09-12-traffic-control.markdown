@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "traffic-control"
+title:  "Traffic control на dlink"
 date:   2014-09-12 09:10:08 +0400
 categories: dlink
 tags: dlink
 ---
 
-# traffic-control
+# Traffic-control
+```
 config traffic control_trap both
 config traffic control 1-8 broadcast enable multicast enable unicast disable action drop threshold 64 countdown 5 time_interval 5
 
@@ -39,6 +40,7 @@ config traffic control 1-3 broadcast enable multicast enable unicast disable act
 config traffic control 25-26 broadcast disable action shutdown threshold 128000 time_interval 5 countdown 0
 config traffic control 25-26 multicast disable action shutdown threshold 128000
 config traffic control 4-5 unicast disable threshold 128000
+```
 
 На коммутаторах серии DES-3200 на прошивке 1.52.b007 threshold возможно указывать лишь от 64 pps. Возможно ли в будущих прошивках сделать возможным указывать этот параметр от 0, как например в 3526.
 А в 3526 нехватает возможности мониторить шторм с конкретного порта, а не с группы портов как в текущих прошивках.
@@ -50,7 +52,7 @@ config traffic control 4-5 unicast disable threshold 128000
 64 Kbit/s - минимально возможное значение, поддерживаемое чипсетом, меньше сделать невозможно.
 
 
-Action
+## Action
 shutdown – Для обнаружения пакетного шторма будет использоваться
 программный механизм управления трафиком. При обнаружении шторма
 порт будет закрыт для всех пакетов, кроме STP BPDU-пакетов,
@@ -96,12 +98,12 @@ Time_interval означает период в секундах с которы�
  коммутатор положил порт, и через какое-то время сам его поднял?
 
 Нормальные настройки
-
+```
 config traffic control 1-5 broadcast enable multicast enable
 config traffic control 1-5 action drop
 config traffic control 1-5 threshold 64 countdown 10 time_interval 10
 config traffic trap both
-
+```
 По поводу threshold = 0 трафик просто отбрасывается.
 
 На клиентских портах лучше использовать drop режим и ставить макс 10 пакетов в секунду, этого будет достаточно для нормальной работы и для безопасности сети.
@@ -124,6 +126,6 @@ config traffic trap both
 64 pps на одного, в линейке 6-8 коммутаторов
 ну наверно 12288
 
-
+```
 config traffic control  1-27 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
-
+```

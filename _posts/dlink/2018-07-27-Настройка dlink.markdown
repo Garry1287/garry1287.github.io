@@ -8,37 +8,22 @@ tags: dlink
 
 # Настройка dlink
 
-
-22,126,688,847,868,881,899
-
-
-22,98,126,847,868,877,881,2031,2033
-
-
-
-логгировани
-
+## Логгирование
+```
 enable syslog
 create syslog host 1 ipaddress 192.168.113.1 severity informational facility local6 udp_port 514  state enable 
 config log_save_timing log_trigger
-
-
-
-ntp
-
-
+```
+## Ntp
+```
 enable sntp
 config time_zone operator + hour 4 min 0
 config sntp primary 81.20.196.53 secondary 81.20.192.19 poll-interval 720
 config dst disable
 
-
-
 broadcast multicast
 config traffic control 1-24 broadcast enable multicast enable unicast disable action drop threshold 64 countdown 5 time_interval 5
 config traffic control 25-28 broadcast disable multicast disable unicast disable action drop threshold 64 countdown 0 time_interval 5
-
-
 
 loop detect
 enable loopdetect
@@ -49,13 +34,12 @@ config loopdetect trap none
 config loopdetect ports 1-23 state enabled
 config loopdetect ports 24-28 state disabled
 
-
-
 cpu_interface_filtering
+```
 
 
-
-Ddos
+## Ddos
+```
 config dos_prevention dos_type land_attack action drop state enable           
 config dos_prevention dos_type blat_attack action drop state enable            
 config dos_prevention dos_type tcp_null_scan action drop state enable          
@@ -66,16 +50,16 @@ config dos_prevention dos_type ping_death_attack action drop state enable
 config dos_prevention dos_type tcp_tiny_frag_attack action drop state enable   
 config dos_prevention trap enable                                              
 config dos_prevention log enable
+```
 
-safeguard_engine
+## safeguard_engine
+```
 config safeguard_engine state enable utilization rising 90 falling 60 trap_log enable mode fuzzy
-
-snmp
-
+```
 
 
-
-ip
+## ip
+```
 create vlan mngt tag 22
 config vlan mngt add tagged 22
 config ipif System vlan mngt ipaddress 192.168.113.253/24 state enable
@@ -86,6 +70,6 @@ create iproute default 192.168.113.1 1
 config snmp system_name s64-s0.sc.int
 config snmp system_location Sovetskaya64 
 config snmp system_contact iptech@sc.ru
-
+```
 
 

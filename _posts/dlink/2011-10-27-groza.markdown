@@ -1,35 +1,23 @@
 ---
 layout: post
-title:  "groza"
+title:  "Проблема на dlink во время грозы"
 date:   2011-10-27 00:46:46 +0400
 categories: dlink
 tags: dlink
 ---
 
-# groza
--A PREROUTING -s 85.142.161.242/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 44443 -j DNAT --to-destination 10.74.253.9:443
+# Groza
 
 
-
-
-
-
-pokupaem.switchi@gmail.com
-
-
-
-
- 1 322 355 101  
-1902003 
-
-
+```
  Unicast RX            15 743 78 447                    24          
  Multicast RX          4592815                       0           
  Broadcast RX          2 496 305                       0
+```
 
-
-
+```
 config traffic control 2:1-2:25 broadcast enable multicast enable unicast disable action drop threshold 545 countdown 5 time_interval 5  
+```
 
 Пофиксили в 
 1.52.B007

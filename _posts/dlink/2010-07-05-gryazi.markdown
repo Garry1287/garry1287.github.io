@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "gryazi"
+title:  "Настройка свитча по схеме gryazi"
 date:   2010-07-05 20:34:08 +0400
 categories: dlink
 tags: dlink
 ---
 
-# gryazi
-#Сайф гард
+# Настройка свитча по схеме gryazi
+```
 create account admin admin
 
 config safeguard_engine state enable
@@ -112,17 +112,8 @@ config erps log disable
 config erps trap disable
 disable erps
 
-
-
-
-
-
-
-
 #dhcp_snooping
-
-
-
 
 config vlan mngt delete 20
 config ports 20 state disable
+```

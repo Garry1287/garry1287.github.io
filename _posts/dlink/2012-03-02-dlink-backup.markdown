@@ -1,12 +1,15 @@
 ---
 layout: post
-title:  "dlink-backup"
+title:  "PPTP схема на dlink"
 date:   2012-03-02 00:55:25 +0400
 categories: dlink
 tags: dlink
 ---
 
-# dlink-backup
+# PPTP схема на dlink
+
+## DHCP
+```
 #1401 Skorohodova 11 p1
 subnet 172.20.140.64 netmask 255.255.255.224 {
         range 172.20.140.66 172.20.140.94;
@@ -86,8 +89,10 @@ subnet 172.20.140.192 netmask 255.255.255.224 {
  34, 224, 172, 20, 140, 193, 20, 81, 20, 192, 172, 20, 140, 193, 18, 93, 180, 0, 172, 20, 140, 193, 12, 172, 16, 172, 20, 140, 193, 17, 95, 179, 0, 172, 20,
 130, 193, 16, 10, 1, 172, 20, 140, 193, 32, 195, 191, 182, 2, 172, 20, 140, 193, 16, 178, 234, 172, 20, 140, 193;
 }
+```
 
-
+## Cisco
+```
 vlan 1401
   name skorohodova11p1
 
@@ -148,19 +153,17 @@ interface Vlan1405
  ip local-proxy-arp
  ip route-cache same-interface
 end
-
-7alY91HU
-
+```
 
 
 
 
 
-
+```
 snmpset -v 2c -c private 172.28.0.32 1.3.6.1.4.1.171.12.1.2.1.1.3.3 a 192.168.1.11
 snmpset -v 2c -c private 172.28.0.32 1.3.6.1.4.1.171.12.1.2.1.1.4.3 i 2           
 snmpset -v 2c -c private 172.28.0.32 1.3.6.1.4.1.171.12.1.2.1.1.5.3 s 172.28.0.32.cfg
 snmpset -v 2c -c private 172.28.0.32 1.3.6.1.4.1.171.12.1.2.1.1.7.3 i 2              
 snmpset -v 2c -c private 172.28.0.32 1.3.6.1.4.1.171.12.1.2.1.1.8.3 i 3
-
+```
 

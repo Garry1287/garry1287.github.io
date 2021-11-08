@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "lldp"
+title:  "Настройка lldp"
 date:   2013-12-05 11:14:30 +0400
 categories: dlink
 tags: dlink

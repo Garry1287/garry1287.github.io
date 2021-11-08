@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "show_error"
+title:  "Понимание show_error на Dlink"
 date:   2012-11-27 03:00:59 +0400
 categories: dlink
 tags: dlink
 ---
 
-# show_error
+# Show_error
 CRC Error Counts otherwise valid packets that did not end on a byte (octet) boundary.
 
 UnderSize The number of packets detected that are less than the minimum permitted packets size of 64 bytes and have a good CRC. Undersize packets usually indicate collision fragments, a nor-mal network occurrence.

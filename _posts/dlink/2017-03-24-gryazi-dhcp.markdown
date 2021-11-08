@@ -1,18 +1,14 @@
 ---
 layout: post
-title:  "gryazi-dhcp"
+title:  "Настройка dhcp по схеме в г.Грязи"
 date:   2017-03-24 13:54:28 +0300
 categories: dlink
 tags: dlink
 ---
 
 # gryazi-dhcp
-Гермес Тракт
-Адеко
-Банк МТС - идезит банкомат
 
-Почта
-
+```
 #  Pravda61
 subnet 172.28.5.0 netmask 255.255.255.224 {
         range 172.28.5.2 172.28.5.30;
@@ -90,4 +86,4 @@ subnet 172.28.5.224 netmask 255.255.255.224 {
         option routers 172.28.5.225;
         option domain-name-servers 172.28.0.4,217.150.34.129;
 }
-
+```

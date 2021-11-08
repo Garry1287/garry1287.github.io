@@ -1,11 +1,14 @@
 ---
 layout: post
-title:  "bpdu_qinq_stp"
+title:  "Настройка bpdu для qinq"
 date:   2014-11-07 06:53:44 +0300
 categories: dlink
 tags: dlink
 ---
 
+# Настройка bpdu для qinq
+
+```
 # bpdu_qinq_stp
  config bpdu_tunnel ports 22 type uplink                                                                                                                     
 disable bpdu_tunnel
@@ -16,13 +19,9 @@ config address_binding ip_mac ports 1-24 state disable allow_zeroip disable forw
 config address_binding ip_mac ports 1-24 mode arp stop_learning_threshold 500 
 config address_binding dhcp_snoop max_entry ports 1-24 limit 5
 
+```
 
-
-
-
-
-
-ониторинг порта показал, что после включения QinQ на DES-3200-26, коммутатор начинает передавать и принимать BPDU на адрес 01:80:C2:00:00:08, вместо 01:80:C2:00:00:00. В то время как DGS продолжает использовать адрес 01:80:C2:00:00:00 в своих BPDU пакетах. В итоге два коммутатора просто не видят друг друга по STP.
+Мониторинг порта показал, что после включения QinQ на DES-3200-26, коммутатор начинает передавать и принимать BPDU на адрес 01:80:C2:00:00:08, вместо 01:80:C2:00:00:00. В то время как DGS продолжает использовать адрес 01:80:C2:00:00:00 в своих BPDU пакетах. В итоге два коммутатора просто не видят друг друга по STP.
 
 Уважаемые сотрудники D-Link, хотелось бы получить хоть какой-нибудь комментарий по данному вопросу, а то все как в пустоту...
 
@@ -51,7 +50,7 @@ DGS-3100 и DES-3200 не получится объединить в STP кол�
 
 
 Как выяснилось - если очень хочется, то можно:
-config stp nni_bpdu_addr dot1d
+`config stp nni_bpdu_addr dot1d`
 
 В этом случае будьте аккуратным с stp, чтобы у вас не перепутались клиентские и операторские деревья.
 
@@ -68,7 +67,7 @@ config stp nni_bpdu_addr dot1d
 
 
 Это когда приоритет для DGS выше
-
+```
 k9-s6#sh spanning-tree mst
 
 ##### MST0    vlans mapped:   1-21,23-25,27-1998,2000-4094
@@ -105,7 +104,7 @@ Interface        Role Sts Cost      Prio.Nbr Type
 Fa0/3            Mstr FWD 200000    128.3    P2p Bound(RSTP) 
 Fa0/4            Altn BLK 200000    128.4    P2p Bound(RSTP) 
 Fa0/24           Desg FWD 200000    128.24   P2p Edge 
-
+```
 
 
 Cisco так не работает. В статье написано
@@ -113,11 +112,11 @@ master port - это линк к корневому (CIST), который на�
 
 
 Приоритет для CIST устанавливается в 0 instanse
-spanning-tree mst 0 priority 16384
+`spanning-tree mst 0 priority 16384`
 
 Конфиги в mst-rstp 
 
-
+```
 (3200-28)========(3627G)==========(K9-S6)
 52 влан		23,24 UNI		mstp
 53 влан		1999 transp		0 инстанс все	
@@ -125,13 +124,13 @@ spanning-tree mst 0 priority 16384
 26 mng		21,22 NNI		2 (1999)
 		Vlan_tra для 26		3,4 порты транк
 		на 23,24 порту		
-
+```
 
 1. Новые рутовые приоритеты 
 2. Остальные приоритеты (поменять приоритет для 0 инстанса с ctd-s1 на ctd-s6)
 3. Включить config stp nni_bpdu_addr dot1d
 4. Настроить порты на DGS v21a-s0
-
+```
 config stp ports 1:24 fbpdu enable
 config stp ports 1:24 externalCost auto  edge false p2p auto state enable restricted_role false restricted_tcn false lbd disable
 
@@ -139,20 +138,22 @@ config stp ports 1:25 fbpdu enable
 config stp ports 1:25 externalCost auto  edge false p2p auto state enable restricted_role false restricted_tcn false lbd disable
 config stp ports 2:25 fbpdu enable
 config stp ports 1:25 externalCost auto  edge false p2p auto state enable restricted_role false restricted_tcn false lbd disable
-
+```
 На ctd-s6
+```
 conf t
 interface GigabitEthernet2/20
 no spanning-tree portfast trunk
 no spanning-tree bpdufilter enable
-
+```
 
 На k9
+```
   config stp ports 25 externalCost auto  edge false p2p auto state enable restricted_role false restricted_tcn false lbd disable
  config stp ports 25 fbpdu enable
 
 config ports 25 state enable
-
+```
 
   
 

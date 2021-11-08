@@ -1,21 +1,23 @@
 ---
 layout: post
-title:  "loopdetect"
+title:  "Loopdetect на dlink"
 date:   2014-08-13 05:52:50 +0400
 categories: dlink
 tags: dlink
 ---
 
-# loopdetect
+# Loopdetect на dlink
 3010g вобще не адекватные железки - у них через полгода работы могут без каких либо причин начать флудить порты.
 ну а что касается тех же 1228me/3028/3526, то на практике используем такую конфигурацию:
 ena loopd
+```
 conf loopd ports 1-24 st ena
 conf traffic control all broad ena
 config stp ports 25-26 restricted_tcn false restricted_role false
 config stp ports 27-28 restricted_tcn false restricted_role false
 config stp ports 1-24 edge true fbpdu enable restricted_role true restricted_tcn true
 conf stp ports 1-24 lbd enable
+```
 
 при условии что 1-24 - это только абоненты, а 25-26(25-28) - это магистральники.
 + отдельно для аплинк порта выключаем fbpdu.
@@ -86,15 +88,18 @@ STP LBD имеет смысл использовать только на кли�
 Я так понимаю, есть 2 варианта:
 
 первый:
+```
 enable loopdetect
 config loopdetect...
 etc.
+```
 
 второй:
+```
 enable stp
 config stp lbd enable
 etc. 
- 
+```
 А если используется и 1-й вариант и stp, что надо делать с lbd в разделе stp? Выключать?
 
 Выключать.
@@ -115,95 +120,15 @@ etc.
 
 
 
-
-
-
-
-
-
-
-
-
-Jul 16 14:40:06 topaz kernel: [16278.866866] named[1686]: segfault at 90 ip b762b313 sp b6b62110 error 6 in libisc.so.83.0.1[b75ee000+5b000]
-Jul 16 14:40:06 topaz named[2717]: Shutting down name server BIND - Warning: named not running! /etc/init.d/named: line 229:  2726 Segmentation fault      ${RNDC_BIN} status &>/dev/null
-Jul 16 14:40:06 topaz kernel: [16278.944029] rndc[2728] general protection ip:b75e9ea8 sp:b66280c0 error:0 in libdns.so.81.3.1[b758a000+1a5000]
-Jul 16 14:40:06 topaz named[2717]: ..done
-
-
-
-
-
-
-
-Jul 16 16:15:37 topaz named[3292]: starting BIND 9.8.1-P1 -4 -t /var/lib/named -u named
-Jul 16 16:15:37 topaz named[3292]: built with '--prefix=/usr' '--bindir=/usr/bin' '--sbindir=/usr/sbin' '--sysconfdir=/etc' '--localstatedir=/var' '--libdir=/usr/lib' '--includedir=/usr/include/bind' '--mandir=/usr/share/man' '--infodir=/usr/share/info' '--with-openssl' '--enable-threads' '--with-libtool' '--enable-runidn' '--with-libxml2' '--with-dlz-mysql' '--with-dlz-ldap' 'CFLAGS=-fomit-frame-pointer -fmessage-length=0 -O2 -Wall -D_FORTIFY_SOURCE=2 -fstack-protector -funwind-tables -fasynchronous-unwind-tables -g -DNO_VERSION_DATE -fno-strict-aliasing' 'LDFLAGS=-L/usr/lib'
-Jul 16 16:15:37 topaz named[3292]: adjusted limit on open files from 4096 to 1048576
-Jul 16 16:15:37 topaz named[3292]: found 1 CPU, using 1 worker thread
-Jul 16 16:15:37 topaz named[3292]: using up to 4096 sockets
-Jul 16 16:15:37 topaz named[3292]: loading configuration from '/etc/named.conf'
-Jul 16 16:15:37 topaz named[3292]: using default UDP/IPv4 port range: [1024, 65535]
-Jul 16 16:15:37 topaz named[3292]: using default UDP/IPv6 port range: [1024, 65535]
-Jul 16 16:15:37 topaz named[3292]: no IPv6 interfaces found
-Jul 16 16:15:37 topaz named[3292]: listening on IPv4 interface lo, 127.0.0.1#53
-Jul 16 16:15:37 topaz kernel: [22010.203992] named[3295]: segfault at 2b ip 0000002b sp b69a1400 error 4
-Jul 16 16:15:37 topaz named[3241]: Starting name server BIND - Warning: /var/lib/named/var/run/named/named.pid exists! ..failed
-Jul 16 16:15:37 topaz systemd[1]: named.service: control process exited, code=exited status=1
-Jul 16 16:15:37 topaz systemd[1]: Unit named.service entered failed state.
-
-
-
-
-
-
-
 VPN на базе IPSec, PPTP, L2TP и SSL, 
-
+```
 config traffic control 1-27 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
 
 
 config traffic control 1-25 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
 config traffic control 2:1-2:25 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
 config traffic control 3:1-3:25 broadcast enable multicast enable unicast disable action drop threshold 12288 countdown 5 time_interval 5
-
-
-
-Владимир 89042182100 Хозяин БЦ
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
 
 
 Задача:
@@ -212,9 +137,11 @@ config traffic control 3:1-3:25 broadcast enable multicast enable unicast disabl
 
 Ситуация, показанная на рисунке, вынуждает управляемый коммутатор постоянно перестраивать «дерево» STP при получении своего же собственного BPDU. Новая функция LoopBack Detection отслеживает такие ситуации и блокирует порт, на котором обнаружена петля, тем самым предотвращая проблемы в сети независимо от работы STP протокола. Т.е. неважно, включен STP протокол на порту или выключен – петля будет обнаружена, и порт будет заблокирован. Петля на порту обнаруживается путём отсылки коммутатором пакета с адресом назначения CF-00-00-00-00-00 (9000 Ethernet Configuration Test protocol (Loopback)). Это нужно учитывать при составлении правил ACL.
 Пример настройки функции LoopBack Detection (LBD) des-3526 (cli):
+```
 DES-3526:admin# enable loopdetect
 DES-3526:admin# config loopdetect ports 1-24 state enabled
 DES-3526:admin# config loopdetect recover_timer 60 interval 10 mode port-based
+```
 
 Recover_timer – время, в течение которого порты будут отключены.
 Interval – интервалы между отправкой пакетов обнаружения петли. Время для этих параметров задаётся глобально на коммутаторе.
@@ -222,24 +149,31 @@ Mode port-based – Режим обнаружения петли на порту
 Mode vlan-based – Режим обнаружения петли в VLAN. Используется в случаях, когда на одном порту присутствует несколько VLAN. При обнаружении петли блокируется трафик из конкретного VLAN.
 Пример настройки функции LoopBack Detection (LBD) на des-3526 по snmp:
 
+```
 snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.1.0 i 1
 # 1 – включить, 2 – выключить LoopBack Detection
-
+```
+```
 snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.2.1.1.2.1 i 1
 #1- включить loopdetect на 1 порту, 2 – выключить
-
+```
+```
 snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.2.0 i 10
 # Задаем интервалы между отправкой пакетов обнаружения петли в секундах (значение от 1 до 32767)
-
+```
+```
 snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.3.0 i 60
 #Задаем время,  в течение которого порты будут отключены, при обнаружении петли в секундах (значение от 0 до 1000000) .
-
+```
+```
 snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.1.4.0 i 2
 #Задаем режим обнаружения петли на порту коммутатора 1 – VLAN-Based, 2 – Port-Based
+```
 
 Посмотреть состояние портов по snmp можно следующим образом
-
+```
 snmpwalk -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.64.1.2.12.2.1.1.4
+```
 
 Где:
 INTEGER: 1 – normal
@@ -247,6 +181,7 @@ INTEGER: 2 – loop
 INTEGER: 3 – error
 
 Посмотреть настройки LoopBack Detection можно командой show loopdetect
+```
 DES-3526:admin# show loopdetect
 Command: show loopdetect
 
@@ -273,9 +208,10 @@ snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.1.2.0  i 10
 
 snmpset -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.1.3.0 i 60
 #Задаем время,  в течение которого порты будут отключены, при обнаружении петли в секундах (значение от 0 до 1000000) .
+```
 
 Посмотреть состояние портов по snmp можно следующим образом
-snmpwalk -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.2.1.1.4
+`snmpwalk -v2c -c private 10.90.90.90 .1.3.6.1.4.1.171.11.63.6.2.21.2.1.1.4`
 
 Где:
 INTEGER: 1 – normal
@@ -283,6 +219,7 @@ INTEGER: 2 – loop
 INTEGER: 3 – error
 
 Посмотреть настройки LoopBack Detection можно командой show loopdetect
+```
 DES-3028:4#show loopdetect
 Command: show loopdetect
 
@@ -291,11 +228,12 @@ Loopdetect Global Settings
 Loopdetect Status : Enabled
 Loopdetect Interval : 10
 Recover Time : 60
+```
 
 Как заметили, у des-3028 только 1 режим – режим обнаружения петли на порту коммутатора.
 
 Вот и вся настройка. Ниже приведен скрипт для включения loopdetect на коммутаторе, в зависимости от модели.
-
+```
 #!/usr/local/bin/bash
 
 if [ ! $# == 1 ]
@@ -340,3 +278,4 @@ tput sgr0
 exit
 fi
 fi
+```

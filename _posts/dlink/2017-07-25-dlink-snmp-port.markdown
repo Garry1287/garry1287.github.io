@@ -1,40 +1,45 @@
 ---
 layout: post
-title:  "dlink-snmp-port"
+title:  "Настройка порта(vlan) на dlink с помощью snmp"
 date:   2017-07-25 03:04:32 +0300
 categories: dlink
 tags: dlink
 ---
 
-# dlink-snmp-port
-tagged (cуммируются с untagged)
-
+# dlink snmp port
+## tagged (cуммируются с untagged)
+```
 garry@garry:/var/home/garry> snmpwalk -v 2c -c public 192.168.118.71
 1.3.6.1.2.1.17.7.1.4.3.1.2
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.1 = Hex-STRING: 00 00 00 00 00 00 00 00
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.25 = Hex-STRING: 00 00 00 F0 00 00 00 00
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.490 = Hex-STRING: FF FF FF F0 00 00 00 00
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.2.491 = Hex-STRING: 00 00 00 C0 00 00 00 00
+```
 
-
-
-untagged
+## untagged
+```
 garry@garry:/var/home/garry> snmpwalk -v 2c -c public 192.168.118.71
 1.3.6.1.2.1.17.7.1.4.3.1.4
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.1 = Hex-STRING: 00 00 00 00 00 00 00 00
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.25 = Hex-STRING: 00 00 00 00 00 00 00 00
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.490 = Hex-STRING: FF FF FF 00 00 00 00 00
 SNMPv2-SMI::mib-2.17.7.1.4.3.1.4.491 = Hex-STRING: 00 00 00 00 00 00 00 00
-
+```
 
 
 8 портов    8 портов    8 портов    4 порта
-FF                 FF                   FF          F0                
+
+FF                    FF                   FF          F0       
+         
                     00 00 00 00
+                    
 11111111    11111111    11111111    11110000
 
-Получается на этой моделе используется 3,5 октета
 
+
+Получается на этой моделе используется 3,5 октета
+```
 VID             : 1           VLAN Name       : default
 VLAN Type       : Static      Advertisement   : Enabled
 Member Ports    :                    
@@ -75,10 +80,14 @@ Current Tagged Ports   : 25-26
 Current Untagged Ports :                    
 Static Tagged Ports    : 25-26              
 Static Untagged Ports  :  
-
+```
          
 
 Сохранить конфиг
+```
 snmpset -v2c -c private 192.168.118.71 1.3.6.1.4.1.171.12.1.2.6.0 i 2
+```
 Прописать описание на порт - 32 символа
+```
 snmpset -v2c -c private 192.168.118.71 IF-MIB::ifAlias.28 s "28port"
+```

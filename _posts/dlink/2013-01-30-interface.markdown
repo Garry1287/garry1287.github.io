@@ -1,37 +1,39 @@
 ---
 layout: post
-title:  "interface"
+title:  "Настройки interface у dlink"
 date:   2013-01-30 08:10:10 +0400
 categories: dlink
 tags: dlink
 ---
 
-# interface
+# Настройки interface у dlink
+```
  no ip redirects
  no ip unreachables
  no ip proxy-arp
+```
  
  
  
- 
- 
+```
   spanning-tree portfast
  spanning-tree portfast trunk
+```
 Функция обеспечивающая то, что на данном порту подлкючено оконечное обородование без настройки stp, соответственно транком и аксеесом
 
- spanning-tree bpdufilter enable
+`spanning-tree bpdufilter enable`
 Команда bpdufilter запрещает прохождение BPDU фреймов на порту.
 
- spanning-tree bpduguard enable
+`spanning-tree bpduguard enable`
 При попадинии BPDU stp на порт, сработает errdisable
 Команда bpduguard слушает начилие любых BPDU фреймов и блокирует порт.
 
-
-switchport nonegotiate
+`switchport nonegotiate`
 nonegotiate — Порт готов перейти в режим trunk, но при этом не передает DTP-кадры порту на другом конце. Этот режим используется для предотвращения конфликтов с другим "не-cisco" оборудованием. В этом случае коммутатор на другом конце должен быть вручную настроен на использование trunk'а. 
 
-
+```
 show errdisable recovery
+```
 
 LINK-3-UPDOWN - нет несущей, из-за помех, отсутствия синхонизации и пр. (L1 проблема)
 LINEPROTO-5-UPDOWN - соответственно, нет канального протокола (L2 проблема)
@@ -42,13 +44,12 @@ LINEPROTO-5-UPDOWN - соответственно, нет канального �
 
 
 [http://www.cisco.com/cisco/web/support/RU/10/105/105416_errdisable_recovery.html](http://www.cisco.com/cisco/web/support/RU/10/105/105416_errdisable_recovery.html)
+
 [http://www.firewall.cx/cisco-technical-knowledgebase/cisco-switches/883-cisco-switches-errdisable-autorecovery](http://www.firewall.cx/cisco-technical-knowledgebase/cisco-switches/883-cisco-switches-errdisable-autorecovery)
+
 [http://vetriks.ru/tech-library/57-cisco-003-04.html](http://vetriks.ru/tech-library/57-cisco-003-04.html)
 
-
-
-
-
+```
 interface FastEthernet0/2
  description IPoE abonents
  switchport access vlan 1011
@@ -63,7 +64,7 @@ interface FastEthernet0/2
  storm-control action trap
  spanning-tree portfast
  spanning-tree bpdufilter enable
-
+```
 
  
  Но access port - это:
@@ -80,31 +81,32 @@ interface FastEthernet0/2
 
 
 На клиентских
-storm-control broadcast level 0.50 0.40
+`storm-control broadcast level 0.50 0.40`
 
-storm-control multicast level 0.50 0.40
+`storm-control multicast level 0.50 0.40`
 
- storm-control action ?????
+ `storm-control action ?????`
 
 на портах между коммутаторами
 
-storm-control broadcast level 5 3
+`storm-control broadcast level 5 3`
 
-storm-control multicast level 5 3
+`storm-control multicast level 5 3`
 
  
  The number limits the total percentage of that traffic type on the interface. So, storm-control broadcast level 10 limits that interface to only transmit at most 10% of its interface bandwidth worth of broadcast packets. 10% is a good normal number. However if you are running any broadcast applications it could cause problems. It is also dangerous to set the port to automatically go into shutdown. Now as a bad guy, all I need to do is send a flood of broadcast traffic at that interface that hits the 10% threshold and I can shutdown the switchport and easily DoS the switch.
  
  We use 7% broadcast and 10% multicast
  
+ ```
  Switch(config-if)#storm-control broadcast level ?
 <0.00 – 100.00>  Enter rising threshold
 bps              Enter suppression level in bits per second
 pps              Enter suppression level in packets per second
 
+```
 
-
-
+```
 interface GigabitEthernetX/Y
  description ** Standard End-User Port **
  switchport access vlan 10
@@ -126,7 +128,7 @@ interface GigabitEthernetX/Y
  spanning-tree portfast
  service-policy input END-USER-INPUT-POLICY
  ip dhcp snooping limit rate 100
- 
+ ```
  rising threshold 
  Восходящий порог 
  
@@ -134,12 +136,12 @@ interface GigabitEthernetX/Y
 
  
  
- Drop - дропает пакеты
+* Drop - дропает пакеты
  Shutdown ложит порт и поднимает через CountDown время. Если это время не указано 5 минут поднимает, либо сам администратор должен поднять
 
-  The threshold value is measured in Kbit/sec when the action isto drop mode; it is measured in pps(packets/sec) when the action is set to shutdown mode. 
+* The threshold value is measured in Kbit/sec when the action isto drop mode; it is measured in pps(packets/sec) when the action is set to shutdown mode. 
 
-  Time interval
+* Time interval
   Это поле позволяет задать временной интервал, через который микросхема
 коммутатора будет предоставлять данные по количеству многоадресных и
 широковещательных пакетов для надлежащей работы функции управления
@@ -148,7 +150,7 @@ interface GigabitEthernetX/Y
 величину. Этот интервал может принимать значения от 5 до 30 с (по
 умолчанию 5 с).
 
-Count Down
+* Count Down
 Таймер Count Down позволяет определить время в минутах, в течение
 которого Коммутатор не будет закрывать порт, на котором обнаружен
 пакетный шторм. Этот параметр имеет значение только для портов,
@@ -159,7 +161,9 @@ Count Down
 
  
  [http://xcme.blogspot.ru/2015/11/traffic-control.html](http://xcme.blogspot.ru/2015/11/traffic-control.html)
-  Работа Traffic Control на разных ревизиях
+
+
+Работа Traffic Control на разных ревизиях
 Проверили на стенде работу Traffic Control в коммутаторах DES-3028 и DES-3200-28 всех ревизий. Исходили мы из этого:
 
 Режим Shutdown:
@@ -191,11 +195,11 @@ p.s. Помню как несколько лет в все плевались о
 
 
 
-
+```
 config traffic control auto_recover_time 0
 config traffic trap none
 config traffic control  1-27 broadcast disable multicast disable unicast disable action drop threshold 255000 countdown 0 time_interval 5
-                                                                                
+```                                                                          
 
 
 
@@ -226,6 +230,7 @@ Multicast level должен быть эквивалентен или больш
 All Layer 2 Broadcasts are Multicasts.
 All Layer 2 Multicasts are not Broadcasts.
 you should set Multicast limit HIGHER than the Broadcast limit
+
 [http://cauew.blogspot.ru/2008/09/storm-control-everything-you-need-to.html](http://cauew.blogspot.ru/2008/09/storm-control-everything-you-need-to.html)
 
 [http://www.netcraftsmen.com/understanding-cisco-traffic-storm-control/](http://www.netcraftsmen.com/understanding-cisco-traffic-storm-control/)
@@ -235,9 +240,12 @@ Switch(config-if)#switchport block {unicast | multicast}
 
 
 Броадкас и мультикаст по 10% на всех кроме STP портов
+
 [http://www.juniper.net/techpubs/en_US/junos11.4/topics/concept/rate-limiting-storm-control-understanding.html](http://www.juniper.net/techpubs/en_US/junos11.4/topics/concept/rate-limiting-storm-control-understanding.html)
+
 [https://www.juniper.net/techpubs/en_US/junos/topics/example/rate-limiting-storm-control-configuring.html](https://www.juniper.net/techpubs/en_US/junos/topics/example/rate-limiting-storm-control-configuring.html)
 
+```
 xe-0/0/0        up    up   Link to Cat4900 ctd-s6
     Total packets                 125904131016     152870088174
     Unicast packets               124619818611     151859849501
@@ -310,6 +318,6 @@ xe-0/0/31                  Second Link to Cat4900
 ae0             up    up   BGW CTD-C6
 ae1             up    up   CTD-S1
 ae3             up    up   It was etherchanel to CTD-C5 Backbone
-
+```
 
 1.Сделать везде 10%, потом поставить на мониторинг и оценить в пакетах
