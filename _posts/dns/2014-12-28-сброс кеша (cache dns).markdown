@@ -1,19 +1,19 @@
 ---
 layout: post
-title:  "сброс кеша (cache dns)"
+title:  "Сброс кеша (cache dns)"
 date:   2014-12-28 21:11:25 +0300
 categories: dns
 tags: dns
 ---
 
-# сброс кеша (cache dns)
-rndc flush
+# Сброс кеша (cache dns)
+`rndc flush`
 
 2. Выполните в командной строке Linux следующую команду:
 
-sudo /etc/init.d/nscd restart
+`sudo /etc/init.d/nscd restart`
 
 
 Внимание! Если в вашем дистрибутиве по указанному выше пути нет данного файла, попробуйте выполнить команду:
 
-nscd -i hosts
+`nscd -i hosts`

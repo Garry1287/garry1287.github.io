@@ -1,16 +1,16 @@
 ---
 layout: post
-title:  "rndc"
+title:  "Rndc"
 date:   2009-06-20 00:36:20 +0400
 categories: dns
 tags: dns
 ---
 
-# rndc
+# Rndc
 RNDC - утилита для управления bind. Может делать вещи, без перезагрузки DNS
 
 1. Сначал генерим файлы rndc.key и rndc.conf
-rndc-confgen >> etc/namedb/rndc.conf
+`rndc-confgen >> etc/namedb/rndc.conf`
 
 Незакомментированную часть вывода помещаете в файл /etc/namedb/rndc.conf
 Закомментированную часть вывода команды rndc-confgen помещаете в конфигурационный файл /etc/namedb/named.conf:
@@ -21,7 +21,7 @@ rndc-confgen >> etc/namedb/rndc.conf
 
 
 rndc.key
-
+```
 key "rndc-key" {
        algorithm hmac-md5;
        secret "2eFfZzmvwzukgDhZ8raxrw==";
@@ -31,11 +31,13 @@ controls {
        inet 127.0.0.1 port 953
                allow { 127.0.0.1; } keys { "rndc-key"; };
 };
-
+```
 
 -----------------------------------------
-rndc.conf
 
+
+rndc.conf
+```
 key "rndc-key" {
         algorithm hmac-md5;
         secret "2eFfZzmvwzukgDhZ8raxrw==";
@@ -46,13 +48,13 @@ options {
         default-server 127.0.0.1;
         default-port 953;
 };
-
+```
 
 rndc-key подключаем в named.conf
 rndc.conf так
 
 Проверить сделанную вами работу вы сможете, когда полностью настроите свой DNS-сервер и запустите его. Тогда, при выполнении команды:
-# rndc status
+`# rndc status`
 
 
 [http://www.maxblogs.ru/index.php?id=57](http://www.maxblogs.ru/index.php?id=57)

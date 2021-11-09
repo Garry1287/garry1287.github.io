@@ -1,22 +1,22 @@
 ---
 layout: post
-title:  "ssh-ios-dns"
+title:  "Настройка ssh и dns на ios cisco"
 date:   2017-12-30 12:21:37 +0300
-categories: dns
-tags: dns
+categories: dns cisco
+tags: dns cisco ssh
 ---
 
-# ssh-ios-dns
-ip domain lookup - включает трансляцию имён в ip адреса основанную на dns. Этот параметр включен по умолчанию.
+# Настройка ssh и dns на ios cisco
 
-ip name-server - этот параметр задаёт адрес одного или нескольких серверов имён (dns).
+* ip domain lookup - включает трансляцию имён в ip адреса основанную на dns. Этот параметр включен по умолчанию.
 
-ip domain name - задаёт имя домена по умолчанию для пользователей Cisco IOS software для разрешения "неопознаных" доменных имён (имена без десятичных доменных имён.
+* ip name-server - этот параметр задаёт адрес одного или нескольких серверов имён (dns).
+
+* ip domain name - задаёт имя домена по умолчанию для пользователей Cisco IOS software для разрешения "неопознаных" доменных имён (имена без десятичных доменных имён.
 
 можно указать список доменов 
 
-
-ip dns server - включаем собственно форвард на циске 
+* ip dns server - включаем собственно форвард на циске 
 
 
 
@@ -24,6 +24,7 @@ ip dns server - включаем собственно форвард на цис
 
 
 ! включаем внутренний DNS сервер (ciso выступает как dns)
+```
 ip dns server   
 
 ip subnet-zero
@@ -57,10 +58,11 @@ ip ssh version 2
 line vty 0 4
  transport input telnet ssh
  privilege level 15
-
+```
 
 
 Архивирование конфигов
+```
 ! включаем архивирование всех изменений конфига, скрывая пароли в логах
 archive
  log config
@@ -68,12 +70,12 @@ archive
   hidekeys
 ! историю изменения конфига можно посмотреть командой
 show archive log config all
-
+```
 
 
 Настройка Internet и Firewall
 
-
+```
 ! настраиваем фильтр входящего трафика (по умолчанию все запрещено)
 ip access-list extended FIREWALL
  permit tcp any any eq 22
@@ -98,7 +100,7 @@ interface FastEthernet0/0
  no cdp enable
  ip inspect INSPECT_OUT out
  ip access-group FIREWALL in
-
+```
 
 
 
@@ -106,8 +108,9 @@ interface FastEthernet0/0
 
 Я бы ещё добавил несколько хинтов:
 изредка бывает, что ключ… слетает! Проверить наличие своего ключа можно командой
+```
 sh cry key mypubkey rsa
-
+```
 
 Иногда стоит привязка имени ключа к его «телу». При перевыработке ключа имя может остаться (например, defaultkey.domain.ru), а собственно небо поменякется.
 Ключи можно вырабатывать не только дефолтовые, но и задавать им метки, чтобы впоследствии вырабатывать по ним сертификаты, например.
@@ -115,7 +118,7 @@ sh cry key mypubkey rsa
 cry key zeroize rsa [название ключа]
 и потом тоже сохраниться 
 
-
+```
 1. cisco> enable
 2. cisco# clock set 17:10:00 28 Aug 2009
 3. cisco# configure terminal
@@ -131,14 +134,14 @@ cry key zeroize rsa [название ключа]
 13. cisco(config-line)# exit
 14. cisco(config)# exit
 15. cisco# copy running-config startup-config
-
+```
 
 
 [http://www.cisco.com/cisco/web/support/RU/9/92/92052_ssh.html](http://www.cisco.com/cisco/web/support/RU/9/92/92052_ssh.html)
 
 
 Отключение ненужных сервисов
-
+```
 no service tcp-small-servers
 no service udp-small-servers
 no service finger
@@ -149,3 +152,4 @@ no ip source-route
 no ip http server
 no ip http secure-server
 no ip bootp server
+```

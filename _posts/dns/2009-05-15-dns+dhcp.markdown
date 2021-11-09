@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "dns+dhcp"
+title:  "Dns+dhcp"
 date:   2009-05-15 18:04:51 +0400
 categories: dns
 tags: dns
 ---
 
-# dns+dhcp
+# Dns+dhcp
 [http://pclinuxos.su/index.php/server/dhcp-server](http://pclinuxos.su/index.php/server/dhcp-server)
