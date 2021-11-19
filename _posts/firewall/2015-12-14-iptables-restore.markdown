@@ -8,6 +8,7 @@ tags: firewall
 
 # iptables-restore
 Чтоб долго не мучаться…
+```
 case "$1" in
 test)
 echo «Stop»
@@ -22,6 +23,7 @@ echo «Iptables stopped after timeout… Check rules...»
 start)
 start
 ;;
+```
 
 После /etc/init.d/iptables test жмем рару раз Enter…
 Если померло, то не увидим на экране движение…

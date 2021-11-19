@@ -1,32 +1,40 @@
 ---
 layout: post
-title:  "change-firewall"
-date:   2011-05-11 19:00:56 +0400
+title:  "Изменение firewall (iptables)"
+date:   2015-05-11 19:00:56 +0400
 categories: firewall
 tags: firewall
 ---
 
 # change-firewall
+
+```
 -A PREROUTING -s 81.20.192.90/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 2343 -j DNAT --to-destination 192.168.121.4:443    #asterisk
 -A PREROUTING -d 81.20.192.19/32 -p tcp -m tcp --dport 23543 -j DNAT --to-destination 192.168.1.129:80      #zabbix for green
 
 -A PREROUTING -d 81.20.192.19/32 -p tcp -m tcp --dport 8880 -j DNAT --to-destination 192.168.1.15:7781          #доступ к биллингу пользователям
 -A PREROUTING -d 192.168.253.1/32 -p tcp -m tcp --dport 80 -j DNAT --to-destination 192.168.1.15:7780           #FSB биллинг
+```
 
 ??????????????????????????????????????????????????????????????????????????????????????????? Удалил нах
+
+```
 -A PREROUTING -s 84.16.137.94/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 2323 -j LOG --log-prefix "from STAR To teleSORM " --log-tcp-options --log-ip-options  #NetbyNet to ast (23 порт) telnet  #УДАЛИТь НАХ
 -A PREROUTING -s 84.16.137.94/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 2323 -j DNAT --to-destination 192.168.1.8:23
 -A PREROUTING -s 83.136.235.94/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 3389 -j LOG --log-prefix "from Satikov To 1C " --log-tcp-options --log-ip-options   # To 1C   (удалим)
 -A PREROUTING -s 91.190.76.53/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 3389 -j LOG --log-prefix "from MTT To 1C " --log-tcp-options --log-ip-options   #Наша сеть )
-
+```
 
 Удалил нах
+```
 -A PREROUTING -s 77.233.199.98/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 8880 -j DNAT --to-destination 192.168.1.14:80            #billing  MEGASVYAZ LLC
 -A PREROUTING -s 77.233.199.98/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 8080 -j DNAT --to-destination 192.168.1.14:8080
 -A PREROUTING -s 77.233.199.98/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 22 -j DNAT --to-destination 192.168.1.14:22
 -A PREROUTING -s 77.233.199.98/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 443 -j DNAT --to-destination 192.168.1.14:443
+```
 
 Нахер
+```
 -A PREROUTING -s 192.168.130.110/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 514 -j DNAT --to-destination 192.168.1.178:514             #Логирование с 130.110 на 1.178, 1.160  Trans bank
 -A PREROUTING -s 192.168.130.110/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 514 -j DNAT --to-destination 192.168.1.160:514
 
@@ -34,6 +42,7 @@ tags: firewall
 -A PREROUTING -d 81.20.192.33/32 -p tcp -m tcp --dport 11194 -j DNAT --to-destination 192.168.1.14:1194                             #проброс openvpn для биллинга
 
 iptables -t nat -D PREROUTING -s 81.20.196.8/32 -d 81.20.192.19/32 -p tcp -m tcp --dport 4389 -j DNAT --to-destination 192.168.1.34:3389            #Проброст порта от физика (НАХ)
+```
 
 ************************************************************************************************************************************************
 -A PREROUTING -s 195.34.240.24/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 443 -j DNAT --to-destination 192.168.1.15:4461        #Проброс порта от ростелеком для биллинга
@@ -89,8 +98,9 @@ iptables -I FORWARD 11 -i vlan10 -s 10.222.0.10/32 -o enp5s1 -d 192.168.1.129/32
 
 Проверяем INPUT, запрещем со всех
 разрешаем радиус на  172.31.3.1
+```
 -A allowed_ports -s 192.168.0.0/16 -p udp -m udp --dport 1812 -j ACCEPT
-
+```
 
 
 
@@ -111,7 +121,7 @@ iptables -I FORWARD 11 -i vlan10 -s 10.222.0.10/32 -o enp5s1 -d 192.168.1.129/32
             - mngt сети
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 1)
-
+```
  iptables -t nat -N POSTROUTING_INET
 iptables -t nat -A POSTROUTING_INET -o vlan10 -j SNAT --to-source 81.20.192.32
 
@@ -121,9 +131,10 @@ iptables -t nat  -A POSTROUTING -s 192.168.1.0/24  -j POSTROUTING_INET
 -A POSTROUTING -s 192.168.248.101/32 -o vlan10 -j SNAT --to-source 81.20.192.32
 -A POSTROUTING -s 192.168.248.102/32 -o vlan10 -j SNAT --to-source 81.20.192.32
 -A POSTROUTING -s 192.168.248.100/32 -o vlan10 -j SNAT --to-source 81.20.192.32
-
+```
 
  PHYS
+ ```
  iptables -t nat -N POSTROUTING_PHYS
  iptables -t nat -I POSTROUTING 2 -s 192.168.1.0/24 -j POSTROUTING_PHYS
  iptables -t nat -A POSTROUTING_PHYS  -d 192.168.117.0/24 -o vlan24 -j SNAT --to-source 192.168.117.1
@@ -137,15 +148,19 @@ iptables -t nat  -A POSTROUTING -s 192.168.1.0/24  -j POSTROUTING_INET
 iptables -t nat -A POSTROUTING_PHYS -d 10.148.0.0/28 -o  vlan1901  -j SNAT --to-source 10.148.0.8
 iptables -t nat -A POSTROUTING_PHYS -d 10.148.0.32/27 -o  vlan133  -j SNAT --to-source 10.148.0.33
 iptables -t nat -A POSTROUTING_PHYS -d 10.148.2.0/23 -o enp2s0.134.134 -j SNAT --to-source 10.148.2.1
- 
+ ```
+
+```
  iptables -t nat -N POSTROUTING_RADIO
 iptables  -t nat -I POSTROUTING 3 -s 192.168.1.0/24 -j POSTROUTING_RADIO
 iptables  -t nat -A POSTROUTING_RADIO -d 192.168.112.0/24 -o vlan21 -j SNAT --to-source 192.168.112.1
 iptables -t nat -A POSTROUTING_RADIO -d 192.168.116.0/24 -o vlan23 -j SNAT --to-source 192.168.116.1
 iptables -t nat -A POSTROUTING_RADIO -d 192.168.248.0/24 -o vlan29 -j SNAT --to-source 192.168.248.1
 iptables -t nat -A POSTROUTING_RADIO -d 192.168.140.0/24 -o vlan40 -j SNAT --to-source 192.168.140.1
+```
 
 
+```
 iptables -t nat -N POSTROUTING_MNGT
  iptables  -t nat -I POSTROUTING 4 -s 192.168.1.0/24 -j POSTROUTING_MNGT
 iptables -t nat -A POSTROUTING_MNGT -d 192.168.113.0/24 -o vlan22 -j SNAT --to-source 192.168.113.1
@@ -169,30 +184,30 @@ iptables -t nat -I POSTROUTING 7 -s 172.31.255.218/30 -j POSTROUTING_GREEN_WHATU
 iptables -t nat -A POSTROUTING_GREEN_WHATUP -d 192.168.253.248/30 -o  vlan402 -j SNAT --to-source 192.168.253.249
 
 iptables -t nat -I POSTROUTING -s 192.168.1.0/24 -d 192.168.253.48/29 -o  vlan401 -j SNAT --to-source 192.168.253.49
+```
 
-
-
+```
 iptables -t nat -N POSTROUTING_VOIP
 iptables -t nat -I POSTROUTING 8 -s 192.168.1.0/24 -j POSTROUTING_VOIP
 iptables  -t nat -A POSTROUTING_VOIP -d 192.168.130.0/24 -o vlan10 -j SNAT --to-source 81.20.192.32
 iptables  -t nat -A  POSTROUTING_VOIP -d 172.16.0.0/16 -o vlan10 -j SNAT --to-source 81.20.192.32
 iptables  -t nat -A POSTROUTING_VOIP -d 192.168.131.0/24 -o vlan10 -j SNAT --to-source 81.20.192.32
+```
 
-
+```
  iptables -t nat -N POSTROUTING_MNGT10VLAN
  iptables  -t nat -I POSTROUTING 10 -s 192.168.1.0/24 -j POSTROUTING_MNGT10VLAN
  iptables  -t nat -A POSTROUTING_MNGT10VLAN  -d 192.168.70.0/24 -o vlan10 -j SNAT --to-source 81.20.192.19
  iptables  -t nat -A POSTROUTING_MNGT10VLAN -d 192.168.83.0/24 -o vlan10 -j SNAT --to-source 81.20.192.19
  iptables  -t nat -A POSTROUTING_MNGT10VLAN -d 192.168.253.80/29 -o vlan10 -j SNAT --to-source 81.20.192.19
-
+```
  
- 
- 
--A POSTROUTING -s 217.107.196.0/26 -d 192.168.121.2/32 -o vlan27 -j SNAT --to-source 192.168.121.1  #Green to 4900 cat
+ ```
+ -A POSTROUTING -s 217.107.196.0/26 -d 192.168.121.2/32 -o vlan27 -j SNAT --to-source 192.168.121.1  #Green to 4900 cat
 -A POSTROUTING -s 172.31.255.216/30 -d 192.168.121.2/32 -o vlan27 -j SNAT --to-source 192.168.121.1 # GREEN to 121
 -A POSTROUTING -d 192.168.1.15/32 -p tcp -m tcp --dport 4459 -j SNAT --to-source 192.168.1.11 # Правила для работы биллинга из локалки
 -A POSTROUTING -d 192.168.1.15/32 -p tcp -m tcp --dport 7780 -j SNAT --to-source 192.168.1.11 # # Правила для работы биллинга из локалки
-
+```
 
  
 LAN к mngt, инет
@@ -208,10 +223,12 @@ vlan209 inet 172.16.77.22/30
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Политика такова, если надо отфильтровать по какому нибудь признаку, заворачиваем в отдельную цепочку, там делаем все проверки, режем, разрешаем, что надо и в конце возвращаем в основную, либо дропаем
 
+```
 iptables -P FORWARD DROP
 iptables -I FORWARD 1 -m conntrack --ctstate INVALID -j DROP
 iptables -I FORWARD 2 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -I FORWARD 3 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+```
 
 1)доступ с лан
             - nlmk
@@ -1370,7 +1387,8 @@ tcp        0      0 127.0.0.1:6379          0.0.0.0:*               LISTEN      
 
 
 
-ПРАВИЛА ДЛЯ ИНПУТ
+## ПРАВИЛА ДЛЯ INPUT
+
 gre (ipsec) 500
 openvpn 1194 --------------------------- ext, lan
 22 (ssh) ------------------------------- lan
@@ -1399,6 +1417,7 @@ zabbix 10050 ----------------- (?????)
 
 81.20.192.0/25  - ospf,bgp,
 
+```
 iptables -I INPUT 9 -p esp -j ACCEPT
 iptables -I INPUT 10 -p ah -j ACCEPT 
 iptables  -I INPUT 10 -p ipencap -j ACCEPT
@@ -1409,14 +1428,15 @@ iptables -I INPUT 12 -i vlan10 -p ospfigp -j ACCEPT
 
 iptables -D INPUT -s 81.20.192.0/25 -i vlan10 -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
 iptables -D INPUT -s 192.168.1.0/24 -i enp5s1 -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+```
 
 
-
-
+```
 iptables -I INPUT 16 -i enp5s1 -j input_lan
 iptables -I INPUT 17 -i tun+ -j input_lan 
 tun+
-
+```
+```
 iptables -I INPUT 18 -s 81.20.192.0/25 -i vlan 10  -j input_dmz
 
 iptables -I INPUT 19 -i vlan401 -j input_dmz
@@ -1517,19 +1537,22 @@ iptables -A INPUT -p icmp --icmp-type 3,8,12 -j ACCEPT
 -A INPUT -p esp -j ACCEPT
 -A INPUT -p ah -j ACCEPT
 -A INPUT -d 81.20.192.19/32 -p gre -j ACCEPT
+````
 
+-------------
 
-?????????????????????????????????????
+## ICMP
+```
 iptables -N ICMP_packets
 iptables -A INPUT -p icmp --icmp-type echo-request -m length --length 128 -j ICMP_packets
 iptables -A ICMP_packets -m limit ! --limit 1000/s --limit-burst 1000 -j DROP
 iptables -A ICMP_packets -m hashlimit --hashlimit-above 50/m --hashlimit-burst 50 --hashlimit-mode srcip --hashlimit-name icmp -j DROP
-
+```
 
 
 
 iptables 
-
+```
 -A input_int -p udp -m pkttype --pkt-type broadcast -m udp --dport 67 -j ACCEPT
 -A input_int -m pkttype --pkt-type broadcast -j DROP
 -A input_int -p icmp -m icmp --icmp-type 8 -j ACCEPT
@@ -1581,7 +1604,7 @@ iptables
 
 -A INPUT -m limit --limit 3/min -j LOG --log-prefix "SFW2-IN-ILL-TARGET " --log-tcp-options --log-ip-options
 -A INPUT -j DROP
-
+```
 
 
 
@@ -1647,8 +1670,9 @@ vlan15
 Как предотвращать DDoS атаки с помощью iptables
 
 Я уверена, что вы все знаете что такое DDoS. Чтобы не допустить этот, в последнее время очень популярный вид атаки, воспользуйтесь следующей командой:
-
+```
  iptables -A INPUT -p tcp --dport 80 -m limit --limit 20/minute --limit-burst 100 -j ACCEPT 
+```
 
 , где
 
@@ -1660,13 +1684,13 @@ vlan15
 Блокировка сканирования порта используя iptables
 
 Хакеры так и ждут возможности просканировать открытые порты на вашем сервере и взломать систему безопасности. Чтобы не допустить этого безобразия:
-
+```
  sudo iptables -N block-scan 
 
  sudo iptables -A block-scan -p tcp —tcp-flags SYN,ACK,FIN,RST -m limit —limit 1/s -j RETURN 
 
  sudo iptables -A block-scan -j DROP 
-
+```
 где block-scan — это название новой цепочки.
 
 Надеюсь, что этот пост был максимально полезным для вас!

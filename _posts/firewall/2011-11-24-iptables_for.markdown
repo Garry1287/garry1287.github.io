@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "iptables_for"
+title:  "Iptables - старые правила"
 date:   2011-11-24 07:02:35 +0400
 categories: firewall
 tags: firewall
@@ -8,7 +8,7 @@ tags: firewall
 
 # iptables_for
 
-
+```
 -A FORWARD -s 192.168.1.0/24 -d 192.168.1.9/32 -i eth1 -o eth1 -p tcp -m tcp --dport 3128 -j ACCEPT 
 -A FORWARD -s 192.168.1.0/24 -d 91.203.193.18/32 -j gambler 
 -A FORWARD -s 192.168.1.0/24 -d 80.75.131.78/32 -j Axaptamtt 
@@ -26,11 +26,13 @@ tags: firewall
 -A FORWARD -s 192.168.169.2/32 -d 192.168.1.0/24 -p udp -m multiport --dports 53,69 -j ACCEPT 
 -A FORWARD -s 192.168.169.2/32 -m limit --limit 3/min -j LOG --log-prefix "MTT atack from 1c to LAN " --log-tcp-options --log-ip-options 
 -A FORWARD -s 192.168.169.2/32 -j DROP 
-
+```
 
 81.20.192.4 - Проверить как Глуховский
+
 81.20.196.100 - pj9997 Тоже Глухов
 
+```
 :PREROUTING ACCEPT [15593758:1110960968]
 :OUTPUT ACCEPT [749220:61948738]
 :POSTROUTING ACCEPT [3049925:200069938]
@@ -41,7 +43,8 @@ tags: firewall
 -A PREROUTING -s 81.20.193.251/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 3389 -j DNAT --to-destination 192.168.1.169:3389
 -A FORWARD -d 192.168.1.15/32 -p tcp -m tcp --dport 7781 -j ACCEPT
 
-#Удалить не нужное правило
+
+## Удалить не нужное правило
 -A PREROUTING -s 81.20.199.208/32 -d 81.20.192.33/32 -p tcp -m tcp --dport 3389 -j DNAT --to-destination 192.168.1.35:3389 
 
 
@@ -335,8 +338,9 @@ tags: firewall
 
 -A POSTROUTING -s 192.168.248.100/32 -o vlan10 -j SNAT --to-source 81.20.192.32 
 -A FORWARD -s 192.168.248.100/32 -i eth1 -o vlan10 -j ACCEPT
+```
 
-
+```
 -A squid -s 192.168.1.9/32 -j ACCEPT 
 -A squid -s 192.168.1.66/32 -j ACCEPT 
 -A squid -s 192.168.1.64/32 -j ACCEPT 
@@ -358,8 +362,10 @@ tags: firewall
 -A squid -p tcp -m tcp --dport 80 -j DNAT --to-destination 192.168.1.9:3128 
 COMMIT
 # Completed on Mon Aug 20 12:16:54 2012
+```
 
 
+```
 LAN
 Unisprint 192.168.2.1
 OUT (19)
@@ -391,8 +397,10 @@ SAPPHIRE-1C-DMZ 1037
 vpn_MGTU-Voip - 2002
 l2vpn-voip-grz 2999 (телефония карамышево-грязи)
 pppoe_nlmk 3997  (dslam на заводе)
+```
 
 
+```
 vlan12    Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B  
           inet addr:192.168.251.2  Bcast:192.168.251.3  Mask:255.255.255.252
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
@@ -604,21 +612,11 @@ vlan3997  Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B
           TX packets:317734 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:0 
           RX bytes:189154621 (180.3 Mb)  TX bytes:29775653 (28.3 Mb)
+```
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+```
 -A INPUT -i vlan1021 -j input_int
 -A INPUT -i vlan11 -j input_int
 -A INPUT -i bond0 -j input_dmz
@@ -627,8 +625,9 @@ vlan3997  Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B
 -A INPUT -i eth1 -j input_dmz
 -A INPUT -i eth2 -j input_dmz
 -A INPUT -i eth3 -j input_dmz
+```
 
-
+```
 -A FORWARD -i vlan1021 -j forward_int
 -A FORWARD -i vlan11 -j forward_int
 -A FORWARD -i vlan13 -j forward_ext
@@ -639,8 +638,10 @@ vlan3997  Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B
 -A FORWARD -i eth2 -j forward_dmz
 -A FORWARD -i eth3 -j forward_dmz
 -A FORWARD -j DROP
+```
 
 
+```
 -A forward_dmz -s 172.20.64.0/19 -i eth0 -o vlan13 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
 -A forward_dmz -s 172.20.64.0/19 -i eth1 -o vlan13 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
 -A forward_dmz -s 172.20.64.0/19 -i eth2 -o vlan13 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
@@ -651,9 +652,9 @@ vlan3997  Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B
 -A forward_dmz -p icmp -m limit --limit 3/min -j LOG --log-prefix "SFW2-FWDdmz-DROP-DEFLT " --log-tcp-options --log-ip-options
 -A forward_dmz -p udp -m limit --limit 3/min -m conntrack --ctstate NEW -j LOG --log-prefix "SFW2-FWDdmz-DROP-DEFLT " --log-tcp-options --log-ip-options
 -A forward_dmz -j DROP
+```
 
-
-
+```
 -A forward_ext -p icmp -m conntrack --ctstate RELATED,ESTABLISHED -m icmp --icmp-type 0 -j ACCEPT
 -A forward_ext -p icmp -m conntrack --ctstate RELATED,ESTABLISHED -m icmp --icmp-type 3 -j ACCEPT
 -A forward_ext -p icmp -m conntrack --ctstate RELATED,ESTABLISHED -m icmp --icmp-type 11 -j ACCEPT
@@ -676,14 +677,15 @@ vlan3997  Link encap:Ethernet  HWaddr 00:23:54:6B:88:2B
 -A forward_ext -p icmp -m limit --limit 3/min -j LOG --log-prefix "SFW2-FWDext-DROP-DEFLT " --log-tcp-options --log-ip-options
 -A forward_ext -p udp -m limit --limit 3/min -m conntrack --ctstate NEW -j LOG --log-prefix "SFW2-FWDext-DROP-DEFLT " --log-tcp-options --log-ip-options
 -A forward_ext -j DROP
+```
 
 
-
+```
 -A input_int -j reject_func
 -A reject_func -p tcp -j REJECT --reject-with tcp-reset
 -A reject_func -p udp -j REJECT --reject-with icmp-port-unreachable
 -A reject_func -j REJECT --reject-with icmp-proto-unreachable
-
+```
 
 
 
