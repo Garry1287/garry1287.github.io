@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "debug-sfp"
+title:  "Просмотр информации о sfp в cisco catalyst 4900"
 date:   2011-07-16 21:08:28 +0400
 categories: hardware
 tags: hardware
 ---
 
-# debug-sfp
+# Просмотр информации о sfp в cisco catalyst 4900.
+```
 CTD-S6#show interfaces Te1/5 transceiver detail 
 ITU Channel not available (Wavelength not available),
 Transceiver is internally calibrated.
@@ -38,8 +39,9 @@ Te1/5        2.4                 4.4         0.4        -8.2      -12.2
 Port       (dBm)              (dBm)       (dBm)      (dBm)      (dBm)
 -------    -----------------  ----------  ---------  ---------  ---------
 Te1/5       -6.0                 4.4         0.4       -14.4      -18.4
+```
 
-
+```
 CTD-S6#sh idprom int Te1/5
 
 X2 Serial EEPROM Contents:
@@ -111,19 +113,10 @@ Current Reference :
   0x40: 38 3E 31 EB AF 00 00 00 00 00 00 00 00 00 4A 15
   0x50: 94 BF 00 00 00 00 00 00 00
           
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
-CTD-S6#
+```
+
+
+```
 CTD-S6#
 CTD-S6#
 CTD-S6#sh inventory
@@ -216,3 +209,4 @@ PID: PWR-C49M-1000AC   , VID: V01  , SN: SNI1450CA10
 
 NAME: "Power Supply 2", DESCR: "Power Supply ( AC 960W )"
 PID: PWR-C49M-1000AC   , VID: V01  , SN: SNI1450CA12
+```

@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "cat4900-10g"
+title:  "Переделка гигабитных портов в 10 гигабитные на cat4900-10g"
 date:   2018-09-21 18:07:00 +0300
 categories: hardware
 tags: hardware
 ---
 
-# cat4900-10g
+# Переделка гигабитных портов в 10 гигабитные на cat4900-10g
+```
 show hw-module module port-group
 
 Module Port-group Active                         Inactive
@@ -17,7 +18,7 @@ Module Port-group Active                         Inactive
    2        3     Gi2/17-20                      Te2/5-6                       
    2        4     Te2/7-8                        Gi2/21-24                     
    3       COMMAND NOT SUPPORTED
-
+```
 Нижняя платформа - это 10G порты - Te1/1, Te1/2 - основная платформа
 Верхняя платформа - это дополнительная платформа - там конверторы 10G в 1G стоят и 2 10G порта Te2/7 и Te2/8
 
@@ -27,8 +28,9 @@ Te1/5 выделить под Матыру
 
 
 Переводятся по 2 10G порта сразу
-
+```
 CTD-S6#show hw-module module 2 port-group 4
 Module Port-group Active                         Inactive
 -------------------------------------------------------------
-   2        4     Te2/7-8                        Gi2/21-24   
+   2        4     Te2/7-8                        Gi2/21-24
+```   

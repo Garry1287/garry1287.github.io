@@ -1,16 +1,18 @@
 ---
 layout: post
-title:  "hdd"
+title:  "О hdd"
 date:   2011-11-16 05:44:09 +0400
 categories: hardware
 tags: hardware
 ---
 
-# hdd
+# О hdd
 Структура диска
 
 [http://ru.wikipedia.org/wiki/%D0%9A%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80_%28%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%86%D0%B0_%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%29](http://ru.wikipedia.org/wiki/%D0%9A%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80_%28%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%86%D0%B0_%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%29)
+
 [http://rus-linux.net/lib.php?name=/MyLDP/hard/hard/hdd-2.htm](http://rus-linux.net/lib.php?name=/MyLDP/hard/hard/hdd-2.htm)
+
 
 
 Общий объем (байт) = C x H x S x 512 (байт),
@@ -41,16 +43,19 @@ tags: hardware
 
 
 
-UUID
+## UUID
 Опция <device>
 
+```
 # blkid /dev/sda5
 
 /dev/sda5: UUID="5a179614-0415-48c6-a9ad-3f6ad9596619" TYPE="ext3" SEC_TYPE="ext2"
+```
 
 Команда vol_id
 Существует еще команда vol_id. Она настолько простая, и ман к ней так понятно написан, что разобраться с ней не составит труда. Например:
 
+```
 # vol_id /dev/sda2
 
 ID_FS_USAGE=filesystem
@@ -61,20 +66,13 @@ ID_FS_UUID_ENC=02E4E3A0E4E39467
 ID_FS_LABEL=Vista
 ID_FS_LABEL_ENC=Vista
 ID_FS_LABEL_SAFE=Vista
-
+```
 
 При загрузке компьютера, программа udev записывает UUID раздела в его ноду - файл блочного устройства в директории /dev.
  В доступной пользователю части файловой системы,
  UUID'ы разделов можно найти в файле /etc/blkid.tab, но информация эта может оказаться устаревшей. 
 
 [http://rus-linux.net/nlib.php?name=/MyLDP/consol/HuMan/blkid-ru.html](http://rus-linux.net/nlib.php?name=/MyLDP/consol/HuMan/blkid-ru.html)
-
-
-
-
-
-
-
 
 
 
@@ -105,7 +103,6 @@ SCSI разъёмы
 [http://www.ihdd.ru/scsi-interface-description](http://www.ihdd.ru/scsi-interface-description)
 
 
-
 аппаратный рейд представляется для системы как один диск.
 
 не важно при этом, сколько винчестеров туда на деле поставлено.
@@ -123,17 +120,17 @@ SCSI разъёмы
 За частую необходимо проверить диски на наличие поврежденных секторов (бед-блоки). Чем раньше их заметить тем меньше информации можно потерять или выявить неисправный диск и заменить.
 
 Для проверки жестких дисков в Linux можно воспользоваться стандартной утилитой badblocks. Утилита простая, пробегая по диску она выводит сектора повреждения. Для подробного отображения используется ключ -v.
-
+```
 # badblocks -v /dev/sda
-
+```
 Для лечения блогов, точнее выключения поврежденных секторов необходимо собрать в файл все поврежденные блоки диска.
-
+```
 # badblocks /dev/sda2 > /tmp/badblocks2.txt
-
+```
 После собранной информации о поврежденных секторах в файле /tmp/badblocks2.txt можно воспользоваться утилитой e2fsck для попытки восстановить данные и перенести из поврежденных секторов.
-
+```
 # e2fsck -l /tmp/badblocks2.txt /dev/sda2
-
+```
 Программа e2fsck проверяет супер блоки файловой системы, структуру файлов. Стоит заметить, что для запуска проверки файловая система должна быть размонтирована или подключен в read-only. При проверки будет попытка прочитать битые сектора (блоки) и перенос данных в рабочие.
 
 
@@ -141,34 +138,34 @@ SCSI разъёмы
 Порой необходимо проверить скорость чтения дисков для понимания: Какие диски с какими можно объединять в масив без потери производительности? Или из-за какого диска тормозит raid массив?
 
 Для быстрой диагностики HDD можно воспользоваться командой:
-
+```
 hdparm -tT /dev/sda
-
+```
 Или скорость чтение для уже собранного raid массива HDD в целом:
-
+```
 hdparm -tT /dev/md0
-
+```
 В результате мы получим примерно это:
-
+```
 hdparm -tT /dev/sda
 
 /dev/sda:
  Timing cached reads:   1690 MB in  2.00 seconds = 845.07 MB/sec
  Timing buffered disk reads: 302 MB in  3.01 seconds = 100.24 MB/sec
 
-
+```
 
 
 [http://www.it-article.ru/linux/opredelenie-k-kakomu-scsi-kontrolleru-podklyuchen-disk](http://www.it-article.ru/linux/opredelenie-k-kakomu-scsi-kontrolleru-podklyuchen-disk)
 
-
+```
 garry:~ # hdparm -I /dev/sda | grep Number
         Model Number:       WDC WD2500AAJS-22VTA0                   
         Serial Number:      WD-WMART2037954
 garry:~ # hdparm -I /dev/sdb | grep Number
         Model Number:       WDC WD5000AAKX-001CA0                   
         Serial Number:      WD-WCAYUH038499
-
+```
 
 
 
@@ -190,52 +187,47 @@ garry:~ # hdparm -I /dev/sdb | grep Number
 
 
 Температура диска
+```
 hddtemp /dev/sda
-
+```
 или
+```
 sudo /usr/sbin/smartctl -a /dev/sda | grep Temp | awk -F" " '{printf "%d",$10}'
+```
 
 
-
-
-
-
-
-
-
+```
 badblocks -v <имя_устройства> Например:
 
 badblocks -v /dev/sda
+```
 
 Параметр -v включает подробный режим работы — о каждом действии программа badblocks будет выводить отчет. 
 Желательно выполнять программу в однопользовательском режиме (при загрузке init=/bin/bash), чтобы ее работе ничто не мешало.
 
 Или
-
+```
 badblocks /dev/sda3 > /tmp/bblcks3
+```
 
 После этого вся информация о поврежденных участках поступит в файл /tmp/bblcks3. 
 Это необходимо, т.к. далее она понадобится для проверки файловой системы.
 
-
+```
 e2fsck -l /tmp/bblcks3 /dev/sda3
+```
 
 Тогда при проверке будет предпринята попытка перенести информацию с поврежденного блока на целый. Иногда это удается.
-
-
-
-
 
 
 Последовательность проверки файловой системы должна быть следующая:
 1. Размонтировать файловую систему.
 2. Запустить fsck для ее проверки.
 Например, для проверки файловой системы раздела /dev/hda1 сначала размонтируем его, а потом запустим fsck:
-
+```
 umount /dev/hda1
 fsck /dev/hda1
-
-
+```
 
 файловая система должна быть размонтирована, или, в крайнем случае, смонтирована read-only
 
@@ -249,9 +241,9 @@ fsck /dev/hda1
 Для перезагрузки в однопользовательском режиме перезагрузите систему (команда reboot), а при загрузке передайте ядру параметр single.
 В однопользовательском режиме может работать только один пользователь — root, а все сервисы выключены, так что проверке файловой системы ничто не будет помешать. 
 Для перемонтирования файловой системы в режим только для чтения введите команду:
-
+```
  mount -о remount го -t ext3 /
-
+```
 
 Код, возвращаемый fsck, является суммой следующих условий:
 
@@ -266,8 +258,9 @@ fsck /dev/hda1
 
 
 Информация о файловой системе
+```
 sudo tune2fs -l /dev/sda2
-
+```
 
 
 
@@ -284,62 +277,58 @@ fsck.vfat /dev/hda1 или fsck.msdos /dev/hda1 или dosfsck /dev/hda1 — п�
 
 
 
-
-
-
-
-Структура
+## Структура
 [http://linux.armd.ru/common/linux/Documentation/hd_structure/index.html](http://linux.armd.ru/common/linux/Documentation/hd_structure/index.html)
 [http://www.opennet.ru/base/dev/hdd_struct.txt.html](http://www.opennet.ru/base/dev/hdd_struct.txt.html)
 
-Сделать опрос состояния и присылвать письма - SMART
+## Сделать опрос состояния и присылвать письма - SMART
+
 [http://xeim.blogspot.ru/2010_01_01_archive.html](http://xeim.blogspot.ru/2010_01_01_archive.html)
+
 [http://ru.wikipedia.org/wiki/S.M.A.R.T.](http://ru.wikipedia.org/wiki/S.M.A.R.T.)
 [http://www.lissyara.su/articles/freebsd/hardware/smartmontools/](http://www.lissyara.su/articles/freebsd/hardware/smartmontools/)
+
 [http://unixmemo.org.ua/2010/05/smartmontools-%D1%80%D0%B0%D1%81%D1%81%D0%BA%D0%B0%D0%B6%D0%B5%D1%82-%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%B6%D0%B8%D0%B2%D0%B0%D1%8E%D1%82-%D0%B2%D0%B0%D1%88%D0%B8-%D0%B6%D0%B5%D1%81%D1%82%D0%BA%D0%B8/](http://unixmemo.org.ua/2010/05/smartmontools-%D1%80%D0%B0%D1%81%D1%81%D0%BA%D0%B0%D0%B6%D0%B5%D1%82-%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%B6%D0%B8%D0%B2%D0%B0%D1%8E%D1%82-%D0%B2%D0%B0%D1%88%D0%B8-%D0%B6%D0%B5%D1%81%D1%82%D0%BA%D0%B8/)
+
 [http://wiki.dieg.info/smartmontools](http://wiki.dieg.info/smartmontools)
 [http://wiki.enchtex.info/tools/system/smartmontools](http://wiki.enchtex.info/tools/system/smartmontools)
+
 wiki.enchtex.info/tools/system/smartmontools
 [http://ksimute.trancom.ru/smart-hdd.shtml](http://ksimute.trancom.ru/smart-hdd.shtml)
 [http://www.lexpr.ru/node/336](http://www.lexpr.ru/node/336)
+
 [http://www.wandmagic.ru/news/178.html](http://www.wandmagic.ru/news/178.html)
+
 [http://www.openkazan.info/smartmontools_smartctl](http://www.openkazan.info/smartmontools_smartctl)
+
 Инженеры Яндекса о жёстких дисках
-
-
-
-
-
-
-
-
-
-
 
 
 О физике диска
 [http://citforum.ru/operating_systems/sos/glava_10.shtml](http://citforum.ru/operating_systems/sos/glava_10.shtml)
+
 [http://esyr.org/wiki/%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B/%D0%A4%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B](http://esyr.org/wiki/%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B/%D0%A4%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D1%8B%D0%B5_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B)
+
 [http://cs.mipt.ru/docs/courses/osstud/12/ch12.htm](http://cs.mipt.ru/docs/courses/osstud/12/ch12.htm)
+
 [http://rk6.bmstu.ru/electronic_book/os/unibase/filsys.html](http://rk6.bmstu.ru/electronic_book/os/unibase/filsys.html)
+
 [http://linux-ve.chat.ru/book/filesystem3.html](http://linux-ve.chat.ru/book/filesystem3.html)
+
 [http://www.rhd.ru/docs/manuals/enterprise/RHEL-AS-2.1-Manual/install-guide/ch-partitions.html](http://www.rhd.ru/docs/manuals/enterprise/RHEL-AS-2.1-Manual/install-guide/ch-partitions.html)
 
 
-
-Смещение физических блоков (размер 4096)
+## Смещение физических блоков (размер 4096)
 [http://habrahabr.ru/company/paragon/blog/97436/](http://habrahabr.ru/company/paragon/blog/97436/)
 
 
-Mdadm
+## Mdadm
 [http://habrahabr.ru/post/200194/](http://habrahabr.ru/post/200194/)
 
 
-
-Добавление жёсткого диска в linux
+## Добавление жёсткого диска в linux
 [http://www.linuxsoft.ru/info/lib/lib/iron/hddadd.htm](http://www.linuxsoft.ru/info/lib/lib/iron/hddadd.htm)
 
 
-
-Smart
+## Smart
 [http://sysadm.pp.ua/linux/monitoring-systems/smart-attributes.html](http://sysadm.pp.ua/linux/monitoring-systems/smart-attributes.html)

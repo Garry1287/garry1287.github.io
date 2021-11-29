@@ -1,19 +1,12 @@
 ---
 layout: post
-title:  "hdware"
+title:  "Набор для офиса"
 date:   2017-04-08 10:55:38 +0300
 categories: hardware
 tags: hardware
 ---
 
-# hdware
-badblocks -s -o /home/garry/badblock-sda /dev/sda
-Checking for bad blocks (read-only test): done 
-
-
-
-
-
+# Набор для офиса - hdware
 
 
 Телефон Panasonic KX-TS2365RUW
@@ -38,9 +31,3 @@ Oklick Optical mouse 143M
 
 Материнская плата
 MSI N 1996
-
-
-hgf
-
-
-echo $(arch)
