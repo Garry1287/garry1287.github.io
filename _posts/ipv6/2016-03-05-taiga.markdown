@@ -7,6 +7,7 @@ tags: ipv6
 ---
 
 # taiga
+```
 DEVICE=eth1.50
 TYPE=Vlan
 VLAN=yes
@@ -17,11 +18,11 @@ IPADDR=10.0.0.1
 NETMASK=255.255.255.252
 IPV6INIT=yes
 IPV6ADDR=2a0c:4280:0::2/64
+```
 
 
 
-
-
+```
 [root@srv-akim garry]# cat /etc/quagga/ospf6d.conf
 !
 ! Zebra configuration saved from vty
@@ -71,24 +72,24 @@ line vty
  ipv6 access-class access6
  exec-timeout 0 0
 !
+```
 
 
 
 
-
-
+```
 cat /etc/tayga/default.conf
 tun-device tunnat64
 ipv4-addr 192.168.255.1
 prefix 2a0c:4280:1:ffff::/96
 dynamic-pool 192.168.255.0/24
 data-dir /var/lib/tayga/default
-
-
+```
+```
 [root@srv-akim garry]# less /var/lib/tayga/default/dynamic.map 
 192.168.255.160 2a0c:4280::b33d:180f:145a:d34d  1522065656
-
-
+```
+```
 acl "ignore" { // do not apply DNS64 to this addresses
   10/8;
   172.16/12;
@@ -160,7 +161,9 @@ logging {
 #                severity dynamic;
 #        };
 #};
+```
 
+```
 zone "." IN {
         type hint;
         file "named.ca";
@@ -168,18 +171,18 @@ zone "." IN {
 
 include "/etc/named.rfc1912.zones";
 include "/etc/named.root.key";
-
+```
 
 
 
 
 
 --------------------------------------------------------------------
--A INPUT -i tunnat64 -j nat64-fw 
+`-A INPUT -i tunnat64 -j nat64-fw `
 
 ------------------------------------------------------------------------
 
-
+```
 interface eth1.20
 {
        AdvSendAdvert on;
@@ -197,4 +200,4 @@ interface eth1.20
         };
 
 };
-
+```
