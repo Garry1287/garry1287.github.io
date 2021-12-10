@@ -1,14 +1,5 @@
 ---
 layout: post
-title:  "juniper-save+"
-date:   2011-10-08 20:42:52 +0400
-categories: juniper
-tags: juniper
----
-
-# juniper-save+
----
-layout: post
 title:  "Juniper EX4200 - восстановление после ошибки  error: could not copy to juniper.save+"
 date:   2018-12-20 17:31:15 +0300
 categories: networking
@@ -41,14 +32,14 @@ total files: 8
 Думаю делать ночью или когда кто-то будет на ЦТД
 
 *[[http://juniper.ucoz.ru/index/file_from_server/0-43](http://juniper.ucoz.ru/index/file_from_server/0-43)]([http://juniper.ucoz.ru/index/file_from_server/0-43)](http://juniper.ucoz.ru/index/file_from_server/0-43))
+
 *[[http://prostoblog-unit.blogspot.com/2016/06/junos.html](http://prostoblog-unit.blogspot.com/2016/06/junos.html)]([http://prostoblog-unit.blogspot.com/2016/06/junos.html)](http://prostoblog-unit.blogspot.com/2016/06/junos.html))
 
 
-```
  Here's what I would do (while connected via console!)
 
  
-
+```
 1. show configuration | no-more | save current-config
 (I'd also recommend to take a local backup to your workstation as well, just in case)
 
@@ -74,13 +65,14 @@ total files: 8
 
 
 
-
+```
 configuration mode # 	commit confirmed <время_в_минутах>
+```
 
 Применяет кандидатскую конфигурацию на указанное количество минут (по умолчанию (если не указывать количество минут) на 10). По истечению времени происходит откат на предыдущую конфигурацию. Для применения конфигурации (перевода ее из временной в постоянную) необходимо ввести команду «commit» или «commit check»
 ВНИМАНИЕ! Повторный ввод команды «commit confirmed» не приведет к сбросу времени. Вместо этого, временная конфигурация будет подтверждена (как при подтверждении временной конфигурации командой «commit» или «commit check»), а временной конфигурацией станет кандидатская (на момент повторного ввода «commit confirmed») конфигурация, даже если никаких изменений не проводилось (в таком случае временной станет «нулевая» конфигурация).
 
-
+```
 % ls -al
 total 156052
 drwxrwxrwt   5 root  config         512 Feb 14 16:25 .
@@ -95,35 +87,37 @@ drwxrwxr-x   2 root  operator       512 Sep  3  2017 .snap
 drwxr-xr-x   2 root  config         512 Sep  3  2017 private
 -rw-r-----   1 root  config    16777216 Sep  3  2017 schema.db
 drwxr-xr-x   3 root  config         512 Sep  3  2017 sdb
+```
 
-
-
+```
 aviva@router1# commit confirmed
 commit confirmed will be automatically rolled back in 10 minutes unless confirmed
 commit complete
+```
 
 Чтобы сделать временную активацию постоянной, запустите следующую команду:
-
+```
 [edit]
 aviva@router1# commit
-
+```
 [http://juniper.ucoz.ru/index/temp_commit/0-41](http://juniper.ucoz.ru/index/temp_commit/0-41)
 
 
 Перегрузка оборудования
-root@juniper> request system reboot
+`root@juniper> request system reboot`
 
 Удаление ненужных файлов
-root@juniper> request system storage cleanup
+`root@juniper> request system storage cleanup`
 
 Откат конфигураций
-root@juniper# rollback {откат на последнюю конфигурацию}
+`root@juniper# rollback {откат на последнюю конфигурацию}`
 
 [http://juniper.ucoz.ru/index/reserv_copy/0-45](http://juniper.ucoz.ru/index/reserv_copy/0-45)
+
 [http://juniper-rus.blogspot.com/2012/10/2.html](http://juniper-rus.blogspot.com/2012/10/2.html)
 
 1.По схеме
-
+````
 root@ctd-s2:RE:0% ls -al
 total 248
 drwxr-xr-x   6 root  wheel   1024 Feb 14 16:25 .
@@ -148,6 +142,7 @@ drwx------   3 root  wheel   2048 Nov 21  2014 lost+found
 -rw-r--r--   1 root  wheel    404 Jan 25  2013 ssh_host_rsa_key.pub
 -rw-r--r--   1 root  wheel   1512 Jan 21  2013 usage.db
 drwxr-xr-x   2 root  wheel    512 Nov 21  2014 vchassis
+```
 
 2.Rollback
 3.

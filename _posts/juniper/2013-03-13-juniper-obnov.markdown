@@ -1,17 +1,21 @@
 ---
 layout: post
-title:  "juniper-obnov"
+title:  "Обновление прошивки juniper"
 date:   2013-03-13 04:04:42 +0400
-categories: juniper
+categories: juniper Networking
 tags: juniper
 ---
 
-# juniper-obnov
+# Обновление прошивки juniper
+
 [https://kb.juniper.net/InfoCenter/index?page=content&id=JSA10613](https://kb.juniper.net/InfoCenter/index?page=content&id=JSA10613)
+
 [http://forum.nag.ru/forum/index.php?showtopic=92380&st=20](http://forum.nag.ru/forum/index.php?showtopic=92380&st=20)
 
 
 [http://wtf.hijacked.us/wiki/index.php/Juniper](http://wtf.hijacked.us/wiki/index.php/Juniper)
+
+```
  #run show interface ge-0/0/1
 
 ->To see the vlan number 501 Brief Information
@@ -68,7 +72,7 @@ tags: juniper
 
 ->To see Chassis mac address
 #show chassis mac-address
-
+```
 
 
 
@@ -88,24 +92,20 @@ As we can see the policy is applied globally but it has impact on instance Route
 Размер таблицы MAC-адресов  32K
 Размер таблицы маршрутизации 10K IPv4 1K IPv6
 
+```
 > show route summary 
 #> show ethernet-switching statistics mac-learning
 Learning stats: 20 learn msg rcvd, 0 error, 9 forced update
 #> show arp 
+```
 
-
-Обновление прошивки Juniper
+# Обновление прошивки Juniper
 
 On EX4500 or EX4550 switches, the software forwarding infrastructure daemon (sfid) might continuously create core files, causing interruptions in traffic, because packets are erroneously freed twice. A possible trigger is the handling of Layer 2 protocol tunneling packets. [PR/941482: This issue has been resolved.]
 
 
 [http://www.juniper.net/support/downloads/?p=ex4550#sw](http://www.juniper.net/support/downloads/?p=ex4550#sw)
 [http://xcat.su/juniper/update-junos-cli/](http://xcat.su/juniper/update-junos-cli/)
-
-
-
-
-
 
 
 
@@ -124,12 +124,11 @@ I've captured and saw some strange packet:
 
 Have anyone know shell command to check detail sfid process ?
 
-
-
+```
 set firewall family inet filter BLOCKTTL1 term TTL from ttl 1
 set firewall family inet filter BLOCKTTL1 term TTL then accept
 set firewall family inet filter BLOCKTTL1 term ACeetALTTL then accept
 
 commit check
+```
 
-lcdd

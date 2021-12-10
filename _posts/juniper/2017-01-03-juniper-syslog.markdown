@@ -1,12 +1,13 @@
 ---
 layout: post
-title:  "juniper-syslog"
+title:  "Логирование в juniper"
 date:   2017-01-03 06:16:37 +0300
-categories: juniper
+categories: juniper Networking
 tags: juniper
 ---
 
-# juniper-syslog
+# Логирование в juniper
+```
 8     0000-00-00 00:34:40 Configuration saved to flash (Username: Anonymous, IP:
                            10.90.90.92)                                        
 7     0000-00-00 00:24:50 Port 24 link up, 100Mbps  FULL duplex                
@@ -17,10 +18,9 @@ tags: juniper
                           90.92)                                               
 3     0000-00-00 00:08:37 Successful login through Web (Username: Anonymous, IP:
                            10.90.90.92)        
+```
 
-
-
-
+```
 syslog {file cli-commands {interactive-commands info;authorization info;}user * {interactive-commands info;authorization info;}}
 
 
@@ -83,10 +83,10 @@ Possible completions:
   notice               Conditions that should be handled specially
   warning              Warning messages
   |                    Pipe through a command
+```
 
 
-
-
+```
 set system syslog archive size 100k
 set system syslog archive files 3
 set system syslog user * any emergency
@@ -107,10 +107,10 @@ set system syslog file kmd-logs match KMD
 set system syslog time-format year
 set system syslog time-format millisecond
 set system syslog source-address 172.30.2.241
+```
 
 
-
-	
+```
 set security log cache limit 256
 set security log mode stream
 set security log format sd-syslog
@@ -120,11 +120,9 @@ set security log stream NOC severity warning
 set security log stream NOC format sd-syslog
 set security log stream NOC category all
 set security log stream NOC host 172.30.5.100
+```
 
-
-
-
-
+```
 syslog {
 /* write all security-related messages to file /var/log/security */
 file security {
@@ -155,10 +153,10 @@ console {
 any error;
 }
 }
+```
 
 
-
-
+```
 show configuration system syslog
 
 
@@ -186,13 +184,14 @@ file interactive-commands {
 }
 
 set system syslog file  messages any info
-
+```
 
 [https://www.51sec.org/2015/12/juniper-srx-logging-methods-and-configuration-stream-mode-vs-event-mode/](https://www.51sec.org/2015/12/juniper-srx-logging-methods-and-configuration-stream-mode-vs-event-mode/)
 
 [https://www.juniper.net/documentation/en_US/junos/topics/example/firewall-filter-option-logging-example.html](https://www.juniper.net/documentation/en_US/junos/topics/example/firewall-filter-option-logging-example.html)
 
 
+```
 1 syslog {/* write all security-related messages to file /var/log/security */file security {authorization info;interactive-commands info;}
 
 file messages {authorization notice;any warning;}
@@ -201,13 +200,14 @@ file messages {authorization notice;any warning;}
 host monitor.mycompany.com {daemon info;any warning;}
 
 set system syslog file  messages  any info
-
+```
 
 
 messages - сохранять ряд
 121.1 сохранять больше
 security - autor
 
+``
 syslog {
 /* write all security-related messages to file /var/log/security */
 file security {
@@ -221,16 +221,19 @@ file messages {
 authorization notice;
 any warning;
 }
+```
 
 
-
-
+```
 set system syslog file security interactive-commands info;authorization info
 archive size 750k files 2;
 set system syslog file qflogs archive size 1g
 
 set system syslog file messages any any; authorization info
+```
 
 [http://www.sourcecodebd.net/2018/01/14/juniper-turning-on-logging/](http://www.sourcecodebd.net/2018/01/14/juniper-turning-on-logging/)
+
 [http://tech4u.pro/info-networks/97-juniper-junos-logging-vvedenie](http://tech4u.pro/info-networks/97-juniper-junos-logging-vvedenie)
-set system syslog file interactive-commands interactive-commands error
+
+`set system syslog file interactive-commands interactive-commands error`

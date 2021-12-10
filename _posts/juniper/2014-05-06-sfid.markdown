@@ -2,14 +2,15 @@
 layout: post
 title:  "sfid"
 date:   2014-05-06 02:39:02 +0400
-categories: juniper
+categories: juniper Networking
 tags: juniper
 ---
 
 # sfid
- show chassis routing-engine no-forwarding 
 
-show system processes extensive no-forwarding
+`show chassis routing-engine no-forwarding` 
+
+`show system processes extensive no-forwarding`
 
 On EX4500 or EX4550 switches, the software forwarding infrastructure daemon (sfid) might continuously create core files, causing interruptions in traffic, because packets are erroneously freed twice. A possible trigger is the handling of Layer 2 protocol tunneling packets. [PR/941482: This issue has been resolved.]
 
@@ -61,25 +62,16 @@ I've captured and saw some strange packet:
 
  Have anyone know shell command to check detail sfid process ?
 
-
-
-
-
 Not that I can offer any help on the issue, but why are you not able to create the filter with that match condition? 
 
- 
-
- 
-
-
-
+```
 set firewall family inet filter BLOCKTTL1 term TTL from ttl 1
 set firewall family inet filter BLOCKTTL1 term TTL then accept
 set firewall family inet filter BLOCKTTL1 term ACeetALTTL then accept
 
 commit check
 configuration check succeeds
-
+```
 
 Model: ex4200-24t
 JUNOS Base OS boot [12.2R1.8]
@@ -95,6 +87,3 @@ including the software forwarding infrastructure (sfid), chassis manager (chassi
 and the virtual chassis system (vccpd). You don't need to be root to get into these."
 [KUDOS PLEASE! If you think I earned it!
 If this solution worked for you please flag my post as an "Accepted Solution" so others can benefit..]
-
-
-
