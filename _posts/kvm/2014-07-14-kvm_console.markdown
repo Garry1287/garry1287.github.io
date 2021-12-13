@@ -1,13 +1,15 @@
 ---
 layout: post
-title:  "kvm_console"
+title:  "Настройка console в kvm"
 date:   2014-07-14 04:44:04 +0400
-categories: kvm
+categories: kvm linux
 tags: kvm
 ---
 
-# kvm_console
+# Настройка console в kvm
 add the red lines
+
+```
 [root@localhost ~]# cat /etc/default/grub
 GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,9600n8"
 GRUB_TERMINAL=serial
@@ -26,18 +28,16 @@ Generating grub.cfg ...
 Found linux image: /boot/vmlinuz-3.3.5-2.fc16.x86_64
 Found initrd image: /boot/initramfs-3.3.5-2.fc16.x86_64.img
 done
-
+```
 
 
 [http://lost-and-found-narihiro.blogspot.ru/2012/05/kvm-how-to-connect-to-fedora-vms-which.html](http://lost-and-found-narihiro.blogspot.ru/2012/05/kvm-how-to-connect-to-fedora-vms-which.html)
 
 
 
-
-
-
 Типы подключения сети
 NAT
+```
 garry:~ # ifconfig
 eth0      Link encap:Ethernet  HWaddr 00:21:85:39:02:AD  
           inet addr:192.168.1.141  Bcast:192.168.1.255  Mask:255.255.255.0
@@ -65,12 +65,15 @@ lo        Link encap:Local Loopback
           collisions:0 txqueuelen:0 
           RX bytes:486439639 (463.9 Mb)  TX bytes:486439639 (463.9 Mb)
 
+```
+
 
 10.0.2.15
 255.255.255.0
 10.0.2.2
 
-сетевой мост
+## Сетевой мост
+```
 bridge - eth0 
 eth0      Link encap:Ethernet  HWaddr 00:21:85:39:02:AD  
           inet addr:192.168.1.141  Bcast:192.168.1.255  Mask:255.255.255.0
@@ -97,19 +100,19 @@ lo        Link encap:Local Loopback
           TX packets:456254 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:0 
           RX bytes:486456702 (463.9 Mb)  TX bytes:486456702 (463.9 Mb)
+```
 
-
-и на хосте
+И на хосте
 192.168.1.206
 255.255.255.0
 192.168.1.11 
 
 
-внутреняя сеть
-хз
+## Внутреняя сеть
 для взаимодействия виртуальных машин
 
-виртуальный адаптер хоста
+Виртуальный адаптер хоста
+```
 eth0      Link encap:Ethernet  HWaddr 00:21:85:39:02:AD  
           inet addr:192.168.1.141  Bcast:192.168.1.255  Mask:255.255.255.0
           inet6 addr: fe80::221:85ff:fe39:2ad/64 Scope:Link
@@ -144,17 +147,13 @@ vboxnet0  Link encap:Ethernet  HWaddr 0A:00:27:00:00:00
           TX packets:43 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:1000 
           RX bytes:0 (0.0 b)  TX bytes:9840 (9.6 Kb)
-
+```
 
 192.168.56.101
 255.255.255.0
 
 Для взаимодействия хост машины и виртуальных, без доступа к инету
-
 универсальный драйвер
-
-
-
 
 NAT. В данном режиме адаптер использует сетевые настройки основной системы при взаимодействии с сетью физического узла и прочими внешними сетями. Сетевая подсистема VirtualBox транслирует IP-трафик с исходным IP-адресом виртуальной машины в трафик с исходным адресом сетевого адаптера хостовой системы (трансляция сетевых адресов, Network Address Translation). Реализация NAT в VirtualBox имеет определенные ограничения, связанные с поддержкой протокола ICMP, широковещательного UDP -трафика и технологий виртуальных частных сетей. Этот режим используется по умолчанию.
 Сетевой мост. В данном режиме сетевой адаптер ВМ подключается к сетевому адаптеру хостовой системы и обрабатывает сетевые пакеты непосредственно в обход сетевого стека хостовой системы ( адаптер хостовой системы работает с адаптером ВМ в режиме моста ).
@@ -174,36 +173,21 @@ NAT. В данном режиме адаптер использует сетев
 
 
 
-
-
-
-
-
-
-
-
-    NAT – наипростейший способ предоставить гостевой ОС доступ в интернет, при таком режиме осуществляется просто перенаправление 
+* NAT – наипростейший способ предоставить гостевой ОС доступ в интернет, при таком режиме осуществляется просто перенаправление 
 (транзакции) пакетов;
-    Bridge Adapter - сетевой адаптер виртуальной машины получает такой же доступ в сеть, 
+* Bridge Adapter - сетевой адаптер виртуальной машины получает такой же доступ в сеть, 
 как и сетевой адаптер host-машины, но нет доступа во внешний мир;
-    Internal Network - внутренняя сеть для объединения виртуальных машин в локальную сеть, без наружу и к host-машине;
-    Host-only adapter - Ваша виртуалка как живая, она имеет доступ к сети Интернет, 
+* Internal Network - внутренняя сеть для объединения виртуальных машин в локальную сеть, без наружу и к host-машине;
+* Host-only adapter - Ваша виртуалка как живая, она имеет доступ к сети Интернет, 
 находится в одной локальной сети с реальной и имеет к ней доступ.
 
-
-
-
-
-
-
-
-
+```
   <interface type='bridge'>
       <mac address='52:54:00:85:e7:90'/>
       <source bridge='br0'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
-
+```
 
 
 По умолчанию KVM использует NAT через бридж с именем virbr0. 
@@ -213,21 +197,21 @@ NAT. В данном режиме адаптер использует сетев
 [http://hrafn.me/2010/01/kak-nastroit-bridzh-dlya-kvm-na-red-hat-enterprise-linux-5-4/](http://hrafn.me/2010/01/kak-nastroit-bridzh-dlya-kvm-na-red-hat-enterprise-linux-5-4/)
 
 
-Роутинг внутри kvm
+## Роутинг внутри kvm
 [http://admoprog.blogspot.ru/2010/09/ipv4-ipv6-kvm-hetzner.html](http://admoprog.blogspot.ru/2010/09/ipv4-ipv6-kvm-hetzner.html)
 
 
 
 
-
 Делаем настройки в iptables, чтобы трафик виртуалок «ходил» через соединение типа bridge
-
+```
 # iptables -I FORWARD -m physdev --physdev-is-bridged -j ACCEPT
+```
 
 
 
+Примечание 2:
 
-римечание 2:
 Если на ВМ нужна «белая сеть», тогда ставим
 --network=bridge:br0
 Если на ВМ требуется «серая сеть», тогда ставим
@@ -240,49 +224,34 @@ NAT. В данном режиме адаптер использует сетев
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Перенаправляем вывод Grub для виртуального окружения в последовательный порт.
 В /boot/grub/menu.lst добавляем:
-
+```
    serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1
    terminal --timeout=10 serial
-
+```
 Отключаем показ заставки  splash и перенаправляем вывод ядра в последовательный порт (в menu.lst):
-
+```
    title CentOS (2.6.18-128.1.10.el5)
 	root (hd0,0)
 	kernel /boot/vmlinuz-2.6.18-128.1.10.el5 ro root=LABEL=/ console=ttyS0
 	initrd /boot/initrd-2.6.18-128.1.10.el5.img
+```
 
-
-
+```
 ln -s /usr/lib/systemd/systemd/serial-getty@.service /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service
+```
 
-вместо
 Настраиваем запуск getty процесса для логина через ttyS0. В /etc/inittab прописываем:
-
+```
    S0:12345:respawn:/sbin/agetty ttyS0 115200
+```
 
-
-
+```
 ln -s /usr/lib/systemd/system/serial-getty\@.service /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service
+```
 
-add the red lines
+```
 [root@localhost ~]# cat /etc/default/grub
 GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,9600n8"
 GRUB_TERMINAL=serial
@@ -301,7 +270,7 @@ Generating grub.cfg ...
 Found linux image: /boot/vmlinuz-3.3.5-2.fc16.x86_64
 Found initrd image: /boot/initramfs-3.3.5-2.fc16.x86_64.img
 done
-
+``
 
 
 
@@ -318,23 +287,27 @@ done
 Либо надо включать в биосе, как на медиатеке. У себя я не нашёл
 
 [http://klinkov.ya.ru/replies.xml?item_no=938](http://klinkov.ya.ru/replies.xml?item_no=938)
+
 [http://www.linuxlib.ru/HowTo/Text-Terminal-HOWTO.html](http://www.linuxlib.ru/HowTo/Text-Terminal-HOWTO.html)
+
 [http://www.lexpr.ru/node/514](http://www.lexpr.ru/node/514)
 [http://vladimir-stupin.blogspot.ru/2009/09/ubuntu.html](http://vladimir-stupin.blogspot.ru/2009/09/ubuntu.html)
+
 [http://www.altlinux.org/SerialLogin](http://www.altlinux.org/SerialLogin)
 [http://0pointer.de/blog/projects/instances.html](http://0pointer.de/blog/projects/instances.html)
+
 [http://blog.baturin.org/2009/08/linux.html](http://blog.baturin.org/2009/08/linux.html)
 [http://www.dobromyslov.ru/sysadmin/connect-usb-to-com-rs232-cable/linux-connect-usb-to-com-rs232-cable](http://www.dobromyslov.ru/sysadmin/connect-usb-to-com-rs232-cable/linux-connect-usb-to-com-rs232-cable)
+
 [http://ru.opensuse.org/SDB:Systemd](http://ru.opensuse.org/SDB:Systemd)
+
 [http://www.opennet.ru/tips/info/2102.shtml](http://www.opennet.ru/tips/info/2102.shtml)
+
 [http://open-os.ru/probros-konsoli-virtualnoj-mashiny-v-xost-mashinu-na-baze-kvm/](http://open-os.ru/probros-konsoli-virtualnoj-mashiny-v-xost-mashinu-na-baze-kvm/)
+
 [http://rusdir.blogspot.ru/2010/12/linux.html](http://rusdir.blogspot.ru/2010/12/linux.html)
+
 [http://www.opennet.ru/openforum/vsluhforumID1/37737.html](http://www.opennet.ru/openforum/vsluhforumID1/37737.html)
-
-
-
-
-
 
 
 [http://lost-and-found-narihiro.blogspot.ru/2012/05/kvm-how-to-connect-to-fedora-vms-which.html](http://lost-and-found-narihiro.blogspot.ru/2012/05/kvm-how-to-connect-to-fedora-vms-which.html)

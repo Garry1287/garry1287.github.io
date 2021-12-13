@@ -1,29 +1,28 @@
 ---
 layout: post
-title:  "rpm-сборка"
+title:  "Rpm сборка"
 date:   2013-03-07 03:34:50 +0400
-categories: kvm
+categories: kvm linux
 tags: kvm
 ---
 
-# rpm-сборка
+# Rpm сборка
+```
 strace -e trace=file python setup.py bdist_rpm 2>&1 | grep AUTHORS
+```
 
 Я нашел два решения, оба не подходят:
 1. checkinstall - работает, но не со всеми программами. И, главное, слишком мало настроек. Да и глючит она/
 2. [http://www.linux.org.ru/books/HOWTO/RPM-HOWTO.html](http://www.linux.org.ru/books/HOWTO/RPM-HOWTO.html) - устарело. rpm пишет, что опцию -ba он не знает, 
 rpmbuild - что используемый синтаксис .spec устарел и не поддерживается.
 
-
-
-установка из src.rpm
+## Установка из src.rpm
+```
 rpm -Uhv /path/to/src.rpm
 rpmbuild -bb /path/to/file.spec 
+```
 
-
-KRPMBuilder
-
-
+## KRPMBuilder
 
 Написать spec и выполнить rpmbuild -ba foo.spec .
 Само написание spec-файла задача не тривиальная. Может быть просто - чуть поправить шаблон, а может...
@@ -42,40 +41,33 @@ checkconfig, но это только если собирать для себя.
 откройте для себя Build Service
 компилится в секунды smile.gif
 
-
-
-
-о-первых, ни в коем случае нельзя ничего собирать под root. Одна маленькая ошибка в спеке - и ты отец и система убита.
-
-
+Во-первых, ни в коем случае нельзя ничего собирать под root. Одна маленькая ошибка в спеке - и ты отец и система убита.
 
 Как пользоваться [https://build.opensuse.org/](https://build.opensuse.org/)
 
 IMHO учиться лучше именно на rpmbuild. Заглядывая в rpm --showrc, сборочный скрипт и содержимое собранного пакета по мере необходимости. OBS хорош для сборки уже отлаженных спеков, а не для отладки.
 
 
-
-
-
-
-
-
-
-Первый rpm
+## Первый rpm
 [http://www.ibm.com/developerworks/library/l-rpm1/](http://www.ibm.com/developerworks/library/l-rpm1/)
+
 [http://www.ibm.com/developerworks/library/l-rpm2/](http://www.ibm.com/developerworks/library/l-rpm2/)
 
 [http://habrahabr.ru/post/110172/](http://habrahabr.ru/post/110172/)
+
 [http://habrahabr.ru/post/130868/](http://habrahabr.ru/post/130868/)
+
 [http://ru.opensuse.org/openSUSE:%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8E_%D1%81%D0%BB%D1%83%D0%B6%D0%B1%D1%8B_%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8](http://ru.opensuse.org/openSUSE:%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE_%D0%BF%D0%BE_%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8E_%D1%81%D0%BB%D1%83%D0%B6%D0%B1%D1%8B_%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8)
+
 [http://habrahabr.ru/post/110172/](http://habrahabr.ru/post/110172/)
+
 [http://ru.opensuse.org/%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0_%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%B2_SUSE](http://ru.opensuse.org/%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0_%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%B2_SUSE)
 
 checkinstall
 [http://nix-sa.blogspot.ru/2012/01/rpm-vlc-checkinstall.html](http://nix-sa.blogspot.ru/2012/01/rpm-vlc-checkinstall.html)
 
 
-RPM-HOWTO
+## RPM-HOWTO
 [http://tigro.info/wp/?p=375](http://tigro.info/wp/?p=375)
 [http://www.lexpr.ru/node/11](http://www.lexpr.ru/node/11)
 [http://www.linuxrsp.ru/docs/howto/RPM-HOWTO.html](http://www.linuxrsp.ru/docs/howto/RPM-HOWTO.html)
@@ -83,16 +75,19 @@ RPM-HOWTO
 [http://unixforum.org/index.php?showtopic=76757](http://unixforum.org/index.php?showtopic=76757)
 
 
-Установка пакетов из tar.gz
+## Установка пакетов из tar.gz
 [http://unixforum.org/index.php?showtopic=38049](http://unixforum.org/index.php?showtopic=38049)
 
-rpm4 rpm5
+## rpm4 rpm5
 [http://unixforum.org/index.php?showtopic=130770](http://unixforum.org/index.php?showtopic=130770)
 
-Урок для сборки rpm
+## Урок для сборки rpm
 [http://wiki.russianfedora.ru/index.php?title=O%D1%82%D0%BA%D1%80%D1%8B%D1%82%D1%8B%D0%B9_%D1%83%D1%80%D0%BE%D0%BA_%D0%BF%D0%BE_%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B5_rpm-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%B2](http://wiki.russianfedora.ru/index.php?title=O%D1%82%D0%BA%D1%80%D1%8B%D1%82%D1%8B%D0%B9_%D1%83%D1%80%D0%BE%D0%BA_%D0%BF%D0%BE_%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B5_rpm-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%B2)
+
 [http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/Packagers_Guide/index.html](http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/Packagers_Guide/index.html)
+
 [http://wiki.mandriva.com/ru/Development/Howto/RPM](http://wiki.mandriva.com/ru/Development/Howto/RPM)
+
 [http://wiki.russianfedora.ru/index.php/%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0_%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D1%8F%D0%B4%D1%80%D0%B0_Fedora](http://wiki.russianfedora.ru/index.php/%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0_%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D1%8F%D0%B4%D1%80%D0%B0_Fedora)
 
 
@@ -100,9 +95,8 @@ rpm4 rpm5
 
 Сайты для поиска пакетов rpm
 
- [http://rpmfind.net](http://rpmfind.net)
+[http://rpmfind.net](http://rpmfind.net)
 	
-
 Ссылки на огромное количество пакетов для различных Линуксов и поисковую машину
 
 [http://rpm.pbone.net](http://rpm.pbone.net)
@@ -124,10 +118,6 @@ rpm4 rpm5
 	
 
 Фронт освобождения Пингвина. Пакеты, которые нельзя включать в Mandriva Free по лицензионным соображениям. 
-
-
-
-
 
 
 [http://ru.wikipedia.org/wiki/OpenSUSE_Build_Service](http://ru.wikipedia.org/wiki/OpenSUSE_Build_Service)
